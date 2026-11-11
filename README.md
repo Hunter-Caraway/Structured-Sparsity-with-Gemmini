@@ -1,4 +1,4 @@
-# Structured 4:8 Sparsity with Gemmini
+# Structured Sparsity with Gemmini
 
 Adding 2:4 and 4:8 structured (N:M) sparsity to UC Berkeley's [Gemmini](https://github.com/ucb-bar/gemmini)
 AI accelerator in [Chipyard](https://github.com/ucb-bar/chipyard), and measuring it in cycle-accurate RTL
