@@ -1,0 +1,2 @@
+chip	program	seed	timeout_cycles	start_epoch	end_epoch	wall_s	exit
+nm24	edge_24_full	1	50000000	1794250005	1794250768	763	0

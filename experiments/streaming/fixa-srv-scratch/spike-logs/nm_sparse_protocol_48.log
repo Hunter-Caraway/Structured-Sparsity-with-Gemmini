@@ -1,0 +1,13 @@
+basic                  ok (0/256 wrong)
+a_stride 2             ok (0/256 wrong)
+weights at preload     ok (0/256 wrong)
+clear                  ok (0/256 wrong)
+4 tiles ahead          ok (0/256 wrong)
+garbage keeps weights  ok (0/256 wrong)
+garbage does not pop   ok (0/256 wrong)
+two tiles, stride 2    ok (0/256 wrong)
+dense after sparse     ok (0/256 wrong)
+nm_sparse_protocol passed
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

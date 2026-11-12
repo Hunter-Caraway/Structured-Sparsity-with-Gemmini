@@ -1,0 +1,44 @@
+== README table (as printed now)
+  busy_reuse  berkeley  1257  2:4   672 (1.871x)  4:8   672 (1.871x)
+  busy_fresh  berkeley  1305  2:4   960 (1.359x)  4:8   960 (1.359x)
+  reuse       berkeley  1622  2:4  1686 (0.962x)  4:8  1913 (0.848x)
+  fresh       berkeley  1604  2:4  2778 (0.577x)  4:8  3827 (0.419x)
+
+== fresh-weights grid time (ex_active of 'dense' vs 'sparse')
+  berkeley dense ex_active 1305  2:4 sparse 960  4:8 sparse 960  ratio 1.3594
+
+== same program (fair_perf_dense_only) on berkeley's chip vs our 2:4 chip
+  dense        total berkeley 1604 ours 1604 diff +0 (0.000%) | ex_active 1305 vs 1305 | tail (total-issued) 74 vs 74 | issued 1530 vs 1530
+     counters that differ: {'spad_b_wait': (192, 0), 'spad_d_wait': (291, 114)}
+  dense_reuse  total berkeley 1622 ours 1628 diff +6 (0.370%) | ex_active 1257 vs 1257 | tail (total-issued) 66 vs 66 | issued 1556 vs 1562
+     counters that differ: {'total': (1622, 1628), 'issued': (1556, 1562), 'rs_full': (1649, 1657), 'spad_a_wait': (360, 368), 'spad_d_wait': (344, 352), 'main_ex': (1511, 1516)}
+
+== same-build ratios (dense loop and sparse loop from the SAME binary, our chip)
+  2:4 dense_reuse/sparse_reuse: 1750 / 1686 = 1.0380
+  2:4 dense/sparse: 1648 / 2778 = 0.5932
+  4:8 dense_reuse/sparse_reuse: 1768 / 1913 = 0.9242
+  4:8 dense/sparse: 1601 / 3827 = 0.4183
+
+== mixed-build effect: dense loops, berkeley DENSE_ONLY build vs full builds (same loop source)
+  dense_only on nm24 chip  dense 1604  dense_reuse 1628
+  fair_perf_24 on nm24     dense 1648  dense_reuse 1750
+  fair_perf_48 on nm48     dense 1601  dense_reuse 1768
+  dense_reuse: 1750 vs 1628 on the same chip = +7.49%
+
+== CPU-only issue time (fair, processor alone)
+  fresh: berkeley 1120 2:4 1883 4:8 2486
+
+== original benchmark: CPU-only issue time as a share of each total (chipyard-setup-notes 65-85%)
+  min 66.71% (nm48 sparse_nat)  max 85.57% (nm24 sparse_reuse)  -> 67-86%
+
+== pattern fidelity (energy kept), min-max over the two synthetic distributions
+  4:8         [89.7, 94.4]  -> 90-94%
+  2:4         [86.8, 92.1]  -> 87-92%
+  paired 4:8  [79.2, 86.1]  -> 79-86%
+  no pattern  [92.9, 96.7]  -> 93-97%
+
+== stall explanation numbers (NEXT-STEPS): fresh-weight sparse grid time per tile vs dense
+  sparse fresh ex_active/tiles = 960/32 = 30.0
+  berkeley dense fresh ex_active/tiles = 1305/64 = 20.4
+  sparse reuse ex_active/tiles = 672/32 = 21.0
+  berkeley dense reuse ex_active/tiles = 1257/64 = 19.64

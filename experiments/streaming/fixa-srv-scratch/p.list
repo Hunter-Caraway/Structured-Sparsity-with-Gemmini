@@ -1,0 +1,8 @@
+experiments/streaming/investigate/src/micro2.c
+experiments/streaming/investigate/src/micro3.c
+experiments/streaming/investigate/src/micro.c
+experiments/streaming/investigate/src/nm_stream_v2.h
+experiments/streaming/investigate/src/stream_bench.c
+experiments/streaming/investigate/src/tiled_matmul_nm_v2.h
+experiments/streaming/src/stream_bench.c
+verification/fair_perf.c

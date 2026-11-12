@@ -1,0 +1,162 @@
+== tests
+nm24  nm_sparse_debug_24           s1 PASS rc=0     819s  nm_sparse_debug passed
+nm24  nm_sparse_matmul_24          s1 PASS rc=0     999s  nm_sparse_matmul passed
+nm24  nm_sparse_perf_24            s1 PASS rc=0    4328s  nm_sparse_perf passed
+nm24  nm_sparse_protocol_24        s1 PASS rc=0    1091s  nm_sparse_protocol passed
+nm24  nm_sparse_spad_24            s1 PASS rc=0    4533s  nm_sparse_spad passed
+nm24  nm_sparse_sw_24              s1 PASS rc=0    3672s  nm_sparse_sw passed
+nm24  proto_neg10_24               s1 PASS rc=2      35s  [82775000] %Error: Gemmini.sv:1136: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: Ass
+nm24  proto_neg14_24               s1 PASS rc=2      38s  [82893000] %Error: ExecuteController.sv:1153: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.ge
+nm24  proto_neg4_24                s1 PASS rc=2      74s  [111249000] %Error: Gemmini.sv:1148: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: As
+nm24  proto_neg7_24                s1 PASS rc=2      46s  [82611000] %Error: ExecuteController.sv:1153: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.ge
+nm24  proto_neg9_24                s1 PASS rc=2      38s  [82557000] %Error: ExecuteController.sv:1147: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.ge
+nm24  spad_neg21_24                s1 PASS rc=2    3597s  [7505507000] %Error: Gemmini.sv:1142: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm24  spad_neg22_24                s1 PASS rc=2    3769s  [7505535000] %Error: Gemmini.sv:1142: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm24  spad_neg23_24                s1 PASS rc=2    3447s  [7505509000] %Error: Gemmini.sv:1154: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm24  spad_neg24_24                s1 PASS rc=2    3498s  [7505535000] %Error: Gemmini.sv:1154: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm24  spad_neg25_24                s1 PASS rc=2    3640s  [7505539000] %Error: Gemmini.sv:1160: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm24  spad_neg26_24                s1 PASS rc=2    3615s  [7505535000] %Error: Gemmini.sv:1160: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm24  spad_neg27_24                s1 PASS rc=2    3617s  [7505535000] %Error: Gemmini.sv:1166: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm24  spad_neg28_24                s1 PASS rc=2    3731s  [7505537000] %Error: Gemmini.sv:1166: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm24  spad_neg29_24                s1 PASS rc=2    3720s  [7505467000] %Error: Gemmini.sv:1166: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm24  spad_neg30_24                s1 PASS rc=2    3665s  [7505537000] %Error: Gemmini.sv:1172: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm24  spad_neg31_24                s1 PASS rc=2    3794s  [7505537000] %Error: Gemmini.sv:1172: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm24  spad_neg32_24                s1 PASS rc=2    3903s  [7505547000] %Error: Gemmini.sv:1178: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm24  spad_neg33_24                s1 PASS rc=2    4524s  [7505531000] %Error: Gemmini.sv:1184: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm24  spad_neg34_24                s1 PASS rc=2    4526s  [7505623000] %Error: Gemmini.sv:1184: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm24  spad_neg35_24                s1 PASS rc=2    4775s  [7505553000] %Error: Gemmini.sv:1202: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm24  spad_neg36_24                s1 PASS rc=2    4794s  [7505641000] %Error: Gemmini.sv:1196: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm24  spad_neg37_24                s1 PASS rc=2    5185s  [7505697000] %Error: Gemmini.sv:1208: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  nm_sparse_debug_48           s1 PASS rc=0     887s  nm_sparse_debug passed
+nm48  nm_sparse_matmul_48          s1 PASS rc=0    1052s  nm_sparse_matmul passed
+nm48  nm_sparse_perf_48            s1 PASS rc=0    4765s  nm_sparse_perf passed
+nm48  nm_sparse_protocol_48        s1 PASS rc=0     856s  nm_sparse_protocol passed
+nm48  nm_sparse_spad_48            s1 PASS rc=0    4572s  nm_sparse_spad passed
+nm48  nm_sparse_sw_48              s1 PASS rc=0    3639s  nm_sparse_sw passed
+nm48  proto_neg10_48               s1 PASS rc=2      39s  [82775000] %Error: Gemmini.sv:1136: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: Ass
+nm48  proto_neg14_48               s1 PASS rc=2      35s  [82893000] %Error: ExecuteController.sv:1126: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.ge
+nm48  proto_neg4_48                s1 PASS rc=2      52s  [113289000] %Error: Gemmini.sv:1148: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: As
+nm48  proto_neg7_48                s1 PASS rc=2      35s  [82611000] %Error: ExecuteController.sv:1126: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.ge
+nm48  proto_neg9_48                s1 PASS rc=2      36s  [82557000] %Error: ExecuteController.sv:1120: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.ge
+nm48  spad_neg21_48                s1 PASS rc=2    4743s  [7636753000] %Error: Gemmini.sv:1142: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  spad_neg22_48                s1 PASS rc=2    4715s  [7636893000] %Error: Gemmini.sv:1142: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  spad_neg23_48                s1 PASS rc=2    4535s  [7636755000] %Error: Gemmini.sv:1154: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  spad_neg24_48                s1 PASS rc=2    4259s  [7636899000] %Error: Gemmini.sv:1154: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  spad_neg25_48                s1 PASS rc=2    4300s  [7636899000] %Error: Gemmini.sv:1160: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  spad_neg26_48                s1 PASS rc=2    4218s  [7636893000] %Error: Gemmini.sv:1160: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  spad_neg27_48                s1 PASS rc=2    4310s  [7636895000] %Error: Gemmini.sv:1166: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  spad_neg28_48                s1 PASS rc=2    4043s  [7636893000] %Error: Gemmini.sv:1166: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  spad_neg29_48                s1 PASS rc=2    4131s  [7636847000] %Error: Gemmini.sv:1166: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  spad_neg30_48                s1 PASS rc=2    4006s  [7636899000] %Error: Gemmini.sv:1172: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  spad_neg31_48                s1 PASS rc=2    4063s  [7636893000] %Error: Gemmini.sv:1172: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  spad_neg32_48                s1 PASS rc=2    4059s  [7636855000] %Error: Gemmini.sv:1178: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  spad_neg33_48                s1 PASS rc=2    4078s  [7636849000] %Error: Gemmini.sv:1184: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  spad_neg34_48                s1 PASS rc=2    4198s  [7636791000] %Error: Gemmini.sv:1184: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  spad_neg35_48                s1 PASS rc=2    4099s  [7636867000] %Error: Gemmini.sv:1202: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  spad_neg36_48                s1 PASS rc=2    4128s  [7636815000] %Error: Gemmini.sv:1196: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+nm48  spad_neg37_48                s1 PASS rc=2    4089s  [7636959000] %Error: Gemmini.sv:1208: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: A
+tests: 56 PASS, 0 FAIL
+
+== fair_perf
+nm24 seed 1 ok pattern=2:4 matches=6 dense=1555 dense_reuse=1502 sparse=2277 sparse_reuse=1375 sparse_batched=2117 sparse_spad=966 cpu_dense=1104 cpu_dense_reuse=1071 cpu_sparse=1716 cpu_sparse_reuse=992 cpu_sparse_batched=1506 cpu_sparse_spad=674 cpu_meta_only=960
+nm24 seed 2 ok pattern=2:4 matches=6 dense=1555 dense_reuse=1502 sparse=2277 sparse_reuse=1375 sparse_batched=2117 sparse_spad=966 cpu_dense=1104 cpu_dense_reuse=1071 cpu_sparse=1716 cpu_sparse_reuse=992 cpu_sparse_batched=1506 cpu_sparse_spad=674 cpu_meta_only=960
+nm24 seed 3 ok pattern=2:4 matches=6 dense=1555 dense_reuse=1502 sparse=2277 sparse_reuse=1375 sparse_batched=2117 sparse_spad=966 cpu_dense=1104 cpu_dense_reuse=1071 cpu_sparse=1716 cpu_sparse_reuse=992 cpu_sparse_batched=1506 cpu_sparse_spad=674 cpu_meta_only=960
+nm48 seed 1 ok pattern=4:8 matches=6 dense=1468 dense_reuse=1483 sparse=3152 sparse_reuse=1567 sparse_batched=2910 sparse_spad=1019 cpu_dense=1095 cpu_dense_reuse=1046 cpu_sparse=2063 cpu_sparse_reuse=1130 cpu_sparse_batched=2148 cpu_sparse_spad=734 cpu_meta_only=1493
+nm48 seed 2 ok pattern=4:8 matches=6 dense=1468 dense_reuse=1483 sparse=3152 sparse_reuse=1567 sparse_batched=2910 sparse_spad=1019 cpu_dense=1095 cpu_dense_reuse=1046 cpu_sparse=2063 cpu_sparse_reuse=1130 cpu_sparse_batched=2148 cpu_sparse_spad=734 cpu_meta_only=1493
+nm48 seed 3 ok pattern=4:8 matches=6 dense=1468 dense_reuse=1483 sparse=3152 sparse_reuse=1567 sparse_batched=2910 sparse_spad=1019 cpu_dense=1095 cpu_dense_reuse=1046 cpu_sparse=2063 cpu_sparse_reuse=1130 cpu_sparse_batched=2148 cpu_sparse_spad=734 cpu_meta_only=1493
+fair ranges (seeds):
+  nm24 cpu_dense            min    1104 max    1104 n=3
+  nm24 cpu_dense_reuse      min    1071 max    1071 n=3
+  nm24 cpu_meta_only        min     960 max     960 n=3
+  nm24 cpu_sparse           min    1716 max    1716 n=3
+  nm24 cpu_sparse_batched   min    1506 max    1506 n=3
+  nm24 cpu_sparse_reuse     min     992 max     992 n=3
+  nm24 cpu_sparse_spad      min     674 max     674 n=3
+  nm24 dense                min    1555 max    1555 n=3
+  nm24 dense_reuse          min    1502 max    1502 n=3
+  nm24 sparse               min    2277 max    2277 n=3
+  nm24 sparse_batched       min    2117 max    2117 n=3
+  nm24 sparse_reuse         min    1375 max    1375 n=3
+  nm24 sparse_spad          min     966 max     966 n=3
+  nm48 cpu_dense            min    1095 max    1095 n=3
+  nm48 cpu_dense_reuse      min    1046 max    1046 n=3
+  nm48 cpu_meta_only        min    1493 max    1493 n=3
+  nm48 cpu_sparse           min    2063 max    2063 n=3
+  nm48 cpu_sparse_batched   min    2148 max    2148 n=3
+  nm48 cpu_sparse_reuse     min    1130 max    1130 n=3
+  nm48 cpu_sparse_spad      min     734 max     734 n=3
+  nm48 dense                min    1468 max    1468 n=3
+  nm48 dense_reuse          min    1483 max    1483 n=3
+  nm48 sparse               min    3152 max    3152 n=3
+  nm48 sparse_batched       min    2910 max    2910 n=3
+  nm48 sparse_reuse         min    1567 max    1567 n=3
+  nm48 sparse_spad          min    1019 max    1019 n=3
+
+== streaming
+nm24 bert_qkv_24_keeperfixa   s1 ok sbench passed (3 of 3 runs verified) | dense_v3 total=451373 cpu=450021 ex=278688  sparse_v3 total=454535 cpu=453367 ex=151451  sparse_fixa total=401522 cpu=400312 ex=158489
+nm24 bert_qkv_24_keeperfixa   s2 ok sbench passed (3 of 3 runs verified) | dense_v3 total=451373 cpu=450021 ex=278688  sparse_v3 total=454535 cpu=453367 ex=151451  sparse_fixa total=401522 cpu=400312 ex=158489
+nm24 bert_qkv_24_keeperfixa   s3 ok sbench passed (3 of 3 runs verified) | dense_v3 total=451373 cpu=450021 ex=278688  sparse_v3 total=454535 cpu=453367 ex=151451  sparse_fixa total=401522 cpu=400312 ex=158489
+nm24 bert_qkv_24_v1fixa       s1 ok sbench passed (2 of 2 runs verified) | sparse_stream total=652222 cpu=650868 ex=301291  sparse_fixa total=459897 cpu=458570 ex=303575
+nm24 bert_qkv_24_v1fixa       s2 ok sbench passed (2 of 2 runs verified) | sparse_stream total=652222 cpu=650868 ex=301291  sparse_fixa total=459897 cpu=458570 ex=303575
+nm24 bert_qkv_24_v1fixa       s3 ok sbench passed (2 of 2 runs verified) | sparse_stream total=652222 cpu=650868 ex=301291  sparse_fixa total=459897 cpu=458570 ex=303575
+nm24 edge_24_keeperfixa       s1 ok sbench passed (3 of 3 runs verified) | dense_v3 total=4931 cpu=4227 ex=1475  sparse_v3 total=5979 cpu=5333 ex=758  sparse_fixa total=4989 cpu=4331 ex=887
+nm24 edge_24_keeperfixa       s2 ok sbench passed (3 of 3 runs verified) | dense_v3 total=4931 cpu=4227 ex=1475  sparse_v3 total=5979 cpu=5333 ex=758  sparse_fixa total=4989 cpu=4331 ex=887
+nm24 edge_24_keeperfixa       s3 ok sbench passed (3 of 3 runs verified) | dense_v3 total=4931 cpu=4227 ex=1475  sparse_v3 total=5979 cpu=5333 ex=758  sparse_fixa total=4989 cpu=4331 ex=887
+nm24 edge_24_v1fixa           s1 ok sbench passed (2 of 2 runs verified) | sparse_stream total=8363 cpu=8114 ex=1425  sparse_fixa total=5561 cpu=5323 ex=1431
+nm24 edge_24_v1fixa           s2 ok sbench passed (2 of 2 runs verified) | sparse_stream total=8363 cpu=8114 ex=1425  sparse_fixa total=5561 cpu=5323 ex=1431
+nm24 edge_24_v1fixa           s3 ok sbench passed (2 of 2 runs verified) | sparse_stream total=8363 cpu=8114 ex=1425  sparse_fixa total=5561 cpu=5323 ex=1431
+nm24 small_24_keeperfixa      s1 ok sbench passed (3 of 3 runs verified) | dense_v3 total=17920 cpu=16600 ex=7755  sparse_v3 total=18015 cpu=16877 ex=4665  sparse_fixa total=15500 cpu=14288 ex=4823
+nm24 small_24_keeperfixa      s2 ok sbench passed (3 of 3 runs verified) | dense_v3 total=17920 cpu=16600 ex=7755  sparse_v3 total=18015 cpu=16877 ex=4665  sparse_fixa total=15500 cpu=14288 ex=4823
+nm24 small_24_keeperfixa      s3 ok sbench passed (3 of 3 runs verified) | dense_v3 total=17920 cpu=16600 ex=7755  sparse_v3 total=18015 cpu=16877 ex=4665  sparse_fixa total=15500 cpu=14288 ex=4823
+nm24 small_24_v1fixa          s1 ok sbench passed (2 of 2 runs verified) | sparse_stream total=29683 cpu=28379 ex=8836  sparse_fixa total=19973 cpu=18666 ex=8754
+nm24 small_24_v1fixa          s2 ok sbench passed (2 of 2 runs verified) | sparse_stream total=29683 cpu=28379 ex=8836  sparse_fixa total=19973 cpu=18666 ex=8754
+nm24 small_24_v1fixa          s3 ok sbench passed (2 of 2 runs verified) | sparse_stream total=29683 cpu=28379 ex=8836  sparse_fixa total=19973 cpu=18666 ex=8754
+nm48 bert_qkv_48_keeperfixa   s1 ok sbench passed (3 of 3 runs verified) | dense_v3 total=451414 cpu=450089 ex=278787  sparse_v3 total=498115 cpu=496948 ex=145559  sparse_fixa total=408056 cpu=406888 ex=158580
+nm48 bert_qkv_48_keeperfixa   s2 ok sbench passed (3 of 3 runs verified) | dense_v3 total=451414 cpu=450089 ex=278787  sparse_v3 total=498115 cpu=496948 ex=145559  sparse_fixa total=408056 cpu=406888 ex=158580
+nm48 bert_qkv_48_keeperfixa   s3 ok sbench passed (3 of 3 runs verified) | dense_v3 total=451414 cpu=450089 ex=278787  sparse_v3 total=498115 cpu=496948 ex=145559  sparse_fixa total=408056 cpu=406888 ex=158580
+nm48 bert_qkv_48_v1fixa       s1 ok sbench passed (2 of 2 runs verified) | sparse_stream total=742933 cpu=741665 ex=301457  sparse_fixa total=464641 cpu=463340 ex=304743
+nm48 bert_qkv_48_v1fixa       s2 ok sbench passed (2 of 2 runs verified) | sparse_stream total=742933 cpu=741665 ex=301457  sparse_fixa total=464641 cpu=463340 ex=304743
+nm48 bert_qkv_48_v1fixa       s3 ok sbench passed (2 of 2 runs verified) | sparse_stream total=742933 cpu=741665 ex=301457  sparse_fixa total=464641 cpu=463340 ex=304743
+nm48 edge_48_keeperfixa       s1 ok sbench passed (3 of 3 runs verified) | dense_v3 total=5098 cpu=4411 ex=1449  sparse_v3 total=6684 cpu=6058 ex=756  sparse_fixa total=5051 cpu=4387 ex=884
+nm48 edge_48_keeperfixa       s2 ok sbench passed (3 of 3 runs verified) | dense_v3 total=5098 cpu=4411 ex=1449  sparse_v3 total=6684 cpu=6058 ex=756  sparse_fixa total=5051 cpu=4387 ex=884
+nm48 edge_48_keeperfixa       s3 ok sbench passed (3 of 3 runs verified) | dense_v3 total=5098 cpu=4411 ex=1449  sparse_v3 total=6684 cpu=6058 ex=756  sparse_fixa total=5051 cpu=4387 ex=884
+nm48 edge_48_v1fixa           s1 ok sbench passed (2 of 2 runs verified) | sparse_stream total=9529 cpu=9348 ex=1422  sparse_fixa total=5623 cpu=5378 ex=1466
+nm48 edge_48_v1fixa           s2 ok sbench passed (2 of 2 runs verified) | sparse_stream total=9529 cpu=9348 ex=1422  sparse_fixa total=5623 cpu=5378 ex=1466
+nm48 edge_48_v1fixa           s3 ok sbench passed (2 of 2 runs verified) | sparse_stream total=9529 cpu=9348 ex=1422  sparse_fixa total=5623 cpu=5378 ex=1466
+nm48 small_48_keeperfixa      s1 ok sbench passed (3 of 3 runs verified) | dense_v3 total=17884 cpu=16539 ex=7740  sparse_v3 total=20576 cpu=19370 ex=4519  sparse_fixa total=15637 cpu=14420 ex=4835
+nm48 small_48_keeperfixa      s2 ok sbench passed (3 of 3 runs verified) | dense_v3 total=17884 cpu=16539 ex=7740  sparse_v3 total=20576 cpu=19370 ex=4519  sparse_fixa total=15637 cpu=14420 ex=4835
+nm48 small_48_keeperfixa      s3 ok sbench passed (3 of 3 runs verified) | dense_v3 total=17884 cpu=16539 ex=7740  sparse_v3 total=20576 cpu=19370 ex=4519  sparse_fixa total=15637 cpu=14420 ex=4835
+nm48 small_48_v1fixa          s1 ok sbench passed (2 of 2 runs verified) | sparse_stream total=34344 cpu=33047 ex=8836  sparse_fixa total=20647 cpu=19345 ex=8806
+nm48 small_48_v1fixa          s2 ok sbench passed (2 of 2 runs verified) | sparse_stream total=34344 cpu=33047 ex=8836  sparse_fixa total=20647 cpu=19345 ex=8806
+nm48 small_48_v1fixa          s3 ok sbench passed (2 of 2 runs verified) | sparse_stream total=34344 cpu=33047 ex=8836  sparse_fixa total=20647 cpu=19345 ex=8806
+stream ranges (total, seeds):
+  nm24 bert_qkv_24_keeperfixa   dense_v3       min    451373 max    451373 n=3
+  nm24 bert_qkv_24_keeperfixa   sparse_fixa    min    401522 max    401522 n=3
+  nm24 bert_qkv_24_keeperfixa   sparse_v3      min    454535 max    454535 n=3
+  nm24 bert_qkv_24_v1fixa       sparse_fixa    min    459897 max    459897 n=3
+  nm24 bert_qkv_24_v1fixa       sparse_stream  min    652222 max    652222 n=3
+  nm24 edge_24_keeperfixa       dense_v3       min      4931 max      4931 n=3
+  nm24 edge_24_keeperfixa       sparse_fixa    min      4989 max      4989 n=3
+  nm24 edge_24_keeperfixa       sparse_v3      min      5979 max      5979 n=3
+  nm24 edge_24_v1fixa           sparse_fixa    min      5561 max      5561 n=3
+  nm24 edge_24_v1fixa           sparse_stream  min      8363 max      8363 n=3
+  nm24 small_24_keeperfixa      dense_v3       min     17920 max     17920 n=3
+  nm24 small_24_keeperfixa      sparse_fixa    min     15500 max     15500 n=3
+  nm24 small_24_keeperfixa      sparse_v3      min     18015 max     18015 n=3
+  nm24 small_24_v1fixa          sparse_fixa    min     19973 max     19973 n=3
+  nm24 small_24_v1fixa          sparse_stream  min     29683 max     29683 n=3
+  nm48 bert_qkv_48_keeperfixa   dense_v3       min    451414 max    451414 n=3
+  nm48 bert_qkv_48_keeperfixa   sparse_fixa    min    408056 max    408056 n=3
+  nm48 bert_qkv_48_keeperfixa   sparse_v3      min    498115 max    498115 n=3
+  nm48 bert_qkv_48_v1fixa       sparse_fixa    min    464641 max    464641 n=3
+  nm48 bert_qkv_48_v1fixa       sparse_stream  min    742933 max    742933 n=3
+  nm48 edge_48_keeperfixa       dense_v3       min      5098 max      5098 n=3
+  nm48 edge_48_keeperfixa       sparse_fixa    min      5051 max      5051 n=3
+  nm48 edge_48_keeperfixa       sparse_v3      min      6684 max      6684 n=3
+  nm48 edge_48_v1fixa           sparse_fixa    min      5623 max      5623 n=3
+  nm48 edge_48_v1fixa           sparse_stream  min      9529 max      9529 n=3
+  nm48 small_48_keeperfixa      dense_v3       min     17884 max     17884 n=3
+  nm48 small_48_keeperfixa      sparse_fixa    min     15637 max     15637 n=3
+  nm48 small_48_keeperfixa      sparse_v3      min     20576 max     20576 n=3
+  nm48 small_48_v1fixa          sparse_fixa    min     20647 max     20647 n=3
+  nm48 small_48_v1fixa          sparse_stream  min     34344 max     34344 n=3

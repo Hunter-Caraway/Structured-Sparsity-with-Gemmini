@@ -1,0 +1,42 @@
+/home/hunter/chipyard/common.mk:537: warning: overriding recipe for target 'run-asm-tests-fast'
+/home/hunter/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/chipyard.harness.TestHarness.GemminiNMRocketConfig.d:780: warning: ignoring old recipe for target 'run-asm-tests-fast'
+/home/hunter/chipyard/common.mk:540: warning: overriding recipe for target 'run-bmark-tests-fast'
+/home/hunter/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/chipyard.harness.TestHarness.GemminiNMRocketConfig.d:839: warning: ignoring old recipe for target 'run-bmark-tests-fast'
+if [ "/home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261109-192907-v3small/bin/small_24_v3o1tr-baremetal" != "none" ] && [ ! -f "/home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261109-192907-v3small/bin/small_24_v3o1tr-baremetal" ]; then printf "\n\nBinary /home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261109-192907-v3small/bin/small_24_v3o1tr-baremetal not found\n\n"; exit 1; fi
+(set -o pipefail &&  /home/hunter/chipyard/sims/verilator/simulator-chipyard.harness-GemminiNMRocketConfig \
+	+permissive \
+	+dramsim +dramsim_ini_dir=/home/hunter/chipyard/generators/testchipip/src/main/resources/dramsim2_ini +max-cycles=15000000  +verilator+seed+1 +loadmem=/home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261109-192907-v3small/bin/small_24_v3o1tr-baremetal  \
+	+permissive-off \
+	/home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261109-192907-v3small/bin/small_24_v3o1tr-baremetal \
+	 \
+	</dev/null | tee /home/hunter/chipyard/sims/verilator/output/chipyard.harness.TestHarness.GemminiNMRocketConfig/small_24_v3o1tr-baremetal.inv.nm24.seed1.20261109-192907-v3small.log)
+== Loading device model file '/home/hunter/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/DDR3_micron_64M_8B_x4_sg15.ini' == 
+%Warning: System has stack size 8192 kb which may be too small; suggest 'ulimit -c 15364' or larger
+[UART] UART0 is here (stdin/stdout).
+== Loading system model file '/home/hunter/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/system.ini' == 
+===== MemorySystem 0 =====
+CH. 0 TOTAL_STORAGE : 4096MB | 1 Ranks | 16 Devices per rank
+DRAMSim2 Clock Frequency =666666666Hz, CPU Clock Frequency=500000000Hz
+sbench: layer=small M=64 K=256 N=128 pattern=2:4 build=full run_mask=96 TI=4 TJ=8 data_seed=20261109 v2_opts=1
+poison reaches all of C (8192 values)
+null window: read_cycles delta 1 | ex_active=0 rdma_active=0 wdma_active=0 load_active=0 store_active=0 rs_full=224 loop_matmul_active=8 rdma_bytes=0
+null window: read_cycles delta 1 | ex_active=0 rdma_active=0 wdma_active=0 load_active=0 store_active=0 rs_full=128 loop_matmul_active=8 rdma_bytes=0
+dense_v3      total      19417  cpu_issue_done      19174 | ex_active=7740 rdma_active=7406 wdma_active=2729 load_active=4409 store_active=2136 rs_full=18533 loop_matmul_active=9270 rdma_bytes=196608
+trace dense_v3 g=0 loads@489(ex=0 rd=0) comp@1016(ex=0 rd=759) compdone@18446744073708990913(ex=0 rd=0) outdone@18446744073708990913(ex=0 rd=0)
+trace dense_v3 g=1 loads@1553(ex=0 rd=924) comp@2158(ex=0 rd=2789) compdone@6292(ex=1833 rd=3803) outdone@6370(ex=1882 rd=3803)
+trace dense_v3 g=2 loads@6411(ex=1935 rd=3803) comp@6932(ex=1935 rd=4454) compdone@9684(ex=3768 rd=5573) outdone@9803(ex=3856 rd=5573)
+trace dense_v3 g=3 loads@9847(ex=3870 rd=5573) comp@10343(ex=3870 rd=6382) compdone@13174(ex=5703 rd=7406) outdone@13252(ex=5748 rd=7406)
+trace dense_v3 g=4 loads@13293(ex=5805 rd=7406) comp@13373(ex=5805 rd=7406) compdone@15654(ex=7638 rd=7406) outdone@18012(ex=7740 rd=7406)
+dense_v3 check: hash 0x8f3286c5fe0a381a expected 0x8f3286c5fe0a381a, sampled rows 8/8 -> verified
+dense_v3 overhead (untimed): poison 6216  evict_l2 341472  check 220557 cycles
+sparse_v3     total      23914  cpu_issue_done      23658 | ex_active=4119 rdma_active=4306 wdma_active=2723 load_active=3165 store_active=2150 rs_full=23485 loop_matmul_active=3674 rdma_bytes=98304
+trace sparse_v3 g=0 loads@608(ex=0 rd=0) comp@1164(ex=0 rd=273) compdone@18446744073708357487(ex=0 rd=0) outdone@18446744073708357487(ex=0 rd=0)
+trace sparse_v3 g=1 loads@1339(ex=0 rd=408) comp@1955(ex=0 rd=1523) compdone@6899(ex=1011 rd=2208) outdone@6960(ex=1035 rd=2208)
+trace sparse_v3 g=2 loads@7006(ex=1035 rd=2208) comp@7576(ex=1035 rd=2483) compdone@11576(ex=2055 rd=3242) outdone@11679(ex=2079 rd=3242)
+trace sparse_v3 g=3 loads@11725(ex=2079 rd=3242) comp@12228(ex=2079 rd=3623) compdone@16298(ex=3075 rd=4306) outdone@16352(ex=3099 rd=4306)
+trace sparse_v3 g=4 loads@16398(ex=3099 rd=4306) comp@16481(ex=3099 rd=4306) compdone@20198(ex=4095 rd=4306) outdone@22512(ex=4119 rd=4306)
+sparse_v3 check: hash 0x8f3286c5fe0a381a expected 0x8f3286c5fe0a381a, sampled rows 8/8 -> verified
+sparse_v3 overhead (untimed): poison 6216  evict_l2 354747  check 225636 cycles
+sbench end cycle 1457315
+sbench passed (2 of 2 runs verified)
+- /home/hunter/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/gen-collateral/TestDriver.v:158: Verilog $finish

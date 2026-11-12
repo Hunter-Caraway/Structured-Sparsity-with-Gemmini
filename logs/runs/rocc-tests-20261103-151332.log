@@ -1,0 +1,20 @@
+mkdir -p bareMetalC
+mkdir -p imagenet
+mkdir -p transformers
+mkdir -p mlps
+make -C bareMetalC -f /home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/../bareMetalC/Makefile abs_top_srcdir=/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/.. XLEN=64 PREFIX=examples-bareMetalC src_dir=/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/../bareMetalC RISCVTOOLS=@RISCVTOOLS@
+make -C imagenet -f /home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/../imagenet/Makefile abs_top_srcdir=/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/.. XLEN=64 PREFIX=examples-imagenet src_dir=/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/../imagenet RISCVTOOLS=@RISCVTOOLS@
+make -C transformers -f /home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/../transformers/Makefile abs_top_srcdir=/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/.. XLEN=64 PREFIX=examples-transformers src_dir=/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/../transformers RISCVTOOLS=@RISCVTOOLS@
+make -C mlps -f /home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/../mlps/Makefile abs_top_srcdir=/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/.. XLEN=64 PREFIX=examples-mlps src_dir=/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/../mlps RISCVTOOLS=@RISCVTOOLS@
+make[1]: Entering directory '/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/transformers'
+make[1]: Entering directory '/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/bareMetalC'
+make[1]: Entering directory '/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/imagenet'
+make[1]: Entering directory '/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/mlps'
+make[1]: Nothing to be done for 'default'.
+make[1]: Leaving directory '/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/transformers'
+make[1]: Nothing to be done for 'default'.
+make[1]: Leaving directory '/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/imagenet'
+make[1]: Nothing to be done for 'default'.
+make[1]: Leaving directory '/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/mlps'
+make[1]: Nothing to be done for 'default'.
+make[1]: Leaving directory '/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/bareMetalC'

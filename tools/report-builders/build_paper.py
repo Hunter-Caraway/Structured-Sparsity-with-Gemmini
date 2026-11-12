@@ -13,7 +13,7 @@ from reportlab.platypus import (BaseDocTemplate, PageTemplate, Frame, Paragraph,
                                 Table, TableStyle, KeepTogether, CondPageBreak)
 from PIL import Image
 
-PROJ = Path("/home/hunter/Structured 4:8 Sparsity with Gemmini")
+PROJ = Path(__file__).resolve().parents[2]
 VER = PROJ / "verification"
 OUT = PROJ / "N-M-Sparsity-Paper-Summary.pdf"
 d = json.load(open(VER / "paper_data.json"))

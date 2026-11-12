@@ -1,0 +1,20 @@
+stamp=20261109-204637-keeper3-srv
+host=AI-1769.floridapoly.org 6.12.0-211.68.1.el10_2.x86_64 nproc=16
+git.gemmini-sparsity=1e50e1c45b8b607e2899562d6c51d4343c99a3ac (uncommitted changes)
+git.gemmini=639a5068bc7f01c5c8fed5a4bea15a55963c60a3 (uncommitted changes)
+git.libgemmini=a14aaa15ed5fa34e61ddf73e302be00af9538d51 (uncommitted changes)
+git.gemmini-rocc-tests=61086b433e1b7fb57bcd22634d03b4285f9d00cf (uncommitted changes)
+sim.stock=GemminiRocketConfig mtime=2026-11-09T14:04:32 sha256=84c2264ab08524b8e6b6f822b53ebb8613e381219e5ccb8144ad9cc9543b75e4
+sim.nm24=GemminiNMRocketConfig mtime=2026-11-09T14:12:26 sha256=97b5d3b291ab37f0e69de2ddbfe077b21a7749bba0b0644450434b21d778cd1e
+sim.nm48=GemminiNM48RocketConfig mtime=2026-11-09T14:17:25 sha256=ddf8b694747d5983edf6f2fd2094d4ae5050a927edc8f92058da838e6497d4fd
+gemmini_nm.h.sha256=d02d2d1fecdba658fdc02c34241de47dd3f89d28537be9954cf41b814e42d98d
+src.micro2.c.sha256=91c4bc01e4e35af0ce27dae64cf4593621292a93afca290c708e90f286b071d4
+src.micro3.c.sha256=99fee7aaf95ae72ed408cd07d2423efdfc5261ad70d8e8676373ea6c7e1a9a59
+src.micro.c.sha256=8e06d4fb02b73faa47826b2ba30b14d8edcb3e7821a25dc0f7e92972e101ba50
+src.nm_stream_v2.h.sha256=21d90a8b93faad9031846119729761d0b40f33b60b452b94b5093c8f25b25c6a
+src.stream_bench.c.sha256=7ae5e2929fcd319724980878fee8b7e8793b7d2b8443e387128b78dbc8036fb7
+src.tiled_matmul_nm_v2.h.sha256=3fc1f617ce20ce483f34923de5a9801bde21c0ced3f709fc0d03e3f9b8e74a01
+make=run-binary-fast LOADMEM=1 BREAK_SIM_PREREQ=1 (RANDOM_SEED, TIMEOUT_CYCLES per job)
+flags=investigate/scripts/build_one.sh (= scripts/build.sh rv_cc flags) + -DNM_N/-DNM_M
+bin.small_24_keeper3-baremetal.sha256=cce0d4cb93913d8b5bc75a20dc4a43c6f18e683affce30e187c09bbfe3dac6ca
+bin.small_48_keeper3-baremetal.sha256=e2762282aa1e80f11809d5848ab5828bc26a185e52a4daf1fe1e1eb34bbd3ee2

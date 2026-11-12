@@ -1,0 +1,16 @@
+chip,config,block,what,area_um2,seq_area_um2,cells,flops
+berkeley,GemminiRocketConfig,Gemmini,whole accelerator (no sram macros),32940724.0,,837568,98932
+berkeley,GemminiRocketConfig,ExecuteController,"execute unit (array, index fifo, control)",12973096.0,,309656,36457
+berkeley,GemminiRocketConfig,MeshWithDelays,array + input/output skew registers,10067698.2,,298636,34414
+berkeley,GemminiRocketConfig,Mesh,16x16 array of tiles,7209274.3,,285958,26118
+berkeley,GemminiRocketConfig,PE_256,one multiply-accumulate pe,10751.6,,1056,41
+nm24,GemminiNMRocketConfig,Gemmini,whole accelerator (no sram macros),34754453.5,,866637,111160
+nm24,GemminiNMRocketConfig,ExecuteController,"execute unit (array, index fifo, control)",14393261.8,,338766,48685
+nm24,GemminiNMRocketConfig,MeshWithDelays,array + input/output skew registers,10918805.8,,322747,43903
+nm24,GemminiNMRocketConfig,Mesh,16x16 array of tiles,7757319.9,,307974,33798
+nm24,GemminiNMRocketConfig,PE_256,one multiply-accumulate pe,11370.9,,1116,45
+nm48,GemminiNM48RocketConfig,Gemmini,whole accelerator (no sram macros),36267439.6,,898975,122097
+nm48,GemminiNM48RocketConfig,ExecuteController,"execute unit (array, index fifo, control)",15559997.0,,371185,59622
+nm48,GemminiNM48RocketConfig,MeshWithDelays,array + input/output skew registers,11662931.9,,351017,53479
+nm48,GemminiNM48RocketConfig,Mesh,16x16 array of tiles,8220163.8,,335622,42758
+nm48,GemminiNM48RocketConfig,PE_256,one multiply-accumulate pe,11750.0,,1191,47

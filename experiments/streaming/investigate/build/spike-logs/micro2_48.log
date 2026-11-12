@@ -1,0 +1,12 @@
+micro: DIM=16 BANK_ROWS=4096 NM=4:8 MW=16 dense_only=0
+micro case=dense_tight TI=8 computes=512 total=3334 issue=3332 cyc_per_compute_x100=651 ex_active=255230 pre_haz=270227 overlap_haz=264637 spA_wait=251793 spB_wait=259668 rs_busy=267807
+micro case=sp_same_tight TI=8 computes=512 total=6022 issue=6020 cyc_per_compute_x100=1176 ex_active=404790 pre_haz=391129 overlap_haz=399948 spA_wait=383853 spB_wait=394658 rs_busy=403937
+micro case=sp_diff_tight TI=8 computes=512 total=6022 issue=6020 cyc_per_compute_x100=1176 ex_active=386666 pre_haz=391426 overlap_haz=398058 spA_wait=383156 spB_wait=392456 rs_busy=398171
+(measured follows)
+micro case=dense_tight TI=8 computes=512 total=3334 issue=3332 cyc_per_compute_x100=651 ex_active=262986 pre_haz=259486 overlap_haz=258351 spA_wait=254165 spB_wait=257924 rs_busy=257103
+micro case=sp_same_tight TI=8 computes=512 total=6022 issue=6020 cyc_per_compute_x100=1176 ex_active=388816 pre_haz=394475 overlap_haz=395832 spA_wait=394049 spB_wait=396067 rs_busy=391822
+micro case=sp_diff_tight TI=8 computes=512 total=6022 issue=6020 cyc_per_compute_x100=1176 ex_active=386350 pre_haz=391032 overlap_haz=397933 spA_wait=395495 spB_wait=394385 rs_busy=390846
+micro done
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

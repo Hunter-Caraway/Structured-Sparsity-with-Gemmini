@@ -1,0 +1,2 @@
+nm24 /home/ai-user/sinv/build/bin-keeper3/bert_qkv_24_keeper3-baremetal 1 30000000
+nm48 /home/ai-user/sinv/build/bin-keeper3/bert_qkv_48_keeper3-baremetal 1 30000000

@@ -1,0 +1,24 @@
+sbench: layer=small M=64 K=256 N=128 pattern=2:4 build=full run_mask=103 TI=4 TJ=8 data_seed=20261109 v2_opts=1
+poison reaches all of C (8192 values)
+null window: read_cycles delta 1 | ex_active=0 rdma_active=0 rs_busy=0 ex_ctlq_block=0 spA_wait=0 spB_wait=0 load_dma_wait=0 ld_and_ex_busy=0
+null window: read_cycles delta 1 | ex_active=0 rdma_active=0 rs_busy=0 ex_ctlq_block=0 spA_wait=0 spB_wait=0 load_dma_wait=0 ld_and_ex_busy=0
+berkeley      total        468  cpu_issue_done        466 | ex_active=3899 rdma_active=3673 rs_busy=3401 ex_ctlq_block=3245 spA_wait=3036 spB_wait=4097 load_dma_wait=4074 ld_and_ex_busy=5239
+berkeley check: hash 0x8f3286c5fe0a381a expected 0x8f3286c5fe0a381a, sampled rows 8/8 -> verified
+berkeley overhead (untimed): poison 861  evict_l2 14351  check 42890 cycles
+dense_stream  total      10919  cpu_issue_done      10917 | ex_active=284688 rdma_active=279044 rs_busy=277898 ex_ctlq_block=278203 spA_wait=277957 spB_wait=277027 load_dma_wait=284634 ld_and_ex_busy=293084
+dense_stream check: hash 0x8f3286c5fe0a381a expected 0x8f3286c5fe0a381a, sampled rows 8/8 -> verified
+dense_stream overhead (untimed): poison 861  evict_l2 14351  check 49470 cycles
+sparse_stream total      11486  cpu_issue_done      11484 | ex_active=205001 rdma_active=223761 rs_busy=217631 ex_ctlq_block=213202 spA_wait=212824 spB_wait=215277 load_dma_wait=212093 ld_and_ex_busy=216731
+sparse_stream check: hash 0x8f3286c5fe0a381a expected 0x8f3286c5fe0a381a, sampled rows 8/8 -> verified
+sparse_stream overhead (untimed): poison 861  evict_l2 14351  check 48038 cycles
+dense_v3      total       9515  cpu_issue_done       9513 | ex_active=285066 rdma_active=276541 rs_busy=289210 ex_ctlq_block=283676 spA_wait=281104 spB_wait=284767 load_dma_wait=289117 ld_and_ex_busy=282420
+dense_v3 check: hash 0x8f3286c5fe0a381a expected 0x8f3286c5fe0a381a, sampled rows 8/8 -> verified
+dense_v3 overhead (untimed): poison 861  evict_l2 14351  check 51020 cycles
+sparse_v3     total       9155  cpu_issue_done       9153 | ex_active=211014 rdma_active=217767 rs_busy=223405 ex_ctlq_block=219197 spA_wait=216345 spB_wait=217240 load_dma_wait=223926 ld_and_ex_busy=224012
+sparse_v3 check: hash 0x8f3286c5fe0a381a expected 0x8f3286c5fe0a381a, sampled rows 8/8 -> verified
+sparse_v3 overhead (untimed): poison 861  evict_l2 14351  check 51065 cycles
+sbench end cycle 540050
+sbench passed (5 of 5 runs verified)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

@@ -1,0 +1,5 @@
+nm_sparse_spad: 4:8, R = 6 rows per index tile, 8 tiles
+GEMMINI: NM_META_CMD rd == 2: tile count rs2[7:0] must be 1..4 (got 0)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

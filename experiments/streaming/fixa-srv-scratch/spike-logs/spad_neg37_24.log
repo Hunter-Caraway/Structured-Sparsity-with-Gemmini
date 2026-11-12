@@ -1,0 +1,5 @@
+nm_sparse_spad: 2:4, R = 4 rows per index tile, 8 tiles
+GEMMINI: sparse preload with no index tile queued: index tile must be sent before its preload
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

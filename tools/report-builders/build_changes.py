@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Builds a PDF documenting every code change on the sparse-nm branches against upstream Gemmini."""
-import re, subprocess
+import os, re, subprocess
 from pathlib import Path
 from xml.sax.saxutils import escape
 from reportlab.lib.pagesizes import letter
@@ -14,9 +14,9 @@ from reportlab.platypus import (BaseDocTemplate, PageTemplate, Frame, Paragraph,
                                 PageBreak, KeepTogether, CondPageBreak, Preformatted, Flowable)
 from reportlab.graphics.shapes import Drawing, Rect, String, Line, Polygon
 
-PROJ = Path("/home/hunter/Structured 4:8 Sparsity with Gemmini")
+PROJ = Path(__file__).resolve().parents[2]
 OUT = PROJ / "Gemmini-NM-Code-Changes.pdf"
-GEM = Path("/home/hunter/chipyard/generators/gemmini")
+GEM = Path(os.environ.get("CHIPYARD_DIR", Path.home() / "chipyard")) / "generators" / "gemmini"
 LIB = GEM / "software/libgemmini"
 TST = GEM / "software/gemmini-rocc-tests"
 BASE = {"gem": "8c3f9923", "lib": "ea8f7ed", "tst": "7c540b3"}

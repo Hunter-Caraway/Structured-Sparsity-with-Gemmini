@@ -1,0 +1,18 @@
+sbench: layer=edge M=36 K=128 N=64 pattern=2:4 build=full run_mask=224 TI=3 TJ=4 data_seed=20261114 v2_opts=0
+poison reaches all of C (2304 values)
+null window: read_cycles delta 1 | ex_active=0 rdma_active=0 wdma_active=0 load_active=0 store_active=0 rs_full=0 loop_matmul_active=0 rdma_bytes=7
+null window: read_cycles delta 1 | ex_active=0 rdma_active=0 wdma_active=0 load_active=0 store_active=0 rs_full=0 loop_matmul_active=0 rdma_bytes=7
+dense_v3      total       2430  cpu_issue_done       2428 | ex_active=60097 rdma_active=50912 wdma_active=60359 load_active=56675 store_active=57035 rs_full=58389 loop_matmul_active=60104 rdma_bytes=5
+dense_v3 check: hash 0x7aff8816ae684b00 expected 0x7aff8816ae684b00, sampled rows 8/8 -> verified
+dense_v3 overhead (untimed): poison 648  evict_l2 14351  check 34817 cycles
+sparse_v3     total       2606  cpu_issue_done       2604 | ex_active=51633 rdma_active=50045 wdma_active=50825 load_active=52425 store_active=50170 rs_full=53366 loop_matmul_active=51198 rdma_bytes=2
+sparse_v3 check: hash 0x7aff8816ae684b00 expected 0x7aff8816ae684b00, sampled rows 8/8 -> verified
+sparse_v3 overhead (untimed): poison 648  evict_l2 14351  check 34376 cycles
+sparse_fixa   total       2469  cpu_issue_done       2467 | ex_active=37532 rdma_active=36271 wdma_active=37933 load_active=40039 store_active=39767 rs_full=37469 loop_matmul_active=39202 rdma_bytes=14
+sparse_fixa check: hash 0x7aff8816ae684b00 expected 0x7aff8816ae684b00, sampled rows 8/8 -> verified
+sparse_fixa overhead (untimed): poison 648  evict_l2 14351  check 34639 cycles
+sbench end cycle 260051
+sbench passed (3 of 3 runs verified)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

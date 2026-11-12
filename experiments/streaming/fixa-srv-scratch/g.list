@@ -1,0 +1,10 @@
+software/gemmini-rocc-tests/bareMetalC/Makefile
+software/gemmini-rocc-tests/bareMetalC/nm_sparse_spad.c
+software/gemmini-rocc-tests/include/gemmini_nm.h
+software/gemmini-rocc-tests/include/gemmini_params.h
+software/libgemmini/gemmini.cc
+software/libgemmini/gemmini.h
+src/main/scala/gemmini/Controller.scala
+src/main/scala/gemmini/ExecuteController.scala
+src/main/scala/gemmini/GemminiConfigs.scala
+src/main/scala/gemmini/ReservationStation.scala

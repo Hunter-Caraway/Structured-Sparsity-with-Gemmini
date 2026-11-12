@@ -1,0 +1,7 @@
+  done stock rn50_conv_24_v3dense-baremetal seed 1 exit 0 2555 s
+  done nm48 rn50_conv_48_v3o9-baremetal seed 1 exit 0 2860 s
+  done nm24 rn50_conv_24_v3o1-baremetal seed 1 exit 0 3511 s
+  done stock bert_ffn2_24_v3dense-baremetal seed 1 exit 0 4166 s
+  done nm48 bert_ffn2_48_v3o9-baremetal seed 1 exit 0 4499 s
+  done nm24 bert_ffn2_24_v3o1-baremetal seed 1 exit 0 5184 s
+done: /home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261109-201341-big
