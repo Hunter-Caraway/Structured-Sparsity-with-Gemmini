@@ -1,39 +1,69 @@
-"""Shared loader for the N:M sparsity results, used by verify_all.py and analysis/advanced_visuals.py.
+"""Shared loader for the N:M sparsity results (verify_all.py, compare_runs.py, paper_data.py, analysis/).
 
-Reads the raw simulator logs directly (no hand-copied numbers). Every function returns plain dicts.
-
-Data sets
-  fair       verification/fair_perf.c (identical lean loops on every chip); the numbers to cite
-  original   logs/runs/bench-*.log from nm_sparse_perf.c (generic loop; whole-job speedups superseded)
-  rerun      verification/rerun-logs/ (fresh re-run of the original six tests)
+Reads the raw simulator logs of a run folder, verification/runs/<name>/, as run-flow.sh `fair` writes them:
+  <chip>.log, <chip>.seed<S>.log or <chip>-seed<S>.log (also one folder level down, e.g. seed3/nm24.log),
+  chip = berkeley | sameprog | nm24 | nm48 (nm24_sameprog is read as sameprog).
+A log's seed is the +verilator+seed+<S> in its own make command line, else the seed<S> in its file or folder
+name, else "default". The newest run folder is the one with the largest YYYYMMDD-HHMMSS stamp in its name.
+Several seeds: every number becomes a stat (min / max / mean over seeds). Nothing is hard-coded; with no
+results every loader raises NoResults, whose message says what to run. NM_RUNS_DIR overrides verification/runs.
 """
+import os
 import re
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 VER = ROOT / "verification"
+RUNS = Path(os.environ.get("NM_RUNS_DIR") or VER / "runs")
+DIM = 16
 
-FAIR_LOGS = {
-    "berkeley": VER / "berkeley-logs/stock-fair_perf_dense_only.log",       # unmodified Gemmini, fair_perf -DDENSE_ONLY
-    "nm24": VER / "fair-logs/fair_perf_24.log",                             # our chip, 2:4
-    "nm48": VER / "fair-logs/fair_perf_48.log",                             # our chip, 4:8
-    "nm24_sameprog": VER / "fair-logs/nm24-fair_perf_dense_only.log",       # our chip running berkeley's exact program
-}
-ORIG_STAMP = {"nm24": "20261006-025209", "nm48": "20261006-030607"}
-TESTS = ("nm_sparse_debug", "nm_sparse_matmul", "nm_sparse_perf")
+CHIPS = ("berkeley", "sameprog", "nm24", "nm48")
+ALIASES = {"nm24_sameprog": "sameprog"}
+PATTERN = {"nm24": "2:4", "nm48": "4:8"}
 
-PERF_RE = re.compile(r"^(\w+)\s+total\s+(\d+)\s+cpu_issue_done\s+(\d+)\s+pairs\s+(\d+)\s+cyc/pair\s+(\d+) \|(.*)$", re.M)
+PERF_RE = re.compile(r"^(\w+)\s+total\s+(\d+)\s+cpu_issue_done\s+(\d+)\s+pairs\s+(\d+)\s+cyc/pair\s+(\d+)\s*\|(.*)$", re.M)
+PREP_RE = re.compile(r"^(prep_\w+)\s+prep\s+(\d+)\s+prune\s+(\d+)\s+compress\s+(\d+)\s+pack_meta\s+(\d+)\s+weights\s+(\d+)", re.M)
+HEADER_RE = re.compile(r"^fair_perf: (\d+):(\d+), i=(\d+) k=(\d+) j=(\d+)", re.M)
+BUILD_RE = re.compile(r"^fair_perf build: (full|dense-only)", re.M)
+SEED_CMD_RE = re.compile(r"\+verilator\+seed\+(\d+)")
+SEED_NAME_RE = re.compile(r"seed[-_]?(\w+?)$")
+LOG_RE = re.compile(r"^(berkeley|nm24_sameprog|sameprog|nm24|nm48)(?:[.-]seed(\w+))?\.log$")
+STAMP_RE = re.compile(r"(\d{8}-\d{6})")
+FAIL_RE = re.compile(r"FAILED|mismatch|[Aa]ssertion|TIMEOUT|[Tt]imed out")
+
+
+class NoResults(Exception):
+    """No usable results; the message says what to do."""
+
+
+def die_no_results(e):
+    print(f"no results: {e}", file=sys.stderr)
+    sys.exit(2)
 
 
 def parse_log(path):
-    """Everything a benchmark log reports: pass/fail, perf rows, matmul cycles, debug scores, reference checks."""
+    """Everything one benchmark log reports."""
     t = Path(path).read_text(errors="replace")
-    out = {"path": str(path), "passed": bool(re.search(r"^\w+ passed$", t, re.M)),
-           "failed": "FAILED" in t or "mismatch" in t, "perf": {}, "matmul": {}, "debug": {},
-           "ref_checks": t.count("matches the cpu reference")}
+    out = {"path": str(path), "seed": None, "passed": bool(re.search(r"^\w+ passed$", t, re.M)),
+           "failed": bool(FAIL_RE.search(t)), "header": None, "build": None, "perf": {}, "prep": {},
+           "ref_ok": [m[1] for m in re.finditer(r"^(\w+) matches the cpu reference", t, re.M)],
+           "poison_ok": "poison reaches the accumulator" in t, "matmul": {}, "debug": {}}
+    out["ref_checks"] = len(out["ref_ok"])
+    s = SEED_CMD_RE.search(t)
+    if s:
+        out["seed"] = s[1]
+    h = HEADER_RE.search(t)
+    if h:
+        out["header"] = dict(zip(("n", "m", "i", "k", "j"), map(int, h.groups())))
+    b = BUILD_RE.search(t)
+    if b:
+        out["build"] = b[1]
     for m in PERF_RE.finditer(t):
         ctr = {k: int(v) for k, v in re.findall(r"(\w+)=(\d+)", m[6])}
-        out["perf"][m[1]] = {"total": int(m[2]), "issued": int(m[3]), "tiles": int(m[4]), **ctr}
+        out["perf"][m[1]] = {"total": int(m[2]), "issued": int(m[3]), "pairs": int(m[4]), "cyc_pair": int(m[5]), **ctr}
+    for m in PREP_RE.finditer(t):
+        out["prep"][m[1]] = dict(zip(("prep", "prune", "compress", "pack_meta", "weights"), map(int, m.groups()[1:])))
     for m in re.finditer(r"^(dense|sparse)\s+cycles: (\d+)", t, re.M):
         out["matmul"][m[1]] = int(m[2])
     for m in re.finditer(r"^  (.+?)\s+(\d+) / 256$", t, re.M):
@@ -41,45 +71,117 @@ def parse_log(path):
     return out
 
 
-def load_fair(require_all=True):
-    """{'berkeley','nm24','nm48','nm24_sameprog'} -> parsed log. Missing logs are skipped unless require_all."""
+def fair_logs(run):
+    """[(chip, seed or None, path)] of the fair logs in a run folder and its direct subfolders."""
+    run = Path(run)
+    found = []
+    for p in sorted(list(run.glob("*.log")) + list(run.glob("*/*.log"))):
+        if "derived" in p.relative_to(run).parts:
+            continue
+        m = LOG_RE.match(p.name)
+        if not m:
+            continue
+        seed = m[2]
+        if seed is None and p.parent != run:
+            n = SEED_NAME_RE.search(p.parent.name)
+            seed = n[1] if n else None
+        found.append((ALIASES.get(m[1], m[1]), seed, p))
+    return found
+
+
+def _stamp_key(d):
+    m = STAMP_RE.search(d.name)
+    return (1, m[1], d.name) if m else (0, f"{d.stat().st_mtime:020.6f}", d.name)
+
+
+def find_runs(args=None):
+    """Run folders to read: the given ones (str or Path, absolute or relative to cwd or the repo), else [newest]."""
+    if args:
+        out = []
+        for a in ([args] if isinstance(args, (str, Path)) else args):
+            hit = next((p for p in (Path(a), ROOT / a) if p.is_dir()), None)
+            if hit is None:
+                raise NoResults(f"run folder '{a}' does not exist")
+            out.append(hit.resolve())
+        return out
+    cands = sorted((d for d in RUNS.iterdir() if d.is_dir() and fair_logs(d)), key=_stamp_key) if RUNS.is_dir() else []
+    if not cands:
+        raise NoResults(f"no fair benchmark results in {RUNS} (the old results were withdrawn). "
+                        "Produce them with ./run-flow.sh fair, or pass a run folder.")
+    return [cands[-1]]
+
+
+def seed_key(s):
+    return (0, int(s), "") if s.isdigit() else (1, 0, s)
+
+
+def load_fair(runs=None, require=("berkeley", "nm24", "nm48")):
+    """{chip: {seed: parsed log}} over the given run folders (default: the newest)."""
     res = {}
-    for k, p in FAIR_LOGS.items():
-        if p.exists():
-            res[k] = parse_log(p)
-        elif require_all and k != "nm24_sameprog":
-            raise FileNotFoundError(p)
-    return res
+    folders = find_runs(runs)
+    for run in folders:
+        for chip, name_seed, p in fair_logs(run):
+            log = parse_log(p)
+            seed = log["seed"] or name_seed or "default"
+            log["seed"] = seed
+            if seed in res.get(chip, {}):
+                raise NoResults(f"two {chip} logs with seed {seed}: {res[chip][seed]['path']} and {p}")
+            res.setdefault(chip, {})[seed] = log
+    if not res:
+        raise NoResults(f"no fair logs (<chip>.log) in {', '.join(map(str, folders))}")
+    missing = [c for c in require if c not in res]
+    if missing:
+        raise NoResults(f"{', '.join(map(str, folders))}: no log for {', '.join(missing)}")
+    return {c: dict(sorted(res[c].items(), key=lambda kv: seed_key(kv[0]))) for c in CHIPS if c in res}
 
 
-def load_original():
-    return {c: {t: parse_log(ROOT / f"logs/runs/bench-{c}-{t}-{s}.log") for t in TESTS} for c, s in ORIG_STAMP.items()}
+def stat(values):
+    v = list(values)
+    return {"values": v, "n": len(v), "min": min(v), "max": max(v), "range": max(v) - min(v), "mean": sum(v) / len(v)}
 
 
-def load_rerun():
-    out = {}
-    for c in ORIG_STAMP:
-        for t in TESTS:
-            p = VER / f"rerun-logs/{c}-{t}.log"
-            if p.exists():
-                out.setdefault(c, {})[t] = parse_log(p)
-    return out
+def metric(chip_logs, variant, key="total"):
+    """stat over seeds of perf[variant][key]; None if any seed lacks it."""
+    try:
+        return stat(log["perf"][variant][key] for log in chip_logs.values())
+    except KeyError:
+        return None
+
+
+def ratio(num, den):
+    """(lowest, highest) of num/den over every pair of seeds."""
+    return num["min"] / den["max"], num["max"] / den["min"]
+
+
+def fmt_stat(s):
+    return f"{s['min']:,}" if s["min"] == s["max"] else f"{s['min']:,}-{s['max']:,}"
+
+
+def fmt_ratio(r):
+    return f"{r[0]:.2f}x" if f"{r[0]:.2f}" == f"{r[1]:.2f}" else f"{r[0]:.2f}x-{r[1]:.2f}x"
+
+
+def _row(logs, k):
+    r = {"pairs": metric(logs, k, "pairs"), "busy_fresh": metric(logs, k, "ex_active"),
+         "busy_reuse": metric(logs, k + "_reuse", "ex_active"), "fresh": metric(logs, k),
+         "reuse": metric(logs, k + "_reuse"), "cpu_fresh": metric(logs, "cpu_" + k),
+         "cpu_reuse": metric(logs, "cpu_" + k + "_reuse")}
+    if k == "sparse":
+        r.update(batched=metric(logs, "sparse_batched"), busy_batched=metric(logs, "sparse_batched", "ex_active"),
+                 cpu_batched=metric(logs, "cpu_sparse_batched"), cpu_meta_only=metric(logs, "cpu_meta_only"))
+    return {a: b for a, b in r.items() if b is not None}
 
 
 def summary(fair):
-    """The headline table: berkeley vs ours (2:4, 4:8) for grid / whole job (reuse, fresh) / processor issue time."""
-    b, s24, s48 = fair["berkeley"]["perf"], fair["nm24"]["perf"], fair["nm48"]["perf"]
-    def row(p, dense):
-        k = "dense" if dense else "sparse"
-        return {"tiles": p[k]["tiles"], "busy_reuse": p[k + "_reuse"]["ex_active"], "busy_fresh": p[k]["ex_active"],
-                "reuse": p[k + "_reuse"]["total"], "fresh": p[k]["total"],
-                "cpu_reuse": p["cpu_" + k + "_reuse"]["total"], "cpu_fresh": p["cpu_" + k]["total"]}
-    out = {"berkeley": row(b, True), "2:4": row(s24, False), "4:8": row(s48, False),
-           "ours_off_2:4": row(s24, True), "ours_off_4:8": row(s48, True)}
-    if "nm24_sameprog" in fair:
-        sp = fair["nm24_sameprog"]["perf"]
-        out["ours_off_sameprog"] = {"reuse": sp["dense_reuse"]["total"], "fresh": sp["dense"]["total"],
-                                    "busy_reuse": sp["dense_reuse"]["ex_active"]}
+    """{row: {metric: stat}}: berkeley, sameprog, 2:4, 4:8 (sparse on), off_2:4, off_4:8 (same chip, dense loops)."""
+    out = {}
+    for chip in ("berkeley", "sameprog"):
+        if chip in fair:
+            out[chip] = _row(fair[chip], "dense")
+    for chip, pat in PATTERN.items():
+        if chip in fair:
+            out[pat] = _row(fair[chip], "sparse")
+            out["off_" + pat] = _row(fair[chip], "dense")
     return out
 
 

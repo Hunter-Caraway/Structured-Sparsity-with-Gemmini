@@ -1,0 +1,4 @@
+chip	binary	seed	timeout	start	end	wall_s	exit
+stock	micro2_24_dense-baremetal	1	10000000	1794270376	1794270553	177	0
+nm24	micro2_24-baremetal	1	10000000	1794270374	1794270637	263	0
+nm48	micro2_48-baremetal	1	10000000	1794270375	1794270692	317	0

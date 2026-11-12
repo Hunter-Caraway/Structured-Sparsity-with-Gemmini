@@ -1,0 +1,35 @@
+/home/ai-user/chipyard/common.mk:537: warning: overriding recipe for target 'run-asm-tests-fast'
+/home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/chipyard.harness.TestHarness.GemminiNMRocketConfig.d:780: warning: ignoring old recipe for target 'run-asm-tests-fast'
+/home/ai-user/chipyard/common.mk:540: warning: overriding recipe for target 'run-bmark-tests-fast'
+/home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/chipyard.harness.TestHarness.GemminiNMRocketConfig.d:839: warning: ignoring old recipe for target 'run-bmark-tests-fast'
+if [ "/home/ai-user/sinv/runs/20261111-183018-fixa-srv/bin/bert_qkv_24_keeperfixa-baremetal" != "none" ] && [ ! -f "/home/ai-user/sinv/runs/20261111-183018-fixa-srv/bin/bert_qkv_24_keeperfixa-baremetal" ]; then printf "\n\nBinary /home/ai-user/sinv/runs/20261111-183018-fixa-srv/bin/bert_qkv_24_keeperfixa-baremetal not found\n\n"; exit 1; fi
+(set -o pipefail &&  /home/ai-user/chipyard/sims/verilator/simulator-chipyard.harness-GemminiNMRocketConfig \
+	+permissive \
+	+dramsim +dramsim_ini_dir=/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini +max-cycles=30000000  +verilator+seed+3 +loadmem=/home/ai-user/sinv/runs/20261111-183018-fixa-srv/bin/bert_qkv_24_keeperfixa-baremetal  \
+	+permissive-off \
+	/home/ai-user/sinv/runs/20261111-183018-fixa-srv/bin/bert_qkv_24_keeperfixa-baremetal \
+	 \
+	</dev/null | tee /home/ai-user/chipyard/sims/verilator/output/chipyard.harness.TestHarness.GemminiNMRocketConfig/bert_qkv_24_keeperfixa-baremetal.fixa.nm24.seed3.20261111-183018-fixa-srv.log)
+== Loading device model file '%Warning: System has stack size 8192 kb which may be too small; suggest 'ulimit -c 15364' or larger
+[UART] UART0 is here (stdin/stdout).
+/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/DDR3_micron_64M_8B_x4_sg15.ini' == 
+== Loading system model file '/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/system.ini' == 
+===== MemorySystem 0 =====
+CH. 0 TOTAL_STORAGE : 4096MB | 1 Ranks | 16 Devices per rank
+DRAMSim2 Clock Frequency =666666666Hz, CPU Clock Frequency=500000000Hz
+sbench: layer=bert_qkv M=128 K=768 N=768 pattern=2:4 build=full run_mask=224 TI=8 TJ=4 data_seed=20261110 v2_opts=0
+poison reaches all of C (98304 values)
+null window: read_cycles delta 1 | ex_active=0 rdma_active=0 wdma_active=0 load_active=0 store_active=0 rs_full=184 loop_matmul_active=8 rdma_bytes=0
+null window: read_cycles delta 1 | ex_active=0 rdma_active=0 wdma_active=0 load_active=0 store_active=0 rs_full=134 loop_matmul_active=8 rdma_bytes=0
+dense_v3      total     451373  cpu_issue_done     450021 | ex_active=278688 rdma_active=153692 wdma_active=30796 load_active=89049 store_active=21751 rs_full=412627 loop_matmul_active=258560 rdma_bytes=7077888
+dense_v3 check: hash 0xd5404d88bcec50e3 expected 0xd5404d88bcec50e3, sampled rows 8/8 -> verified
+dense_v3 overhead (untimed): poison 30265  evict_l2 366623  check 850450 cycles
+sparse_v3     total     454535  cpu_issue_done     453367 | ex_active=151451 rdma_active=97510 wdma_active=35713 load_active=67361 store_active=23418 rs_full=433031 loop_matmul_active=101136 rdma_bytes=3831808
+sparse_v3 check: hash 0xd5404d88bcec50e3 expected 0xd5404d88bcec50e3, sampled rows 8/8 -> verified
+sparse_v3 overhead (untimed): poison 31275  evict_l2 372444  check 838390 cycles
+sparse_fixa   total     401522  cpu_issue_done     400312 | ex_active=158489 rdma_active=111137 wdma_active=32679 load_active=79828 store_active=22380 rs_full=379763 loop_matmul_active=133779 rdma_bytes=3612672
+sparse_fixa check: hash 0xd5404d88bcec50e3 expected 0xd5404d88bcec50e3, sampled rows 8/8 -> verified
+sparse_fixa overhead (untimed): poison 31378  evict_l2 372083  check 837291 cycles
+sbench end cycle 6761820
+sbench passed (3 of 3 runs verified)
+- /home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/gen-collateral/TestDriver.v:158: Verilog $finish

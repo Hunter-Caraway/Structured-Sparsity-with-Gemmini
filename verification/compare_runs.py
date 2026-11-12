@@ -1,68 +1,85 @@
 #!/usr/bin/env python3
-"""Compare a new simulation run against the recorded results, number for number.
+"""Check a run folder, and compare it number for number with a reference run folder.
 
-The simulation is deterministic, so a correct re-run must reproduce every cycle count and hardware counter
-exactly. run-flow.sh writes new runs to verification/runs/<stamp>/ with these log names:
+Every log in RUN (fair logs <chip>[.seed<S>].log and re-run logs orig-<cfg>-<test>.log, see nmdata.py) must have
+passed with no failure line. With REFERENCE, each (log, seed) must exist in both folders and every number
+(perf rows, counters, prep, matmul, debug, reference checks) must be identical: a simulation with a given seed is
+deterministic. Without REFERENCE only the pass checks run (there are no recorded results to compare with).
 
-  fair benchmark      nm24.log  nm48.log  berkeley.log  nm24_sameprog.log
-  original six tests  orig-nm24-<test>.log  orig-nm48-<test>.log   (<test> = nm_sparse_debug|matmul|perf)
-
-usage: ~/chipyard/.conda-env/bin/python verification/compare_runs.py verification/runs/<stamp>
-Exit code 0 only if every log present matches its recorded counterpart (and at least one log was found).
+usage: ~/chipyard/.conda-env/bin/python verification/compare_runs.py RUN [REFERENCE]
+exit 0 = all good, 1 = a log failed or differs, 2 = RUN has no logs.
 """
+import re
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import nmdata  # noqa: E402
 
-
-def pairs(run):
-    for key, rec in nmdata.FAIR_LOGS.items():
-        yield run / f"{key}.log", rec, f"fair benchmark, {key}"
-    for cfg, stamp in nmdata.ORIG_STAMP.items():
-        for t in nmdata.TESTS:
-            yield run / f"orig-{cfg}-{t}.log", nmdata.ROOT / f"logs/runs/bench-{cfg}-{t}-{stamp}.log", f"original {t}, {cfg}"
+ORIG_RE = re.compile(r"^(orig-(?:nm24|nm48)-nm_sparse_\w+?)(?:[.-]seed(\w+))?\.log$")
+NUMBERS = ("perf", "prep", "matmul", "debug", "ref_ok")
 
 
-def numbers(p):
-    return {k: p[k] for k in ("perf", "matmul", "debug", "ref_checks")}
+def logs(run):
+    """{(name, seed): parsed log} for every fair and re-run log in run."""
+    out = {}
+    for chip, name_seed, p in nmdata.fair_logs(run):
+        d = nmdata.parse_log(p)
+        out[(chip, d["seed"] or name_seed or "default")] = d
+    for p in sorted(run.glob("orig-*.log")):
+        m = ORIG_RE.match(p.name)
+        if m:
+            d = nmdata.parse_log(p)
+            out[(m[1], d["seed"] or m[2] or "default")] = d
+    return out
+
+
+def diff(a, b):
+    lines = []
+    for v in sorted(set(a["perf"]) | set(b["perf"])):
+        ra, rb = a["perf"].get(v), b["perf"].get(v)
+        if ra is None or rb is None:
+            lines.append(f"{v}: only in the {'reference' if rb is None else 'new run'}")
+        elif ra != rb:
+            lines.append(f"{v}: " + ", ".join(f"{k} {ra.get(k)} -> {rb.get(k)}" for k in sorted(set(ra) | set(rb)) if ra.get(k) != rb.get(k)))
+    for k in NUMBERS[1:]:
+        if a[k] != b[k]:
+            lines.append(f"{k}: reference {a[k]}, new {b[k]}")
+    return lines
 
 
 def main():
-    if len(sys.argv) != 2:
+    if len(sys.argv) not in (2, 3):
         sys.exit(__doc__)
-    run = Path(sys.argv[1]).resolve()
-    found = fails = 0
-    print(f"comparing {run} with the recorded results")
-    for new, rec, label in pairs(run):
-        if not new.exists():
-            continue
-        found += 1
-        a, b = nmdata.parse_log(rec), nmdata.parse_log(new)
-        ok_run = b["passed"] and not b["failed"]
-        same = numbers(a) == numbers(b)
-        n = sum(len(v) for v in a["perf"].values()) + len(a["matmul"]) + len(a["debug"])
-        if not (ok_run and same):
-            fails += 1
-        status = "PASS" if ok_run and same else "FAIL"
-        detail = f"all {n} numbers identical" if same else "numbers differ from the recorded run"
-        print(f"  {status}  {label}: {'passed' if ok_run else 'DID NOT PASS'}, {detail}")
-        if not same:
-            for v in sorted(set(a["perf"]) | set(b["perf"])):
-                ra, rb = a["perf"].get(v), b["perf"].get(v)
-                if ra is None or rb is None:
-                    print(f"        {v}: {'missing from the new run' if rb is None else 'not in the recorded run'}")
-                elif ra != rb:
-                    diffs = ", ".join(f"{k} {ra[k]} -> {rb.get(k)}" for k in ra if ra[k] != rb.get(k))
-                    print(f"        {v}: {diffs}")
-            for k in ("matmul", "debug", "ref_checks"):
-                if a[k] != b[k]:
-                    print(f"        {k}: recorded {a[k]}, new {b[k]}")
-    if not found:
-        print("  FAIL  no recognised logs in this folder")
-        sys.exit(1)
-    print(f"\n{'ALL RUNS MATCH' if not fails else f'{fails} RUN(S) DIFFER'}  ({found} logs compared)")
+    try:
+        run = nmdata.find_runs([sys.argv[1]])[0]
+        ref = nmdata.find_runs([sys.argv[2]])[0] if len(sys.argv) == 3 else None
+    except nmdata.NoResults as e:
+        nmdata.die_no_results(e)
+    new = logs(run)
+    if not new:
+        nmdata.die_no_results(f"no recognised logs in {run}")
+    fails = 0
+    print(f"checking {run}" + (f" against {ref}" if ref else " (no reference run given: pass checks only)"))
+    for key, d in sorted(new.items()):
+        ok = d["passed"] and not d["failed"]
+        fails += not ok
+        print(f"  {'PASS' if ok else 'FAIL'}  {key[0]} seed {key[1]}: {'passed' if ok else 'DID NOT PASS'}, "
+              f"{d['ref_checks']} result(s) matched the cpu reference")
+    if ref:
+        old = logs(ref)
+        for key in sorted(set(old) | set(new)):
+            if key not in new or key not in old:
+                fails += 1
+                print(f"  FAIL  {key[0]} seed {key[1]}: only in {'the reference' if key in old else 'the new run'}")
+                continue
+            lines = diff(old[key], new[key])
+            n = sum(len(v) for v in old[key]["perf"].values()) + len(old[key]["prep"]) + len(old[key]["matmul"]) + len(old[key]["debug"])
+            fails += bool(lines)
+            print(f"  {'FAIL' if lines else 'PASS'}  {key[0]} seed {key[1]}: " + (f"all {n} numbers identical" if not lines else "differs"))
+            for l in lines:
+                print(f"        {l}")
+    print(f"\n{'ALL GOOD' if not fails else f'{fails} PROBLEM(S)'}  ({len(new)} logs checked{', compared with ' + ref.name if ref else ''})")
     sys.exit(1 if fails else 0)
 
 

@@ -1,94 +1,108 @@
 #!/usr/bin/env python3
-# pulls every number the paper summary uses straight out of the simulator logs, writes
-# verification/paper_data.json and draws verification/paper_chart.png. nothing is typed in by hand.
-#
-# run: ~/chipyard/.conda-env/bin/python verification/paper_data.py
-import json, re
+# the paper's numbers, straight from one or more fair run folders (default: newest), as min-max over seeds.
+# writes <first run>/derived/paper_data.json, readme_table.md and paper_chart.png; nothing goes into the repo tree.
+# ratios are "Berkeley cycles / ours" (above 1 = ours takes fewer cycles), as the envelope over every seed pair.
+# run: ~/chipyard/.conda-env/bin/python verification/paper_data.py [RUN ...]
+import json
+import sys
 from pathlib import Path
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 
-ROOT = Path(__file__).resolve().parent.parent
-LOGS = {
-    "berkeley": ROOT / "verification/berkeley-logs/stock-fair_perf_dense_only.log",   # fair_perf.c built -DDENSE_ONLY
-    # fair_perf: the same lean loops as berkeley_dense_perf, plus sparse versions written the same way
-    "ours_2:4": ROOT / "verification/fair-logs/fair_perf_24.log",
-    "ours_4:8": ROOT / "verification/fair-logs/fair_perf_48.log",
-}
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import nmdata  # noqa: E402
+
+PATS = ("2:4", "4:8")
+ROWS = [("busy_reuse", "Array time (cycles in the compute state), weights reused"),
+        ("reuse", "Whole job, weights reused"), ("fresh", "Whole job, fresh weights"),
+        ("batched", "Whole job, fresh weights, indexes batched 4 tiles ahead")]
 
 
-def perf(path):
-    t = Path(path).read_text(errors="replace")
-    assert re.search(r"^\w+ passed$", t, re.M) and "FAILED" not in t, f"{path} did not pass"
-    out = {}
-    for m in re.finditer(r"^(\w+)\s+total\s+(\d+)\s+cpu_issue_done\s+\d+\s+pairs\s+(\d+)\s.*?ex_active=(\d+)", t, re.M):
-        out[m[1]] = {"total": int(m[2]), "tiles": int(m[3]), "busy": int(m[4])}
-    out["_checks"] = t.count("matches the cpu reference")
-    return out, t
+def build_data(fair):
+    s = nmdata.summary(fair)
+    d = {"seeds": {c: list(v) for c, v in fair.items()}, "rows": s, "vs_berkeley": {}, "vs_own_dense": {}}
+    b = s["berkeley"]
+    for pat in PATS:
+        r, off = s[pat], s["off_" + pat]
+        d["vs_berkeley"][pat] = {k: nmdata.ratio(b["fresh" if k == "batched" else k], r[k])
+                                 for k, _ in ROWS if k in r}
+        d["vs_own_dense"][pat] = {k: nmdata.ratio(off["fresh" if k == "batched" else k], r[k])
+                                  for k, _ in ROWS if k in r and ("fresh" if k == "batched" else k) in off}
+    if "sameprog" in s:
+        o = s["sameprog"]
+        d["sameprog_vs_berkeley_pct"] = {k: max(abs(x - y) / y for x in o[k]["values"] for y in b[k]["values"]) * 100
+                                         for k in ("busy_reuse", "busy_fresh", "reuse", "fresh") if k in o and k in b}
+    return d
 
 
-berk, berk_txt = perf(LOGS["berkeley"])
-assert berk_txt.count("matches the cpu reference") == 2, "berkeley run must check both results against the cpu"
-p24, _ = perf(LOGS["ours_2:4"])
-p48, _ = perf(LOGS["ours_4:8"])
-assert p24["_checks"] == 4 and p48["_checks"] == 4, "every fair_perf run must match the cpu reference"
+def readme_table(d):
+    s, cols = d["rows"], ["berkeley", *PATS]
+    cell = lambda row, k: nmdata.fmt_stat(s[row][k]) if k in s[row] else "–"
+    out = ["| Cycles (min-max over seeds) | Berkeley | 2:4 | 4:8 |", "|---|---:|---:|---:|"]
+    for k, label in ROWS:
+        out.append(f"| {label} | " + " | ".join(cell(c, k) if not (c == "berkeley" and k == "batched") else "–" for c in cols) + " |")
+    for key, label in (("vs_berkeley", "Berkeley / ours"), ("vs_own_dense", "same chip dense / sparse (same program)")):
+        for k, name in ROWS:
+            vals = [nmdata.fmt_ratio(d[key][p][k]) if k in d[key][p] else "–" for p in PATS]
+            if any(v != "–" for v in vals):
+                out.append(f"| {label}: {name[0].lower() + name[1:]} | – | " + " | ".join(vals) + " |")
+    seeds = sorted({x for v in d["seeds"].values() for x in v}, key=nmdata.seed_key)
+    out += ["", f"Seeds: {', '.join(seeds)}. Ratios above 1 mean fewer cycles than the reference column."]
+    return "\n".join(out) + "\n"
 
-d = {
-    "berkeley": {"busy": berk["dense_reuse"]["busy"], "reuse": berk["dense_reuse"]["total"], "fresh": berk["dense"]["total"],
-                 "busy_fresh": berk["dense"]["busy"], "tiles": berk["dense"]["tiles"]},
-    "ours_2:4": {"busy": p24["sparse_reuse"]["busy"], "reuse": p24["sparse_reuse"]["total"], "fresh": p24["sparse"]["total"],
-                 "busy_fresh": p24["sparse"]["busy"], "tiles": p24["sparse"]["tiles"]},
-    "ours_4:8": {"busy": p48["sparse_reuse"]["busy"], "reuse": p48["sparse_reuse"]["total"], "fresh": p48["sparse"]["total"],
-                 "busy_fresh": p48["sparse"]["busy"], "tiles": p48["sparse"]["tiles"]},
-    # our modified chip with sparse mode OFF, to show the change doesn't slow down normal use
-    "ours_off_2:4": {"busy": p24["dense_reuse"]["busy"], "reuse": p24["dense_reuse"]["total"], "fresh": p24["dense"]["total"]},
-    "ours_off_4:8": {"busy": p48["dense_reuse"]["busy"], "reuse": p48["dense_reuse"]["total"], "fresh": p48["dense"]["total"]},
-    # processor-only time (accelerator removed), for explaining where the time goes
-    "cpu": {"berkeley_fresh": berk["cpu_dense"]["total"], "berkeley_reuse": berk["cpu_dense_reuse"]["total"],
-            "2:4_fresh": p24["cpu_sparse"]["total"], "2:4_reuse": p24["cpu_sparse_reuse"]["total"],
-            "4:8_fresh": p48["cpu_sparse"]["total"], "4:8_reuse": p48["cpu_sparse_reuse"]["total"]},
-}
-# berkeley's exact program (fair_perf.c built -DDENSE_ONLY) run on OUR 2:4 chip: separates a hardware
-# difference from a program-layout difference when comparing our normal mode with berkeley's
-same = ROOT / "verification/fair-logs/nm24-fair_perf_dense_only.log"
-if same.exists() and "fair_perf passed" in same.read_text():
-    ps, st = perf(same)
-    assert st.count("matches the cpu reference") == 2
-    d["ours_off_sameprog"] = {"busy": ps["dense_reuse"]["busy"], "reuse": ps["dense_reuse"]["total"], "fresh": ps["dense"]["total"]}
-json.dump(d, open(ROOT / "verification/paper_data.json", "w"), indent=1)
-print(json.dumps(d, indent=1))
 
-# ---- chart: one measure (cycles), one axis, three series in fixed palette order ----
-SER = [("berkeley", "Berkeley original", "#2a78d6"), ("ours_2:4", "Ours, 2:4", "#eb6834"), ("ours_4:8", "Ours, 4:8", "#1baf7a")]
-ROWS = [("busy", "Multiplier grid working time\n(weights reused)"), ("reuse", "Whole job, weights reused\n(the realistic case)"),
-        ("fresh", "Whole job, fresh weights\nevery step (stress test)")]
-INK, INK2, GRID, SURF = "#0b0b0b", "#52514e", "#e6e5e0", "#fcfcfb"
+def chart(d, path):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    ser = [("berkeley", "Berkeley original", "#2a78d6"), ("2:4", "Ours, 2:4", "#eb6834"), ("4:8", "Ours, 4:8", "#1baf7a")]
+    rows = [(k, l) for k, l in ROWS[:3]]
+    ink, ink2, grid, surf = "#0b0b0b", "#52514e", "#e6e5e0", "#fcfcfb"
+    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 10})
+    fig, ax = plt.subplots(figsize=(8.4, 4.4), dpi=200)
+    fig.patch.set_facecolor(surf); ax.set_facecolor(surf)
+    bar_h, gap, top = 0.22, 0.03, 0
+    for r, (key, _) in enumerate(rows):
+        for i, (sk, _, col) in enumerate(ser):
+            st, y = d["rows"][sk][key], r + (i - 1) * (bar_h + gap)
+            ax.barh(y, st["mean"], height=bar_h, color=col, edgecolor=surf, linewidth=1, zorder=3)
+            if st["range"]:
+                ax.plot([st["min"], st["max"]], [y, y], color=ink, linewidth=1, zorder=4)
+            txt = nmdata.fmt_stat(st)
+            if sk != "berkeley":
+                txt += f"   Berkeley / ours {nmdata.fmt_ratio(d['vs_berkeley'][sk][key])}"
+            ax.text(st["max"] * 1.02, y, txt, va="center", ha="left", fontsize=8.6, color=ink2 if sk == "berkeley" else ink, zorder=4)
+            top = max(top, st["max"])
+    ax.set_yticks(range(len(rows))); ax.set_yticklabels([l.replace(", ", ",\n", 1) for _, l in rows], color=ink)
+    ax.invert_yaxis()
+    ax.set_xlim(0, top * 1.8)
+    ax.set_xlabel("cycles, 64x128x32 matmul (bar = mean, line = min-max over seeds)", color=ink2, fontsize=9)
+    ax.grid(axis="x", color=grid, linewidth=0.8, zorder=0); ax.set_axisbelow(True)
+    for side in ("top", "right", "left"): ax.spines[side].set_visible(False)
+    ax.spines["bottom"].set_color("#c9c8c2"); ax.tick_params(axis="x", colors=ink2, labelsize=8.5); ax.tick_params(axis="y", length=0)
+    ax.xaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda x, _: f"{int(x):,}"))
+    handles = [matplotlib.patches.Patch(color=c, label=n) for _, n, c in ser]
+    ax.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.42, 1.0), ncol=3, frameon=False, fontsize=9, labelcolor=ink)
+    fig.tight_layout()
+    fig.savefig(path, facecolor=surf)
 
-plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 10})
-fig, ax = plt.subplots(figsize=(8.4, 4.4), dpi=200)
-fig.patch.set_facecolor(SURF); ax.set_facecolor(SURF)
-bar_h, gap = 0.22, 0.03
-for r, (key, label) in enumerate(ROWS):
-    for s, (sk, sname, col) in enumerate(SER):
-        y = r + (s - 1) * (bar_h + gap)
-        v = d[sk][key]
-        ax.barh(y, v, height=bar_h, color=col, edgecolor=SURF, linewidth=1, zorder=3)
-        txt = f"{v:,}"
-        if sk != "berkeley":
-            sp = d["berkeley"][key] / v
-            txt += f"   {sp:.2f}× {'faster' if sp > 1.02 else 'slower' if sp < 0.98 else '(about the same)'}"
-        ax.text(v + 45, y, txt, va="center", ha="left", fontsize=8.6, color=INK2 if sk == "berkeley" else INK, zorder=4)
-ax.set_yticks(range(len(ROWS))); ax.set_yticklabels([l for _, l in ROWS], color=INK)
-ax.invert_yaxis()
-ax.set_xlim(0, max(d[s][k] for s, _, _ in SER for k, _ in ROWS) * 1.42)
-ax.set_xlabel("clock cycles to finish the same job (shorter is better)", color=INK2, fontsize=9)
-ax.grid(axis="x", color=GRID, linewidth=0.8, zorder=0); ax.set_axisbelow(True)
-for side in ("top", "right", "left"): ax.spines[side].set_visible(False)
-ax.spines["bottom"].set_color("#c9c8c2"); ax.tick_params(axis="x", colors=INK2, labelsize=8.5); ax.tick_params(axis="y", length=0)
-ax.xaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda x, _: f"{int(x):,}"))
-handles = [matplotlib.patches.Patch(color=c, label=n) for _, n, c in SER]
-ax.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.42, 1.0), ncol=3, frameon=False, fontsize=9, labelcolor=INK)
-fig.tight_layout()
-fig.savefig(ROOT / "verification/paper_chart.png", facecolor=SURF)
-print("chart written")
+
+def main():
+    try:
+        runs = nmdata.find_runs(sys.argv[1:] or None)
+        fair = nmdata.load_fair(runs)
+    except nmdata.NoResults as e:
+        nmdata.die_no_results(e)
+    bad = [f"{c} seed {s}" for c, v in fair.items() for s, log in v.items() if not log["passed"] or log["failed"]]
+    if bad:
+        sys.exit(f"these runs did not pass, so no paper numbers: {', '.join(bad)}")
+    d = build_data(fair)
+    out = runs[0] / "derived"
+    out.mkdir(exist_ok=True)
+    (out / "paper_data.json").write_text(json.dumps({"runs": [str(r) for r in runs], **d}, indent=1) + "\n")
+    (out / "readme_table.md").write_text(readme_table(d))
+    chart(d, out / "paper_chart.png")
+    print(readme_table(d))
+    print(f"wrote {out}/paper_data.json, readme_table.md, paper_chart.png")
+
+
+if __name__ == "__main__":
+    main()

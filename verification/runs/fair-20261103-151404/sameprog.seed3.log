@@ -1,0 +1,33 @@
+/home/hunter/chipyard/common.mk:537: warning: overriding recipe for target 'run-asm-tests-fast'
+/home/hunter/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/chipyard.harness.TestHarness.GemminiNMRocketConfig.d:780: warning: ignoring old recipe for target 'run-asm-tests-fast'
+/home/hunter/chipyard/common.mk:540: warning: overriding recipe for target 'run-bmark-tests-fast'
+/home/hunter/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/chipyard.harness.TestHarness.GemminiNMRocketConfig.d:839: warning: ignoring old recipe for target 'run-bmark-tests-fast'
+if [ "/home/hunter/gemmini-sparsity/verification/runs/fair-20261103-151404/bin/fair_perf_dense_only-baremetal" != "none" ] && [ ! -f "/home/hunter/gemmini-sparsity/verification/runs/fair-20261103-151404/bin/fair_perf_dense_only-baremetal" ]; then printf "\n\nBinary /home/hunter/gemmini-sparsity/verification/runs/fair-20261103-151404/bin/fair_perf_dense_only-baremetal not found\n\n"; exit 1; fi
+(set -o pipefail &&  /home/hunter/chipyard/sims/verilator/simulator-chipyard.harness-GemminiNMRocketConfig \
+	+permissive \
+	+dramsim +dramsim_ini_dir=/home/hunter/chipyard/generators/testchipip/src/main/resources/dramsim2_ini +max-cycles=150000000  +verilator+seed+3 +loadmem=/home/hunter/gemmini-sparsity/verification/runs/fair-20261103-151404/bin/fair_perf_dense_only-baremetal  \
+	+permissive-off \
+	/home/hunter/gemmini-sparsity/verification/runs/fair-20261103-151404/bin/fair_perf_dense_only-baremetal \
+	 \
+	</dev/null | tee /home/hunter/chipyard/sims/verilator/output/chipyard.harness.TestHarness.GemminiNMRocketConfig/fair_perf_dense_only-baremetal.sameprog.seed3.20261103-151404.log)
+== Loading device model file '%Warning: System has stack size 8192 kb which may be too small; suggest 'ulimit -c 15364' or larger
+[UART] UART0 is here (stdin/stdout).
+/home/hunter/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/DDR3_micron_64M_8B_x4_sg15.ini' == 
+== Loading system model file '/home/hunter/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/system.ini' == 
+===== MemorySystem 0 =====
+CH. 0 TOTAL_STORAGE : 4096MB | 1 Ranks | 16 Devices per rank
+DRAMSim2 Clock Frequency =666666666Hz, CPU Clock Frequency=500000000Hz
+fair_perf: 2:4, i=64 k=128 j=32
+fair_perf build: dense-only (no sparse-mode instructions)
+prep_cold      prep   340777  prune   235692  compress    86577  pack_meta    18508  weights 4096
+prep_warm      prep   335779  prune   234547  compress    83287  pack_meta    17945  weights 4096
+poison reaches the accumulator (2048 values)
+dense          total   1555  cpu_issue_done   1493  pairs  64  cyc/pair   24 | ex_active=1320 rs_full=1527 ctrl_q_block=0 overlap_haz=0 spad_a_wait=194 spad_b_wait=0 spad_d_wait=172 main_ex=1481
+dense matches the cpu reference (2048 values)
+dense_reuse    total   1541  cpu_issue_done   1474  pairs  64  cyc/pair   24 | ex_active=1260 rs_full=1514 ctrl_q_block=0 overlap_haz=0 spad_a_wait=221 spad_b_wait=0 spad_d_wait=207 main_ex=1465
+dense_reuse matches the cpu reference (2048 values)
+cpu only (no gemmini instructions issued):
+cpu_dense      total   1101  cpu_issue_done   1099  pairs  64  cyc/pair   17 | ex_active=0 rs_full=1201 ctrl_q_block=0 overlap_haz=0 spad_a_wait=1156 spad_b_wait=0 spad_d_wait=1126 main_ex=0
+cpu_dense_reuse total   1071  cpu_issue_done   1069  pairs  64  cyc/pair   16 | ex_active=0 rs_full=1170 ctrl_q_block=0 overlap_haz=0 spad_a_wait=1125 spad_b_wait=0 spad_d_wait=1095 main_ex=0
+fair_perf passed
+- /home/hunter/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/gen-collateral/TestDriver.v:158: Verilog $finish

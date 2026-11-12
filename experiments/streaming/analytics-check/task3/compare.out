@@ -1,0 +1,15 @@
+checking /tmp/claude-1000/-home-hunter-gemmini-sparsity/ea1e5421-9b5c-4a67-8397-d208a5e1b2c9/scratchpad/runcopy/fair-20261103-151404 (no reference run given: pass checks only)
+  PASS  berkeley seed 1: passed, 2 result(s) matched the cpu reference
+  PASS  berkeley seed 2: passed, 2 result(s) matched the cpu reference
+  PASS  berkeley seed 3: passed, 2 result(s) matched the cpu reference
+  PASS  nm24 seed 1: passed, 5 result(s) matched the cpu reference
+  PASS  nm24 seed 2: passed, 5 result(s) matched the cpu reference
+  PASS  nm24 seed 3: passed, 5 result(s) matched the cpu reference
+  PASS  nm48 seed 1: passed, 5 result(s) matched the cpu reference
+  PASS  nm48 seed 2: passed, 5 result(s) matched the cpu reference
+  PASS  nm48 seed 3: passed, 5 result(s) matched the cpu reference
+  PASS  sameprog seed 1: passed, 2 result(s) matched the cpu reference
+  PASS  sameprog seed 2: passed, 2 result(s) matched the cpu reference
+  PASS  sameprog seed 3: passed, 2 result(s) matched the cpu reference
+
+ALL GOOD  (12 logs checked)

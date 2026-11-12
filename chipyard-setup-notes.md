@@ -157,7 +157,9 @@ Three repos are involved:
 | `generators/gemmini/software/libgemmini` (Spike model) | `761558c` sparse model · `cb3ffc7` latch at preload · `7679121` index FIFO · `a14aaa1` **upstream bug fix** (uninitialized state) |
 | `generators/gemmini/software/gemmini-rocc-tests` | `e2e7e27` SW helpers · `8a11c1d` Gemmini wrappers + matmul test · `a7daeea` debug/perf tests · `61086b4` perf variants |
 
-The design is generic N:M with M = 2N. **2:4 and 4:8 both pass on Spike and on the Verilator RTL.**
+The design is generic N:M with M = 2N. The original tests passed for 2:4 and 4:8 on the Verilator RTL and for 2:4 on
+Spike (no 4:8 Spike log was kept). The later code review found those tests could pass with sparse mode broken, so they
+are being reworked.
 
 ## Design
 
@@ -187,7 +189,8 @@ The design is generic N:M with M = 2N. **2:4 and 4:8 both pass on Spike and on t
 | `nm_sparse_matmul` | 32×64×32 dense vs sparse on Gemmini, both checked against the CPU reference |
 | `nm_sparse_perf` | 64×128×32 timing: dense, dense+bias, sparse (2 orderings), with/without weight reuse, plus CPU-only issue cost |
 
-4:8 versions are built as `*_48-baremetal` with `-DNM_N=4 -DNM_M=8`. `./run-flow.sh tests` does this.
+`./run-flow.sh tests` builds each as `*_24-baremetal` (`-DNM_N=2 -DNM_M=4`) and `*_48-baremetal` (`-DNM_N=4 -DNM_M=8`),
+and checks that each compile really used that pattern.
 
 ## Original benchmark results: WITHDRAWN, kept only as a historical record
 
@@ -212,7 +215,8 @@ What this shows:
   theoretical 2×; 1.9× without reuse). Same for 2:4 and 4:8.
 - **End to end with weight reuse** (how Gemmini's real kernels run): **1.44× faster for 2:4, 1.36× for 4:8.**
 - **Without reuse, sparse is slower end to end.** These bare-metal loops are bound by Rocket issuing RoCC commands:
-  with no accelerator at all, just building the command stream takes roughly 65–85% of the runtime. Sparse adds 4 (2:4) or 8
+  with no accelerator at all, just building the command stream takes 67–86% of the runtime (computed from the
+  original logs by `fixes-wip/numbers.py`). Sparse adds 4 (2:4) or 8
   (4:8) metadata commands per tile, each 2 loads plus a RoCC. Moving metadata out of the reservation station (the FIFO
   commit) fixed correctness and ordering but not this, because the cost is on the CPU side.
 - `nm_sparse_matmul` (32×64×32, small) shows the same thing: dense 543 vs sparse 815 cycles (2:4), 554 vs 1031 (4:8).
@@ -243,12 +247,13 @@ What this shows:
 
 ```bash
 ./run-flow.sh check          # env sanity
-./run-flow.sh spike-lib      # build the Spike model (2:4 by default)
-./run-flow.sh tests          # build tests incl. 4:8 variants
-./run-flow.sh spike          # quick functional check
-./run-flow.sh sim nm24       # or nm48 / dense
-./run-flow.sh bench nm24     # RTL correctness + perf, appends to results/cycles.csv
+./run-flow.sh spike-lib      # build the Spike model (2:4; spike-lib nm48 for 4:8)
+./run-flow.sh tests          # build tests incl. the _24 / _48 sparse variants
+./run-flow.sh spike          # quick functional check (spike nm48 after spike-lib nm48)
+./run-flow.sh sim nm24       # or nm48; sim dense only from Berkeley's base commits
+./run-flow.sh fair           # the fair benchmark, once per seed -> verification/runs/fair-<stamp>/
+./run-flow.sh bench nm24     # the original benchmark -> verification/runs/bench-nm24-<stamp>/
 ```
 
-The Spike model's N:M is fixed at compile time (default 2:4). For 4:8 on Spike, build libgemmini with
-`-DNM_N=4 -DNM_M=8` (see the `g++` line in `software/libgemmini/Makefile`).
+The Spike model's N:M is fixed at compile time (default 2:4); `spike-lib nm48` passes `NM_N=4 NM_M=8` to
+libgemmini's Makefile.

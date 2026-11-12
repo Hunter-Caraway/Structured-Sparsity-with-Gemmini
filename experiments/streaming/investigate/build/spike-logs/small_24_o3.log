@@ -1,0 +1,15 @@
+sbench: layer=small M=64 K=256 N=128 pattern=2:4 build=full run_mask=24 TI=4 TJ=8 data_seed=20261109 v2_opts=3
+poison reaches all of C (8192 values)
+null window: read_cycles delta 1 | ex_active=0 rdma_active=0 wdma_active=0 load_active=0 store_active=0 rs_full=0 loop_matmul_active=0 rdma_bytes=6
+null window: read_cycles delta 1 | ex_active=0 rdma_active=0 wdma_active=0 load_active=0 store_active=0 rs_full=0 loop_matmul_active=0 rdma_bytes=6
+dense_v2      total      18147  cpu_issue_done      18145 | ex_active=281260 rdma_active=286157 wdma_active=288105 load_active=285010 store_active=291278 rs_full=293801 loop_matmul_active=288307 rdma_bytes=13
+dense_v2 check: hash 0x8f3286c5fe0a381a expected 0x8f3286c5fe0a381a, sampled rows 8/8 -> verified
+dense_v2 overhead (untimed): poison 861  evict_l2 14351  check 50284 cycles
+sparse_v2     total      19513  cpu_issue_done      19511 | ex_active=217592 rdma_active=223672 wdma_active=223284 load_active=224174 store_active=223530 rs_full=217145 loop_matmul_active=215502 rdma_bytes=11
+sparse_v2 check: hash 0x8f3286c5fe0a381a expected 0x8f3286c5fe0a381a, sampled rows 8/8 -> verified
+sparse_v2 overhead (untimed): poison 861  evict_l2 14351  check 47301 cycles
+sbench end cycle 310050
+sbench passed (2 of 2 runs verified)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

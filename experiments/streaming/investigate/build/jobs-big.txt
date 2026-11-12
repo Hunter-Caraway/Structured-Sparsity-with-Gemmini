@@ -1,0 +1,6 @@
+nm24 /home/hunter/gemmini-sparsity/experiments/streaming/investigate/build/bin-big/rn50_conv_24_v3o1-baremetal 1 30000000
+stock /home/hunter/gemmini-sparsity/experiments/streaming/investigate/build/bin-big/rn50_conv_24_v3dense-baremetal 1 30000000
+nm48 /home/hunter/gemmini-sparsity/experiments/streaming/investigate/build/bin-big/rn50_conv_48_v3o9-baremetal 1 30000000
+nm24 /home/hunter/gemmini-sparsity/experiments/streaming/investigate/build/bin-big/bert_ffn2_24_v3o1-baremetal 1 60000000
+stock /home/hunter/gemmini-sparsity/experiments/streaming/investigate/build/bin-big/bert_ffn2_24_v3dense-baremetal 1 60000000
+nm48 /home/hunter/gemmini-sparsity/experiments/streaming/investigate/build/bin-big/bert_ffn2_48_v3o9-baremetal 1 60000000

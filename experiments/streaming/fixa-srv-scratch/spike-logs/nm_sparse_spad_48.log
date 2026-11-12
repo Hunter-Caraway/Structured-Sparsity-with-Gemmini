@@ -1,0 +1,14 @@
+nm_sparse_spad: 4:8, R = 6 rows per index tile, 8 tiles
+packer (spec section 9)    ok
+load 4, early              ok (0/2048 wrong)
+loads of 1,3,2,2           ok (0/2048 wrong)
+register tile, then loads  ok (0/2048 wrong)
+loads in dense mode        ok (0/2048 wrong)
+bank edges                 ok (0/2048 wrong)
+rows overwritten after load ok (0/2048 wrong)
+reset, then register rows  ok (0/2048 wrong)
+spec section 9 sequence    ok (0/256 wrong)
+nm_sparse_spad passed
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

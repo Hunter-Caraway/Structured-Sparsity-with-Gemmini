@@ -4,3 +4,9 @@ __pycache__/
 .venv/
 tools/report-builders/shots*/
 verification/build/
+analysis/area/work/
+
+# large build/scratch outputs, not source
+experiments/streaming/build/
+experiments/area-nofraig/work/
+*.trace

@@ -1,0 +1,3 @@
+  done nm24 micro3_24-baremetal seed 1 exit 0 268 s
+  done nm48 micro3_48-baremetal seed 1 exit 0 337 s
+done: /home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261109-194754-micro3

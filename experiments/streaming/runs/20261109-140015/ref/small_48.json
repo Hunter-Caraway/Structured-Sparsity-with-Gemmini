@@ -1,0 +1,37 @@
+{
+ "layer": "small",
+ "M": 64,
+ "K": 256,
+ "N": 128,
+ "n": 4,
+ "m": 8,
+ "seed": 20261109,
+ "hash": "0xe574e010e769ecf0",
+ "sample_rows": [
+  0,
+  1,
+  14,
+  32,
+  33,
+  44,
+  62,
+  63
+ ],
+ "sha256": {
+  "A.bin": "6d44e093e3a350f195cf926c6651432a92183659d4357e328d6b91911967bb62",
+  "W.bin": "6a93e9c16e68f13153564596013e3e0f605e03f1dc80d431e7b25063d2cb9366",
+  "WC.bin": "0bbb07f4b99a1629ba3ce1391101fd6397b45a2229c572e341b1db1ed4085ff3",
+  "IDX.bin": "aa93fb7710fd6042ee722881e2a4fbe541e7112f80f7821fda11500943ce9a55",
+  "META.bin": "a40aa6ba1d291bd3ea8371f0b9a4ff642daeb9d1bf0a912465b1bfa1626c236c",
+  "SREF.bin": "bb853a72b2b4fcd9bdbbaf4f0485db0bf8854b9d8eb9cf224d0b871fac1eb2f5"
+ },
+ "kept_fraction": 0.5,
+ "meta_words_per_tile": 16,
+ "bytes": {
+  "A": 16384,
+  "W": 32768,
+  "WC": 16384,
+  "META": 8192,
+  "C_int32": 32768
+ }
+}

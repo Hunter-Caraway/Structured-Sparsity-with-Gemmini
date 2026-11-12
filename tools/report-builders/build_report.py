@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Builds the N:M sparsity run report PDF from the project's logs, results and charts."""
-import re, subprocess
+import os, re, subprocess
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 from reportlab.lib.pagesizes import letter
@@ -13,14 +13,14 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (BaseDocTemplate, PageTemplate, Frame, Paragraph, Spacer, Image as RLImage,
                                 Table, TableStyle, PageBreak, KeepTogether, CondPageBreak, Preformatted)
 
-PROJ = Path("/home/hunter/Structured 4:8 Sparsity with Gemmini")
+PROJ = Path(__file__).resolve().parents[2]
 LOGS = PROJ / "logs"
 CHARTS = PROJ / "analysis" / "charts"
 SCR = Path(__file__).parent
 CAP = SCR / "cap"
 SHOTS = SCR / "shots"; SHOTS.mkdir(exist_ok=True)
 OUT = PROJ / "N-M-Sparsity-Run-Report.pdf"
-GEM = Path("/home/hunter/chipyard/generators/gemmini")
+GEM = Path(os.environ.get("CHIPYARD_DIR", Path.home() / "chipyard")) / "generators" / "gemmini"
 
 ANSI = re.compile(r"\x1b\[[0-9;]*m")
 def rd(p): return ANSI.sub("", Path(p).read_text(errors="replace"))
@@ -74,9 +74,10 @@ def terminal(name, title, lines, cols=None):
     p = SHOTS / f"{name}.png"; im.save(p); return p
 
 def short(path):
-    return str(path).replace("/home/hunter/chipyard/sims/verilator/generated-src/", "…/generated-src/") \
-                    .replace("/home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests/build/bareMetalC/", "…/bareMetalC/") \
-                    .replace("/home/hunter/chipyard/", "~/chipyard/").replace("/home/hunter/", "~/")
+    cy, home = f"{GEM.parents[1]}/", f"{Path.home()}/"
+    return str(path).replace(f"{cy}sims/verilator/generated-src/", "…/generated-src/") \
+                    .replace(f"{GEM}/software/gemmini-rocc-tests/build/bareMetalC/", "…/bareMetalC/") \
+                    .replace(cy, "~/chipyard/").replace(home, "~/")
 
 shots = {}
 # 1 setup failure

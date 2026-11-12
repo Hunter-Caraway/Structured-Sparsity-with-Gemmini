@@ -1,0 +1,68 @@
+diff --git a/gemmini.h b/gemmini.h
+index 0257f5c..0701cc0 100644
+--- a/gemmini.h
++++ b/gemmini.h
+@@ -23,14 +23,25 @@ static const uint64_t addr_len = ADDR_LEN; // Number of bits used to address the
+ #define NUM_EXTERNAL_COUNTERS 6 
+ 
+ // n:m sparsity pattern for the sparse weight-stationary mode
+-// changed: added, defaults to 2:4, hardware needs m == 2*n
+-#ifndef NM_N
+-#define NM_N 2
++// changed: added. the Makefile passes -DNM_N/-DNM_M (NM_N ?= 2, NM_M ?= 4 there), so there is no silent
++// default in here; the model prints the pattern it was built for on startup
++#if !defined(NM_N) || !defined(NM_M)
++#error "build libgemmini through its Makefile (or pass -DNM_N=.. -DNM_M=..), e.g. make NM_N=4 NM_M=8"
+ #endif
+-#ifndef NM_M
+-#define NM_M 4
++#if defined(GEMMINI_HW_NM_N) && defined(GEMMINI_HW_NM_M) && (GEMMINI_HW_NM_N != NM_N || GEMMINI_HW_NM_M != NM_M)
++#error "NM_N/NM_M don't match the GEMMINI_HW_NM_N/GEMMINI_HW_NM_M in gemmini_params.h"
+ #endif
+ 
++constexpr unsigned nm_log2_ceil(unsigned x) { return x <= 1 ? 0 : 1 + nm_log2_ceil((x + 1) / 2); }
++static_assert(NM_N >= 1 && NM_M == 2 * NM_N, "the sparse array needs m == 2*n");
++static_assert((NM_M & (NM_M - 1)) == 0, "m has to be a power of 2");
++static_assert(DIM % NM_N == 0, "DIM has to be a multiple of n");
++static_assert(DIM * nm_log2_ceil(NM_M) <= 64, "one index row (DIM * log2(m) bits) has to fit a 64 bit register");
++
++// changed: added. depth of the hardware index-tile fifo: software may be at most this many tiles ahead of the
++// real sparse preloads that consume them (a 5th tile deadlocks the rtl, the model aborts)
++#define NM_META_FIFO_DEPTH 4
++
+ #define MAKECUSTOMFN(opcode) custom ## opcode
+ #define CUSTOMFN(opcode) MAKECUSTOMFN(opcode)
+ 
+@@ -127,6 +138,14 @@ struct gemmini_state_t
+   std::deque<std::vector<std::vector<uint8_t>>> nm_meta_q;
+   std::vector<std::vector<uint8_t>> pe_meta;
+   std::vector<std::vector<uint8_t>> preload_meta; // what the last preload cmd grabbed
++  // changed: added. the mode is latched with the weights: preload_nm_sparse is the mode the last preload ran in,
++  // pe_nm_sparse the mode of the weights now in the pes. a compute in another mode aborts
++  bool preload_nm_sparse;
++  bool pe_nm_sparse;
++  // changed: added. the preload's D/B tile is read when the preload cmd runs (the rtl's reservation station keeps
++  // a later mvin to those rows behind the preload), not at the compute. rows past preload_d_rows weren't latched
++  std::vector<std::vector<elem_t>> preload_d;
++  size_t preload_d_rows;
+ 
+   // cisc state
+   reg_t a_addr, b_addr, c_addr, d_addr;
+@@ -151,6 +170,7 @@ public:
+   void compute(reg_t a_addr, reg_t bd_addr, bool preload);
+   void compute_cisc();
+   void nm_meta_load(reg_t rs1, reg_t rs2); // changed: added
++  void nm_meta_clear(); // changed: added, NM_META_CMD with rd == 1
+   reg_t counter_operation(reg_t rs1);
+ 
+   void loop_ws(reg_t rs1, reg_t rs2);
+@@ -186,7 +206,8 @@ private:
+   const unsigned compute_accumulated_funct = 5;
+   const unsigned preload_funct = 6;
+   const unsigned flush_funct = 7;
+-  const unsigned nm_meta_funct = 26; // changed: added, loads n:m index rows
++  const unsigned nm_meta_funct = 26; // changed: added, loads n:m index rows (rd == 1: clear instead)
++  const unsigned nm_meta_clear_rd = 1; // changed: added
+   const unsigned loop_ws_funct = 8;
+   const unsigned loop_ws_config_bounds_funct = 9;
+   const unsigned loop_ws_config_addrs_AB_funct = 10;

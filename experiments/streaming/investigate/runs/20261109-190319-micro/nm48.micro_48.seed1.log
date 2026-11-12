@@ -1,0 +1,46 @@
+/home/hunter/chipyard/common.mk:537: warning: overriding recipe for target 'run-asm-tests-fast'
+/home/hunter/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNM48RocketConfig/chipyard.harness.TestHarness.GemminiNM48RocketConfig.d:780: warning: ignoring old recipe for target 'run-asm-tests-fast'
+/home/hunter/chipyard/common.mk:540: warning: overriding recipe for target 'run-bmark-tests-fast'
+/home/hunter/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNM48RocketConfig/chipyard.harness.TestHarness.GemminiNM48RocketConfig.d:839: warning: ignoring old recipe for target 'run-bmark-tests-fast'
+if [ "/home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261109-190319-micro/bin/micro_48-baremetal" != "none" ] && [ ! -f "/home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261109-190319-micro/bin/micro_48-baremetal" ]; then printf "\n\nBinary /home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261109-190319-micro/bin/micro_48-baremetal not found\n\n"; exit 1; fi
+(set -o pipefail &&  /home/hunter/chipyard/sims/verilator/simulator-chipyard.harness-GemminiNM48RocketConfig \
+	+permissive \
+	+dramsim +dramsim_ini_dir=/home/hunter/chipyard/generators/testchipip/src/main/resources/dramsim2_ini +max-cycles=20000000  +verilator+seed+1 +loadmem=/home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261109-190319-micro/bin/micro_48-baremetal  \
+	+permissive-off \
+	/home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261109-190319-micro/bin/micro_48-baremetal \
+	 \
+	</dev/null | tee /home/hunter/chipyard/sims/verilator/output/chipyard.harness.TestHarness.GemminiNM48RocketConfig/micro_48-baremetal.inv.nm48.seed1.20261109-190319-micro.log)
+== Loading device model file '/home/hunter/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/DDR3_micron_64M_8B_x4_sg15.ini' == 
+%Warning: System has stack size 8192 kb which may be too small; suggest 'ulimit -c 15365' or larger
+[UART] UART0 is here (stdin/stdout).
+== Loading system model file '/home/hunter/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/system.ini' == 
+===== MemorySystem 0 =====
+CH. 0 TOTAL_STORAGE : 4096MB | 1 Ranks | 16 Devices per rank
+DRAMSim2 Clock Frequency =666666666Hz, CPU Clock Frequency=500000000Hz
+micro: DIM=16 BANK_ROWS=4096 NM=4:8 MW=16 dense_only=0
+(warm-up follows)
+micro case=dense TI=1 computes=512 total=17726 issue=17661 cyc_per_compute_x100=3462 ex_active=15360 pre_haz=0 overlap_haz=0 spA_wait=681 spB_wait=0 rs_busy=17482
+micro case=sp_same TI=1 computes=512 total=43172 issue=43091 cyc_per_compute_x100=8432 ex_active=23552 pre_haz=0 overlap_haz=0 spA_wait=150 spB_wait=18035 rs_busy=43012
+micro case=sp_diff TI=1 computes=512 total=43648 issue=43583 cyc_per_compute_x100=8525 ex_active=15360 pre_haz=0 overlap_haz=0 spA_wait=26689 spB_wait=26841 rs_busy=35328
+micro case=sp_diff_cold TI=1 computes=512 total=95243 issue=95192 cyc_per_compute_x100=18602 ex_active=15360 pre_haz=0 overlap_haz=0 spA_wait=78480 spB_wait=78480 rs_busy=35328
+micro case=sp_diff_b4 TI=1 computes=512 total=96560 issue=96495 cyc_per_compute_x100=18859 ex_active=15360 pre_haz=0 overlap_haz=0 spA_wait=79791 spB_wait=79791 rs_busy=23062
+(measured follows)
+micro case=dense TI=1 computes=512 total=17535 issue=17470 cyc_per_compute_x100=3424 ex_active=15360 pre_haz=0 overlap_haz=0 spA_wait=728 spB_wait=86 rs_busy=17464
+micro case=sp_same TI=1 computes=512 total=43240 issue=43159 cyc_per_compute_x100=8445 ex_active=23552 pre_haz=0 overlap_haz=0 spA_wait=241 spB_wait=18015 rs_busy=43011
+micro case=sp_diff TI=1 computes=512 total=43636 issue=43571 cyc_per_compute_x100=8522 ex_active=15360 pre_haz=0 overlap_haz=0 spA_wait=26677 spB_wait=26829 rs_busy=35328
+micro case=sp_diff_cold TI=1 computes=512 total=95086 issue=95035 cyc_per_compute_x100=18571 ex_active=15360 pre_haz=0 overlap_haz=0 spA_wait=78323 spB_wait=78323 rs_busy=35328
+micro case=sp_diff_b4 TI=1 computes=512 total=96695 issue=96630 cyc_per_compute_x100=18885 ex_active=15360 pre_haz=0 overlap_haz=0 spA_wait=79926 spB_wait=79926 rs_busy=23051
+(warm-up follows)
+micro case=dense TI=8 computes=512 total=10774 issue=10709 cyc_per_compute_x100=2104 ex_active=9609 pre_haz=0 overlap_haz=0 spA_wait=288 spB_wait=88 rs_busy=10701
+micro case=sp_same TI=8 computes=512 total=16666 issue=16304 cyc_per_compute_x100=3255 ex_active=15905 pre_haz=0 overlap_haz=0 spA_wait=239 spB_wait=113 rs_busy=16457
+micro case=sp_diff TI=8 computes=512 total=14470 issue=14404 cyc_per_compute_x100=2826 ex_active=9984 pre_haz=0 overlap_haz=0 spA_wait=3332 spB_wait=3484 rs_busy=13384
+micro case=sp_diff_cold TI=8 computes=512 total=20402 issue=20336 cyc_per_compute_x100=3984 ex_active=9984 pre_haz=0 overlap_haz=0 spA_wait=9459 spB_wait=9462 rs_busy=13376
+micro case=sp_diff_b4 TI=8 computes=512 total=21225 issue=21159 cyc_per_compute_x100=4145 ex_active=9984 pre_haz=0 overlap_haz=0 spA_wait=10280 spB_wait=10280 rs_busy=11962
+(measured follows)
+micro case=dense TI=8 computes=512 total=10749 issue=10684 cyc_per_compute_x100=2099 ex_active=9600 pre_haz=0 overlap_haz=0 spA_wait=278 spB_wait=84 rs_busy=10680
+micro case=sp_same TI=8 computes=512 total=16668 issue=16306 cyc_per_compute_x100=3255 ex_active=15905 pre_haz=0 overlap_haz=0 spA_wait=241 spB_wait=110 rs_busy=16457
+micro case=sp_diff TI=8 computes=512 total=14467 issue=14401 cyc_per_compute_x100=2825 ex_active=9984 pre_haz=0 overlap_haz=0 spA_wait=3329 spB_wait=3481 rs_busy=13379
+micro case=sp_diff_cold TI=8 computes=512 total=20394 issue=20328 cyc_per_compute_x100=3983 ex_active=9984 pre_haz=0 overlap_haz=0 spA_wait=9452 spB_wait=9455 rs_busy=13376
+micro case=sp_diff_b4 TI=8 computes=512 total=20958 issue=20892 cyc_per_compute_x100=4093 ex_active=9984 pre_haz=0 overlap_haz=0 spA_wait=10013 spB_wait=10013 rs_busy=11953
+micro done
+- /home/hunter/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNM48RocketConfig/gen-collateral/TestDriver.v:158: Verilog $finish

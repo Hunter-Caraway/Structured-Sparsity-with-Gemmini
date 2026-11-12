@@ -1,0 +1,17 @@
+stamp=20261109-190319-micro
+host=fortnite 7.1.8-200.fc44.x86_64 nproc=16
+git.gemmini-sparsity=1e50e1c45b8b607e2899562d6c51d4343c99a3ac (uncommitted changes)
+git.gemmini=639a5068bc7f01c5c8fed5a4bea15a55963c60a3 (uncommitted changes)
+git.libgemmini=a14aaa15ed5fa34e61ddf73e302be00af9538d51 (uncommitted changes)
+git.gemmini-rocc-tests=61086b433e1b7fb57bcd22634d03b4285f9d00cf (uncommitted changes)
+sim.stock=GemminiRocketConfig mtime=2026-10-06T00:56:57 sha256=062e7da1f9214b7ec28148e4e0abb5edf216b9428c84ecea900158e461a12244
+sim.nm24=GemminiNMRocketConfig mtime=2026-11-03T15:10:27 sha256=98e328ee5fa2e0286aadb392be3a213844459350d9c82fcfe096ccbac1a3807a
+sim.nm48=GemminiNM48RocketConfig mtime=2026-11-03T15:12:07 sha256=41050999335dd6d932a6d362c5946dda1f96281944bb2c823f0c6c4a70bcce20
+gemmini_nm.h.sha256=82305e436dfabf64874c232a16d8015d674cca8475c18ddfa212264eed289fa5
+src.micro.c.sha256=8e06d4fb02b73faa47826b2ba30b14d8edcb3e7821a25dc0f7e92972e101ba50
+src.stream_bench.c.sha256=3e06a0321c2b45f33d97e158c39a887eab6316c9b31364178ac2278e3fbca0b3
+make=run-binary-fast LOADMEM=1 BREAK_SIM_PREREQ=1 (RANDOM_SEED, TIMEOUT_CYCLES per job)
+flags=investigate/scripts/build_one.sh (= scripts/build.sh rv_cc flags) + -DNM_N/-DNM_M
+bin.micro_24-baremetal.sha256=19672a76cdc0b3a8ec1804160af360f08f88531424c89f2a5415d07625834f93
+bin.micro_48-baremetal.sha256=358dd6f818722728c75773d388f58af336fd6fe3a9cd3f34bc5e167480c84ac0
+bin.micro_24_dense-baremetal.sha256=2d65b4882089fbf820fd32769b4807e4072cc9c8c13af87fb2a1d8951301652a

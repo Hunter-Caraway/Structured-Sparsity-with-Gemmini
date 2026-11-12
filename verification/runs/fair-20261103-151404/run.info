@@ -1,0 +1,12 @@
+stamp=20261103-151404
+seeds=1 2 3
+timeout_cycles=150000000
+step=fair all
+fair_bin=/home/hunter/gemmini-sparsity/verification/build
+git.gemmini-sparsity=1e50e1c45b8b607e2899562d6c51d4343c99a3ac (uncommitted changes)
+git.gemmini=639a5068bc7f01c5c8fed5a4bea15a55963c60a3 (uncommitted changes)
+git.libgemmini=a14aaa15ed5fa34e61ddf73e302be00af9538d51 (uncommitted changes)
+git.gemmini-rocc-tests=61086b433e1b7fb57bcd22634d03b4285f9d00cf (uncommitted changes)
+sim.GemminiNM48RocketConfig=2026-11-03T15:12:07 sha256:41050999335dd6d9
+sim.GemminiNMRocketConfig=2026-11-03T15:10:27 sha256:98e328ee5fa2e028
+sim.GemminiRocketConfig=2026-10-06T00:56:57 sha256:062e7da1f9214b7e
