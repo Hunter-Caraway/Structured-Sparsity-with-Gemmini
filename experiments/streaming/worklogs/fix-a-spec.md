@@ -276,3 +276,4 @@ the LOAD waits in the reservation station until the index mvin completes, is div
 - 2026-11-11 (documentation only, no semantic change to RTL or Spike): P5 reworded; a LOAD must not sit between a
   preload and its paired compute (possible RTL deadlock, else lost preload/compute overlap). Section 6 loader
   wording softened: it can delay an operand read by about one cycle under read back-pressure.
+- 2026-11-12 (documentation only, no semantic change): HANDOFF.md was removed from the tree; its section 5 ("Plan for the fix round", which holds the "Shared protocol spec") is now at `git show e06b436:HANDOFF.md`. The "HANDOFF.md section 5" citation in the header refers to that.

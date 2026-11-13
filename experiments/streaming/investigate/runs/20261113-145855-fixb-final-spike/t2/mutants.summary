@@ -1,0 +1,32 @@
+m1-ahi-base-24 nm_sparse_loop_24 rc=1: KILLED; 19 cases FAIL; 
+m2-idx-stride32-24 nm_sparse_loop_24 rc=1: KILLED; 21 cases FAIL; 
+m3-stc-k-not-halved-24 nm_sparse_loop_24 rc=1: KILLED; 19 cases FAIL; 
+m4-idx-over-b-24 nm_sparse_loop_24 rc=255: KILLED; 0 cases FAIL; GEMMINI: NM_META_CMD rd == 2: the index rows must all lie in one scratchpad bank (rows 8188..8195)
+m5-no-budget-gate-24 nm_sparse_loop_24 rc=255: KILLED; 0 cases FAIL; GEMMINI: n:m index fifo: more than 4 index tiles ahead of their preloads (3 queued, 0 in flight, load of 2)
+m6-nm-flag-not-latched-24 nm_sparse_loop_24 rc=255: KILLED; 0 cases FAIL; GEMMINI: sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+m7-idx-rows-8-24 nm_sparse_loop_24 rc=1: KILLED; 5 cases FAIL; 
+m8-load-idx-uses-id2-stride-24 nm_sparse_loop_24 rc=1: KILLED; 21 cases FAIL; 
+m1-ahi-base-48 nm_sparse_loop_48 rc=1: KILLED; 19 cases FAIL; 
+m2-idx-stride32-48 nm_sparse_loop_48 rc=1: KILLED; 21 cases FAIL; 
+m3-stc-k-not-halved-48 nm_sparse_loop_48 rc=1: KILLED; 19 cases FAIL; 
+m4-idx-over-b-48 nm_sparse_loop_48 rc=255: KILLED; 0 cases FAIL; GEMMINI: NM_META_CMD rd == 2: the index rows must all lie in one scratchpad bank (rows 8186..8197)
+m5-no-budget-gate-48 nm_sparse_loop_48 rc=255: KILLED; 0 cases FAIL; GEMMINI: n:m index fifo: more than 4 index tiles ahead of their preloads (3 queued, 0 in flight, load of 2)
+m6-nm-flag-not-latched-48 nm_sparse_loop_48 rc=255: KILLED; 0 cases FAIL; GEMMINI: sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+m7-idx-rows-8-48 nm_sparse_loop_48 rc=1: KILLED; 5 cases FAIL; 
+m8-load-idx-uses-id2-stride-48 nm_sparse_loop_48 rc=1: KILLED; 21 cases FAIL; 
+a-N1-removed NEG=10: KILLED (WRONGTEXT NEG=10 24 rc=255: GEMMINI: sparse preload with no index tile queued: index tile must be sent before its preload)
+a-N1-removed NEG=11: KILLED (NOTCAUGHT NEG=11 24 rc=0)
+a-N2-removed NEG=20: KILLED (NOTCAUGHT NEG=20 24 rc=0)
+a-N3-removed NEG=30: KILLED (NOTCAUGHT NEG=30 24 rc=0)
+a-N4-removed NEG=40: KILLED (NOTCAUGHT NEG=40 24 rc=0)
+a-N5-removed NEG=50: KILLED (NOTCAUGHT NEG=50 24 rc=0)
+a-N6-removed NEG=60: KILLED (NOTCAUGHT NEG=60 24 rc=0)
+a-N6-removed NEG=61: KILLED (NOTCAUGHT NEG=61 24 rc=0)
+a-N7-removed NEG=70: KILLED (NOTCAUGHT NEG=70 24 rc=0)
+a-N8-removed NEG=80: KILLED (NOTCAUGHT NEG=80 24 rc=0)
+a-N9-removed NEG=90: KILLED (WRONGTEXT NEG=90 24 rc=1: )
+a-N10-removed NEG=100: KILLED (NOTCAUGHT NEG=100 24 rc=0)
+a-N11-removed NEG=110: KILLED (NOTCAUGHT NEG=110 24 rc=0)
+a-N12-removed NEG=120: KILLED (NOTCAUGHT NEG=120 24 rc=0)
+a-N13-removed NEG=130: KILLED (WRONGTEXT NEG=130 24 rc=255: )
+a-N14-removed NEG=140: KILLED (NOTCAUGHT NEG=140 24 rc=0)

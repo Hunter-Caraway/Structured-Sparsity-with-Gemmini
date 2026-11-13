@@ -9,7 +9,7 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase.pdfmetrics import registerFontFamily
-from reportlab.platypus import (BaseDocTemplate, PageTemplate, Frame, Paragraph, Spacer, Image as RLImage,
+from reportlab.platypus import (BaseDocTemplate, PageTemplate, Frame, Paragraph, Image as RLImage,
                                 Table, TableStyle, KeepTogether, CondPageBreak)
 from PIL import Image
 
@@ -66,7 +66,6 @@ def c(v): return f"{v:,}"
 g24, g48 = r(B0["busy"], T24["busy"]), r(B0["busy"], T48["busy"])
 e24, e48 = r(B0["reuse"], T24["reuse"]), r(B0["reuse"], T48["reuse"])
 f24, f48 = r(B0["fresh"], T24["fresh"]), r(B0["fresh"], T48["fresh"])
-def pct(v): return f"{abs(v - 1) * 100:.0f}%"
 
 story = [P("Gemmini with 2:4 and 4:8 Sparsity: Results Summary", "title"),
          P("How our modified chip compares with UC Berkeley's original, what the numbers mean, and which pattern makes sense", "sub"),

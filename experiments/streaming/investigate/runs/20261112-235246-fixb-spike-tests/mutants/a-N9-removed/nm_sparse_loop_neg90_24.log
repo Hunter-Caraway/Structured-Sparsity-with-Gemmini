@@ -1,0 +1,4 @@
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4
+LOOP_WS bounds were too large for double-buffering

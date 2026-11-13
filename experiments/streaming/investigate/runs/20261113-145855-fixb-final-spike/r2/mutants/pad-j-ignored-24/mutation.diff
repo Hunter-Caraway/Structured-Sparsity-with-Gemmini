@@ -1,0 +1,11 @@
+--- /home/hunter/chipyard/generators/gemmini/software/libgemmini/gemmini.cc	2026-11-12 23:45:00.857507335 -0500
++++ /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-final/r2root/mutants/pad-j-ignored-24/gemmini.cc	2026-11-13 14:57:21.903473291 -0500
+@@ -933,7 +933,7 @@
+   const uint16_t K = gemmini_state.loop_ws_K;
+ 
+   const uint16_t pad_I = gemmini_state.loop_ws_pad_I;
+-  const uint16_t pad_J = gemmini_state.loop_ws_pad_J;
++  const uint16_t pad_J = 0;
+   const uint16_t pad_K = gemmini_state.loop_ws_pad_K;
+ 
+   const uint32_t GARBAGE_ADDR = ~0;

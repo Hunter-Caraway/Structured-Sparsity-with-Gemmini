@@ -1,0 +1,4 @@
+955c955
+<       nm_loop_abort("sparse loop needs A_stride == 1"); // changed: sparse-loop-fix, N8
+---
+>       (void)0; // changed: sparse-loop-fix, N8

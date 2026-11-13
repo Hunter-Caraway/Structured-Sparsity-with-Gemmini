@@ -1,0 +1,4 @@
+917c917
+<     nm_loop_abort("LOOP_WS with rs1[3] set needs LOOP_WS_CONFIG_NM (funct 28) first"); // changed: sparse-loop-fix, N3
+---
+>     (void)0; // changed: sparse-loop-fix, N3

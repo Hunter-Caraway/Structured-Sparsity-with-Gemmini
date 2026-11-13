@@ -42,6 +42,13 @@ def die_no_results(e):
     sys.exit(2)
 
 
+def die_unpassed(fair, what):
+    """Exit 1 if any log in {chip: {seed: parsed log}} did not pass or has a failure line: its cycles don't count."""
+    bad = [f"{c} seed {s}" for c, v in fair.items() for s, log in v.items() if not log["passed"] or log["failed"]]
+    if bad:
+        sys.exit(f"these runs did not pass, so no {what}: {', '.join(bad)}")
+
+
 def parse_log(path):
     """Everything one benchmark log reports."""
     t = Path(path).read_text(errors="replace")

@@ -1,0 +1,6 @@
+A_transpose: 0, B_transpose: 0, dataflow: 0
+Output-stationary
+Gemmini extension configured with:
+    dim = 16
+*** FAILED *** (tohost = 1337)
+exit=57

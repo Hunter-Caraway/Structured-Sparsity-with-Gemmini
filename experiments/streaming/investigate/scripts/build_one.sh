@@ -15,6 +15,7 @@ rv_inc=(-I"$here/src" -I"$tests_dir/riscv-tests" -I"$tests_dir/riscv-tests/env" 
         -I"$tests_dir/riscv-tests/benchmarks/common" -DID_STRING= -DPRINT_TILE=0)
 c="$tests_dir/riscv-tests/benchmarks/common"
 mkdir -p "$(dirname "$out")"
+rm -f "$out"  # the gcc exit status is masked below; without this a failed compile passes the -s check on an old binary
 riscv64-unknown-elf-gcc "$@" -DNM_N="$n" -DNM_M="$m" "${rv_pre[@]}" -lm -lgcc "${rv_inc[@]}" -nostdlib -nostartfiles \
   -static -T "$c/test.ld" -DBAREMETAL=1 "$src" -o "$out" "$c/syscalls.c" "$c/crt.S" 2>&1 | grep -v RWX || true
 [ -s "$out" ] || { echo "compile failed: $out" >&2; exit 1; }

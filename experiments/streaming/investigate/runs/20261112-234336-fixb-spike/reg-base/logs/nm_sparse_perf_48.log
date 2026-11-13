@@ -1,0 +1,17 @@
+nm_sparse_perf: 4:8, i=64 k=128 j=32
+dense          total   1904  cpu_issue_done   1902  pairs  64  cyc/pair   29 | ex_active=34179 rs_full=30878 ctrl_q_block=34035 overlap_haz=30547 spad_a_wait=31896 spad_b_wait=32898 spad_d_wait=31518 main_ex=32961
+dense_bias     total   1840  cpu_issue_done   1838  pairs  64  cyc/pair   28 | ex_active=29236 rs_full=33515 ctrl_q_block=30883 overlap_haz=30535 spad_a_wait=34845 spad_b_wait=32035 spad_d_wait=33106 main_ex=30723
+sparse         total   2761  cpu_issue_done   2759  pairs  32  cyc/pair   86 | ex_active=79310 rs_full=81153 ctrl_q_block=84674 overlap_haz=83076 spad_a_wait=76915 spad_b_wait=82316 spad_d_wait=81448 main_ex=85084
+sparse_nat     total   2632  cpu_issue_done   2630  pairs  32  cyc/pair   82 | ex_active=79823 rs_full=82735 ctrl_q_block=78239 overlap_haz=79150 spad_a_wait=84889 spad_b_wait=78924 spad_d_wait=81283 main_ex=84256
+dense_reuse    total   1861  cpu_issue_done   1859  pairs  64  cyc/pair   29 | ex_active=33654 rs_full=33071 ctrl_q_block=36510 overlap_haz=30174 spad_a_wait=35583 spad_b_wait=32549 spad_d_wait=33496 main_ex=34657
+sparse_reuse   total   1408  cpu_issue_done   1406  pairs  32  cyc/pair   44 | ex_active=32304 rs_full=36562 ctrl_q_block=34883 overlap_haz=31440 spad_a_wait=31436 spad_b_wait=32934 spad_d_wait=30200 main_ex=32837
+cpu only (no gemmini instructions issued):
+cpu_dense      total   1456  cpu_issue_done   1454  pairs  64  cyc/pair   22 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse     total   2283  cpu_issue_done   2281  pairs  32  cyc/pair   71 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse_nat total   2185  cpu_issue_done   2183  pairs  32  cyc/pair   68 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_dense_reuse total   1509  cpu_issue_done   1507  pairs  64  cyc/pair   23 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse_reuse total   1161  cpu_issue_done   1159  pairs  32  cyc/pair   36 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+nm_sparse_perf passed
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

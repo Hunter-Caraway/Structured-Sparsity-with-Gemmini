@@ -1,0 +1,14 @@
+Flush Gemmini TLB of stale virtual addresses
+Initialize our input and output matrices in main memory
+Calculate the scratchpad addresses of all our matrices
+  Note: The scratchpad is "row-addressed", where each address contains one matrix row
+Move "In" matrix from main memory into Gemmini's scratchpad
+Move "Identity" matrix from main memory into Gemmini's scratchpad
+Multiply "In" matrix with "Identity" matrix with a bias of 0
+Move "Out" matrix from Gemmini's scratchpad into main memory
+Fence till Gemmini completes all memory operations
+Check whether "In" and "Out" matrices are identical
+Input and output matrices are identical, as expected
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

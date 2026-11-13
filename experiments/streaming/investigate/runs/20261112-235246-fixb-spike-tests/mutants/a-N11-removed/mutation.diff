@@ -1,0 +1,4 @@
+880c880
+<   nm_loop_abort("LOAD_IDX (funct 27) on a dense build (nm_sparsity = None)"); // changed: sparse-loop-fix, N11
+---
+>   (void)0; // changed: sparse-loop-fix, N11

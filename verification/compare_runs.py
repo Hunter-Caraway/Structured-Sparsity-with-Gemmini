@@ -23,14 +23,19 @@ NUMBERS = ("perf", "prep", "matmul", "debug", "ref_ok")
 def logs(run):
     """{(name, seed): parsed log} for every fair and re-run log in run."""
     out = {}
+
+    def add(key, d):
+        if key in out:
+            sys.exit(f"two {key[0]} logs with seed {key[1]}: {out[key]['path']} and {d['path']}")
+        out[key] = d
     for chip, name_seed, p in nmdata.fair_logs(run):
         d = nmdata.parse_log(p)
-        out[(chip, d["seed"] or name_seed or "default")] = d
+        add((chip, d["seed"] or name_seed or "default"), d)
     for p in sorted(run.glob("orig-*.log")):
         m = ORIG_RE.match(p.name)
         if m:
             d = nmdata.parse_log(p)
-            out[(m[1], d["seed"] or m[2] or "default")] = d
+            add((m[1], d["seed"] or m[2] or "default"), d)
     return out
 
 

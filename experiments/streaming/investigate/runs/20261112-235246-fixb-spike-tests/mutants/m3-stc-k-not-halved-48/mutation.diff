@@ -1,0 +1,4 @@
+1121c1121
+<         if (gemmini_state.loop_ws_C != 0 && k == KB-1) { // changed: sparse-loop-fix, last K tile of a sparse loop is K/2 - 1
+---
+>         if (gemmini_state.loop_ws_C != 0 && k == K-1) { // changed: sparse-loop-fix, last K tile of a sparse loop is K/2 - 1

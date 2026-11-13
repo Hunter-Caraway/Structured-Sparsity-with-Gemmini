@@ -1,0 +1,30 @@
+run: fixb-r2-spike (D1 Makefile switch NM_DENSE_BUILD, D4 N13 range check, smoke), laptop, 2026-11-13T14:47:54-05:00
+libgemmini: branch sparse-loop-fix HEAD 2a6ff44 + uncommitted diff, sources:
+8224264c50347886a019df69b2e9e4937c661b506662ef325ca48a513dd511a4  /home/hunter/chipyard/generators/gemmini/software/libgemmini/gemmini.cc
+402441cef1b5b65ecd9e7fe14fabcd4998ebd7365186d5e49afa02cbeabd1068  /home/hunter/chipyard/generators/gemmini/software/libgemmini/gemmini.h
+6f025fb9a2eec1d991edfc5f2b78d1e924f87f49b9122ff0270384915c3fe111  /home/hunter/chipyard/generators/gemmini/software/libgemmini/Makefile
+build: make -B -f $L/Makefile -C <scratch dir> VPATH=$L libgemmini.so NM_N=<n> NM_M=<m> [NM_DENSE_BUILD=1]  (nm24-zero: NM_DENSE_BUILD=0)
+libs:
+7617dce538fd6690483cd3d4810e9810d45bee8f17183bc79b62aaf2ae0a3745  /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/libs/libgemmini-dense24/libgemmini.so
+8eb89b8a7f9e1c83a8966677d5b82efdfcfd45e22ae210f1bb89cbdb8f2afef7  /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/libs/libgemmini-dense48/libgemmini.so
+0d30970a1be73a02ea33b44a2ae6a73826945b84fdbd9882bcc4ca96dc58b640  /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/libs/libgemmini-nm24/libgemmini.so
+0d30970a1be73a02ea33b44a2ae6a73826945b84fdbd9882bcc4ca96dc58b640  /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/libs/libgemmini-nm24-zero/libgemmini.so
+9c5894d41210c745765c90ca4ae05e00c77a7ddee9263ae1bd2e45660e61440f  /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/libs/libgemmini-nm48/libgemmini.so
+installed lib (untouched), before and after:
+34578eb7dd40188639345b6d1986fd639672c8b216ecc3140f1abf71179a592a  /home/hunter/chipyard/.conda-env/riscv-tools/lib/libgemmini.so
+34578eb7dd40188639345b6d1986fd639672c8b216ecc3140f1abf71179a592a  /home/hunter/chipyard/.conda-env/riscv-tools/lib/libgemmini.so
+test binaries (tests agent, /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-tests/tests/bareMetalC):
+40e069a3307571ee9bf5bdc8cf90c2ae0e8540e1675e09b7083e5180b55c7cb2  nm_sparse_loop_24-baremetal
+d0b8e89ce03401e570dd7a57a8af9d9b78ee7742d86c5b79ec1fbfc674601f61  nm_sparse_loop_48-baremetal
+b4914b61b4a16f66b53f0af2e5e3815246dfc3e106d4d301977d52381e7fb555  nm_sparse_loop_neg110_24-baremetal
+3f2e273279349480952a8102bb6f9339a4461b01cd4d73fbaedabe9c474f170c  nm_sparse_loop_neg110_48-baremetal
+4c882393ea1b5a62f317a35aee15ba6570a31d989ee12c0dbce088079f620503  nm_sparse_loop_neg130_24-baremetal
+b0d2661990c8a718175bcb76ee9f9649350c5ff028606e1d3a9bf86a06c29220  nm_sparse_loop_neg130_48-baremetal
+30ecd78dff88a046fe149c40db8e5d671055d108f5cc86216feefd046354249d  nm_sparse_loop_neg131_24-baremetal
+202784106641b5562d69096efee783264f19fe2530f1b523aee37ff3d7dd78bf  nm_sparse_loop_neg131_48-baremetal
+285f0ed0846dfef5946ba2053f30904d218c6d1d3eb8b1cf6ab8a613f3852d4a  nm_sparse_loop_neg132_24-baremetal
+ab4a4cf47339b4fa9c5dcb2a0012089275c370471e52b6ec4c46943d7558bffe  nm_sparse_loop_neg132_48-baremetal
+e40be5114c3e004281fe7af47913f098b9346e8adc77a8e0965a66d569317129  nm_sparse_loop_neg140_24-baremetal
+e1a0008a827b8ad65ce08ca3d6127539986c5fdb4d6393f1db23a92aaaa497a7  nm_sparse_loop_neg140_48-baremetal
+scratch binaries smoke_neg{22,25}_{24,48}: built from smoke/smoke_neg.c with -DNEG=<n> (flags of the round 1 build_run.sh)
+command: spike --extlib=<lib> --extension=gemmini <bin>; dense-* logs ran on the NM_DENSE_BUILD libs; verdicts in smoke/summary.txt

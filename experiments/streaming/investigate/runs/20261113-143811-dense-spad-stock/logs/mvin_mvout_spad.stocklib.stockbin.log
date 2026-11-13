@@ -1,0 +1,7 @@
+acc addr: 80000000
+spad addr: 0
+out addr: 0x80002f00
+Gemmini extension configured with:
+    dim = 16
+*** FAILED *** (tohost = 1337)
+exit=57

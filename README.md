@@ -93,8 +93,7 @@ exit code 2.
 
 You need Linux with roughly 16 GB+ of RAM (32 GB+ for the bigger experiments) and about 60 GB of free disk.
 Install Chipyard **1.14.0** (tested at `1.14.0-36-gbfa5699f`) by following the
-[Chipyard docs](https://chipyard.readthedocs.io/). [`chipyard-setup-notes.md`](chipyard-setup-notes.md) covers
-the Fedora-specific problems I hit, including a `build-setup.sh` glibc bug.
+[Chipyard docs](https://chipyard.readthedocs.io/).
 
 **Chipyard must live at a path with no spaces or `:`** (the default is `~/chipyard`).
 
@@ -177,7 +176,6 @@ per seed and shown as a min-max range in `<run>/derived/split.{csv,md,png}`.
 
 | Path | What it is |
 |---|---|
-| `chipyard-setup-notes.md` | Installing Chipyard on Fedora 44, plus design notes from the sparsity work |
 | `run-flow.sh` | The whole flow in one script: env check → Spike extension → tests → simulators → benchmarks |
 | `verification/` | The benchmark and every check (see below) |
 | `analysis/advanced_visuals.py`, `chart_all_data.py` | Figure scripts for a fair run folder (paper figures; every counter). Output goes to `<run>/derived/figures/` |

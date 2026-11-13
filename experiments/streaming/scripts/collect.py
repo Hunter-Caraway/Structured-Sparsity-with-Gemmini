@@ -9,6 +9,7 @@ counters), one "check" line per variant, "sbench passed". A row is verified=yes 
     expected value compiled into the binary), and so does the expected value it printed
   - sampled rows 8/8, the log ends with "sbench passed", and the seed in the make command line
     (+verilator+seed+S) equals the seed in the file name
+  - sparse_loop only: the log has its "sparse_loop tiles: tile_I= tile_J= tile_K=" line (columns loop_tile_*)
 Rows from logs that did not finish (timeout, crash) are reported with verified=no and empty cycle columns.
 Every number in the outputs comes from the logs; nothing is typed in.
 """
@@ -25,14 +26,19 @@ CTRS = ["ex_active", "rdma_active", "wdma_active", "load_active", "store_active"
         "rdma_bytes"]
 COLS = ["layer", "M", "K", "N", "chip", "program", "pattern", "build", "variant", "seed", "total_cycles",
         "cpu_issue_done"] + CTRS + ["TI", "TJ", "hash", "hash_ref", "sampled_rows_ok", "verified", "sim_wall_s",
-                                   "sim_end_cycle", "host", "sim_sha256", "log"]
+                                   "sim_end_cycle", "host", "sim_sha256", "log", "loop_tile_I", "loop_tile_J",
+                                   "loop_tile_K"]
 LOGNAME = re.compile(r"^(stock|nm24|nm48)\.(.+)\.seed(\d+)\.log$")
 HDR = re.compile(r"^sbench: layer=(\S+) M=(\d+) K=(\d+) N=(\d+) pattern=(\d+):(\d+) build=(\S+) run_mask=(\d+) "
                  r"TI=(\d+) TJ=(\d+)")
-TOT = re.compile(r"^(berkeley|dense_stream|sparse_stream)\s+total\s+(\d+)\s+cpu_issue_done\s+(\d+) \|(.*)$")
-CHK = re.compile(r"^(berkeley|dense_stream|sparse_stream) check: hash (0x[0-9a-f]{16}) expected (0x[0-9a-f]{16}), "
-                 r"sampled rows (\d+)/(\d+) -> (verified|MISMATCH)$")
-MASK_VARIANTS = {1: "berkeley", 2: "dense_stream", 4: "sparse_stream"}
+VARIANTS = ("berkeley", "dense_stream", "sparse_stream", "sparse_fixa", "sparse_loop")
+TOT = re.compile(r"^(%s)\s+total\s+(\d+)\s+cpu_issue_done\s+(\d+) \|(.*)$" % "|".join(VARIANTS))
+CHK = re.compile(r"^(%s) check: hash (0x[0-9a-f]{16}) "
+                 r"expected (0x[0-9a-f]{16}), sampled rows (\d+)/(\d+) -> (verified|MISMATCH)$" % "|".join(VARIANTS))
+# printed once per program, before the sparse_loop run (the full-size loop's tiling)
+LOOP_TILES = re.compile(r"^sparse_loop tiles: tile_I=(\d+) tile_J=(\d+) tile_K=(\d+)$")
+# bit values of src/stream_bench.c's RUN_MASK (investigate/src/stream_bench.c uses 8 for dense_v2)
+MASK_VARIANTS = {1: "berkeley", 2: "dense_stream", 4: "sparse_stream", 8: "sparse_fixa", 16: "sparse_loop"}
 
 
 def hosts(run):
@@ -75,7 +81,7 @@ def parse(log, walls):
     lines = text.splitlines()
     hdr = next((HDR.match(l) for l in lines if HDR.match(l)), None)
     seed_ok = re.search(r"\+verilator\+seed\+%s(\s|$)" % seed, text) is not None
-    cfg_ok = CHIP_CFG[chip] in text.split("\n", 12)[-1] or CHIP_CFG[chip] in text
+    cfg_ok = CHIP_CFG[chip] in text
     passed = any(l.startswith("sbench passed") for l in lines)
     end = next((int(l.split()[-1]) for l in lines if l.startswith("sbench end cycle")), None)
     layer = prog.rsplit("_", 2)[0]
@@ -92,6 +98,7 @@ def parse(log, walls):
         expect = []
     tots = {t.group(1): t for t in map(TOT.match, lines) if t}
     chks = {c.group(1): c for c in map(CHK.match, lines) if c}
+    tiles = [m for m in map(LOOP_TILES.match, lines) if m]
     rows = []
     for v in expect or ["(no output)"]:
         r = dict(base, variant=v)
@@ -105,6 +112,10 @@ def parse(log, walls):
             r["hash"], r["sampled_rows_ok"] = c.group(2), f"{c.group(4)}/{c.group(5)}"
         ok = bool(t and c and c.group(6) == "verified" and c.group(2) == ref["hash"] and c.group(3) == ref["hash"]
                   and c.group(4) == c.group(5) == str(len(ref["sample_rows"])) and passed and seed_ok and cfg_ok)
+        if v == "sparse_loop":
+            if len(tiles) == 1:
+                r["loop_tile_I"], r["loop_tile_J"], r["loop_tile_K"] = tiles[0].groups()
+            ok = ok and len(tiles) == 1
         r["verified"] = "yes" if ok else "no"
         rows.append(r)
     return rows
@@ -115,10 +126,20 @@ def fmt_range(vals):
     return f"{lo:,}" if lo == hi else f"{lo:,}-{hi:,}"
 
 
+def sim_mix(rows):
+    """chip -> {sim_sha256: row count}, only for chips with more than one build."""
+    per = defaultdict(lambda: defaultdict(int))
+    for r in rows:
+        per[r["chip"]][r["sim_sha256"]] += 1
+    return {c: dict(m) for c, m in sorted(per.items()) if len(m) > 1}
+
+
 def main():
-    runs = [Path(a).resolve() for a in sys.argv[1:]]
+    args = sys.argv[1:]
+    allow_mixed = "--allow-mixed-sims" in args
+    runs = [Path(a).resolve() for a in args if a != "--allow-mixed-sims"]
     if not runs:
-        sys.exit("usage: collect.py <run_dir> [...]")
+        sys.exit("usage: collect.py [--allow-mixed-sims] <run_dir> [...]")
     rows = []
     for run in runs:
         walls = wall_times(run)
@@ -132,6 +153,11 @@ def main():
                 else:
                     r["host"], r["sim_sha256"] = hs["_default"][0], hs["_default"][1][r["chip"]]
             rows += got
+    mix = sim_mix(rows)  # one chip must come from one simulator build
+    if mix and not allow_mixed:
+        lines = [f"  chip {c}: sim_sha256 {h} ({n} rows)" for c, m in mix.items() for h, n in sorted(m.items())]
+        sys.exit("collect.py: a chip has rows from more than one simulator build:\n" + "\n".join(lines) +
+                 "\nre-run with --allow-mixed-sims to continue; summary.md will then state the mix.")
     out = runs[0]
     with (out / "results.csv").open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=COLS)
@@ -148,6 +174,9 @@ def main():
     md = ["# Streaming benchmark results (generated by scripts/collect.py from the logs)", "",
           f"Run folder(s): {', '.join(str(r.relative_to(HERE)) for r in runs)}", "",
           f"Rows: {len(rows)}, verified: {len(rows) - len(bad)}, NOT verified: {len(bad)}", ""]
+    if mix:  # disclose the mix in the output
+        md += ["## WARNING: mixed simulator builds (--allow-mixed-sims)", ""]
+        md += [f"- chip {c}: sim_sha256 {h} ({n} rows)" for c, m in mix.items() for h, n in sorted(m.items())] + [""]
     if bad:
         md += ["## NOT verified", ""] + [f"- {r['log']} {r['variant']}" for r in bad] + [""]
     md += ["## Total cycles (first mvin .. last mvout + fence), min-max over seeds", "",
@@ -159,7 +188,7 @@ def main():
         base = agg.get((L, "stock", "berkeley"))
         bmean = sum(r["total_cycles"] for r in base) / len(base) if base else None
         for chip in ("stock", "nm24", "nm48"):
-            for v in ("berkeley", "dense_stream", "sparse_stream"):
+            for v in VARIANTS:
                 rs = agg.get((L, chip, v))
                 if not rs:
                     continue

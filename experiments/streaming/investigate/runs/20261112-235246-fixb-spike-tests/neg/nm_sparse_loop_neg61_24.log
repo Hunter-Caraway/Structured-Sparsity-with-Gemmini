@@ -1,0 +1,4 @@
+GEMMINI: sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

@@ -38,6 +38,8 @@ EXPECT = {"berkeley": ("dense-only", "2:4", ["dense", "dense_reuse"]),
           "sameprog": ("dense-only", "2:4", ["dense", "dense_reuse"]),
           "nm24": ("full", "2:4", ["dense", "dense_reuse", "sparse", "sparse_reuse", "sparse_batched"]),
           "nm48": ("full", "4:8", ["dense", "dense_reuse", "sparse", "sparse_reuse", "sparse_batched"])}
+# sparse-loop-fix variants of fair_perf.c: required in every log of a run as soon as one log has one
+LOOP_EXPECT = {"dense-only": ["dense_loop"], "full": ["dense_loop", "sparse_loop"]}
 
 results = []   # (section, ok, message); ok is None for a skipped check
 
@@ -100,6 +102,7 @@ def sec_d(fair):
     seeds = {c: tuple(v) for c, v in fair.items()}
     check("D", len(set(seeds.values())) == 1, "every chip ran the same seeds: " + "; ".join(f"{c}={','.join(v)}" for c, v in seeds.items()))
     check("D", "sameprog" in fair, "our chip ran Berkeley's exact program with sparsity off (sameprog log present)")
+    has_loop = any(v.endswith("_loop") for logs in fair.values() for f in logs.values() for v in f["perf"])
     for c, logs in fair.items():
         build, pat, gem = EXPECT[c]
         for seed, f in logs.items():
@@ -113,6 +116,14 @@ def sec_d(fair):
             check("D", not missing and not unchecked and sorted(f["ref_ok"]) == sorted(set(f["ref_ok"])),
                   f"{tag}: every gemmini variant matched the cpu reference ({len(f['ref_ok'])} results, 2,048 values each)"
                   + (f"; missing {missing}" if missing else "") + (f"; unchecked {unchecked}" if unchecked else ""))
+            if has_loop:
+                want = LOOP_EXPECT[build]
+                got_loop = sorted(v for v in f["perf"] if v.endswith("_loop"))
+                bad_loop = [v for v in want if v not in f["perf"] or f["ref_ok"].count(v) != 1]
+                check("D", got_loop == sorted(want) and not bad_loop,
+                      f"{tag}: hardware-loop variants of a {build} build ({', '.join(want)}) each ran and matched the cpu reference"
+                      + (f"; log has {got_loop or 'none'}" if got_loop != sorted(want) else "")
+                      + (f"; missing or unmatched {bad_loop}" if bad_loop else ""))
             h = f["header"]
             got = f"{h['n']}:{h['m']}" if h else None
             check("D", got == pat, f"{tag}: program built for {got} (expected {pat})")
@@ -132,6 +143,9 @@ def sec_d(fair):
     if "sameprog" in s:
         o, b = s["sameprog"], s["berkeley"]
         for k in ("busy_reuse", "busy_fresh", "reuse", "fresh"):
+            if k not in o or k not in b:
+                check("D", False, f"our chip, sparsity off, Berkeley's program: counter {k} missing in {'sameprog' if k not in o else 'berkeley'} logs")
+                continue
             worst = max(abs(x - y) / y for x in o[k]["values"] for y in b[k]["values"])
             check("D", worst <= SAMEPROG_TOL, f"our chip, sparsity off, Berkeley's program: {k} {nmdata.fmt_stat(o[k])} vs Berkeley "
                   f"{nmdata.fmt_stat(b[k])}, worst seed pair {worst * 100:.2f}% apart (limit {SAMEPROG_TOL:.0%})")

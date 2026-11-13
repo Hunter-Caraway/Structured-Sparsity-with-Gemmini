@@ -1,0 +1,16 @@
+nm_sparse_loop_24 rc=0 | 0 FAIL lines |  |     n:m sparsity = 2:4
+nm_sparse_loop_neg130_24 rc=255 | 0 FAIL lines | GEMMINI: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address |     n:m sparsity = 2:4
+nm_sparse_loop_neg131_24 rc=255 | 0 FAIL lines | GEMMINI: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address |     n:m sparsity = 2:4
+nm_sparse_loop_neg132_24 rc=255 | 0 FAIL lines | GEMMINI: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address |     n:m sparsity = 2:4
+dense-nm_sparse_loop_neg110_24 rc=255 | 0 FAIL lines | GEMMINI: sparse-loop-fix: LOAD_IDX (funct 27) on a dense build (nm_sparsity = None) |     n:m sparsity = 2:4
+dense-nm_sparse_loop_neg140_24 rc=255 | 0 FAIL lines | GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) on a dense build (nm_sparsity = None) |     n:m sparsity = 2:4
+smoke_neg22_24 rc=255 | 0 FAIL lines | GEMMINI: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address |     n:m sparsity = 2:4
+smoke_neg25_24 rc=0 | 0 FAIL lines |  |     n:m sparsity = 2:4
+nm_sparse_loop_48 rc=0 | 0 FAIL lines |  |     n:m sparsity = 4:8
+nm_sparse_loop_neg130_48 rc=255 | 0 FAIL lines | GEMMINI: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address |     n:m sparsity = 4:8
+nm_sparse_loop_neg131_48 rc=255 | 0 FAIL lines | GEMMINI: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address |     n:m sparsity = 4:8
+nm_sparse_loop_neg132_48 rc=255 | 0 FAIL lines | GEMMINI: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address |     n:m sparsity = 4:8
+dense-nm_sparse_loop_neg110_48 rc=255 | 0 FAIL lines | GEMMINI: sparse-loop-fix: LOAD_IDX (funct 27) on a dense build (nm_sparsity = None) |     n:m sparsity = 4:8
+dense-nm_sparse_loop_neg140_48 rc=255 | 0 FAIL lines | GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) on a dense build (nm_sparsity = None) |     n:m sparsity = 4:8
+smoke_neg22_48 rc=255 | 0 FAIL lines | GEMMINI: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address |     n:m sparsity = 4:8
+smoke_neg25_48 rc=0 | 0 FAIL lines |  |     n:m sparsity = 4:8

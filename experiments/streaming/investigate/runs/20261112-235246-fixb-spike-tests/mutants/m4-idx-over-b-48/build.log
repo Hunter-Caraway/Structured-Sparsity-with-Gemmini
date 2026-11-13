@@ -1,0 +1,16 @@
+In file included from gemmini.cc:2:
+/home/hunter/chipyard/.conda-env/riscv-tools/include/riscv/mmu.h:60:30: warning: default member initializers for bit-fields only available with '-std=c++20' or '-std=gnu++20' [-Wc++20-extensions]
+   60 |   const bool forced_virt : 1 {false};
+      |                              ^
+/home/hunter/chipyard/.conda-env/riscv-tools/include/riscv/mmu.h:61:23: warning: default member initializers for bit-fields only available with '-std=c++20' or '-std=gnu++20' [-Wc++20-extensions]
+   61 |   const bool hlvx : 1 {false};
+      |                       ^
+/home/hunter/chipyard/.conda-env/riscv-tools/include/riscv/mmu.h:62:21: warning: default member initializers for bit-fields only available with '-std=c++20' or '-std=gnu++20' [-Wc++20-extensions]
+   62 |   const bool lr : 1 {false};
+      |                     ^
+/home/hunter/chipyard/.conda-env/riscv-tools/include/riscv/mmu.h:63:28: warning: default member initializers for bit-fields only available with '-std=c++20' or '-std=gnu++20' [-Wc++20-extensions]
+   63 |   const bool ss_access : 1 {false};
+      |                            ^
+/home/hunter/chipyard/.conda-env/riscv-tools/include/riscv/mmu.h:64:30: warning: default member initializers for bit-fields only available with '-std=c++20' or '-std=gnu++20' [-Wc++20-extensions]
+   64 |   const bool clean_inval : 1 {false};
+      |                              ^

@@ -1,0 +1,4 @@
+864c864
+<   if (st.nm_sparse) {
+---
+>   if (false) {

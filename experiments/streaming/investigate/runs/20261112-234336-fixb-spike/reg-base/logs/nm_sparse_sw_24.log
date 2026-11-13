@@ -1,0 +1,7 @@
+2:4 ok (k=64 squashed to 32 rows)
+4:8 ok (k=64 squashed to 32 rows)
+1:2 ok (k=64 squashed to 32 rows)
+2:4 ok (k=63 squashed to 32 rows)
+4:8 ok (k=61 squashed to 32 rows)
+edge tile packing ok
+nm_sparse_sw passed

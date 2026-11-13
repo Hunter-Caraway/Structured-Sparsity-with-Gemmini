@@ -1,0 +1,8 @@
+Read DMA cycles: 9964
+Cycle when taking snapshot: 10361, Cycle read after operation finished: 10361
+Cycles after snapshot is reset: 11180
+Cycles after counter reset: 0
+RESERVATION_STATION # of load insts after executing 15 mvin and mvout insts: 5
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

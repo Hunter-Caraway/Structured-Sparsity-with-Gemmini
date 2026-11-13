@@ -1,0 +1,18 @@
+fair_perf: 2:4, i=64 k=128 j=32
+fair_perf build: dense-only (no sparse-mode instructions)
+prep_cold      prep   236488  prune   159732  compress    61743  pack_meta    15013  weights 4096
+prep_warm      prep   235960  prune   159204  compress    61743  pack_meta    15013  weights 4096
+poison reaches the accumulator (2048 values)
+dense          total   1327  cpu_issue_done   1325  pairs  64  cyc/pair   20 | ex_active=31205 rs_full=33114 ctrl_q_block=30270 overlap_haz=31130 spad_a_wait=33150 spad_b_wait=33210 spad_d_wait=32222 main_ex=30650
+dense matches the cpu reference (2048 values)
+dense_reuse    total   1391  cpu_issue_done   1389  pairs  64  cyc/pair   21 | ex_active=29727 rs_full=32370 ctrl_q_block=35014 overlap_haz=30898 spad_a_wait=31568 spad_b_wait=33273 spad_d_wait=34213 main_ex=34771
+dense_reuse matches the cpu reference (2048 values)
+dense_loop     total     20  cpu_issue_done     18  pairs  64  cyc/pair    0 | ex_active=1500 rs_full=1748 ctrl_q_block=1024 overlap_haz=1668 spad_a_wait=2016 spad_b_wait=1729 spad_d_wait=1535 main_ex=1539
+dense_loop matches the cpu reference (2048 values)
+cpu only (no gemmini instructions issued):
+cpu_dense      total   1007  cpu_issue_done   1005  pairs  64  cyc/pair   15 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_dense_reuse total   1023  cpu_issue_done   1021  pairs  64  cyc/pair   15 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+fair_perf passed
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

@@ -1,0 +1,4 @@
+smoke_neg0_48 rc=0 smoke_neg NEG=0: not caught 
+smoke_neg8_48 rc=255 GEMMINI: sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM) 
+smoke_neg15_48 rc=255 GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank) 
+smoke_neg16_48 rc=255 GEMMINI: sparse-loop-fix: sparse loop started with index tiles pending in the FIFO: gemmini_nm_reset() first 

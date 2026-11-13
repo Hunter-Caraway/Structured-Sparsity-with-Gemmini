@@ -1,0 +1,4 @@
+GEMMINI: sparse-loop-fix: sparse loop started with index tiles pending in the FIFO: gemmini_nm_reset() first
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

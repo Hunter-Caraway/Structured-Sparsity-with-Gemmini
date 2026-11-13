@@ -1,0 +1,4 @@
+919c919
+<     nm_loop_abort("LOOP_WS_CONFIG_NM (funct 28) without LOOP_WS rs1[3]"); // changed: sparse-loop-fix, N4
+---
+>     (void)0; // changed: sparse-loop-fix, N4

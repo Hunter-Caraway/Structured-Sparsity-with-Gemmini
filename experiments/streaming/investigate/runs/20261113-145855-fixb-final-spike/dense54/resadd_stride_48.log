@@ -1,0 +1,8 @@
+I: 54, J: 27
+Starting slow CPU resadd
+Cycles taken: 35389
+Starting gemmini resadd
+Cycles taken: 44
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

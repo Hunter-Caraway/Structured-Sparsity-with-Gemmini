@@ -1,0 +1,7 @@
+Starting slow CPU matmul
+Cycles taken: 591137
+Starting gemmini matmul
+Cycles taken: 124
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

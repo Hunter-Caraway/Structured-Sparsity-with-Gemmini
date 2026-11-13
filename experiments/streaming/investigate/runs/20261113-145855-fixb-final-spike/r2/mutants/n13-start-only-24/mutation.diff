@@ -1,0 +1,11 @@
+--- /home/hunter/chipyard/generators/gemmini/software/libgemmini/gemmini.cc	2026-11-12 23:45:00.857507335 -0500
++++ /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-final/r2root/mutants/n13-start-only-24/gemmini.cc	2026-11-13 14:57:19.174436978 -0500
+@@ -884,7 +884,7 @@
+   const reg_t rows = (sp_addr >> (addr_len + 16)) & 0xFFFF; // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
+   if (cols != 16 || rows == 0 || rows > 16) // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
+     nm_loop_abort("LOAD_IDX needs cols == 16 and 1..16 rows"); // changed: sparse-loop-fix, N12
+-  if (base_row_addr + rows > (reg_t)BANK_NUM * BANK_ROWS) // changed: sparse-loop-fix, also catches accumulator addresses and GARBAGE
++  if (base_row_addr >= (reg_t)BANK_NUM * BANK_ROWS) // changed: sparse-loop-fix, also catches accumulator addresses and GARBAGE
+     nm_loop_abort("LOAD_IDX destination must be a scratchpad row address"); // changed: sparse-loop-fix, N13
+ 
+   dprintf("GEMMINI: load_idx - 0x%02lx rows from 0x%08lx to addr 0x%08lx\n", rows, dram_addr, base_row_addr); // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler

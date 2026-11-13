@@ -38,7 +38,7 @@ def split_log(chip, log):
     """rows for one log (one chip, one seed)."""
     h, p, sparse = log["header"], log["perf"], chip.startswith("nm")
     if h is None: sys.exit(f"{log['path']}: no 'fair_perf:' header line (not a fair_perf log?)")
-    if not log["passed"]: sys.exit(f"{log['path']}: the run did not pass; not splitting it")
+    if not log["passed"] or log["failed"]: sys.exit(f"{log['path']}: the run did not pass; not splitting it")
     if sparse and not log["prep"]:
         sys.exit(f"{log['path']}: no prep_cold/prep_warm lines: made by an older fair_perf.c, rebuild with ./run-flow.sh fair-build")
     kc = h["k"] * h["n"] // h["m"]

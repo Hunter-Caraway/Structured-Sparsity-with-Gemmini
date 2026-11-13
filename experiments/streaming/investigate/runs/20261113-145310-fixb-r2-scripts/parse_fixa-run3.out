@@ -1,0 +1,78 @@
+== tests
+nm24  nm_sparse_loop_24            s1 PASS rc=0       1s  nm_sparse_loop passed
+tests: 1 PASS, 0 FAIL
+
+== fair_perf
+nm24 seed 1 ok pattern=2:4 matches=8 dense=1327 dense_reuse=1391 sparse=1626 sparse_reuse=1071 sparse_batched=1667 sparse_spad=884 dense_loop=20 sparse_loop=23 cpu_dense=1007 cpu_dense_reuse=1023 cpu_sparse=1318 cpu_sparse_reuse=838 cpu_sparse_batched=1307 cpu_sparse_spad=644 cpu_meta_only=704
+nm24 seed 1 ok pattern=2:4 matches=3 dense=1327 dense_reuse=1391 dense_loop=20 cpu_dense=1007 cpu_dense_reuse=1023
+nm48 seed 1 ok pattern=4:8 matches=8 dense=1327 dense_reuse=1391 sparse=2266 sparse_reuse=1231 sparse_batched=2307 sparse_spad=892 dense_loop=20 sparse_loop=23 cpu_dense=1007 cpu_dense_reuse=1023 cpu_sparse=1830 cpu_sparse_reuse=966 cpu_sparse_batched=1819 cpu_sparse_spad=652 cpu_meta_only=1216
+fair ranges (seeds):
+  nm24 cpu_dense            min    1007 max    1007 n=2
+  nm24 cpu_dense_reuse      min    1023 max    1023 n=2
+  nm24 cpu_meta_only        min     704 max     704 n=1
+  nm24 cpu_sparse           min    1318 max    1318 n=1
+  nm24 cpu_sparse_batched   min    1307 max    1307 n=1
+  nm24 cpu_sparse_reuse     min     838 max     838 n=1
+  nm24 cpu_sparse_spad      min     644 max     644 n=1
+  nm24 dense                min    1327 max    1327 n=2
+  nm24 dense_loop           min      20 max      20 n=2
+  nm24 dense_reuse          min    1391 max    1391 n=2
+  nm24 sparse               min    1626 max    1626 n=1
+  nm24 sparse_batched       min    1667 max    1667 n=1
+  nm24 sparse_loop          min      23 max      23 n=1
+  nm24 sparse_reuse         min    1071 max    1071 n=1
+  nm24 sparse_spad          min     884 max     884 n=1
+  nm48 cpu_dense            min    1007 max    1007 n=1
+  nm48 cpu_dense_reuse      min    1023 max    1023 n=1
+  nm48 cpu_meta_only        min    1216 max    1216 n=1
+  nm48 cpu_sparse           min    1830 max    1830 n=1
+  nm48 cpu_sparse_batched   min    1819 max    1819 n=1
+  nm48 cpu_sparse_reuse     min     966 max     966 n=1
+  nm48 cpu_sparse_spad      min     652 max     652 n=1
+  nm48 dense                min    1327 max    1327 n=1
+  nm48 dense_loop           min      20 max      20 n=1
+  nm48 dense_reuse          min    1391 max    1391 n=1
+  nm48 sparse               min    2266 max    2266 n=1
+  nm48 sparse_batched       min    2307 max    2307 n=1
+  nm48 sparse_loop          min      23 max      23 n=1
+  nm48 sparse_reuse         min    1231 max    1231 n=1
+  nm48 sparse_spad          min     892 max     892 n=1
+
+== streaming
+nm24 bert_ffn1_24_loop        s1 ok sbench passed (2 of 2 runs verified) [sparse_loop tiles I=5 J=6 K=48] | berkeley total=12000 cpu=11998 ex=123002  sparse_loop total=4404 cpu=4402 ex=117661
+nm24 bert_ffn2_24_loop        s1 ok sbench passed (2 of 2 runs verified) [sparse_loop tiles I=5 J=6 K=58] | berkeley total=10057 cpu=10055 ex=121565  sparse_loop total=3327 cpu=3325 ex=119838
+nm24 bert_qkv_24_loop         s1 ok sbench passed (2 of 2 runs verified) [sparse_loop tiles I=5 J=6 K=48] | berkeley total=3214 cpu=3212 ex=29232  sparse_loop total=1451 cpu=1449 ex=30483
+nm24 edge_24_loop             s1 ok sbench passed (2 of 2 runs verified) [sparse_loop tiles I=3 J=4 K=8] | berkeley total=402 cpu=400 ex=2114  sparse_loop total=363 cpu=361 ex=3386
+nm24 rn50_conv_24_loop        s1 ok sbench passed (2 of 2 runs verified) [sparse_loop tiles I=5 J=6 K=58] | berkeley total=4833 cpu=4831 ex=56108  sparse_loop total=1871 cpu=1869 ex=48984
+nm24 small_24_loop            s1 ok sbench passed (2 of 2 runs verified) [sparse_loop tiles I=4 J=8 K=16] | berkeley total=468 cpu=466 ex=3899  sparse_loop total=469 cpu=467 ex=4245
+nm48 bert_ffn1_48_loop        s1 ok sbench passed (2 of 2 runs verified) [sparse_loop tiles I=5 J=6 K=48] | berkeley total=12000 cpu=11998 ex=123002  sparse_loop total=4613 cpu=4611 ex=117661
+nm48 bert_ffn2_48_loop        s1 ok sbench passed (2 of 2 runs verified) [sparse_loop tiles I=5 J=6 K=56] | berkeley total=10057 cpu=10055 ex=121565  sparse_loop total=3460 cpu=3458 ex=119838
+nm48 bert_qkv_48_loop         s1 ok sbench passed (2 of 2 runs verified) [sparse_loop tiles I=5 J=6 K=48] | berkeley total=3214 cpu=3212 ex=29232  sparse_loop total=1516 cpu=1514 ex=30483
+nm48 edge_48_loop             s1 ok sbench passed (2 of 2 runs verified) [sparse_loop tiles I=3 J=4 K=8] | berkeley total=402 cpu=400 ex=2114  sparse_loop total=378 cpu=376 ex=3386
+nm48 rn50_conv_48_loop        s1 ok sbench passed (2 of 2 runs verified) [sparse_loop tiles I=5 J=6 K=56] | berkeley total=4833 cpu=4831 ex=56108  sparse_loop total=1893 cpu=1891 ex=48984
+nm48 small_48_loop            s1 ok sbench passed (2 of 2 runs verified) [sparse_loop tiles I=4 J=8 K=16] | berkeley total=468 cpu=466 ex=3899  sparse_loop total=487 cpu=485 ex=4245
+stream ranges (total, seeds):
+  nm24 bert_ffn1_24_loop        berkeley       min     12000 max     12000 n=1
+  nm24 bert_ffn1_24_loop        sparse_loop    min      4404 max      4404 n=1
+  nm24 bert_ffn2_24_loop        berkeley       min     10057 max     10057 n=1
+  nm24 bert_ffn2_24_loop        sparse_loop    min      3327 max      3327 n=1
+  nm24 bert_qkv_24_loop         berkeley       min      3214 max      3214 n=1
+  nm24 bert_qkv_24_loop         sparse_loop    min      1451 max      1451 n=1
+  nm24 edge_24_loop             berkeley       min       402 max       402 n=1
+  nm24 edge_24_loop             sparse_loop    min       363 max       363 n=1
+  nm24 rn50_conv_24_loop        berkeley       min      4833 max      4833 n=1
+  nm24 rn50_conv_24_loop        sparse_loop    min      1871 max      1871 n=1
+  nm24 small_24_loop            berkeley       min       468 max       468 n=1
+  nm24 small_24_loop            sparse_loop    min       469 max       469 n=1
+  nm48 bert_ffn1_48_loop        berkeley       min     12000 max     12000 n=1
+  nm48 bert_ffn1_48_loop        sparse_loop    min      4613 max      4613 n=1
+  nm48 bert_ffn2_48_loop        berkeley       min     10057 max     10057 n=1
+  nm48 bert_ffn2_48_loop        sparse_loop    min      3460 max      3460 n=1
+  nm48 bert_qkv_48_loop         berkeley       min      3214 max      3214 n=1
+  nm48 bert_qkv_48_loop         sparse_loop    min      1516 max      1516 n=1
+  nm48 edge_48_loop             berkeley       min       402 max       402 n=1
+  nm48 edge_48_loop             sparse_loop    min       378 max       378 n=1
+  nm48 rn50_conv_48_loop        berkeley       min      4833 max      4833 n=1
+  nm48 rn50_conv_48_loop        sparse_loop    min      1893 max      1893 n=1
+  nm48 small_48_loop            berkeley       min       468 max       468 n=1
+  nm48 small_48_loop            sparse_loop    min       487 max       487 n=1

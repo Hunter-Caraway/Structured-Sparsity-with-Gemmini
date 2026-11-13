@@ -7,13 +7,18 @@
 #    env               print the commands to set up a fresh terminal by hand
 #    check             tools, simulators, branches, python libraries
 #  build (one at a time; never run two builds at once)
-#    spike-lib [pat]   build + install the Gemmini Spike extension (libgemmini) for pat = nm24 (default) | nm48
-#    tests             build gemmini-rocc-tests, plus nm_sparse_*_24 / _48 built with explicit -DNM_N/-DNM_M
+#    spike-lib [pat]   build the Gemmini Spike extension (libgemmini) in a scratch dir (never installed) for
+#                      pat = nm24 (default) | nm48 | dense24 | dense48 (the model of a dense chip, NM_DENSE_BUILD=1;
+#                      `spike` needs it for the N11 / N14 checks); loaded with --extlib, which must come before --extension
+#    tests             build the programs this flow uses into a scratch dir (never gemmini-rocc-tests/build): Berkeley's
+#                      54 dense tests for normal configs, plus nm_sparse_*_24 / _48 built with explicit -DNM_N/-DNM_M
 #    fair-build        build the fair benchmark (and berkeley_dense_perf) into verification/build/, check each
 #                      program's N:M, and compare it with the old programs in verification/bin/
-#    sim <cfg>         build a Verilator simulator. cfg = nm24 | nm48 | dense (see the note on dense below)
+#    sim <cfg>         build a Verilator simulator. cfg = nm24 | nm48 | dense (see the note on dense below);
+#                      needs FORCE_REBUILD=1 and backs up the old simulator + generated-src first
 #  simulate (slow; sleep is blocked while these run; every run uses BREAK_SIM_PREREQ=1, so build sims first)
-#    spike [pat]       quick functional tests on Spike for pat = nm24 (default) | nm48 (seconds)
+#    spike [pat]       quick functional tests on Spike for pat = nm24 (default) | nm48 (seconds); needs spike-lib
+#                      <pat> and spike-lib dense24 | dense48 (same pattern)
 #    fair [which]      fair benchmark on RTL, once per seed in SEEDS. which = all (default) | nm24 | nm48 |
 #                      berkeley | sameprog. -> verification/runs/fair-<stamp>/<chip>.seed<S>.log + run.info
 #    rerun             the nm_sparse_* RTL tests once per seed, plus the NEG asserts -> verification/runs/rerun-<stamp>/
@@ -30,14 +35,17 @@
 #    area              chip area of the three simulators' generated verilog (yosys, sky130) -> analysis/area/
 #    checks [run...]   math + patterns + verify + figures
 #  pipelines
-#    all               spike-lib, tests, fair-build, spike, sim nm24, sim nm48, fair all, checks
+#    all               spike-lib (nm24, dense24), tests, fair-build, spike, sim nm24, sim nm48, fair all, checks
 #                      (needs Berkeley's stock simulator already built; see the note on dense below)
 #
 # environment variables
 #   CHIPYARD_DIR    where chipyard lives (default ~/chipyard; no spaces or ':' allowed)
 #   JOBS            make -j for simulator builds (default: picked from free RAM, ~2.5 GB per job)
 #   SEEDS           Verilator RANDOM_SEED values for fair / rerun / bench (default "1 2 3"); recorded in run.info
-#   PAR             how many simulations run at once (default: number of CPUs)
+#   PAR             how many simulations run at once (default: number of CPUs, capped at 12). Runs go through
+#                      make in sims/verilator, which must never run in parallel, so they are serialized for now
+#   FORCE_REBUILD=1 required by `sim nm24|nm48` (a rebuild replaces the simulator; the old one is backed up first)
+#   SCRATCH_DIR     scratch for libgemmini, test programs and backups (default <repo>/build-scratch)
 #   TIMEOUT_CYCLES  simulation cycle limit (default 150M; chipyard's own 10M is too short)
 #   FAIR_BIN        folder with the fair benchmark programs (default verification/build, from fair-build;
 #                   verification/bin holds the old programs that produced the withdrawn results)
@@ -50,17 +58,18 @@
 #   * Berkeley's stock simulator (GemminiRocketConfig) must be built from UNMODIFIED Gemmini sources: `sim dense`
 #     refuses unless all three Gemmini repos sit cleanly at Berkeley's base commits. Chipyard rebuilds a simulator
 #     whenever the Scala changes, so every run uses BREAK_SIM_PREREQ=1 and never rebuilds anything.
-#   * every elaboration rewrites gemmini_params.h; tests and fair-build put the committed one back first.
+#   * every elaboration rewrites gemmini_params.h; tests and fair-build copy the committed one back first (no git state change).
 #   * the laptop suspends on lid close / idle, which pauses simulations; long steps hold a sleep inhibitor.
 
-set -eo pipefail
+set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cy="${CHIPYARD_DIR:-$HOME/chipyard}"
 gem="$cy/generators/gemmini"
 lib_dir="$gem/software/libgemmini"
 tests_dir="$gem/software/gemmini-rocc-tests"
-bm="$tests_dir/build/bareMetalC"
+scratch="${SCRATCH_DIR:-$here/build-scratch}"
+bm="$scratch/tests/bareMetalC"  # never gemmini-rocc-tests/build (Berkeley's tree stays as is)
 ver="$here/verification"
 logs="$here/logs"
 runs="$ver/runs"
@@ -69,7 +78,7 @@ fair_bin="${FAIR_BIN:-$ver/build}"
 [[ "$fair_bin" = /* ]] || fair_bin="$here/$fair_bin"
 seeds="${SEEDS:-1 2 3}"
 stamp="$(date +%Y%m%d-%H%M%S)"
-nm_tests=(nm_sparse_debug nm_sparse_matmul nm_sparse_perf nm_sparse_protocol)
+nm_tests=(nm_sparse_debug nm_sparse_matmul nm_sparse_perf nm_sparse_protocol nm_sparse_loop)
 # nm_sparse_protocol -DNEG=<n>: illegal uses that must stop the run (Spike abort / RTL assert); 6 is Spike only
 neg_spike=(4 6 7 9 10 14) neg_rtl=(4 7 9 10 14)
 # the RTL assert message each NEG case must trigger
@@ -79,6 +88,30 @@ neg_msg() {
     7|14) echo "differs from the mode its weights were preloaded in" ;;
     9) echo "needs weight stationary dataflow" ;;
     10) echo "issued while n:m sparse mode" ;;
+  esac
+}
+# nm_sparse_loop -DNEG=<n> (sparse-loop-fix): n / 10 = the assert N1..N14 of fix-b-spec.md 2.5.6 it must trigger.
+# 110 and 140 (N11, N14) are illegal only on a dense build and Spike only (fix-b-spec.md changelog 2026-11-13 D1):
+# `spike` runs them on the dense libgemmini, never on the n:m libs or on RTL
+loop_neg=(10 11 20 30 40 50 51 52 60 61 70 71 72 73 74 80 90 91 100 120 121 122 130 131 132 133) loop_neg_dense=(110 140)
+# the message (same text in the RTL assert and the Spike abort) each of them must show
+loop_neg_msg() {
+  case "$(($1 / 10))" in
+    1) echo "sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])" ;;
+    2) echo "sparse-loop-fix: LOOP_CONV_WS issued while n:m sparse mode (config_ex rs1[10]) is on" ;;
+    3) echo "sparse-loop-fix: LOOP_WS with rs1[3] set needs LOOP_WS_CONFIG_NM (funct 28) first" ;;
+    4) echo "sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) without LOOP_WS rs1[3]" ;;
+    5) echo "sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0" ;;
+    6) echo "sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)" ;;
+    7) echo "sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only" ;;
+    8) echo "sparse-loop-fix: sparse loop needs A_stride == 1" ;;
+    9) echo "sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank)" ;;
+    10) echo "sparse-loop-fix: sparse loop started with index tiles pending in the FIFO: gemmini_nm_reset() first" ;;
+    11) echo "sparse-loop-fix: LOAD_IDX (funct 27) on a dense build (nm_sparsity = None)" ;;
+    12) echo "sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows" ;;
+    13) echo "sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address" ;;
+    14) echo "sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) on a dense build (nm_sparsity = None)" ;;
+    *) die "no sparse-loop-fix message for NEG=$1" ;;
   esac
 }
 # Berkeley's base commits (what Chipyard 1.14.0 pins); the stock simulator is built only from these
@@ -101,10 +134,18 @@ pat_nm() {
     *) die "unknown pattern '$1' (want nm24 or nm48)" ;;
   esac
 }
+# pattern of a libgemmini build; dense24 / dense48 model a dense chip but still compile with a pattern
+lib_nm() {
+  case "$1" in
+    nm24|dense24) echo "2 4" ;;
+    nm48|dense48) echo "4 8" ;;
+    *) die "unknown libgemmini build '$1' (want nm24, nm48, dense24 or dense48)" ;;
+  esac
+}
 sim_path() { echo "$cy/sims/verilator/simulator-chipyard.harness-$1"; }
 
 case "$cy" in *" "*|*:*) die "chipyard path '$cy' has a space or ':' in it; it has to live somewhere plain" ;; esac
-[ -f "$cy/env.sh" ] || die "no env.sh in $cy; did build-setup.sh run? (see chipyard-setup-notes.md)"
+[ -f "$cy/env.sh" ] || die "no env.sh in $cy; did build-setup.sh run? (see README.md, section 1. Install Chipyard)"
 for s in $seeds; do [[ "$s" =~ ^[0-9]+$ ]] || die "SEEDS must be whole numbers, got '$s'"; done
 
 # ---------------------------------------------------------------- helpers
@@ -112,21 +153,27 @@ for s in $seeds; do [[ "$s" =~ ^[0-9]+$ ]] || die "SEEDS must be whole numbers, 
 load_env() {
   local base
   base="$(conda info --base 2>/dev/null || echo "$HOME/miniforge3")"
+  # conda.sh and env.sh read unset variables, so -u is off while they run
+  set +u
   # shellcheck disable=SC1091
   source "$base/etc/profile.d/conda.sh"
   conda deactivate 2>/dev/null || true
   # shellcheck disable=SC1091
   source "$cy/env.sh"
-  [ -n "$RISCV" ] || die "RISCV not set after sourcing env.sh"
+  set -u
+  [ -n "${RISCV:-}" ] || die "RISCV not set after sourcing env.sh"
   export LD_LIBRARY_PATH="$RISCV/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 }
+
+# libgemmini is built per pattern into scratch and loaded with --extlib; nothing is installed into the toolchain
+libgemmini_path() { echo "$scratch/libgemmini-$1/libgemmini.so"; }
 
 need_py() { [ -x "$py" ] || die "no python at $py (set PYTHON=...)"; }
 need_sim() { [ -x "$(sim_path "$1")" ] || die "no simulator for $1 at $(sim_path "$1") (./run-flow.sh sim ...)"; }
 
 # verilator compiles take ~2.5 GB each on gemmini
 pick_jobs() {
-  if [ -n "$JOBS" ]; then echo "$JOBS"; return; fi
+  if [ -n "${JOBS:-}" ]; then echo "$JOBS"; return; fi
   local avail_kb jobs
   avail_kb=$(awk '/MemAvailable/ {print $2}' /proc/meminfo)
   jobs=$(( avail_kb / (2560 * 1024) ))
@@ -203,17 +250,29 @@ rv_cc_nm() {
 }
 
 # every elaboration rewrites gemmini_params.h (an n:m config adds GEMMINI_HW_NM_N/M); put the committed one back
+# copy-based (a read-only `git show` into scratch, then cp): no git state is touched
 restore_params_h() {
-  git -C "$tests_dir" diff --quiet -- include/gemmini_params.h && return 0
-  echo "  restoring the committed include/gemmini_params.h (the last elaboration rewrote it)"
-  git -C "$tests_dir" checkout -- include/gemmini_params.h
+  local f="$tests_dir/include/gemmini_params.h" ref="$scratch/gemmini_params.h.committed"
+  mkdir -p "$scratch"
+  git -C "$tests_dir" show HEAD:include/gemmini_params.h > "$ref" || die "can't read the committed gemmini_params.h"
+  cmp -s "$ref" "$f" && return 0
+  echo "  restoring the committed include/gemmini_params.h (the last elaboration rewrote it); the current one is saved in build-scratch/"
+  cp "$f" "$scratch/gemmini_params.h.before-restore-$stamp"
+  cp "$ref" "$f"
+}
+
+# all make in sims/verilator goes through one lock: two makes there at once corrupt the build tree
+sims_make() {
+  command -v flock >/dev/null || die "flock is needed to serialize make in sims/ (util-linux)"
+  mkdir -p "$scratch"
+  (cd "$cy/sims/verilator" && flock "$scratch/sims-make.lock" make "$@")
 }
 
 # run one binary on one (already built) simulator: sim_run <cfg> <binary> <log> [extra make args...]
 sim_run() {
   local cfg="$1" bin="$2" log="$3"; shift 3
-  (cd "$cy/sims/verilator" && make CONFIG="$cfg" run-binary-fast LOADMEM=1 BREAK_SIM_PREREQ=1 \
-     TIMEOUT_CYCLES="${TIMEOUT_CYCLES:-150000000}" BINARY="$bin" "$@") > "$log" 2>&1
+  sims_make CONFIG="$cfg" run-binary-fast LOADMEM=1 BREAK_SIM_PREREQ=1 \
+     TIMEOUT_CYCLES="${TIMEOUT_CYCLES:-150000000}" BINARY="$bin" "$@" > "$log" 2>&1
 }
 
 # simulation queue: queue <name> <cfg> <binary> <log> <seed> <expected lines (grep -E, one per line)>
@@ -225,9 +284,20 @@ queue() {
   q_name+=("$1"); q_cfg+=("$2"); q_bin+=("$3"); q_log+=("$4"); q_seed+=("$5"); q_expect+=("$6"); q_mode+=("${7:-pass}")
 }
 
+# PAR: default nproc, never more than 12 simulations at once (project limit)
+clamp_par() {
+  local p="${PAR:-$(nproc)}"
+  [[ "$p" =~ ^[0-9]+$ ]] && [ "$p" -ge 1 ] || die "PAR must be a whole number >= 1, got '$p'"
+  [ "$p" -le 12 ] || { echo "  note: PAR=$p clamped to 12" >&2; p=12; }
+  echo "$p"
+}
+
 # run the queue, PAR at a time; fail if any run exits non-zero or lacks an expected line
 run_queue() {
-  local par="${PAR:-$(nproc)}" n="${#q_name[@]}" i fails=0
+  local par n="${#q_name[@]}" i fails=0
+  par="$(clamp_par)"
+  # every run is a make in sims/ (serialized by sims_make), so more than one at a time only adds waiting
+  [ "$par" -le 1 ] || { echo "  note: PAR=$par requested; runs are serialized (make in sims/ must not run in parallel)"; par=1; }
   local -A job_of=()
   reap() {
     local done_pid rc=0 j pat bad="" p keep=()
@@ -293,12 +363,15 @@ EOF
 step_check() {
   load_env
   say "tools"
-  echo "CONDA_DEFAULT_ENV=$CONDA_DEFAULT_ENV"
+  echo "CONDA_DEFAULT_ENV=${CONDA_DEFAULT_ENV:-}"
   echo "RISCV=$RISCV"
   for t in spike verilator firtool riscv64-unknown-elf-gcc; do
     printf '  %-24s %s\n' "$t" "$(command -v "$t" || echo MISSING)"
   done
-  [ -f "$RISCV/lib/libgemmini.so" ] && echo "  libgemmini.so installed" || echo "  libgemmini.so MISSING (run spike-lib)"
+  for c in nm24 nm48 dense24 dense48; do
+    if [ -f "$(libgemmini_path "$c")" ]; then echo "  libgemmini $c built: $(libgemmini_path "$c")"
+    else echo "  libgemmini $c MISSING (run spike-lib $c)"; fi
+  done
   say "simulators"
   local c s
   for c in dense nm24 nm48; do
@@ -320,27 +393,45 @@ step_check() {
 
 # ---------------------------------------------------------------- build
 step_spike_lib() {
-  local pat="${1:-nm24}" n m log="$logs/runs/libgemmini-$stamp.log"
-  pat_nm "$pat" > /dev/null
-  read -r n m <<<"$(pat_nm "$pat")"
+  local pat="${1:-nm24}" n m log="$logs/runs/libgemmini-$stamp.log" out dense=""
+  lib_nm "$pat" > /dev/null
+  read -r n m <<<"$(lib_nm "$pat")"
+  case "$pat" in dense*) dense=1 ;; esac
   load_env
   mkdir -p "$logs/runs"
-  say "building libgemmini (spike extension) for $n:$m -> ${log#"$here"/}"
-  # -B: the .so only depends on gemmini.cc, so a pattern change alone would not rebuild it
-  make -B -C "$lib_dir" install NM_N="$n" NM_M="$m" > "$log" 2>&1 || { tail -20 "$log" >&2; die "libgemmini build failed, see $log"; }
-  [ -f "$RISCV/lib/libgemmini.so" ] || die "libgemmini.so didn't install"
-  echo "  installed $RISCV/lib/libgemmini.so ($n:$m)"
+  out="$(dirname "$(libgemmini_path "$pat")")"
+  mkdir -p "$out"
+  say "building libgemmini (spike extension) for $n:$m${dense:+, dense chip model} in ${out#"$here"/}, not installed -> ${log#"$here"/}"
+  # -B: the .so only depends on gemmini.cc, so a pattern change alone would not rebuild it; VPATH builds outside the source tree
+  make -B -f "$lib_dir/Makefile" -C "$out" VPATH="$lib_dir" libgemmini.so NM_N="$n" NM_M="$m" NM_DENSE_BUILD="$dense" > "$log" 2>&1 ||
+    { tail -20 "$log" >&2; die "libgemmini build failed, see $log"; }
+  [ -s "$out/libgemmini.so" ] || die "libgemmini.so wasn't built in $out"
+  # make ignores a variable its Makefile does not know, so the compile line is the proof of which model was built
+  if grep -q -- '-DNM_DENSE_BUILD' "$log"; then [ -n "$dense" ] || die "$pat libgemmini was compiled with -DNM_DENSE_BUILD, see $log"
+  else [ -z "$dense" ] || die "$pat libgemmini was compiled without -DNM_DENSE_BUILD (libgemmini Makefile lacks NM_DENSE_BUILD?), see $log"; fi
+  echo "  built $out/libgemmini.so ($n:$m${dense:+, dense chip model}); spike loads it with --extlib"
 }
 
+# builds only what this flow runs, into scratch: gemmini-rocc-tests' build.sh has no output dir option and would overwrite its build/
 step_tests() {
-  local log="$logs/runs/rocc-tests-$stamp.log" t built
+  local t n built dense all no_spad
   load_env
-  mkdir -p "$logs/runs"
-  say "building gemmini-rocc-tests -> ${log#"$here"/}"
+  mkdir -p "$bm"
+  say "building the flow's test programs into ${bm#"$here"/} (gemmini-rocc-tests/build is left alone)"
   restore_params_h
-  # a killed make can leave 0-byte binaries that look up to date; clear them first
-  [ -d "$tests_dir/build" ] && find "$tests_dir/build" -type f -size 0 -name '*-baremetal' -delete
-  (cd "$tests_dir" && ./build.sh) > "$log" 2>&1 || { tail -20 "$log" >&2; die "test build failed, see $log"; }
+  # Berkeley's dense list is read from its Makefile (never edited), so it can't drift; nm_* are built below with explicit patterns
+  mapfile -t all < <(awk '/^tests = /{f=1;next} f&&/^$/{exit} f{gsub(/[\\\t ]/,""); if ($0 !~ /^nm_/) print}' "$tests_dir/bareMetalC/Makefile")
+  # the same Makefile drops the tests that need the external scratchpad on normal configs (its second
+  # `runs_baremetal := $(filter-out ...)`); that filter is read too, since they fail on Berkeley's own stock Spike lib
+  mapfile -t no_spad < <(sed -n 's/^runs_baremetal := \$(filter-out \(.*\),\$(runs_baremetal))[[:space:]]*$/\1/p' "$tests_dir/bareMetalC/Makefile" |
+    tr -s ' \t' '\n\n' | sed -n 's/-baremetal\.run$//p')
+  [ "${#no_spad[@]}" -gt 0 ] || die "no 'runs_baremetal := \$(filter-out ...)' line found in gemmini-rocc-tests/bareMetalC/Makefile"
+  dense=()
+  for t in "${all[@]}"; do
+    [[ " ${no_spad[*]} " == *" $t "* ]] || dense+=("$t")
+  done
+  [ "${#dense[@]}" -eq 54 ] || die "expected 54 dense tests in gemmini-rocc-tests/bareMetalC/Makefile (normal configs: ${#all[@]} listed, without ${no_spad[*]}), found ${#dense[@]}"
+  for t in "${dense[@]}"; do rv_cc "$tests_dir/bareMetalC/$t.c" "$bm/$t-baremetal"; done
   # both patterns of the sparse tests, with explicit -D flags so they don't depend on the last elaboration
   for t in nm_sparse_sw "${nm_tests[@]}"; do
     rv_cc_nm "$tests_dir/bareMetalC/$t.c" "$bm/${t}_24-baremetal" 2 4
@@ -350,8 +441,12 @@ step_tests() {
     rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_protocol.c" "$bm/nm_sparse_protocol_neg${n}_24-baremetal" 2 4 -DNEG="$n"
     rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_protocol.c" "$bm/nm_sparse_protocol_neg${n}_48-baremetal" 4 8 -DNEG="$n"
   done
+  for n in "${loop_neg[@]}" "${loop_neg_dense[@]}"; do
+    rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_loop.c" "$bm/nm_sparse_loop_neg${n}_24-baremetal" 2 4 -DNEG="$n"
+    rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_loop.c" "$bm/nm_sparse_loop_neg${n}_48-baremetal" 4 8 -DNEG="$n"
+  done
   built=("$bm"/*-baremetal)
-  echo "${#built[@]} bare-metal tests built (including nm_sparse_*_24 / _48, N:M checked)"
+  echo "${#built[@]} bare-metal tests built (${#dense[@]} dense, without ${no_spad[*]}; nm_sparse_*_24 / _48, N:M checked)"
 }
 
 step_fair_build() {
@@ -389,6 +484,18 @@ at_base() {
     [ -z "$(git -C "$1" status --porcelain --untracked-files=no)" ]
 }
 
+# copy the simulator binary and its generated-src aside before a rebuild: backup_sim <config name>
+backup_sim() {
+  local cfg="$1" b="$scratch/sim-backups/$stamp-$1" s g
+  s="$(sim_path "$cfg")"; g="$cy/sims/verilator/generated-src/chipyard.harness.TestHarness.$cfg"
+  [ -e "$s" ] || [ -e "$g" ] || { echo "  no existing $cfg simulator or generated-src; nothing to back up"; return 0; }
+  mkdir -p "$b"
+  if [ -e "$s" ]; then cp -a "$s" "$b/" || die "backup of $s failed"; fi
+  if [ -e "$g" ]; then cp -a "$g" "$b/" || die "backup of $g failed"; fi
+  (cd "$b" && find . -type f -printf '%P\0' | sort -z | xargs -0 sha256sum > SHA256SUMS) || die "checksums of the backup failed"
+  echo "  backed up the old $cfg simulator and generated-src to ${b#"$here"/}"
+}
+
 step_sim() {
   local which="${1:-}" cfg jobs log s
   [ -n "$which" ] || die "usage: ./run-flow.sh sim nm24|nm48|dense"
@@ -401,17 +508,24 @@ $base_lib (libgemmini) and $base_tests (gemmini-rocc-tests) with clean trees, bu
     fi
     [ ! -x "$s" ] || [ "${FORCE:-0}" = 1 ] || die "$cfg already exists; FORCE=1 to rebuild it (from the base sources)"
   fi
+  # a rebuild replaces the simulator that recorded results came from: explicit opt-in only
+  [ "${FORCE_REBUILD:-0}" = 1 ] || die "sim $which rebuilds a simulator; set FORCE_REBUILD=1 to confirm (the old one is backed up first)"
+  # stock must never come from modified sources, whatever FORCE/FORCE_REBUILD say
+  if [ "$cfg" = GemminiRocketConfig ] && ! { at_base "$gem" "$base_gem" && at_base "$lib_dir" "$base_lib" && at_base "$tests_dir" "$base_tests"; }; then
+    die "refusing to build GemminiRocketConfig (stock) from modified sources"
+  fi
   load_env
   mkdir -p "$logs/runs"
   jobs="$(pick_jobs)"
   log="$logs/runs/sim-$cfg-$stamp.log"
+  backup_sim "$cfg"
   stay_awake "building $cfg"
   say "building verilator sim $cfg with -j$jobs -> ${log#"$here"/}"
-  if ! (cd "$cy/sims/verilator" && make -j"$jobs" CONFIG="$cfg") > "$log" 2>&1; then
+  if ! sims_make -j"$jobs" CONFIG="$cfg" > "$log" 2>&1; then
     # the OOM killer shows up as a killed compiler; retry slower once
     if grep -qiE "killed|signal 9|out of memory" "$log" && [ "$jobs" -gt 2 ]; then
       say "looks like it ran out of memory, retrying with -j2"
-      (cd "$cy/sims/verilator" && make -j2 CONFIG="$cfg") >> "$log" 2>&1 || die "sim build failed, see $log"
+      sims_make -j2 CONFIG="$cfg" >> "$log" 2>&1 || die "sim build failed, see $log"
     else
       die "sim build failed, see $log"
     fi
@@ -421,18 +535,44 @@ $base_lib (libgemmini) and $base_tests (gemmini-rocc-tests) with clean trees, bu
 }
 
 # ---------------------------------------------------------------- simulate
+# spike_loop_neg <extlib> <note> <n>...: each nm_sparse_loop NEG program must abort with exactly its own message
+# (grep -F: the texts hold [ ] and *). reads the caller's sfx and log, counts into the caller's fails
+spike_loop_neg() {
+  local lib="$1" note="$2" n t msg out; shift 2
+  for n in "$@"; do
+    t="$bm/nm_sparse_loop_neg${n}${sfx}-baremetal"; msg="$(loop_neg_msg "$n")"
+    [ -f "$t" ] || die "missing $t (./run-flow.sh tests)"
+    if out="$(timeout 120 spike --extlib="$lib" --extension=gemmini "$t" 2>&1)"; then echo "FAIL  loop NEG=$n not caught$note"; fails=$((fails + 1))
+    elif grep -qF -- "$msg" <<<"$out"; then echo "pass  loop NEG=$n aborts$note: $msg"
+    else echo "FAIL  loop NEG=$n stopped without '$msg'$note"; fails=$((fails + 1)); fi
+    echo "$out" >> "$log"
+  done
+}
+
 step_spike() {
-  local pat="${1:-nm24}" sfx log="$logs/runs/spike-$stamp.log" fails=0 t
+  local pat="${1:-nm24}" sfx log="$logs/runs/spike-$stamp.log" fails=0 t extlib dlib
   sfx="_${pat#nm}"; pat_nm "$pat" > /dev/null
   load_env
   mkdir -p "$logs/runs"
-  say "spike tests ($pat; libgemmini must be built for it: ./run-flow.sh spike-lib $pat) -> ${log#"$here"/}"
+  extlib="$(libgemmini_path "$pat")"
+  [ -f "$extlib" ] || die "missing $extlib (./run-flow.sh spike-lib $pat)"
+  dlib="$(libgemmini_path "dense${pat#nm}")"
+  [ -f "$dlib" ] || die "missing $dlib (./run-flow.sh spike-lib dense${pat#nm})"
+  say "spike tests ($pat; libgemmini from ${extlib#"$here"/}) -> ${log#"$here"/}"
+  # --extlib must come before --extension or spike also dlopens the installed $RISCV/lib/libgemmini.so (old layout, garbage state)
+  # smoke run: the installed lib must never be mapped
+  local ld="$scratch/ld-debug.$stamp"
+  LD_DEBUG=libs LD_DEBUG_OUTPUT="$ld" spike --extlib="$extlib" --extension=gemmini "$bm/mvin_mvout-baremetal" > /dev/null 2>&1 ||
+    die "spike smoke run failed"
+  cat "$ld".* 2>/dev/null | grep -q "$RISCV/lib/libgemmini" && die "spike loaded the installed $RISCV/lib/libgemmini.so; results would be wrong"
+  grep -q "$extlib" "$ld".* || die "spike did not load $extlib"
+  rm -f "$ld".*
   for t in "$bm/mvin_mvout-baremetal" "$bm/matmul-baremetal" "$bm/nm_sparse_sw${sfx}-baremetal" \
            "$bm/nm_sparse_matmul${sfx}-baremetal" "$bm/nm_sparse_debug${sfx}-baremetal" "$bm/nm_sparse_perf${sfx}-baremetal" \
-           "$bm/nm_sparse_protocol${sfx}-baremetal" "$fair_bin/fair_perf${sfx}-baremetal" \
+           "$bm/nm_sparse_protocol${sfx}-baremetal" "$bm/nm_sparse_loop${sfx}-baremetal" "$fair_bin/fair_perf${sfx}-baremetal" \
            "$fair_bin/fair_perf_dense_only-baremetal" "$fair_bin/berkeley_dense_perf-baremetal"; do
     [ -f "$t" ] || die "missing $t (./run-flow.sh tests / fair-build)"
-    if spike --extension=gemmini "$t" >> "$log" 2>&1; then echo "pass  $(basename "$t" -baremetal)"
+    if spike --extlib="$extlib" --extension=gemmini "$t" >> "$log" 2>&1; then echo "pass  $(basename "$t" -baremetal)"
     else echo "FAIL  $(basename "$t" -baremetal)"; fails=$((fails + 1)); fi
   done
   # illegal uses: Spike must abort with a GEMMINI: message (not a warning)
@@ -440,11 +580,14 @@ step_spike() {
   for n in "${neg_spike[@]}"; do
     t="$bm/nm_sparse_protocol_neg${n}${sfx}-baremetal"
     [ -f "$t" ] || die "missing $t (./run-flow.sh tests)"
-    if out="$(timeout 120 spike --extension=gemmini "$t" 2>&1)"; then echo "FAIL  NEG=$n not caught"; fails=$((fails + 1))
+    if out="$(timeout 120 spike --extlib="$extlib" --extension=gemmini "$t" 2>&1)"; then echo "FAIL  NEG=$n not caught"; fails=$((fails + 1))
     elif grep -q '^GEMMINI: [^w]' <<<"$out"; then echo "pass  NEG=$n aborts: $(grep -m1 '^GEMMINI: [^w]' <<<"$out")"
     else echo "FAIL  NEG=$n stopped without a GEMMINI abort"; fails=$((fails + 1)); fi
     echo "$out" >> "$log"
   done
+  spike_loop_neg "$extlib" "" "${loop_neg[@]}"
+  # N11 / N14 exist only in the dense model: the same programs, on the dense libgemmini of this pattern
+  spike_loop_neg "$dlib" " (dense lib ${dlib#"$here"/})" "${loop_neg_dense[@]}"
   [ "$fails" -eq 0 ] || die "$fails spike test(s) failed, see $log"
 }
 
@@ -473,7 +616,7 @@ step_fair() {
   done
   write_info "$run" "step=fair $which" "fair_bin=$fair_bin"
   stay_awake "fair benchmark simulations"
-  say "fair benchmark ($which, seeds: $seeds) -> ${run#"$here"/}   (each takes ~15-40 min; $(nproc) CPUs, PAR=${PAR:-$(nproc)})"
+  say "fair benchmark ($which, seeds: $seeds) -> ${run#"$here"/}   (each takes ~15-40 min; $(nproc) CPUs, PAR=$(clamp_par))"
   run_queue
   write_sums "$run"
   echo "all runs passed; results in ${run#"$here"/} (check them with ./run-flow.sh verify, then figures)"
@@ -489,6 +632,9 @@ step_rerun() {
     done
     for n in "${neg_rtl[@]}"; do
       [ -f "$bm/nm_sparse_protocol_neg${n}_${c#nm}-baremetal" ] || die "missing NEG=$n program (./run-flow.sh tests)"
+    done
+    for n in "${loop_neg[@]}"; do
+      [ -f "$bm/nm_sparse_loop_neg${n}_${c#nm}-baremetal" ] || die "missing loop NEG=$n program (./run-flow.sh tests)"
     done
   done
   new_run "$run"
@@ -507,10 +653,16 @@ step_rerun() {
       queue "$c-neg$n" "$(cfg_name $c)" "$run/bin/nm_sparse_protocol_neg${n}${sfx}-baremetal" "$run/neg-$c-$n.seed$s.log" "$s" \
         "$(printf '%s\n' 'Assertion failed' "$(neg_msg "$n")")" fail
     done
+    # the expected lines are grep -E patterns: the message goes in with its ERE specials escaped
+    for n in "${loop_neg[@]}"; do
+      cp "$bm/nm_sparse_loop_neg${n}${sfx}-baremetal" "$run/bin/"
+      queue "$c-loopneg$n" "$(cfg_name $c)" "$run/bin/nm_sparse_loop_neg${n}${sfx}-baremetal" "$run/loopneg-$c-$n.seed$s.log" "$s" \
+        "$(printf '%s\n' 'Assertion failed' "$(loop_neg_msg "$n" | sed 's/[][()*.?+{}|^$\\]/\\&/g')")" fail
+    done
   done
   write_info "$run" "step=rerun"
   stay_awake "re-running the RTL tests"
-  say "RTL tests: ${nm_tests[*]} + ${#neg_rtl[@]} illegal-use asserts, nm24 and nm48 (seeds: $seeds) -> ${run#"$here"/}"
+  say "RTL tests: ${nm_tests[*]} + ${#neg_rtl[@]} + ${#loop_neg[@]} illegal-use asserts, nm24 and nm48 (seeds: $seeds) -> ${run#"$here"/}"
   run_queue
   write_sums "$run"
   echo "all runs passed; results in ${run#"$here"/}"
@@ -525,16 +677,24 @@ step_baseline() {
   stay_awake "stock baseline simulation"
   say "stock baseline: matmul-baremetal on Berkeley's GemminiRocketConfig -> ${log#"$here"/}"
   # run-binary (not -fast) logs every instruction: very slow, GB-sized trace in sims/verilator/output
-  (cd "$cy/sims/verilator" && make CONFIG=GemminiRocketConfig run-binary BREAK_SIM_PREREQ=1 \
-     BINARY="$bm/matmul-baremetal" TIMEOUT_CYCLES="${TIMEOUT_CYCLES:-150000000}") > "$log" 2>&1 ||
+  sims_make CONFIG=GemminiRocketConfig run-binary BREAK_SIM_PREREQ=1 \
+     BINARY="$bm/matmul-baremetal" TIMEOUT_CYCLES="${TIMEOUT_CYCLES:-150000000}" > "$log" 2>&1 ||
     die "baseline simulation failed, see $log"
   grep -E "PASSED|FAILED|Completed after" "$log" || true
   grep -q "PASSED" "$log" || die "baseline log has no PASSED line, see $log"
 }
 
+# last number matching a grep -oP pattern in a file (or stdin: log_num <pat> [file]); aborts when there is none
+log_num() {
+  local v
+  if [ "$#" -ge 2 ]; then v="$(grep -oP "$1" "$2" | tail -1 || true)"; else v="$(grep -oP "$1" | tail -1 || true)"; fi
+  [[ "$v" =~ ^[0-9]+$ ]] || die "no number matching '$1' in ${2:-the row}"
+  echo "$v"
+}
+
 # the ORIGINAL benchmark (its loop slowed dense mode more than sparse; superseded by `fair`), into its own run folder
 step_bench() {
-  local which="${1:-nm24}" cfg sfx run t s log tmp
+  local which="${1:-nm24}" cfg sfx run t s log tmp rows
   [ "$which" = dense ] && die "bench needs a sparse config (nm24 or nm48)"
   cfg="$(cfg_name "$which")"; sfx="_${which#nm}"
   run="$runs/bench-$which-$stamp"
@@ -553,16 +713,24 @@ step_bench() {
   echo "note: this is the original benchmark (superseded loop). For numbers to cite, use: ./run-flow.sh fair"
   say "${nm_tests[*]} on $cfg (seeds: $seeds) -> ${run#"$here"/}"
   run_queue
-  # cycles.csv from the logs, written to a temp file first so an abort never leaves half a table
+  # cycles.csv from the logs, written to a temp file first so an abort never leaves half a table; a missing number aborts
   tmp="$(mktemp "$run/.cycles.XXXXXX")"
   echo "timestamp,config,test,variant,seed,status,total_cycles,array_busy_cycles,tiles" > "$tmp"
   for s in $seeds; do
     log="$run/nm_sparse_matmul.seed$s.log"
-    echo "$stamp,$cfg,nm_sparse_matmul,dense,$s,passed,$(grep -oP 'dense\s+cycles: \K[0-9]+' "$log" | tail -1),,"
-    echo "$stamp,$cfg,nm_sparse_matmul,sparse,$s,passed,$(grep -oP 'sparse cycles: \K[0-9]+' "$log" | tail -1),,"
-    { grep -E '^[a-z_]+ +total' "$run/nm_sparse_perf.seed$s.log" || true; } | while read -r name _ total _ _ _ tiles _ _ rest; do
-      echo "$stamp,$cfg,nm_sparse_perf,$name,$s,passed,$total,$(grep -oP 'ex_active=\K[0-9]+' <<<"$rest"),$tiles"
-    done
+    # a row counts only if the program verified its output
+    grep -q '^nm_sparse_matmul passed$' "$log" || die "no 'nm_sparse_matmul passed' in $log"
+    echo "$stamp,$cfg,nm_sparse_matmul,dense,$s,passed,$(log_num 'dense\s+cycles: \K[0-9]+' "$log"),,"
+    echo "$stamp,$cfg,nm_sparse_matmul,sparse,$s,passed,$(log_num 'sparse cycles: \K[0-9]+' "$log"),,"
+    log="$run/nm_sparse_perf.seed$s.log"
+    grep -q '^nm_sparse_perf passed$' "$log" || die "no 'nm_sparse_perf passed' in $log"
+    rows=0
+    while read -r name _ total _ _ _ tiles _ _ rest; do
+      [[ "$total" =~ ^[0-9]+$ && "$tiles" =~ ^[0-9]+$ ]] || die "unparsable total/tiles for '$name' in $log"
+      echo "$stamp,$cfg,nm_sparse_perf,$name,$s,passed,$total,$(log_num 'ex_active=\K[0-9]+' <<<"$rest"),$tiles"
+      rows=$((rows + 1))
+    done < <(grep -E '^[a-z_]+ +total' "$log" || true)
+    [ "$rows" -gt 0 ] || die "no '<variant> total ...' rows in $log"
   done >> "$tmp"
   mv "$tmp" "$run/cycles.csv"
   write_sums "$run"
@@ -613,6 +781,7 @@ case "$step" in
   checks)     step_checks "$@" ;;
   all)
     step_spike_lib nm24
+    step_spike_lib dense24
     step_tests
     step_fair_build
     step_spike nm24
@@ -621,6 +790,6 @@ case "$step" in
     step_fair all
     step_checks
     ;;
-  ""|-h|--help|help) sed -n '2,/^set -eo/p' "$0" | sed '$d' | sed 's/^# \{0,1\}//'; exit 0 ;;
+  ""|-h|--help|help) sed -n '2,/^set -euo/p' "$0" | sed '$d' | sed 's/^# \{0,1\}//'; exit 0 ;;
   *) echo "unknown step '$step'"; sed -n '/^#  setup/,/^#$/p' "$0" | sed 's/^# \{0,1\}//'; exit 1 ;;
 esac

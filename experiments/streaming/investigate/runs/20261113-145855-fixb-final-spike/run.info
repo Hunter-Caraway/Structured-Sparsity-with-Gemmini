@@ -1,0 +1,123 @@
+run: fixb-final-spike (final Spike verification of sparse-loop-fix, current uncommitted working trees), laptop only, 2026-11-13
+scratch (session, not kept): /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-final
+RISCV libgemmini.so sha256 before: 34578eb7dd40188639345b6d1986fd639672c8b216ecc3140f1abf71179a592a ; after: 34578eb7dd40188639345b6d1986fd639672c8b216ecc3140f1abf71179a592a
+spike: /home/hunter/chipyard/.conda-env/riscv-tools/bin/spike sha256 4a201fa115154db2daf8b72635b5ce951318d1491d52ce029b7d89e00d498824; Spike RISC-V ISA Simulator 1.1.1-dev
+
+commands (cwd ~/gemmini-sparsity, SCRATCH_DIR=$S):
+  1 ./run-flow.sh spike-lib nm24|nm48|dense24|dense48 ; 2 ./run-flow.sh tests ; 3 ./run-flow.sh spike nm24|nm48
+  3b 54 dense tests (tests/bareMetalC non-nm_ programs) on nm24 and nm48 libs: spike --extlib=<lib> --extension=gemmini <bin> -> dense54/
+  4 t2.sh $S (round 1) and r2.sh $S/r2out (round 2; cc.sh); copies of the scripts from runs/20261112-235246-fixb-spike-tests and 20261113-145158-fixb-r2-tests, paths redirected only via directory layout (t2 needed mkdir t2)
+  5 BIN_DIR=$S/sbench experiments/streaming/scripts/build.sh edge small bert_qkv rn50_conv bert_ffn1 bert_ffn2 ; bench.sh (52 programs, 6 parallel); fair_perf built with cc.sh into $S/fair (NOT verification/build, which is stale 11-03)
+     collect.py (byte-identical copy under cx/) on loop logs +/- synthetic marker line; parse_fixa.py on pf/ (jobs.tsv synthetic, exit=0)
+
+libs:
+7617dce538fd6690483cd3d4810e9810d45bee8f17183bc79b62aaf2ae0a3745  libgemmini-dense24/libgemmini.so
+8eb89b8a7f9e1c83a8966677d5b82efdfcfd45e22ae210f1bb89cbdb8f2afef7  libgemmini-dense48/libgemmini.so
+0d30970a1be73a02ea33b44a2ae6a73826945b84fdbd9882bcc4ca96dc58b640  libgemmini-nm24/libgemmini.so
+9c5894d41210c745765c90ca4ae05e00c77a7ddee9263ae1bd2e45660e61440f  libgemmini-nm48/libgemmini.so
+
+sources libgemmini:
+8224264c50347886a019df69b2e9e4937c661b506662ef325ca48a513dd511a4  /home/hunter/chipyard/generators/gemmini/software/libgemmini/gemmini.cc
+402441cef1b5b65ecd9e7fe14fabcd4998ebd7365186d5e49afa02cbeabd1068  /home/hunter/chipyard/generators/gemmini/software/libgemmini/gemmini.h
+
+test binaries (sha256):
+359534b38b33a8ec57535586c197324520a01f9f25d9b8ec811e04fea5056eff  tests/bareMetalC/nm_sparse_loop_24-baremetal
+30a170bd1cf76ab6055a1a9344381b50047e6c0b91cf52bb2de8137c7fd95e54  tests/bareMetalC/nm_sparse_loop_48-baremetal
+38f603b37fccd60b4b5ac395a76a68bc35e45921fefa2a9574d3c7f399b21c17  sbench/bert_ffn1/bert_ffn1_24_dense-baremetal
+6f5fdb8fdde77bbf2486264e6f01a772bd9644bb2b85d021df6ce24ba5adcbfe  sbench/bert_ffn1/bert_ffn1_24_ds-baremetal
+0bdc830d8f670aea1dd229d0dd8d261d3d091e3eb6dbd36536f2efef8e111ce0  sbench/bert_ffn1/bert_ffn1_24_full-baremetal
+e2ae8f8fead5641cd4801ee0a5b472a735dee478d891bc6d0f4d82171680bc07  sbench/bert_ffn1/bert_ffn1_24_loop-baremetal
+b796654a22e5364f73b8cd81473eeb25cefaf4ba3fc391ac309fce43036c38d7  sbench/bert_ffn1/bert_ffn1_24_sparse-baremetal
+9a67ed230d18d3083cd0d37d132a998bec0f898516a4a85596639e5a1a1c766a  sbench/bert_ffn1/bert_ffn1_48_full-baremetal
+39445633da61d55d62b7fb14c51a5809f4aef02a32c7f6f92bcd882ace785340  sbench/bert_ffn1/bert_ffn1_48_loop-baremetal
+9763397d7e32a801c5beec32ce1048be74497fe7a3fc137c61a6d0ef370a3c10  sbench/bert_ffn1/bert_ffn1_48_sparse-baremetal
+4d7399c0658ca40479deb2980c691c8ff0963ccfffccbd2346cc1e3bd68afa47  sbench/bert_ffn2/bert_ffn2_24_dense-baremetal
+a6236926f4cbf23895ea8f2599f92bd73817ed9331c0a910a37eb9532483ad54  sbench/bert_ffn2/bert_ffn2_24_ds-baremetal
+0d650084aca7af90899971b8a539ede3b1903e2e9cee2f29ab64c8ddde9e2226  sbench/bert_ffn2/bert_ffn2_24_full-baremetal
+67bfc4b8ae91e350898c4090ab09669b654d544699fd5541618b0fbbb32c4614  sbench/bert_ffn2/bert_ffn2_24_loop-baremetal
+9575f899ed520a0b09039ef47f946fd0af355f0af0e43fec90aaec0c4762c728  sbench/bert_ffn2/bert_ffn2_24_sparse-baremetal
+9c37c5b1ede346eccc4a44d9c78ba2e820ad82df8c5d36d05e21968faf6471d6  sbench/bert_ffn2/bert_ffn2_48_full-baremetal
+6892c4079dae50104b33d6beab006c6d4b4516cb4a95313a6d99f887e2411ff9  sbench/bert_ffn2/bert_ffn2_48_loop-baremetal
+8b0f9b951ff7405b1e8a85aa464e6a1183f45880df20dd6dd838beaed79bbcbd  sbench/bert_ffn2/bert_ffn2_48_sparse-baremetal
+0d707223da4e9d2a830835ce220801af5dfb343faa03e8f4408e2b4943a75e6b  sbench/bert_qkv/bert_qkv_24_dense-baremetal
+989984891a58c2beef4fef7e5a8a374e3fd29047d9b3f6d3fd1fd8f96a19e197  sbench/bert_qkv/bert_qkv_24_ds-baremetal
+8606c5aa088eafc66c5014572f9a6c529df3c0a8d053355f428efdc2d8cf1f3b  sbench/bert_qkv/bert_qkv_24_full-baremetal
+a9f034a5ef914c316a610e7747d02bd5a73e9891d0cf2e69cd62effc7c23c467  sbench/bert_qkv/bert_qkv_24_loop-baremetal
+e01272c1a7ca61b35ca9d673833b39db748cbe4403a8086af8df65329a7aee15  sbench/bert_qkv/bert_qkv_24_sparse-baremetal
+5cecead4daea9e19d66e7d14c1ebacd383f8ee157391f2c669af1a0a3b9e2ecd  sbench/bert_qkv/bert_qkv_48_full-baremetal
+cee64cfd1e6bebc6745f1107755558dad6dfa7dad9a6f026e7bd35812aea9324  sbench/bert_qkv/bert_qkv_48_loop-baremetal
+74be8b03f4ea0e166947dcd743956986e0de4f5b9346f4a09be7f2e751806dc9  sbench/bert_qkv/bert_qkv_48_sparse-baremetal
+a50e91b87721f64de1f5e36e54ee9f98a093c2266f12f609053abc9a1871a926  sbench/edge/edge_24_dense-baremetal
+386a2962103c23ecee00b5d111bab4b11b31f006e229529b6d53dee69ae1cdd6  sbench/edge/edge_24_ds-baremetal
+592be0e70e1afb9e75f5a093fa34da2d056aad7801f21a5fa624c1e48442487f  sbench/edge/edge_24_full-baremetal
+6d5f3418a599a39fff72ced0acf736480a426898d98f74837b91f70847812e7f  sbench/edge/edge_24_loop-baremetal
+88484362e1f6e8a7859a18e0cf75a9bf0cf17438594b1fec3679110fe3174bd8  sbench/edge/edge_24_sparse-baremetal
+292ebacd4bec1510d34e6bfdf6586f26cfc9094e99046f8187ebfc14a7f3876b  sbench/edge/edge_48_full-baremetal
+942a195460dd593d88e0b146a9f6a8745f777a1dbeb205ffc33fde077ce4e4b2  sbench/edge/edge_48_loop-baremetal
+1ec301cdd29053b112c960ce5aa7b2f4b197abd7abc61b94ecffa4fe891aaaba  sbench/edge/edge_48_sparse-baremetal
+7ee8ff28b257c791c530da979138ea84ebbfe73acb02ea738a2b7002abfd11c7  sbench/rn50_conv/rn50_conv_24_dense-baremetal
+b55e494b86352e3960cb1f1a60c78c2bc3be76489551d9ee45b9576be617b6aa  sbench/rn50_conv/rn50_conv_24_ds-baremetal
+bda7c65e730c1da392bb2572ad5c6ee2ede32b1fd3dff9a6d35b57ebbb0654cd  sbench/rn50_conv/rn50_conv_24_full-baremetal
+fa15ac47fca1198497bd66e238760e495c6f3b15bb59511dcde441a973e8c315  sbench/rn50_conv/rn50_conv_24_loop-baremetal
+870490cb423df4f2f4830d4a7240fa9c7636f18f5c4083e376625a48c6739bf3  sbench/rn50_conv/rn50_conv_24_sparse-baremetal
+3ec21e526aeb5223397c90f8e764d6cf8f33e0b4bf2c233f85eb66cf420cf716  sbench/rn50_conv/rn50_conv_48_full-baremetal
+63aabac77b4b36a7d439bc20b290d91a28ae103b4c420767b6d0c8897745aa87  sbench/rn50_conv/rn50_conv_48_loop-baremetal
+41d2cbee87f886f0f3d64c86cec608a6079db2fd1f3187000f096f5cb37d7375  sbench/rn50_conv/rn50_conv_48_sparse-baremetal
+c96e510c4be8602feba2335a4aaa712be85dc4bcb7df993b1225dc96fd6ca27d  sbench/small/small_24_dense-baremetal
+b5302345c5deb2e765014ad64398387c359839ed7ef58a2ad932e33665a24d59  sbench/small/small_24_ds-baremetal
+c25203cde6432b05b584a7f7c029f5eb4bd96795813a17dfcec84cf84d69b630  sbench/small/small_24_full-baremetal
+47e3eda7dd730bf3b487da5278b4148a52f5342ff82a2aa478d8edbc2cde61e5  sbench/small/small_24_loop-baremetal
+4edd45e9d04463ea5dad288b9a34fc91732618d98c2d6225e14c2f4e33452363  sbench/small/small_24_sparse-baremetal
+cc4df76290b677b2521539526180023bd6c1840bf7b6da6fbb7d7a4f0052627d  sbench/small/small_48_full-baremetal
+e5511d42cef8872bfb91a5d35a2aea374e576682a3665c31535e0887da5d4c15  sbench/small/small_48_loop-baremetal
+9069163ae42c5684ae4fc38d4a300fe4f44fde062585c73c0688339e0c1af174  sbench/small/small_48_sparse-baremetal
+6a73789da54562cb0c78bc4bfe1a44722cd32b2139214fd5cc9a390497469c3a  fair/berkeley_dense_perf-baremetal
+60affc1a3e3df7d87da57ad2e20cd5d034474b38531a171762a457ced8bfd3a2  fair/fair_perf_24-baremetal
+93a6a56b76e560437e226be6155849df9fd32fae9a7b150795c114475dee6ac0  fair/fair_perf_48-baremetal
+6592852136a26e65a0ffc0eaf2cf3386ed4c4d2d48200467d1b2282c8ef6b4e7  fair/fair_perf_dense_only-baremetal
+
+git:
+== /home/hunter/gemmini-sparsity branch spad-index-fix HEAD e06b436
+ REVIEW-FINDINGS.md                                 | 528 ---------------------
+ analysis/advanced_visuals.py                       |   4 +-
+ analysis/chart_all_data.py                         |   1 +
+ analysis/split.py                                  |   2 +-
+ chipyard-setup-notes.md                            | 259 ----------
+ experiments/streaming/analysis/stream_analysis.py  |  19 +-
+ .../streaming/investigate/scripts/build_one.sh     |   1 +
+ .../streaming/investigate/scripts/run_bins.sh      |   3 +-
+ experiments/streaming/scripts/build.sh             |  12 +-
+ experiments/streaming/scripts/collect.py           |  47 +-
+ experiments/streaming/src/stream_bench.c           |  35 +-
+ experiments/streaming/tools/parse_fixa.py          |  64 ++-
+ experiments/streaming/worklogs/fix-a-spec.md       |   1 +
+ experiments/streaming/worklogs/fix-b-spec.md       | 280 +++++++++--
+ run-flow.sh                                        | 279 ++++++++---
+ tools/report-builders/build_changes.py             |   2 +-
+ tools/report-builders/build_paper.py               |   3 +-
+ tools/report-builders/build_report.py              |   1 -
+ verification/compare_runs.py                       |   9 +-
+ verification/cross_check.py                        | 132 ++++--
+ verification/fair_perf.c                           |  58 ++-
+ verification/nmdata.py                             |   7 +
+ verification/paper_data.py                         |   4 +-
+ verification/verify_all.py                         |  14 +
+ 29 files changed, 797 insertions(+), 1327 deletions(-)
+== /home/hunter/chipyard/generators/gemmini branch sparse-loop-fix HEAD d12b0840
+ software/gemmini-rocc-tests                     |   0
+ software/libgemmini                             |   0
+ src/main/scala/gemmini/Controller.scala         |  60 +++-
+ src/main/scala/gemmini/GemminiISA.scala         |   2 +
+ src/main/scala/gemmini/LoadController.scala     |  35 ++-
+ src/main/scala/gemmini/LoopMatmul.scala         | 368 ++++++++++++++++++++++--
+ src/main/scala/gemmini/ReservationStation.scala |  12 +-
+ 7 files changed, 440 insertions(+), 37 deletions(-)
+== /home/hunter/chipyard/generators/gemmini/software/libgemmini branch sparse-loop-fix HEAD 2a6ff44
+ Makefile   |   8 ++++-
+ gemmini.cc | 116 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----
+ gemmini.h  |   6 ++++
+ 3 files changed, 120 insertions(+), 10 deletions(-)
+== /home/hunter/chipyard/generators/gemmini/software/gemmini-rocc-tests branch sparse-loop-fix HEAD 25a6611
+ bareMetalC/Makefile  |  18 +++++-
+ include/gemmini_nm.h | 175 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 192 insertions(+), 1 deletion(-)

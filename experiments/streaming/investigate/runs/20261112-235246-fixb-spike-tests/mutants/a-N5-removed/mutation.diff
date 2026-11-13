@@ -1,0 +1,4 @@
+907c907
+<     nm_loop_abort("LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0"); // changed: sparse-loop-fix, N5
+---
+>     (void)0; // changed: sparse-loop-fix, N5

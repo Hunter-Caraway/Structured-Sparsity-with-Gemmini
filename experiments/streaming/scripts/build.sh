@@ -4,8 +4,10 @@
 #   <layer>_24_dense   2:4 data, -DDENSE_ONLY, berkeley + dense_stream     (run on Berkeley's stock chip)
 #   <layer>_24_sparse  2:4 data, sparse_stream only
 #   <layer>_24_ds      2:4 data, dense_stream + sparse_stream               (2:4 chip, big layers)
+#   <layer>_24_loop    2:4 data, sparse_loop only                           (2:4 sparse-loop-fix chip)
 #   <layer>_48_full    4:8 data, all three                                  (run on the 4:8 chip)
 #   <layer>_48_sparse  4:8 data, sparse_stream only
+#   <layer>_48_loop    4:8 data, sparse_loop only                           (4:8 sparse-loop-fix chip)
 # the _24_* programs differ only in two volatile .sdata flags: their .text is checked byte-identical.
 # compile flags = run-flow.sh's rv_cc (the gemmini-rocc-tests flags), with explicit -DNM_N/-DNM_M, checked via -dM -E.
 set -eo pipefail
@@ -52,9 +54,13 @@ for L in "${layers[@]}"; do
   rv_cc "$out/${L}_24_dense-baremetal"  2 4 "$d24" -DRUN_MASK=3 -DDENSE_ONLY
   rv_cc "$out/${L}_24_sparse-baremetal" 2 4 "$d24" -DRUN_MASK=4
   rv_cc "$out/${L}_24_ds-baremetal"     2 4 "$d24" -DRUN_MASK=6
+  rv_cc "$out/${L}_24_loop-baremetal"   2 4 "$d24" -DRUN_MASK=16
   rv_cc "$out/${L}_48_full-baremetal"   4 8 "$d48" -DRUN_MASK=7
   rv_cc "$out/${L}_48_sparse-baremetal" 4 8 "$d48" -DRUN_MASK=4
-  a="$(text_sha "$out/${L}_24_full-baremetal")"; b="$(text_sha "$out/${L}_24_dense-baremetal")"; s="$(text_sha "$out/${L}_24_sparse-baremetal")"; t="$(text_sha "$out/${L}_24_ds-baremetal")"
-  [ "$a" = "$b" ] && [ "$a" = "$s" ] && [ "$a" = "$t" ] || die "$L: .text differs between the _24 builds ($a / $b / $s)"
-  echo "$L: built 6 programs; _24_full/_24_dense/_24_sparse/_24_ds .text identical (sha256 $a); _48 .text $(text_sha "$out/${L}_48_full-baremetal")"
+  rv_cc "$out/${L}_48_loop-baremetal"   4 8 "$d48" -DRUN_MASK=16
+  a="$(text_sha "$out/${L}_24_full-baremetal")"; b="$(text_sha "$out/${L}_24_dense-baremetal")"; s="$(text_sha "$out/${L}_24_sparse-baremetal")"; t="$(text_sha "$out/${L}_24_ds-baremetal")"; l="$(text_sha "$out/${L}_24_loop-baremetal")"
+  [ "$a" = "$b" ] && [ "$a" = "$s" ] && [ "$a" = "$t" ] && [ "$a" = "$l" ] || die "$L: .text differs between the _24 builds ($a / $b / $s / $t / $l)"
+  a48="$(text_sha "$out/${L}_48_full-baremetal")"; s48="$(text_sha "$out/${L}_48_sparse-baremetal")"; l48="$(text_sha "$out/${L}_48_loop-baremetal")"
+  [ "$a48" = "$l48" ] || die "$L: .text differs between _48_full and _48_loop ($a48 / $l48)"
+  echo "$L: built 8 programs; _24_full/_24_dense/_24_sparse/_24_ds/_24_loop .text identical (sha256 $a); _48_full/_48_loop .text $a48 (_48_sparse $s48)"
 done

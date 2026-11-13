@@ -1,0 +1,16 @@
+layer_pat berkeley_total sparse_loop_total passed_line  (Spike timed-region counts from <log>:'berkeley total' / 'sparse_loop total'; not cycles)
+bert_ffn1_24 12000 4404 sbench passed (2 of 2 runs verified)
+bert_ffn1_48 12000 4613 sbench passed (2 of 2 runs verified)
+bert_ffn2_24 10057 3327 sbench passed (2 of 2 runs verified)
+bert_ffn2_48 10057 3460 sbench passed (2 of 2 runs verified)
+bert_qkv_24 3214 1451 sbench passed (2 of 2 runs verified)
+bert_qkv_48 3214 1516 sbench passed (2 of 2 runs verified)
+edge_24 402 363 sbench passed (2 of 2 runs verified)
+edge_48 402 378 sbench passed (2 of 2 runs verified)
+rn50_conv_24 4833 1871 sbench passed (2 of 2 runs verified)
+rn50_conv_48 4833 1893 sbench passed (2 of 2 runs verified)
+small_24 468 469 sbench passed (2 of 2 runs verified)
+small_48 468 487 sbench passed (2 of 2 runs verified)
+fair_perf_24: 8 variants match cpu reference; fair_perf passed
+fair_perf_48: 8 variants match cpu reference; fair_perf passed
+fair_perf_dense_only: 3 variants match cpu reference; fair_perf passed

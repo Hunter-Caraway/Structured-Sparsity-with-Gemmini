@@ -11,7 +11,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase.pdfmetrics import registerFontFamily, stringWidth
 from reportlab.platypus import (BaseDocTemplate, PageTemplate, Frame, Paragraph, Spacer, Table, TableStyle,
-                                PageBreak, KeepTogether, CondPageBreak, Preformatted, Flowable)
+                                PageBreak, KeepTogether, CondPageBreak, Preformatted)
 from reportlab.graphics.shapes import Drawing, Rect, String, Line, Polygon
 
 PROJ = Path(__file__).resolve().parents[2]

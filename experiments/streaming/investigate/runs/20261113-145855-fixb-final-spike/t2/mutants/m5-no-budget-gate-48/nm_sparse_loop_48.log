@@ -1,0 +1,10 @@
+nm_sparse_loop: 4:8, R = 6 rows per index tile, 2 tiles per LOAD_IDX
+T=1 i1 j1                          ok (0/256 wrong)
+T=2 i2 j2 repeating bias           ok (0/1024 wrong)
+T=3 i1 j3 row bias                 ok (0/768 wrong)
+T=4 i2 j2                          ok (0/1024 wrong)
+T=5 i2 j5                          ok (0/2560 wrong)
+GEMMINI: n:m index fifo: more than 4 index tiles ahead of their preloads (3 queued, 0 in flight, load of 2)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

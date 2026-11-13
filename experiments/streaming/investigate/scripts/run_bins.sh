@@ -33,7 +33,8 @@ cp "$jobs" "$run/jobs-$(date +%Y%m%d-%H%M%S).txt"
 one() {
   local chip="$1" b="$2" seed="$3" tmo="$4" name log t0 t1 rc
   name="$(basename "$b")"; cp -n "$b" "$run/bin/"
-  echo "bin.$name.sha256=$(sha256sum "$b" | cut -d' ' -f1)" >> "$run/run.info"
+  # hash the copy that is simulated: cp -n keeps an earlier file of the same name
+  echo "bin.$name.sha256=$(sha256sum "$run/bin/$name" | cut -d' ' -f1)" >> "$run/run.info"
   log="$run/$chip.${name%-baremetal}.seed$seed.log"; [ ! -e "$log" ] || return 0
   t0=$(date +%s)
   (cd "$cy/sims/verilator" && make CONFIG="$(cfg_of "$chip")" run-binary-fast LOADMEM=1 BREAK_SIM_PREREQ=1 \

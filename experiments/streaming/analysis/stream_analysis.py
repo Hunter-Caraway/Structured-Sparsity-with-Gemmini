@@ -30,7 +30,9 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[2]
-RUN = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else REPO / "experiments/streaming/runs/20261109-144252"
+ALLOW_MIXED = "--allow-mixed-sims" in sys.argv
+_ARGS = [a for a in sys.argv[1:] if a != "--allow-mixed-sims"]
+RUN = Path(_ARGS[0]).resolve() if _ARGS else REPO / "experiments/streaming/runs/20261109-144252"
 FAIR = REPO / "verification/runs/fair-20261103-151404"
 AREA = REPO / "analysis/area/area.csv"
 OUT = HERE / "out"
@@ -53,10 +55,21 @@ SERIES = [("berkeley", "stock", "berkeley", "Berkeley tiled_matmul_auto (stock c
           ("sp48", "nm48", "sparse_stream", "Hand tiler, 4:8 sparse")]
 
 
+MIX = {}   # chip -> {sim_sha256: rows} for chips with several builds
+
+
 def load_results():
     rows = list(csv.DictReader(open(RUN / "results.csv")))
     bad = [r["log"] for r in rows if r["verified"] != "yes"]
     if bad: sys.exit(f"unverified rows in results.csv: {bad}")
+    per = defaultdict(lambda: defaultdict(int))
+    for r in rows: per[r["chip"]][r["sim_sha256"]] += 1
+    # one chip must come from one simulator build unless --allow-mixed-sims
+    MIX.clear(); MIX.update({c: dict(m) for c, m in sorted(per.items()) if len(m) > 1})
+    if MIX and not ALLOW_MIXED:
+        lines = [f"  chip {c}: sim_sha256 {h} ({n} rows)" for c, m in MIX.items() for h, n in sorted(m.items())]
+        sys.exit("a chip has rows from more than one simulator build:\n" + "\n".join(lines) +
+                 "\nre-run with --allow-mixed-sims to continue; the outputs will then state the mix.")
     g = defaultdict(list)
     for r in rows: g[(r["layer"], r["chip"], r["variant"])].append(r)
     out = {}
@@ -153,6 +166,7 @@ def write_tables(table, area, area_blocks, fair, fair_seeds, nrows):
     n["ranges_real_layers"] = {f"{k}.{f}": rng(k, f) for k in ("dense", "sp24", "sp48")
                                for f in ("vs_berkeley_best", "vs_dense_stream_stock", "perf_per_mm2_vs_berkeley_best", "rs_full_share")}
     n["dense_chip_spread_pct"] = max(abs(n["layers"][L]["nm24_dense_vs_stock_dense_pct"]) for L in ALL_LAYERS)
+    if MIX: n["mixed_sim_builds"] = MIX   # disclose the mix
     (OUT / "numbers.json").write_text(json.dumps(n, indent=1) + "\n")
 
     md = [f"# Streaming benchmark tables (stream_analysis.py, from {n['run']}/results.csv)", "",
@@ -164,6 +178,9 @@ def write_tables(table, area, area_blocks, fair, fair_seeds, nrows):
         md.append(f"| {t['layer']} | {t['variant']} ({t['chip']}) | {t['total_cycles']:,} | {t['vs_berkeley_best']:.3f}× | "
                   f"{t['vs_dense_stream_stock']:.3f}× | {t['macs_per_cycle']:.1f} | {t['macs_per_cycle_per_mm2']:.2f} | "
                   f"{t['perf_per_mm2_vs_berkeley_best']:.3f}× | {t['ex_active']:,} | {t['rdma_bytes_real']:,} | {t['rs_full_share'] * 100:.0f}% |")
+    if MIX:   # disclose the mix
+        md += ["", "WARNING: mixed simulator builds (--allow-mixed-sims). Rows per chip and sim_sha256:"]
+        md += [f"- chip {c}: sim_sha256 {h} ({k} rows)" for c, m in MIX.items() for h, k in sorted(m.items())]
     md += ["", "Definitions: see the header of stream_analysis.py. bytes read = rdma_bytes counter / 4.",
            "no-alloc cycles (rs_full) = Gemmini's rs_full counter, which is !io.alloc.ready (ReservationStation.scala:611): "
            "cycles with no command allocated into the reservation station, idle cycles included. It is not a measure of a "

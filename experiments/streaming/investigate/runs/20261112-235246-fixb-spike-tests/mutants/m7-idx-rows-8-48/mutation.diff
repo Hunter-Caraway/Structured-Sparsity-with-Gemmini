@@ -1,0 +1,4 @@
+944c944
+<   const size_t nm_R = nm_spad_rows_per_tile; // changed: sparse-loop-fix, sparse loop sizes and legality checks
+---
+>   const size_t nm_R = 8; // changed: sparse-loop-fix, sparse loop sizes and legality checks

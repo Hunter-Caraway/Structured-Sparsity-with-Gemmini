@@ -13,8 +13,8 @@ Accuracy of results is the top priority.
 | Tests and helpers (`gemmini_nm.h`) | `.../gemmini/software/gemmini-rocc-tests` | `sparse-nm` | `7c540b3` |
 
 Key paths: worklogs and specs `experiments/streaming/worklogs/`; recorded runs `experiments/streaming/investigate/runs/`
-and `experiments/streaming/runs/`; tools `experiments/streaming/tools/`. Background: `HANDOFF.md`,
-`worklogs/fix-a-spec.md` (spad-index-fix), `worklogs/fix-b-spec.md` (sparse-loop-fix, draft).
+and `experiments/streaming/runs/`; tools `experiments/streaming/tools/`. Background: `HANDOFF.md` (removed from the tree; read
+it with `git show e06b436:HANDOFF.md`), `worklogs/fix-a-spec.md` (spad-index-fix), `worklogs/fix-b-spec.md` (sparse-loop-fix, draft).
 
 ## Hard rules
 1. Every number in a doc, report or worklog cites the log it came from. No estimates presented as measurements.
@@ -38,7 +38,7 @@ spec's changelog with a date.
   the toolchain or overwrite `gemmini-rocc-tests/build`).
 - Every new check or assert has a negative (NEG) test that triggers it.
 - The new tests fail on a deliberately broken (mutant) build.
-- Berkeley's 56 dense tests still pass.
+- Berkeley's 54 dense tests still pass (its `bareMetalC/Makefile` list for normal configs; `matmul_spad` and `mvin_mvout_spad` excluded, as Berkeley does).
 - Then Verilator runs on the server confirm it (with user approval for any rebuild).
 
 ## Comments

@@ -299,9 +299,11 @@ def fig6(T, theme):
 if __name__ == "__main__":
     try:
         runs = nmdata.find_runs(sys.argv[1:] or None)
-        S = nmdata.summary(nmdata.load_fair(runs))
+        fair = nmdata.load_fair(runs)
     except nmdata.NoResults as e:
         nmdata.die_no_results(e)
+    nmdata.die_unpassed(fair, "figures")
+    S = nmdata.summary(fair)
     OUT = runs[0] / "derived" / "figures"
     OUT.mkdir(parents=True, exist_ok=True)
     for theme, T in THEMES.items():

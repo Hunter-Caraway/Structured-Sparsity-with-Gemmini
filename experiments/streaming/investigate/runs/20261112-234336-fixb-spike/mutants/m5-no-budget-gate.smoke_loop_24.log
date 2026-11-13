@@ -1,0 +1,9 @@
+case M=16 N=16 K=32 tiles 1x1x2 bias=0: ok (0 wrong)
+case M=20 N=16 K=64 tiles 2x1x4 bias=0: ok (0 wrong)
+case M=16 N=48 K=32 tiles 1x3x2 bias=1: ok (0 wrong)
+case M=16 N=64 K=32 tiles 1x4x2 bias=2: ok (0 wrong)
+case M=16 N=80 K=32 tiles 1x5x2 bias=0: ok (0 wrong)
+GEMMINI: n:m index fifo: more than 4 index tiles ahead of their preloads (3 queued, 0 in flight, load of 2)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

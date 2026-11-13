@@ -1,0 +1,4 @@
+1116c1116
+<           if (nm && i == I-1 && nm_loaded < nm_tiles && nm_loaded - ((size_t)k*J + j + 1) <= 2) // changed: sparse-loop-fix, rolling index LOAD
+---
+>           if (nm && i == I-1 && nm_loaded < nm_tiles && true) // changed: sparse-loop-fix, rolling index LOAD

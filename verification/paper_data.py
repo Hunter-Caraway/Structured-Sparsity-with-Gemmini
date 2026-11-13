@@ -91,9 +91,7 @@ def main():
         fair = nmdata.load_fair(runs)
     except nmdata.NoResults as e:
         nmdata.die_no_results(e)
-    bad = [f"{c} seed {s}" for c, v in fair.items() for s, log in v.items() if not log["passed"] or log["failed"]]
-    if bad:
-        sys.exit(f"these runs did not pass, so no paper numbers: {', '.join(bad)}")
+    nmdata.die_unpassed(fair, "paper numbers")
     d = build_data(fair)
     out = runs[0] / "derived"
     out.mkdir(exist_ok=True)

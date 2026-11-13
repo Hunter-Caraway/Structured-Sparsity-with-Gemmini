@@ -8,5 +8,6 @@ analysis/area/work/
 
 # large build/scratch outputs, not source
 experiments/streaming/build/
+build-scratch/
 experiments/area-nofraig/work/
 *.trace

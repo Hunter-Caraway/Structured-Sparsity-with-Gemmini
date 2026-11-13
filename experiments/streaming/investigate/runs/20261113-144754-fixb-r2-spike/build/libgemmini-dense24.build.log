@@ -1,0 +1,20 @@
+make: Entering directory '/tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/libs/libgemmini-dense24'
+Running with RISCV=/home/hunter/chipyard/.conda-env/riscv-tools
+g++ -L /home/hunter/chipyard/.conda-env/riscv-tools/lib -Wl,-rpath,/home/hunter/chipyard/.conda-env/riscv-tools/lib -shared -o libgemmini.so -std=c++17 -I /home/hunter/chipyard/.conda-env/riscv-tools/include -fPIC -O3 -DNM_N=2 -DNM_M=4 -DNM_DENSE_BUILD /home/hunter/chipyard/generators/gemmini/software/libgemmini/gemmini.cc
+In file included from /home/hunter/chipyard/generators/gemmini/software/libgemmini/gemmini.cc:2:
+/home/hunter/chipyard/.conda-env/riscv-tools/include/riscv/mmu.h:60:30: warning: default member initializers for bit-fields only available with '-std=c++20' or '-std=gnu++20' [-Wc++20-extensions]
+   60 |   const bool forced_virt : 1 {false};
+      |                              ^
+/home/hunter/chipyard/.conda-env/riscv-tools/include/riscv/mmu.h:61:23: warning: default member initializers for bit-fields only available with '-std=c++20' or '-std=gnu++20' [-Wc++20-extensions]
+   61 |   const bool hlvx : 1 {false};
+      |                       ^
+/home/hunter/chipyard/.conda-env/riscv-tools/include/riscv/mmu.h:62:21: warning: default member initializers for bit-fields only available with '-std=c++20' or '-std=gnu++20' [-Wc++20-extensions]
+   62 |   const bool lr : 1 {false};
+      |                     ^
+/home/hunter/chipyard/.conda-env/riscv-tools/include/riscv/mmu.h:63:28: warning: default member initializers for bit-fields only available with '-std=c++20' or '-std=gnu++20' [-Wc++20-extensions]
+   63 |   const bool ss_access : 1 {false};
+      |                            ^
+/home/hunter/chipyard/.conda-env/riscv-tools/include/riscv/mmu.h:64:30: warning: default member initializers for bit-fields only available with '-std=c++20' or '-std=gnu++20' [-Wc++20-extensions]
+   64 |   const bool clean_inval : 1 {false};
+      |                              ^
+make: Leaving directory '/tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/libs/libgemmini-dense24'

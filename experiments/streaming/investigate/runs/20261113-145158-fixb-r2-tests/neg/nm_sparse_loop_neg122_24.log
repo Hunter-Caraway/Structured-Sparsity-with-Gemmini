@@ -1,0 +1,4 @@
+GEMMINI: sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

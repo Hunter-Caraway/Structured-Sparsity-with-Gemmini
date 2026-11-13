@@ -1,9 +1,9 @@
-STATUS: DRAFT, not approved for RTL. Spec only; no source file was edited, nothing built or simulated.
+STATUS: FROZEN (2026-11-12). Semantics below must not change without a changelog entry at the end.
 
 # Fix B spec and cost estimate: N:M sparse mode inside the hardware matmul loop (LOOP_WS)
 
 Author: spec agent, 2026-11-12 (written 11:15-11:45 EST against the working tree; Fix A and protocol changes are
-uncommitted there). Builds on `fix-a-spec.md` (FROZEN) and HANDOFF.md section 5. Nothing in Fix A changes; Fix B
+uncommitted there). Builds on `fix-a-spec.md` (FROZEN) and HANDOFF.md section 5 (removed from the tree; see `git show e06b436:HANDOFF.md`). Nothing in Fix A changes; Fix B
 only adds a new *producer* of the Fix A commands (preload / compute with a_hi / LOAD / mvin of index rows).
 
 Tags: [M] = measured (log or source cited), [E] = estimated (reasoning given), [Q] = open question for the user.
@@ -54,19 +54,20 @@ in gemmini_nm.h (lines ~440-510) already issues per tile.
 | P2 | `LoopMatmulLdB` | B has max_k/2 K tiles: use `kb = max_k >> 1` for `sp_addr_start` (line 178), iteration bound (`max_row_iterator`) and `blocks`. DRAM side unchanged (B in DRAM is already the squashed K/2 x N matrix, `B_stride` as given). |
 | P3 | `LoopMatmulExecute` | iterate k' in 0..max_k/2-1; a_lo address uses A tile `2k'`, a_hi = a_lo + DIM; `comp_cmd_rs2` = a_hi with num_rows = a_rows, num_cols = DIM (today GARBAGE, rows/cols DIM); `b_addr_start` uses `max_k/2`; `lda_ahead` must test A tile `2k'+1`; C accumulate flag `k' != 0` unchanged. |
 | P4 | `LoopMatmulStC`, `StCSpad` | [M, read] they test `io.ex_k === req.max_k - 1` (LoopMatmul.scala:629, 780) and the wiring at 1215/1228 passes `max_k`: pass `max_k/2` for a sparse loop. `ex` itself needs both values (A layout uses the original max_k via `a_max_col`, line 398; B layout and k iteration use the half), so `LoopMatmulExecuteReq` gains `max_k_b`. LdA (line 1121) keeps the original max_k, LdB (line 1142) gets the half. |
-| P5 | new `LoopMatmulLdIdx` | new FSM (copy of LdB structure) that mvins index tiles, see 1.4. Joins `ldab_arb`/`arb` (arb becomes 6 inputs); counted in `ld_utilization`. |
+| P5 [SUPERSEDED in part: funct 27, see 2.5.3] | new `LoopMatmulLdIdx` | new FSM (copy of LdB structure) that mvins index tiles, see 1.4. Joins `ldab_arb`/`arb` (arb becomes 6 inputs); counted in `ld_utilization`. |
 | P6 | `LoopMatmulExecute` | new state `ldidx` between the last compute of weight tile u and the preload of tile u+1 (and before the first preload) that emits a Fix A LOAD (funct 26, rd = 2) when the budget rule of 1.5 allows. |
-| P7 | Controller.scala:274-285 | relax the "LOOP_WS in sparse mode" assert (section 2.3). |
+| P7 | Controller.scala:274-285 | replace the "LOOP_WS in sparse mode" assert by 2.5.5/2.5.6. |
+| P9 | GemminiISA.scala, LoadController.scala, ReservationStation.scala | funct 27 `LOAD_IDX_CMD` (2.5.2): funct constants, constant stride/scale/block-stride mux in LoadController (:61-70, :107), RS dst range / is_load / id handling (ReservationStation.scala:276, 296, 323); NM builds only. |
 | P8 | ExecuteController.scala | **no change expected**: it already handles real sparse preload, compute with a_hi, and the LOAD diverter; the loop emits exactly the commands software emits today. |
 
 Layout consequence (spad): A tiles keep Berkeley's `(i*max_k + k)*DIM` row-major tile layout with the original max_k,
 so a_lo = tile(i, 2k'), a_hi = tile(i, 2k'+1) = a_lo + DIM (rows consecutive, matches "a_hi stride 1"). B region is
-half size. Index region (new): `idx_addr_end = b_addr_start`, `idx_addr_start = idx_addr_end - n_tiles*R` where
+half size. [SUPERSEDED by 2.5.4: index region at the top of the half, B below it] Index region (new): `idx_addr_end = b_addr_start`, `idx_addr_start = idx_addr_end - n_tiles*R` where
 `n_tiles = (max_k/2)*max_j`; carved just below the B region of the loop's half. RTL assert: the whole region lies in
 one scratchpad bank (LOAD bank rule, Fix A section 3) and does not collide with A (`a_end <= idx_addr_start`).
 Software tiler must size tiles with this reserve (section 6).
 
-### 1.4 LdIdx (index mvin) detail
+### 1.4 LdIdx (index mvin) detail [mvin3 / config_ld id 2 / "D = NULL" parts SUPERSEDED by 2.5.2-2.5.3: LdIdx emits funct 27 with fixed config; bias allowed]
 - Index tiles are stored in DRAM contiguously in the same order the loop consumes weight tiles: tile u = k'*max_j + j
   (k', j as in LdB order), each tile R*16 bytes (the Fix A "tight" format, `nm_pack_meta_spad`). DRAM address of tile
   u = `idx_dram + u*R*16`; spad rows `idx_addr_start + u*R`.
@@ -92,7 +93,7 @@ T/2 + 1 LOADs, i.e. +0.5 command per tile; irrelevant because they are generated
 
 ## 2. ISA changes
 
-### 2.1 Chosen: a flag in LOOP_WS and reuse of the D slots; no new funct
+### 2.1 [SUPERSEDED 2026-11-12 by 2.5: no bias possible, rejected by Q1] A flag in LOOP_WS and reuse of the D slots; no new funct
 Dense LOOP_WS encoding is unchanged bit for bit. Used bits today: LOOP_WS rs1 [0] ex_accumulate, [1] full_C, [2] low_D,
 [15:8] act, [19:16] spad ids; rs2 [0] a_transpose, [1] b_transpose, [2] is_resadd, [9:3] FSM-started flags, [63:32]
 c_spad_addr (SPAD variant). Free: rs1[7:3], rs1[63:20], rs2[31:10].
@@ -107,13 +108,13 @@ New bit **LOOP_WS rs1[3] = nm_sparse** (call it `loop_nm`). When set:
   the per-tile path. The loop does not touch config_ex; the preloads it emits are latched sparse by the existing
   ExecuteController logic. Index base in scratchpad is not an operand (derived, section 1.3).
 
-### 2.2 Alternative (if [Q1] says bias is needed): one new funct
+### 2.2 [ADOPTED 2026-11-12 in the form of 2.5, with a second funct 27; text below is the original sketch] Alternative: one new funct
 funct 27 `LOOP_WS_CONFIG_NM`: rs1 = idx_dram, rs2 = flags/idx spad base. It must be added to `is_loop_config_cmd`
 (line 983) and the LoopUnroller range checks; the sparse flag then lives there. Costs ~10 lines more, a new CPU
 instruction per call, and LdD must be told a different mvin id (only three ids exist, so bias and index would share
 mvin3 stride config: not possible without a new load-config id). Not recommended for v1.
 
-### 2.3 Controller assert (Controller.scala:274-285)
+### 2.3 [SUPERSEDED by 2.5.5/2.5.6, messages now "sparse-loop-fix: ..."] Controller assert (Controller.scala:274-285)
 Today: LOOP_WS / LOOP_CONV_WS while `nm_loop_sparse` (config_ex rs1[10]) is on is fatal. New rule, checked where
 LOOP_WS is seen on `raw_cmd`: `LOOP_WS.rs1[3] == nm_loop_sparse` (sparse loop only in sparse mode, dense loop only in
 dense mode) and LOOP_CONV_WS with sparse mode stays fatal. Message: "LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])". The program-order model (q, in_flight, mode latch, P1-P5 asserts) sits after the
@@ -125,6 +126,117 @@ Dense chips (`nm_sparsity = None`): the new fields and FSM are not elaborated; r
 the stock Berkeley build is unchanged). NM chips running dense code: rs1[3] = 0 so behaviour is identical. Existing
 sparse per-tile software (Fix A path) is unchanged and remains the fallback; `LOOP_WS` with rs1[3] = 1 in the old
 protocol would have been fatal, so no existing program breaks.
+
+### 2.5 Chosen design after the 2026-11-12 decisions (Q1: bias needed; Q2: K % 2*DIM == 0). Replaces 2.1; adopts 2.2 in this form
+
+Two new functs and one flag. Nothing in Fix A, in the dense LOOP_WS encoding, or in config_ld/LdD changes. Bias (LdD, mvin3,
+accumulator) works exactly as in a dense loop.
+
+#### 2.5.1 Why the index rows cannot use LdA/LdB/LdD's mvin ids
+[M] Every mvin funct selects a per-id DRAM row stride, scale and block stride in LoadController
+(`strides/scales/block_strides = Reg(Vec(load_states, ...))`, LoadController.scala:33-36, `state_id` from funct at :61-64; `load_states = 3`,
+GemminiConfigs.scala:193). [M] The software always configures all three before a loop (`gemmini_extended3_config_ld` ids 0, 1, 2 for A, B, D,
+gemmini.h:760-762), and LdA/LdB/LdD emit LOAD_CMD/LOAD2_CMD/LOAD3_CMD (LoopMatmul.scala:75, 189, 292). Index rows need a 16 B DRAM row
+stride (tiles are packed contiguously), so any of the three ids would clobber the A, B or D stride (D is the bias, now needed). [M]
+The `state_id` field of config_ld is 2 bits (GemminiISA.scala:107) but `load_states = 3` and the id comes from the mvin funct, so a 4th id needs a
+4th funct anyway. Rejected: index in DRAM with B's row stride (padded, 4x line traffic [E]); a 4th configurable id (resizes Vec in
+LoadController and RS for NM builds, more Berkeley lines, one more config_ld the software must remember).
+
+#### 2.5.2 Encodings (all custom-3 / XCUSTOM_ACC, R-type, funct3 = 0x3, xs1 = xs2 = 1, xd = 0)
+Funct collision check [M]: Berkeley uses 0-25 and 126 (GemminiISA.scala:8-39, 62); the cisc-gemmini opcodes 10-17 (GemminiISA.scala:52-61) are an
+unused separate decoder; Fix A uses 26 (:41); `grep` of src/, libgemmini, gemmini-rocc-tests/include (2026-11-12) finds no use of 27 or 28.
+
+| funct | name | rs1 | rs2 |
+|---|---|---|---|
+| 27 | `LOAD_IDX_CMD` (mvin of index rows, fixed config) | DRAM byte address of the first index row | `MvinRs2` layout: [63:48] rows (1..16), [47:32] cols (must be 16), [31:0] spad row address |
+| 28 | `LOOP_WS_CONFIG_NM` | `idx_dram`: DRAM byte address of index tile 0 of this loop (non-zero, 16 B aligned) | must be 0 |
+| 8 | `LOOP_WS`, new bit | **rs1[3] = nm_sparse** (free today: used rs1 bits are [0], [1], [2], [15:8], [19:16], LoopMatmul.scala:1081-1112) | unchanged |
+
+LOAD_IDX semantics: identical to an mvin (LOAD_CMD) with these constants, selected by funct and not stored in any config register: DRAM
+row stride 16 B (the `rows` rows are contiguous, `rows*16` bytes), scale = identity, no shrink, pixel repeats 1, block stride DIM. One mvin
+therefore reads `rows*16` contiguous bytes, i.e. `g = floor(16/R)` whole index tiles (g = 4 for 2:4, 2 for 4:8 = 12 rows). It is an ld-queue command
+like LOAD3 (RS dst range = `rs2[31:0] .. + rows`), and is legal from the CPU too (used by tests). The scale constant must equal the bit
+pattern `scale_t_to_scale_t_bits(MVIN_SCALE_IDENTITY)` produces for the chip's `mvin_scale_t` [E; RTL agent confirms, check C6].
+Why it cannot be a Fix A rd value: funct 26 rd == 3 is "reserved" in Fix A and funct 26 commands bypass the RS (rd 0/1) or enter the ex queue
+(rd 2); an mvin must enter the ld queue and the DMA path, so it needs its own funct [E].
+
+LOOP_WS_CONFIG_NM is a loop config command like funct 9-13/24/25: it must be added to `is_loop_config_cmd` (LoopMatmul.scala:983-984) and to the
+config `switch` (:1043-1080), storing `idx_dram` in `loop_being_configured`. LOOP_WS rs1[3] is latched into `loop_being_configured.nm`.
+A `nm_cfg_seen` bit (set by funct 28, cleared at LOOP_WS) ties the two together (assert, 2.5.6).
+
+Instruction sequence for one sparse loop (bias optional; software also keeps the Fix A prerequisites):
+`gemmini_nm_reset(); config_ex(sparse=1, A_stride=1); config_ld ids 0,1,2 (as today); LOOP_WS_CONFIG_BOUNDS (original K tile count, even);
+ADDRS_AB; ADDRS_DC (D = bias or NULL, C); STRIDES_AB; STRIDES_DC; LOOP_WS_CONFIG_NM(idx_dram, 0); LOOP_WS(rs1[3] = 1, ...)`.
+CPU cost +1 RoCC command per loop (funct 28) versus a dense loop. No `config_ld` for the index.
+
+#### 2.5.3 Load path, ordering, and why it cannot deadlock or reorder [M] cites, [E] argument
+- New FSM `LoopMatmulLdIdx` (copy of LdB structure) emits LOAD_IDX_CMD into `unrolled_cmd`. The existing arbiter is `Arbiter(5)` with fixed priority
+  (in(0) stC, in(1) ex, in(2) ldD, in(3) `ldab_arb.out`, in(4) stC_spad; LoopMatmul.scala:960-964); `ldab_arb` is a WeightedArbiter between only A and B
+  (:943-957). LdIdx is **not** added to `ldab_arb` (it would perturb the A/B weighting; untouched) but is a new `arb` input (arb becomes `Arbiter(6)`)
+  placed **above** `ldab_arb` (priority between ldD and ldab) so it is never starved behind a long A/B stream. It cannot starve A/B because it
+  self-throttles: it issues only while `u_idx_issued <= u_B_issued + g` (at most one mvin ahead of LdB; at most R*g rows = 16 rows per mvin).
+- RS ordering is by address, not by mvin id: a load entry depends only on older ld/ex entries whose dst/src ranges overlap (RS deps_ld/deps_ex,
+  ReservationStation.scala:351-375; dst range from `rs2[31:0]` for LOAD/LOAD2/LOAD3, :276-282). The index region is disjoint from the A region, the
+  B region (asserted, 2.5.4), and from the accumulator (different address space; bias lives there), so an idx mvin has no RAW/WAR edge with any
+  LdA/LdB/LdD mvin or with computes. Its only edges: RAW into the Fix A LOAD that reads it (ex queue, younger), and WAR against the Fix A LOAD of the
+  loop two loops earlier that read the same rows (older, in ex queue). All edges point to program-order-older entries, so no cycle (same argument as
+  H2/H10) [E].
+- Because LOAD_IDX is a plain load-queue command the `ld_utilization` counter (:973) counts it (add `ldIdx.io.cmd.fire`), `rob_overloaded`
+  throttles it like LdA/LdB (:998-1001), and `io.ld_completed` (RS `matmul_ld_completed`) balances it, as for LdD.
+- The ex FSM emits the Fix A LOAD (funct 26 rd 2) under the unchanged section 1.5 rule; its gate "covering mvin issued" now reads LdIdx's
+  `u_idx_issued` counter (the same counter used for throttling), so the RS always has the producer mvin allocated before the LOAD (RAW seen).
+- Reordering: LOAD_IDX commands of one loop are issued by one FSM in tile order; the RS may complete them out of order but the Fix A LOAD
+  waits (RAW) for the rows it reads, and tiles enter the FIFO in LOAD program order (Fix A section 4), so order of arrival of data is irrelevant [E].
+- Two concurrent loops: loop n+1's LdIdx may start before loop n's ex is done (like LdA/LdB); its region is the other half of the scratchpad (2.5.4),
+  so no overlap with loop n's index rows [E].
+
+#### 2.5.4 Scratchpad reservation (replaces the 1.3 "index region just below B")
+[M] Berkeley halves the scratchpad per loop: `a_addr_start = i*max_addr/2`, `b_addr_end = (i+1)*max_addr/2` (LoopMatmul.scala:1296-1297;
+B start = `b_addr_end - max_k*max_j*DIM`, :387). max_addr = 16384 rows (4 banks x 4096), half = 8192 rows = 2 banks.
+For a sparse loop (kb = max_k/2, n_tiles = kb*max_j, idx_rows = n_tiles*R):
+- index region = rows `[b_addr_end - idx_rows, b_addr_end)` (top of the loop's half, so it ends on a bank boundary);
+- B region = `[b_addr_end - idx_rows - kb*max_j*DIM, b_addr_end - idx_rows)` (LdB and ex both use `b_addr_end_eff = b_addr_end - idx_rows`);
+- A region unchanged, `[a_addr_start, a_addr_start + max_i*max_k*DIM)` (A keeps the original max_k, layout of 1.3).
+Because idx_rows <= 4096 is asserted and the region ends on a bank boundary (multiples of 4096), it lies in one bank, satisfying the Fix A
+LOAD bank rule for every n <= 4 sub-range. Bias is in the accumulator (`acc` address space, LoopMatmul.scala:1115 `ld_d_addr_start`, :1115, :1209), so it cannot
+collide with the index region [E]. Software tiler must satisfy `max_i*max_k*DIM + kb*max_j*DIM + idx_rows <= 8192` (asserted in RTL and Spike).
+Per-tile cost: 2:4 R = 4 rows per 32 original K rows x 16 cols weight tile => +4 rows per 16 weight rows (+25% spad rows of the B region); 4:8 R = 6 (+37.5%).
+Tiles per loop shrink accordingly: this is a tiler constraint, not a bug [E].
+
+#### 2.5.5 Controller rules (replaces the 2.3 rule; same location Controller.scala:274-285)
+On `raw_cmd`: `LOOP_WS.rs1[3] == nm_loop_sparse` (both ways); LOOP_CONV_WS in sparse mode stays fatal. The program-order model after the unroller
+(Controller.scala:579+) polices loop-generated LOAD/mvin traffic unchanged (P1..P5 asserts). New sideband bit from LoopMatmul to the Controller
+(`nm_loop_first_load`, true on the first LOAD of a sparse loop) lets the Controller require `q == 0 && !in_flight` at that point [E; implementation detail
+left to the RTL agent but the assert is required].
+
+#### 2.5.6 Illegal use and sim-time asserts (new; all messages start with the feature name "sparse-loop-fix:"; Spike aborts with the same text)
+| # | condition | message |
+|---|---|---|
+| N1 | LOOP_WS rs1[3] != config_ex rs1[10] mode | `sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])` |
+| N2 | LOOP_CONV_WS while sparse mode on | `sparse-loop-fix: LOOP_CONV_WS issued while n:m sparse mode (config_ex rs1[10]) is on` |
+| N3 | LOOP_WS rs1[3] = 1 with no LOOP_WS_CONFIG_NM since the previous LOOP_WS | `sparse-loop-fix: LOOP_WS with rs1[3] set needs LOOP_WS_CONFIG_NM (funct 28) first` |
+| N4 | LOOP_WS_CONFIG_NM seen, LOOP_WS rs1[3] = 0 | `sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) without LOOP_WS rs1[3]` |
+| N5 | funct 28: rs1 == 0 or rs1[3:0] != 0 or rs2 != 0 | `sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0` |
+| N6 | sparse loop with odd K tile count or pad_K != 0 | `sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)` |
+| N7 | sparse loop with A_transpose, B_transpose, is_resadd, low_D, or spad_only | `sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only` (bias with full-width D is legal) |
+| N8 | A_stride (config_ex rs1[31:16]) != 1 at a sparse LOOP_WS | `sparse-loop-fix: sparse loop needs A_stride == 1` |
+| N9 | A + B + index regions exceed the loop's half of the scratchpad, or idx_rows > 4096 | `sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank)` |
+| N10 | sparse loop started with index tiles pending (q != 0 or in_flight) | `sparse-loop-fix: sparse loop started with index tiles pending in the FIFO: gemmini_nm_reset() first` |
+| N11 | funct 27 on a dense build (Spike dense lib only, no RTL assert; changelog 2026-11-13 D1) | `sparse-loop-fix: LOAD_IDX (funct 27) on a dense build (nm_sparsity = None)` |
+| N12 | funct 27 with cols != 16 or rows == 0 or rows > 16 | `sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows` |
+| N13 | funct 27 local address is an accumulator address or GARBAGE or outside the scratchpad, or address + rows > scratchpad rows (changelog 2026-11-13 D4) | `sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address` |
+| N14 | funct 28 on a dense build (Spike dense lib only, no RTL assert; changelog 2026-11-13 D1) | `sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) on a dense build (nm_sparsity = None)` |
+| I1 | (internal, never in a legal run) ex emits a LOAD between a preload and its compute | `sparse-loop-fix: internal: LOAD between a preload and its compute` |
+| I2 | (internal) ex emits a LOAD before its covering index mvin was issued | `sparse-loop-fix: internal: LOAD before its index mvin was issued` |
+| I3 | (internal) loop ends with `loaded != n_tiles` or the FIFO budget gate disagrees | `sparse-loop-fix: internal: loop finished with undelivered index tiles` |
+N2 replaces the LOOP_CONV_WS half of the existing Controller.scala:281 message (the LOOP_WS half is replaced by N1). Existing Fix A messages
+(P1 budget, P3, ...) keep firing for loop-generated LOADs. N9/N6/N7/N8 are checked at LOOP_WS decode in LoopMatmul (they need the fully
+configured loop); N1-N5, N10 in Controller (N11, N14 Spike only, D1); N12/N13 where LOAD_IDX is dispatched (Controller, like the Fix A funct 26 checks).
+
+#### 2.5.7 Dense chips and compatibility
+Dense chips (`nm_sparsity = None`): new fields, FSM, constants muxes and functs are not elaborated; dense Verilog must stay identical (checked in
+6.3). Functs 27/28 on a dense build hit N11/N14 in Spike only (D1). NM chips running dense code: rs1[3] = 0 and no funct 27/28, behaviour identical. Fix A per-tile software
+unchanged. A stock Berkeley chip never sees these functs.
 
 ## 3. Hazards and deadlock analysis
 
@@ -179,6 +291,15 @@ H10. **Deadlock from RS full.** `LOAD`s wait in the RS holding entries while A/B
 (RS full). Because LOAD is emitted only after its mvin is *allocated*, and the mvin is older, the older command can
 always complete (its own deps are older commands). Same argument as Berkeley's own loop. [E]
 
+H11. **Bias vs index (new, 2026-11-12).** [E] Bias is mvin3 (id 2, config_ld stride D) into the accumulator; index rows are funct 27 into the scratchpad with
+no config state. Different funct, different address space, different config: no hazard and no shared stride. A sparse loop with bias has the same LdD traffic as a dense one.
+H12. **Arbiter starvation / priority (new).** [E] LdIdx above `ldab_arb` in `Arbiter(6)` (2.5.3) with its self-throttle `u_idx_issued <= u_B_issued + g`; a mutant that
+removes the throttle must fail by starving A/B or by tripping the budget (6.3).
+H13. **LOAD_IDX vs ld queue capacity (new).** [E] It takes ld RS entries (counted in `ld_utilization`); worst case g-tile mvins ahead of LdB = 1 mvin, so at most
+1-2 extra ld entries beyond a dense loop.
+H14. **Second concurrent loop, index region (new).** [E] Loop 0's index region is the top of rows [0, 8192), loop 1's the top of [8192, 16384): disjoint. Loop n+2 reuses loop n's
+rows; WAR is protected by the RS against the Fix A LOAD of loop n (as H5).
+
 ## 4. Spike changes (libgemmini gemmini.cc / gemmini.h)
 
 Spike models `loop_ws` (gemmini.cc:870) functionally by calling its own mvin/preload/compute handlers. Needed:
@@ -202,6 +323,14 @@ Spike models `loop_ws` (gemmini.cc:870) functionally by calling its own mvin/pre
    a software LOAD).
 6. Tests (section 6) must run on the *mutants* too (section 6.4). ~120 lines of C++ [E].
 
+7. [E] New `LOAD_IDX_CMD` (funct 27) handler: an mvin with constants (row stride 16 B, scale identity, no shrink) into the scratchpad model; aborts N11-N13 text. Dense
+   Spike build (`nm_sparsity` absent) aborts with N11. Funct 28 handler: stores `idx_dram`, sets `nm_cfg_seen`; N3-N5, N14.
+8. [E] `loop_ws` sparse branch: replace the `loop_ws_D` reuse of the v1 text by `loop_ws_idx_dram` from funct 28; D/bias keeps its dense behaviour; region layout
+   of 2.5.4 (B end = `b_addr_end - idx_rows`); abort N6-N10 with the RTL text. Index mvins are performed with the LOAD_IDX handler (same group size g, same
+   rolling LOAD policy of 1.5).
+9. [E] `nm_forbid_loop` for LOAD/PUSH interplay unchanged; N10 uses Spike's existing `q`/`in_flight` model.
+10. [E] Spike gains no timing: I1-I3 (internal) and the arbiter-priority / throttle behaviour are RTL-only.
+
 Spike must match the RTL on a deliberately illegal loop: Spike has no timing, so the checks to mirror are only the
 legality ones; P4 and in-flight C-output hazards stay unmodelled as in Fix A.
 
@@ -214,13 +343,34 @@ rn50_conv 488,259 / 497,480; bert_ffn1 1,153,201 / 1,171,638; bert_ffn2 1,120,03
 already taken by Fix A (push -> LOAD) were 13.7-21.8 instr per tile [M]; remaining per tile is ~190-250 instructions
 (qkv: 287,902/1152 real preloads = 250, includes A/B mvins and the garbage preload/compute pairs of the i loop).
 
-Fix B per layer [E]: CPU issues config (about 6-8 RoCC commands per `LOOP_WS`, plus address arithmetic and the one-time
+[SUPERSEDED by the measurement below for the Berkeley-dense numbers; kept as history] Fix B per layer [E]: CPU issues config (about 6-8 RoCC commands per `LOOP_WS`, plus address arithmetic and the one-time
 `config_ld`s) per loop call. Assuming 40-100 instructions per call and tiled_matmul_auto-style tiling into 4-30 calls
 per layer, the CPU cost is about 0.2-3k instructions per layer for all the layers above, i.e. >99% of the issue
 instructions are removed (qkv: ~286k of 288k; ffn1: ~1.15M of 1.15M). The number of calls is the main uncertainty; no
 Berkeley instruction count is recorded in the logs ([M] only `cpu_issue_done` is, which includes the final fence and
 is therefore not an instruction count), so Berkeley's own dense Spike instret should be measured first (cheap, Spike
 only) [Q3].
+
+**Measured (Q3, 2026-11-12) supersedes the estimates above for Berkeley's dense loop.** [M] Spike instruction counts of Berkeley's dense `tiled_matmul_auto`
+(the call of the `berkeley` variant of stream_bench.c, WS, int32 C, no bias; dims at run time), run folder
+`experiments/streaming/investigate/runs/20261112-205136-q3-spike/`, all verified; worklog `experiments/streaming/worklogs/fixb-q3-spike.md`.
+Values from `rt/logs/<layer>.log:4` (instret) and `rt/logs/<layer>.trace.txt:4` (LOOP_WS calls = funct7 8 count, RoCC commands):
+
+| layer | instret | LOOP_WS calls | RoCC cmds | vs Fix A 2:4 keeper count above (removed) |
+|---|---|---|---|---|
+| edge | 397 | 1 | 11 | 83.9% |
+| small | 463 | 1 | 11 | 94.0% |
+| bert_qkv | 3,209 | 20 | 125 | 98.9% |
+| rn50_conv | 4,827 | 36 | 221 | 99.0% |
+| bert_ffn1 | 11,994 | 78 | 473 | 99.0% |
+| bert_ffn2 | 10,051 | 80 | 485 | 99.1% |
+The percentages are (1 - dense instret / Fix A count) recomputed from these logs and the Fix A counts quoted above (verified 2026-11-12). The old assumption
+(40-100 instr and 4-30 calls per layer, 0.2-3k per layer) was too low for the big layers: measured 126-160 instr per call on the multi-call layers and
+up to 80 calls (ffn1 11,994 = 4x the old upper bound). ">99% removed" holds for rn50_conv and ffn2 (99.0%, 99.1%); qkv and ffn1 are 98.9% and 99.0%,
+small 94.0%, edge 83.9%. The conclusion (issue cost nearly gone on big layers; edge and small keep a visible CPU share) stands.
+Fix B's own count stays [E]: a sparse call adds one RoCC command (funct 28) and may split tiles differently (index region, 2.5.4), so expect somewhat more calls
+and 1-2% more instructions per call than the dense numbers [E]. Spike counts instructions, not Rocket cycles; compiler gcc 16.1.0 -O2 (run.info in the run folder).
+A sparse loop with bias issues the same LdD bias path as dense; the Berkeley number above has no bias.
 
 ### 5.2 Cycles
 The CPU removal only matters if the hardware, not the CPU, becomes the limit. Berkeley dense hardware counters
@@ -252,12 +402,14 @@ share).
 ### 6.1 Files / regions
 | file | region | size [E] |
 |---|---|---|
-| LoopMatmul.scala | state/req bundles (+nm, idx base), LdB halving, Execute (k' loop, a_hi, LOAD state, ahead gates), StC bounds, new `LoopMatmulLdIdx`, arb 5 -> 6, utilization counters, config decode (`rs1[3]`, D slot reuse), derived idx region + asserts | 250-350 lines |
-| Controller.scala | assert at 274-285 | ~15 lines |
-| ExecuteController.scala, ReservationStation.scala | none expected (check C1 for completion routing) | 0-10 |
-| libgemmini gemmini.cc/.h | section 4 | ~120 lines |
-| gemmini-rocc-tests include/gemmini.h or gemmini_nm.h | `gemmini_loop_ws` sparse variant (rs1[3], idx addr in D slot), `tiled_matmul_nm_loop()` with tile sizing that reserves the index region and requires even K, K-padding helper | ~150 lines |
-| tests | `bareMetalC/nm_sparse_loop.c` (+ NEG builds), stream_bench variant `sparse_loop`, fair_perf variant | ~400 lines |
+| LoopMatmul.scala | state/req bundles (+nm, idx_dram), LdB halving + `b_addr_end_eff`, Execute (k' loop, a_hi, LOAD state, ahead gates), StC bounds, new `LoopMatmulLdIdx` (funct 27, priority above ldab), arb 5 -> 6, utilization counters, config decode (funct 28, `rs1[3]`), region layout + N6-N9, I1-I3 | 280-380 lines |
+| GemminiISA.scala | funct 27, 28 | ~3 |
+| LoadController.scala, ReservationStation.scala | funct 27 constants mux (stride 16 B, identity scale, block stride, pixel repeats) and load-queue decode; NM builds only | ~15-25 |
+| Controller.scala | N1-N5, N10-N14 asserts, `nm_cfg_seen`, `nm_loop_first_load` sideband, a_stride tracking (N8), replace assert at 274-285 | ~50-70 lines |
+| ExecuteController.scala | none expected (check C1 for completion routing) | 0 |
+| libgemmini gemmini.cc/.h | section 4 (items 0-10, funct 27/28 handlers) | ~160 lines |
+| gemmini-rocc-tests include/gemmini.h or gemmini_nm.h | `gemmini_loop_ws_nm` (funct 28 + rs1[3]), `gemmini_nm_load_idx` (funct 27), `tiled_matmul_nm_loop()` with bias support, tile sizing that reserves the index region and requires even K, K-padding helper | ~170 lines |
+| tests | `bareMetalC/nm_sparse_loop.c` (+ one NEG build per row N1-N14, incl. bias positive case), `nm_load_idx.c`, stream_bench variant `sparse_loop`, fair_perf variant | ~500 lines |
 | run-flow.sh / verification scripts | add the new tests and NEG messages | small |
 
 ### 6.2 Area and timing risk [E]
@@ -274,13 +426,10 @@ Medium-low risk; synthesis was not run, so area/timing remain unmeasured.
    odd/even tile counts T (so n = 1 tails), T < 4, T = 4, T > 4, index region at bank edge, two back-to-back loops
    (concurrent loops, both halves), loop followed by a dense loop and by a per-tile sparse sequence, full-range int8,
    CPU reference as in `nm_sparse_spad.c`.
-2. NEG builds (each must abort in Spike with the RTL message and in RTL with the same assert): flag/mode mismatch (both
-   ways), LOOP_CONV_WS in sparse, transposes, low_D, odd K, pad_K, A_stride != 1, idx_dram 0/unaligned, region collides with A
-   or crosses a bank, loop in sparse mode on a dense-latched buffer. Plus RTL-only internal asserts: LOAD between a
-   preload and its compute, budget overflow (these must never fire in positive runs; a mutant that removes the
-   `loaded - pre <= 2` gate must trip the Controller's budget assert, proving the check is live).
-3. Mutants (`make_mutants.sh` style): wrong a_hi base, K not halved in StC, LOAD without RAW gate (idx mvin not yet issued),
-   LdIdx lockstep removed, idx stride 4:8 as 8 rows. Each must fail the positive matrix.
+2. NEG builds, one per assert, N1-N14 of 2.5.6 (each must abort in Spike with the RTL message and in RTL with the same assert; N11/N14 on a dense build): N1 both ways, N2, N3, N4, N5 (three variants: zero, unaligned, rs2 != 0), N6 (odd K, pad_K), N7 (one build per option), N8, N9 (collision; over-4096 rows), N10 (PUSH tile pending before the loop), N11-N14. Positive cases additionally: sparse loop with bias (full-width D, repeating bias and per-row bias), without bias. Plus RTL-only internal asserts I1-I3 and Fix A budget overflow (never fire in positive runs; each gets a mutant that must trip it: I1 LOAD emitted mid preload/compute, I2 LOAD without the issued-gate, I3 a LOAD count off by one; removing the `loaded - pre <= 2` gate must trip the Fix A budget assert, proving the check is live).
+3. Mutants (`make_mutants.sh` style; Spike and RTL where applicable): wrong a_hi base, K not halved in StC, LOAD without RAW gate (idx mvin not yet issued),
+   LdIdx throttle removed, idx stride 4:8 as 8 rows, funct 27 row stride 32 instead of 16 (index garbage), LdIdx emitting LOAD3 (bias stride collision: must fail the bias positive test),
+   index region overlapping B (N9 removed), LdIdx at lowest arbiter priority (must show as a timeout or a large cycle regression, not a wrong result: run with a sim timeout), `nm` flag not latched. Each must fail the positive matrix.
 4. Elaborate GemminiNMRocketConfig and GemminiNM48RocketConfig (and the stock chip with `DENSE_ONLY`, check generated
    Verilog diff of the dense/stock config is empty modulo names), Verilator build on the server (see memory: ai-1769,
    VPN), run: all nm_* tests incl. NEG, streaming benches with a new `sparse_loop` variant per layer/pattern (the
@@ -290,14 +439,14 @@ Medium-low risk; synthesis was not run, so area/timing remain unmeasured.
 ### 6.4 Hours (agent working time, excluding user waiting) [E]
 | item | hours |
 |---|---|
-| RTL implementation (LoopMatmul + Controller) | 10-14 |
-| Spike | 5-7 |
-| Software tiler/header + tests + NEG + mutants | 10-14 |
+| RTL implementation (LoopMatmul, Controller, LoadController, ReservationStation, ISA) | 12-17 |
+| Spike | 6-8 |
+| Software tiler/header + tests + NEG (14 builds) + mutants | 12-16 |
 | Review round + fixes | 6-8 |
 | Elaboration, Verilator builds (2 configs, ~1-2 h each incl. waiting) | 3-5 |
 | Server runs and collection (98-job grid took ~8 h wall for Fix A; sparse_loop only: ~4 h wall) | 4-6 (wall 6-10) |
 | Analysis + paper numbers | 3-4 |
-Total about 40-55 agent hours; with parallel agents (RTL, Spike, SW) and the serial server stage the wall time is
+Total about 46-64 agent hours (was 40-55 before the bias/funct 27 revision, [E]); with parallel agents (RTL, Spike, SW) and the serial server stage the wall time is
 about 3-4 days. Today is Thu 12 Nov; paper due Mon 15 Dec (33 days), so the schedule fits with ~2 weeks margin even
 with one failed server round. Recommended gate: decide by ~Mon 16 Nov so results exist by ~Fri 4 Dec.
 
@@ -311,30 +460,57 @@ with one failed server round. Recommended gate: decide by ~Mon 16 Nov so results
 | E | index stored interleaved with weights in B DRAM so LdB's mvin brings both | removes LdIdx and the D slot reuse, but needs a spad layout change in B and a new split of the B mvin (rows of different widths) and changes the Fix A format contract; rejected for v1. |
 | F | index loaded by preload (Fix A alt B) | rejected in Fix A. |
 
-## 8. Open questions for the user
-- [Q1] Is bias (LdD / `D`) needed in sparse layers? v1 reuses the D DRAM slot and mvin3 for the index tiles, so a sparse
-  loop cannot take a bias. BERT QKV/FFN and ResNet convs normally have one; software can add it after (extra pass) or we
-  take the new-funct route of 2.2 (and still need a load id for the index: needs more thought).
-- [Q2] OK to require K % (2*DIM) == 0 (pad with zeros) in v1? Real layers (768, 3072, 2048-ish) satisfy it; edge shapes get padded.
-- [Q3] May an agent run Berkeley's dense `tiled_matmul_auto` under Spike for the six layers to get instruction counts (cheap, no
-  server)? It turns the 5.1 estimate into a measurement.
-- [Q4] Fix B vs the cheaper alternatives (B software tuning, D macro): which risk/benefit do you want before 15 Dec?
-- [Q5] Does the paper need a "faster than Berkeley dense" claim? If only "area-neutral, beats equal-effort dense", Fix B may not be worth its schedule risk.
+## 8. Open questions and user decisions
+User decisions of 2026-11-12 (recorded; do not re-argue):
+- [Q1] DECIDED: bias IS needed in sparse loops. The v1 design (index tiles through the D DRAM slot / mvin3) is rejected. Design adopted: section 2.5
+  (funct 27 `LOAD_IDX_CMD` fixed-config index mvin, funct 28 `LOOP_WS_CONFIG_NM`, LOOP_WS rs1[3]); bias keeps LdD, mvin3 and the accumulator unchanged.
+- [Q2] DECIDED: yes, require K % (2*DIM) == 0 in v1; software zero-pads K (assert N6).
+- [Q3] DECIDED: yes. A separate agent measures Berkeley's dense `tiled_matmul_auto` instruction counts under Spike for the six layers; results go to
+  `experiments/streaming/worklogs/fixb-q3-spike.md` (placeholder in 5.1; the coordinator will pass numbers).
+- [Q4] DECIDED: Fix B (go ahead) over the cheaper alternatives B (software tuning) and D (macro command).
+- [Q5] DECIDED: no, the paper does not need a "faster than Berkeley dense" claim. Fix B still goes ahead. Consequence for planning only: the 5.2 speed-up
+  ranges are not an acceptance threshold; acceptance is correctness (6.3) plus a measured same-build comparison (AGENTS rule 4).
+
+Remaining decisions for the user: see "Ready to freeze?" below.
+
+### Ready to freeze?
+R1-R3 answered and the spec frozen 2026-11-12. C1, C2, C6 remain first tasks of the RTL agent (reading tasks, no user input; a finding that changes semantics needs a changelog entry):
+- [x] R1. DECIDED 2026-11-12: accept the spad reserve of the index region (+4 rows per 16 weight rows for 2:4, +6 for 4:8, 2.5.4) and the smaller tiles.
+- [x] R2. DECIDED 2026-11-12: CPU-issued funct 27 (LOAD_IDX) is legal outside loops; no `from_matmul_fsm` assert (as written in 2.5.2; N11-N13 apply to any source). Tests may issue it directly.
+- [x] R3. DECIDED 2026-11-12: yes, OK, every added line carries `// changed: sparse-loop-fix, <why>`. (Question was: is adding two functs (27, 28) and a funct-27 constants mux in LoadController/ReservationStation (five Berkeley files touched: GemminiISA, LoadController,
+  ReservationStation, Controller, LoopMatmul) acceptable under AGENTS rule 6?)
+- [ ] C1 (RTL agent): LOAD's `from_matmul_fsm` bit survives the Controller path (Controller.scala:542-547).
+- [ ] C2: `ldb_ahead` quirk (LoopMatmul.scala:459, `io.ld_ka === k` in a B condition) reviewed with the halved B iterator.
+- [ ] C6: identity-scale bit pattern for the LOAD_IDX constant and the RS block_stride / pixel-repeat constants (2.5.2) confirmed in code.
+- [ ] C3/C4 (tiler sizing, Spike second-half B start) closed by the software and Spike agents; not blockers for freezing the ISA.
 
 ## RESUME HERE
-Done (11:45 EST): everything above: design (1), ISA (2), hazards (3), Spike (4), benefit estimate (5), cost (6),
-alternatives (7), questions (8).
-Not verified (read-only session, do these first if continuing):
-- C1: CLOSED 11:19. ReservationStation.scala:502-521 completes an ex entry by its own rob id and reports
-  `matmul_ex_completed := entries_ex(id).cmd.from_matmul_fsm`; a loop-generated LOAD carries that bit like any ex
-  command, so the unroller's `ex_utilization` stays balanced. Remaining check: the LOAD's `from_matmul_fsm` must survive the
-  Controller path (Controller.scala:542-547 handles LOAD on `unrolled_cmd`; confirm it copies the bit into the RS entry).
-- C2: `ldb_ahead`'s use of `ld_ka` (LoopMatmul.scala ~457) with a halved B iterator: still open.
-- C3: PARTLY CLOSED. StC/StCSpad `ex_k` bound read (P4 row updated). Still open: how `tiled_matmul_auto` chooses tile
-  sizes, to size the index reserve in the software tiler.
-- C4: PARTLY CLOSED. Spike `loop_ws` read (section 4 item 0 added). Still open: the exact Spike handling of `a_spad_id/b_spad_id`
-  for the second half (upper-half B start) with the index region.
-- C5: no Berkeley instruction counts exist (see [Q3]); section 5.1 numbers are estimates.
-Next steps: get answers to Q1-Q5; if approved, spawn (a) RTL agent from sections 1-3, (b) Spike agent from section 4,
-(c) software/tests agent from sections 2, 6.1-6.3; run C1-C4 as the first task of each; freeze this file (STATUS line)
-only after C1-C4 are closed and Q1 is decided.
+Done (2026-11-12 revision): decisions Q1-Q5 recorded (8); new ISA, load path, spad reservation, asserts in 2.5; hazards H11-H14 added; Spike items
+(4 items 7-10); cost 6.1/6.4 and verification 6.3 updated; changelog entry. Superseded v1 parts are marked, not deleted.
+Not verified: nothing was built or run; all [E] items are paper arguments. C1, C2, C6 open (section 8). Q3 numbers pending (worklogs/fixb-q3-spike.md).
+Next: spawn RTL / Spike / software agents from 2.5, 3, 4, 6 (spec is FROZEN; C1, C2, C6 first).
+
+## Changelog
+- 2026-11-13 (5.1 correction, measured): the [E] "somewhat more calls and 1-2% more instructions per call" is contradicted by Spike. RUN3
+  (`investigate/runs/20261112-235246-fixb-spike-tests/bench/`) shows sparse_loop 2:4 at about 0.45x Berkeley's instret on qkv/rn50/ffn1/ffn2
+  (bert_qkv 1,451 vs 3,214). qkv trace: 16 LOOP_WS calls at ~61 instr vs Berkeley's 20 at ~148 (worklogs/fixb-icount.md). Cause: specialised
+  `tiled_matmul_nm_loop` vs Berkeley's generic run-time `tiled_matmul_outer` plus tile search, and halved B allowing tile_J 6 vs 5 (inferred).
+  This is code specialisation, not a sparsity gain; do not present it as one. Funct-27 index mvins are loop-issued and invisible to the CPU count.
+- 2026-11-13 (user: "all as recommended", post-implementation decisions D1-D5):
+  D1. N11/N14 are Spike-only. The RTL dense build generates no funct 27/28 hardware and must stay identical to stock, so it carries no N11/N14 assert;
+  the dense libgemmini build (Makefile switch `NM_DENSE_BUILD`) aborts with the 2.5.6 texts. NEG tests for N11/N14 run on the dense Spike lib only.
+  D2. N9's "idx_rows > 4096" part is unreachable under the other checks; kept as a defensive check, covered by a mutant, no NEG test required.
+  D3. Sparse loop with B = NULL is legal; index rows are still loaded (RTL and Spike already agree).
+  D4. N13 gains a range check: local address + rows must not pass the end of the scratchpad. Same 2.5.6 text, in RTL and Spike, with a NEG test.
+  D5. stream_bench `sparse_loop`: the CPU-side index reorder (data prep, no mvins) is outside the timed region; index-row loads stay timed.
+  Dense regression: `matmul_spad` and `mvin_mvout_spad` fail on Berkeley's stock Spike lib too (funct 23 unhandled; Berkeley's
+  `bareMetalC/Makefile:70-71` excludes them on normal configs; run `investigate/runs/20261113-143811-dense-spad-stock/`). run-flow.sh uses
+  Berkeley's filtered list: 54 dense tests.
+- 2026-11-12 (FREEZE): user answered R1 (accept spad reserve), R2 (CPU-issued funct 27 legal outside loops, no `from_matmul_fsm` assert; 2.5.2 text already says so), R3 (five Berkeley files, `// changed: sparse-loop-fix`). Q3 measured and recorded in 5.1 (old 5.1 CPU-instruction estimates superseded by measurement for Berkeley dense; Fix B count stays [E]). Line 1 changed from DRAFT to FROZEN; no semantic change to 2.5.
+- 2026-11-12: HANDOFF.md was removed from the tree; its section 5 ("Plan for the fix round", which holds the "Shared protocol spec") is now at `git show e06b436:HANDOFF.md`. Header line 6 updated to point there.
+- 2026-11-12 (revision for user decisions, STATUS still DRAFT): Q1 bias needed -> v1 ISA (old 2.1: index through the D DRAM slot and mvin3, no bias) is SUPERSEDED by
+  new 2.5; old 2.2 (one new funct) is adopted in the form of 2.5 (funct 28 `LOOP_WS_CONFIG_NM` + LOOP_WS rs1[3]) plus a new funct 27 `LOAD_IDX_CMD`, because all three mvin
+  ids carry configured strides. Old 1.3 P5 (LdIdx used mvin3 id 2) and old 1.4 "mvin3 / config_ld id 2 / D = NULL" are SUPERSEDED (LdIdx emits funct 27;
+  priority and throttle rule in 2.5.3 replace the "wins the arbiter against LdB" wording); old 1.3 layout "index region just below B" is SUPERSEDED by 2.5.4
+  (index region at the top of the loop's half). Old 2.3 Controller rule is superseded by 2.5.5/2.5.6 (message prefix "sparse-loop-fix:"). Q2 decided yes (K % 2*DIM,
+  assert N6). Q3 decided yes (placeholder in 5.1). Q4 decided Fix B. Q5 decided no (8). Added hazards H11-H14, Spike items 7-10, cost and verification updates.

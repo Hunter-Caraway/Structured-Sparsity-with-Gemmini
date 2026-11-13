@@ -85,6 +85,7 @@ def main():
         fair = nmdata.load_fair(runs, require=())
     except nmdata.NoResults as e:
         nmdata.die_no_results(e)
+    nmdata.die_unpassed(fair, "counter table")
     derived = runs[0] / "derived"
     (derived / "figures").mkdir(parents=True, exist_ok=True)
     rows = [(chip, seed, v, k, val) for chip, logs in fair.items() for seed, log in logs.items()

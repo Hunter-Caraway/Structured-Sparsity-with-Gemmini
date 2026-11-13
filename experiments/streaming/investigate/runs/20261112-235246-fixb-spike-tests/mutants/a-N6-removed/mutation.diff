@@ -1,0 +1,4 @@
+953c953
+<       nm_loop_abort("sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)"); // changed: sparse-loop-fix, N6
+---
+>       (void)0; // changed: sparse-loop-fix, N6

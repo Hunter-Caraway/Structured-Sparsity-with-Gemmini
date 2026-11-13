@@ -1,0 +1,4 @@
+957c957
+<       nm_loop_abort("A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank)"); // changed: sparse-loop-fix, N9
+---
+>       (void)0; // changed: sparse-loop-fix, N9

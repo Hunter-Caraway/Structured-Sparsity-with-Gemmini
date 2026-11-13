@@ -1,0 +1,4 @@
+GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) on a dense build (nm_sparsity = None)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

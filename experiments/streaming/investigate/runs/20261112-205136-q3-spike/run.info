@@ -1,0 +1,11 @@
+q3 dense instruction count under Spike (laptop), copied from the session scratchpad /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/{final,final-fold}
+rt/          default build: both calls (dense_icount = constant dims, dense_icount_rt = run-time dims). cmd:
+             scripts/q3_dense_icount.sh /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final
+const-only/  -DQ3_CONST_ONLY build (single inlined call, tile search folded by gcc). cmd:
+             Q3_CONST_ONLY=1 scripts/q3_dense_icount.sh /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final-fold
+rt/logs-nm24lib/  lib-independence check: the rt binaries for edge and bert_qkv on the project's pre-spad-index-fix
+             2:4 model build/spike/nm24/libgemmini.so (sha256 34578eb7dd40188639345b6d1986fd639672c8b216ecc3140f1abf71179a592a). cmd:
+             spike --extlib=/home/hunter/gemmini-sparsity/experiments/streaming/build/spike/nm24/libgemmini.so --extension=gemmini /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final/bin/q3_<layer>-baremetal
+Per-layer lib/binary/params.h sha256 and command lines: rt/run.info, const-only/run.info.
+Binaries and the stock libgemmini.so are not copied (22 MB, rebuildable by the script); their sha256 are in run.info.
+Paths inside the logs point at the scratchpad.

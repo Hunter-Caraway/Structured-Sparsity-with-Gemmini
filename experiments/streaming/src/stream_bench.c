@@ -5,6 +5,8 @@
 //   sparse_stream  tiled_matmul_nm(): the same tiler with the n:m compressed weights + packed index tiles
 //   sparse_fixa    tiled_matmul_nm_spad() (Fix A): as sparse_stream, but the index tiles are mvin'd with the weights
 //                  and each batch of up to 4 is one scratchpad index load (funct 26 rd 2); needs a Fix A chip
+//   sparse_loop    tiled_matmul_nm_loop() (sparse-loop-fix): the LOOP_WS hardware loop in sparse mode; the loop itself
+//                  mvins the index rows (funct 27, inside the timed region); needs a sparse-loop-fix chip
 // all data and the reference come from the host (gen/gen_data.py -> data.h). the cpu only hashes C (64-bit FNV-1a
 // over every value) and compares the sampled rows.
 // before every run (warm-up and timed): C and the whole accumulator are filled with a poison value; before every
@@ -12,7 +14,7 @@
 // timed region: read_cycles() right before the call (configs included) .. last mvout + gemmini_fence().
 // build: -DNM_N/-DNM_M (must equal the data header's pattern), -DSBENCH_DATA=\"<.../data.h>\",
 //        -DDENSE_ONLY (stock chip: only flips the volatile build_mode flag, .text stays byte-identical),
-//        -DRUN_MASK=<bits> (1 berkeley, 2 dense_stream, 4 sparse_stream, 8 sparse_fixa; a volatile flag too)
+//        -DRUN_MASK=<bits> (1 berkeley, 2 dense_stream, 4 sparse_stream, 8 sparse_fixa, 16 sparse_loop; a volatile flag too)
 
 #include <stdint.h>
 #include <stddef.h>
@@ -41,6 +43,7 @@
 #define RUN_DENSE 2
 #define RUN_SPARSE 4
 #define RUN_SPARSE_FIXA 8
+#define RUN_SPARSE_LOOP 16
 // both non-zero so they sit in .sdata in every build
 static volatile int build_mode = BUILD_MODE;
 static volatile int run_mask = RUN_MASK | 0x100;
@@ -175,6 +178,33 @@ static void v_sparse_fixa(size_t m, size_t n, size_t k) {
   tiled_matmul_nm_spad(m, n, k, (const elem_t *)l_A, L_K, (const elem_t *)l_WC, L_N, meta_sp, &c_out[0][0], L_N, TI, TJ);
 }
 
+// sparse-loop-fix: the index tiles in the order the loop calls read them (nm_loop_order_idx), which depends on the
+// tile sizes, so the timed layer and the warm-up corner each get their own copy; made once at start (untimed, like
+// the compression). the tile sizes are computed again inside the timed call, as tiled_matmul_auto does for berkeley
+#define WARM_M (L_M < 2 * DIM ? L_M : 2 * DIM)
+#define WARM_N (L_N < 128 ? L_N : 128)
+#define WARM_K (L_K < 128 ? L_K : 128)
+#define WARM_NTILES ((size_t)(WARM_K / 2 / DIM) * ((WARM_N + DIM - 1) / DIM))
+static uint8_t meta_loop_buf[L_NTILES * NM_META_SPAD_BYTES] __attribute__((aligned(64)));
+static uint8_t meta_loop_warm[WARM_NTILES * NM_META_SPAD_BYTES] __attribute__((aligned(64)));
+static void prep_meta_loop(void) {
+  size_t ti, tj, tk;
+  nm_loop_tiles(L_M, L_N, L_K, &ti, &tj, &tk);
+  nm_loop_order_idx(L_N, L_K, tj, tk, meta_sp, L_N / DIM, meta_loop_buf);
+  printf("sparse_loop tiles: tile_I=%d tile_J=%d tile_K=%d\n", (int)ti, (int)tj, (int)tk);
+  nm_loop_tiles(WARM_M, WARM_N, WARM_K, &ti, &tj, &tk);
+  nm_loop_order_idx(WARM_N, WARM_K, tj, tk, meta_sp, L_N / DIM, meta_loop_warm);
+}
+static void v_sparse_loop(size_t m, size_t n, size_t k) {
+  if (build_mode != MODE_FULL) { printf("sparse run requested in a dense-only build; sbench FAILED\n"); exit(3); }
+  const int full = m == L_M && n == L_N && k == L_K;
+  if (!full && !(m == WARM_M && n == WARM_N && k == WARM_K)) { printf("sparse_loop: no index tiles for this size; sbench FAILED\n"); exit(3); }
+  size_t ti, tj, tk;
+  nm_loop_tiles(m, n, k, &ti, &tj, &tk);
+  tiled_matmul_nm_loop(m, n, k, (const elem_t *)l_A, L_K, (const elem_t *)l_WC, L_N, NULL, 0, false,
+                       full ? meta_loop_buf : meta_loop_warm, &c_out[0][0], L_N, ti, tj, tk);
+}
+
 static int run(void (*v)(size_t, size_t, size_t), const char * name) {
   // warm-up: same code path on a small corner of the layer (i-cache, branch predictors), untimed, unchecked
   poison();
@@ -205,7 +235,7 @@ static int run(void (*v)(size_t, size_t, size_t), const char * name) {
 
 int main(void) {
   if (build_mode != MODE_FULL && build_mode != MODE_DENSE_ONLY) { printf("bad build_mode %d; sbench FAILED\n", build_mode); exit(3); }
-  const int mask = run_mask & 15;
+  const int mask = run_mask & 31;
   nm_stream_tiles(L_M, L_N, &TI, &TJ);
   printf("sbench: layer=%s M=%d K=%d N=%d pattern=%d:%d build=%s run_mask=%d TI=%d TJ=%d data_seed=%d\n", L_NAME, L_M,
          L_K, L_N, NM_N, NM_M, build_mode == MODE_FULL ? "full" : "dense-only", mask, (int)TI, (int)TJ, L_SEED);
@@ -219,6 +249,7 @@ int main(void) {
   if (mask & RUN_DENSE) { ran++; good += run(v_dense, "dense_stream"); }
   if (mask & RUN_SPARSE) { ran++; good += run(v_sparse, "sparse_stream"); }
   if (mask & RUN_SPARSE_FIXA) { prep_meta_sp(); ran++; good += run(v_sparse_fixa, "sparse_fixa"); }
+  if (mask & RUN_SPARSE_LOOP) { prep_meta_sp(); prep_meta_loop(); ran++; good += run(v_sparse_loop, "sparse_loop"); }
 
   printf("sbench end cycle %llu\n", (unsigned long long)read_cycles());
   if (ran == 0 || good != ran) { printf("sbench FAILED (%d of %d runs verified)\n", good, ran); exit(1); }

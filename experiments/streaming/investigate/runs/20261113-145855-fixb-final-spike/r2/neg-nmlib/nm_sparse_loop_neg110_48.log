@@ -1,0 +1,4 @@
+nm_sparse_loop NEG=110: illegal use NOT caught
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

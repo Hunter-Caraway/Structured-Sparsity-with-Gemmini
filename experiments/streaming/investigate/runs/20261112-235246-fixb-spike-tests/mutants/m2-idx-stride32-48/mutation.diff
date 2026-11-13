@@ -1,0 +1,4 @@
+896c896
+<         dram_addr == 0 ? 0 : read_from_dram<elem_t>(dram_addr + row*16 + col*sizeof(elem_t)); // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
+---
+>         dram_addr == 0 ? 0 : read_from_dram<elem_t>(dram_addr + row*32 + col*sizeof(elem_t)); // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler

@@ -1,0 +1,4 @@
+GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

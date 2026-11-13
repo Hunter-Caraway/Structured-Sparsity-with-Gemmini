@@ -1,0 +1,4 @@
+GEMMINI: sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

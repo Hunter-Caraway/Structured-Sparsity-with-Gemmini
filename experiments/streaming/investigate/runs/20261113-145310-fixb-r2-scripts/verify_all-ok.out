@@ -1,0 +1,25 @@
+
+D. fair benchmark (same lean loops on every chip)
+  PASS  every chip ran the same seeds: berkeley=1; nm24=1; nm48=1
+  FAIL  our chip ran Berkeley's exact program with sparsity off (sameprog log present)
+  PASS  berkeley seed 1: printed 'passed' and no failure line
+  PASS  berkeley seed 1: log from the current fair_perf.c (dense-only build, warm-up, poison reaches the accumulator, prep lines)
+  PASS  berkeley seed 1: every gemmini variant matched the cpu reference (3 results, 2,048 values each)
+  PASS  berkeley seed 1: hardware-loop variants of a dense-only build (dense_loop) each ran and matched the cpu reference
+  PASS  berkeley seed 1: program built for 2:4 (expected 2:4)
+  PASS  berkeley seed 1: pair counts equal the count computed from i=64 k=128 j=32 and 2:4
+  PASS  nm24 seed 1: printed 'passed' and no failure line
+  PASS  nm24 seed 1: log from the current fair_perf.c (full build, warm-up, poison reaches the accumulator, prep lines)
+  PASS  nm24 seed 1: every gemmini variant matched the cpu reference (8 results, 2,048 values each)
+  PASS  nm24 seed 1: hardware-loop variants of a full build (dense_loop, sparse_loop) each ran and matched the cpu reference
+  PASS  nm24 seed 1: program built for 2:4 (expected 2:4)
+  PASS  nm24 seed 1: pair counts equal the count computed from i=64 k=128 j=32 and 2:4
+  PASS  nm48 seed 1: printed 'passed' and no failure line
+  PASS  nm48 seed 1: log from the current fair_perf.c (full build, warm-up, poison reaches the accumulator, prep lines)
+  PASS  nm48 seed 1: every gemmini variant matched the cpu reference (8 results, 2,048 values each)
+  PASS  nm48 seed 1: hardware-loop variants of a full build (dense_loop, sparse_loop) each ran and matched the cpu reference
+  PASS  nm48 seed 1: program built for 4:8 (expected 4:8)
+  PASS  nm48 seed 1: pair counts equal the count computed from i=64 k=128 j=32 and 4:8
+  FAIL  2:4: array time with reused weights is 0.819-0.819 of the same chip's dense time (ideal 0.500 +-10%): 29,634 -> 24,260
+  FAIL  4:8: array time with reused weights is 1.068-1.068 of the same chip's dense time (ideal 0.500 +-10%): 30,044 -> 32,080
+FAILS 3

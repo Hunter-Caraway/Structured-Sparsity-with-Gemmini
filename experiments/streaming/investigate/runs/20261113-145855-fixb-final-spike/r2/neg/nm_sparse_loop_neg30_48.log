@@ -1,0 +1,4 @@
+GEMMINI: sparse-loop-fix: LOOP_WS with rs1[3] set needs LOOP_WS_CONFIG_NM (funct 28) first
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

@@ -1,0 +1,26 @@
+nm_sparse_loop: 2:4, R = 4 rows per index tile, 4 tiles per LOAD_IDX
+T=1 i1 j1                          ok (0/256 wrong)
+T=2 i2 j2 repeating bias           ok (0/1024 wrong)
+T=3 i1 j3 row bias                 ok (0/768 wrong)
+T=4 i2 j2                          ok (0/1024 wrong)
+T=5 i2 j5: mismatch at (0,64): got -18152 want -3534
+T=5 i2 j5                          FAIL (512/2560 wrong)
+T=10 i3 j5 partial i, row bias: mismatch at (0,0): got -669740 want -691546
+T=10 i3 j5 partial i, row bias     FAIL (3199/3200 wrong)
+8 loops, partial i and j, rep. bias ok (0/2016 wrong)
+8 loops, no bias                   ok (0/3072 wrong)
+4 loops, T=3 and T=1, row bias     ok (0/1024 wrong)
+K=40 padded to 64                  ok (0/512 wrong)
+nm_loop_tiles, row bias: mismatch at (0,0): got -124212 want -194180
+nm_loop_tiles, row bias            FAIL (4608/4608 wrong)
+seq: sparse loop                   ok (0/1024 wrong)
+seq: dense loop (pruned W)         ok (0/1024 wrong)
+seq: per-tile, LOAD_IDX groups     ok (0/1024 wrong)
+seq: sparse loop again             ok (0/1024 wrong)
+seq: per-tile, LOAD_IDX by tile    ok (0/1024 wrong)
+seq: sparse loop, 2 calls          ok (0/1024 wrong)
+nm_sparse_loop: 3 case(s) FAILED
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4
+*** FAILED *** (tohost = 1)

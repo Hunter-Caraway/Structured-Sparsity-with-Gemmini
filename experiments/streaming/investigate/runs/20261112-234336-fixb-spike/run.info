@@ -1,0 +1,14 @@
+run: fixb-spike (Spike model of sparse-loop-fix), laptop, 2026-11-12T23:43:36-05:00
+libgemmini: branch sparse-loop-fix HEAD 2a6ff44 + uncommitted diff (libgemmini.diff)
+e99dfe93cb9b9ec85dbe2fd2a08e8b2589519bfec5ab348d0abca7493933b2c9  /home/hunter/chipyard/generators/gemmini/software/libgemmini/gemmini.cc
+402441cef1b5b65ecd9e7fe14fabcd4998ebd7365186d5e49afa02cbeabd1068  /home/hunter/chipyard/generators/gemmini/software/libgemmini/gemmini.h
+libs (scratch, not installed):
+0d30970a1be73a02ea33b44a2ae6a73826945b84fdbd9882bcc4ca96dc58b640  /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-spike/libgemmini-nm24/libgemmini.so
+9c5894d41210c745765c90ca4ae05e00c77a7ddee9263ae1bd2e45660e61440f  /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-spike/libgemmini-nm48/libgemmini.so
+7617dce538fd6690483cd3d4810e9810d45bee8f17183bc79b62aaf2ae0a3745  /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-spike/libgemmini-dense24/libgemmini.so
+cbf59ecfdad2cb5d7f243297b77eb7fb32b79ae1e014038ac1822b763967a5f2  /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-spike/base-nm24/libgemmini.so
+84c270c6d2c0ee9ac9afbe50ea84ba59d9eb0e6521877b2321aac64cd5334626  /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-spike/base-nm48/libgemmini.so
+base-* = HEAD 2a6ff44 sources; dense24 = -DNM_DENSE_BUILD
+gemmini-rocc-tests: HEAD 25a6611, gemmini_nm.h uncommitted (tests agent, in progress): 521ce0a3ac0198b257078bf1bb23f53223c93db2028b1098b5474f7fb24f6d3e
+spike: /home/hunter/chipyard/.conda-env/riscv-tools/bin/spike (run as --extlib=<lib> --extension=gemmini)
+installed lib before/after: riscv-before.txt riscv-after.txt (identical)

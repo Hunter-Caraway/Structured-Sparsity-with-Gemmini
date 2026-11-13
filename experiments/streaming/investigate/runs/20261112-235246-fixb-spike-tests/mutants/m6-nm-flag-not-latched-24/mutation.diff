@@ -1,0 +1,4 @@
+913c913
+<   const bool nm = (rs1 >> 3) & 1; // changed: sparse-loop-fix, rs1[3] = sparse loop (replaces the blanket ban on LOOP_WS in sparse mode)
+---
+>   const bool nm = false; // changed: sparse-loop-fix, rs1[3] = sparse loop (replaces the blanket ban on LOOP_WS in sparse mode)

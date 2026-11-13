@@ -1,0 +1,15 @@
+BATCH_SIZE = 4
+IN_DIM = 224
+IN_CHANNELS = 3
+OUT_CHANNELS = 32
+KERNEL_DIM = 3
+PADDING = 1
+STRIDE = 2
+NO_BIAS = 0
+Output dimension: 112
+
+Gemmini conv...
+Gemmini conv took 110191 cycles
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

@@ -9,6 +9,9 @@
 // sparse_batched (indexes for up to NM_META_FIFO_DEPTH tiles, then their preload/compute pairs), sparse_spad
 // (Fix A: the same batches, but the index tiles were moved into the scratchpad once with the weights and each batch
 // is one gemmini_nm_load_spad()), and cpu_* runs of the same loops with no gemmini instructions.
+// dense_loop / sparse_loop (sparse-loop-fix): the whole matmul as one LOOP_WS hardware loop, dense and n:m sparse.
+// unlike the other variants their timed region also moves A, the weights (and the index rows) in from main memory and
+// C out to it, so compare the two with each other only.
 // prep_cold / prep_warm time the one-time weight preprocessing.
 
 #include <stdint.h>
@@ -44,6 +47,7 @@ static elem_t wc[KC][NM_J] row_align(1);
 static nm_idx_t idx[KC][NM_J];
 static uint64_t meta[KCT][JT][2 * DIM];
 static uint8_t meta_sp[JT][KCT][NM_META_SPAD_BYTES] row_align(1); // Fix A: scratchpad format, the KCT tiles of a jt back to back
+static uint8_t meta_loop[KCT][JT][NM_META_SPAD_BYTES] row_align(1); // sparse-loop-fix: the same tiles in the loop's (k', j) order
 static acc_t c_out[NM_I][NM_J] row_align_acc(1);
 static acc_t gold[NM_I][NM_J];
 static acc_t poison_tile[DIM][DIM] row_align_acc(1);
@@ -60,6 +64,8 @@ static acc_t poison_tile[DIM][DIM] row_align_acc(1);
 #define C_ACC(it, jt) (((it) * JT + (jt)) * DIM)
 
 static int cpu_only = 0;
+// set by a variant whose result is already in c_out (the hardware loops store C themselves)
+static int c_in_dram = 0;
 static int quiet = 0;
 #define SINK(x, y) asm volatile ("" :: "r"((uint64_t)(x)), "r"((uint64_t)(y)))
 #define PRELOAD(b, c) do { if (cpu_only) SINK(b, c); else { gemmini_preload(b, c); } } while (0)
@@ -114,7 +120,7 @@ static void poison(void) {
   gemmini_fence();
 }
 static int check(const char * name, int silent) {
-  store_c();
+  if (!c_in_dram) store_c();
   for (int y = 0; y < NM_I; y++)
     for (int x = 0; x < NM_J; x++)
       if (c_out[y][x] != gold[y][x]) {
@@ -287,6 +293,48 @@ static void sparse_reuse(const char * name) {
   sparse_end();
 }
 
+// ---- sparse-loop-fix: one LOOP_WS for the whole matmul, main memory to main memory ----
+_Static_assert((IT * KT + KT * JT) * DIM <= BANK_NUM * BANK_ROWS / 2 && IT * JT * DIM <= ACC_ROWS / 2, "one loop has to hold the matmul");
+static void loop_config(const char * name, int stride_b) {
+  if (cpu_only) { printf("%s: hardware loop issued in a cpu-only run; fair_perf FAILED\n", name); exit(3); }
+  gemmini_config_st(NM_J * sizeof(acc_t));
+  gemmini_extended3_config_ld(NM_K * sizeof(elem_t), MVIN_SCALE_IDENTITY, false, 0);
+  gemmini_extended3_config_ld(stride_b * sizeof(elem_t), MVIN_SCALE_IDENTITY, false, 1);
+  gemmini_extended3_config_ld(NM_J * sizeof(acc_t), MVIN_SCALE_IDENTITY, false, 2);
+  gemmini_fence();
+}
+static void dense_loop(const char * name) {
+  gemmini_config_ex(WEIGHT_STATIONARY, NO_ACTIVATION, 0);
+  loop_config(name, NM_J);
+  ctr_start();
+  uint64_t start = read_cycles();
+  gemmini_loop_ws(IT, JT, KT, 0, 0, 0, &a[0][0], &w[0][0], NULL, &c_out[0][0], NM_K, NM_J, NM_J, NM_J,
+                  false, false, true, false, false, NO_ACTIVATION, 0, 0, false);
+  uint64_t issued = read_cycles();
+  gemmini_fence();
+  uint64_t end = read_cycles();
+  ctr_stop();
+  report(name, start, issued, end, IT * JT * KT);
+  c_in_dram = 1;
+}
+static void sparse_loop(const char * name) {
+  _Static_assert(KT % 2 == 0, "a sparse loop needs an even K tile count");
+  sparse_begin(name);
+  loop_config(name, NM_J);
+  NM_REQUIRE(nm_loop_fits(IT, JT, KT));
+  ctr_start();
+  uint64_t start = read_cycles();
+  gemmini_loop_ws_nm(IT, JT, KT, 0, 0, 0, &a[0][0], &wc[0][0], NULL, &c_out[0][0], NM_K, NM_J, NM_J, NM_J,
+                     false, false, true, false, false, NO_ACTIVATION, 0, 0, false, &meta_loop[0][0][0]);
+  uint64_t issued = read_cycles();
+  gemmini_fence();
+  uint64_t end = read_cycles();
+  ctr_stop();
+  report(name, start, issued, end, IT * JT * KCT);
+  sparse_end();
+  c_in_dram = 1;
+}
+
 // cpu cost of issuing only the index tiles of the sparse loop (cpu only: index tiles with no preloads would fill the fifo)
 static void meta_only(const char * name) {
   const int ntiles = IT * JT * KCT;
@@ -324,9 +372,11 @@ static int run(void (*variant)(const char *), const char * name) {
   int fails = 0;
   if (!cpu_only) poison();
   quiet = 1;
+  c_in_dram = 0;
   variant(name);
   quiet = 0;
   if (!cpu_only) { fails += check(name, 1); poison(); }
+  c_in_dram = 0;
   variant(name);
   if (!cpu_only) fails += check(name, 0);
   return fails;
@@ -368,6 +418,9 @@ int main() {
         nm_pack_meta_spad(&idx[t * DIM][jt * DIM], NM_J, DIM, DIM, NM_M, meta_sp[jt][t]);
     gemmini_config_ld(DIM * sizeof(elem_t));
     nm_mvin_meta_spad(&meta_sp[0][0][0], IDX_SP(0, 0), JT * KCT, 0);
+    for (int t = 0; t < KCT; t++)
+      for (int jt = 0; jt < JT; jt++)
+        nm_pack_meta_spad(&idx[t * DIM][jt * DIM], NM_J, DIM, DIM, NM_M, meta_loop[t][jt]);
   }
   gemmini_fence();
 
@@ -380,6 +433,9 @@ int main() {
     fails += run(sparse_batched, "sparse_batched");
     fails += run(sparse_spad, "sparse_spad");
   }
+  // last: a hardware loop loads its own operands over the scratchpad rows the runs above read
+  fails += run(dense_loop, "dense_loop");
+  if (sparse) fails += run(sparse_loop, "sparse_loop");
 
   printf("cpu only (no gemmini instructions issued):\n");
   cpu_only = 1;

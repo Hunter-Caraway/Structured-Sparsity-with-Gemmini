@@ -1,0 +1,33 @@
+fair_perf: 2:4, i=64 k=128 j=32
+fair_perf build: full (dense + sparse runs)
+prep_cold      prep   236488  prune   159732  compress    61743  pack_meta    15013  weights 4096
+prep_warm      prep   235960  prune   159204  compress    61743  pack_meta    15013  weights 4096
+poison reaches the accumulator (2048 values)
+dense          total   1327  cpu_issue_done   1325  pairs  64  cyc/pair   20 | ex_active=32183 rs_full=32921 ctrl_q_block=30425 overlap_haz=31395 spad_a_wait=32858 spad_b_wait=34108 spad_d_wait=32841 main_ex=30291
+dense matches the cpu reference (2048 values)
+dense_reuse    total   1391  cpu_issue_done   1389  pairs  64  cyc/pair   21 | ex_active=29634 rs_full=32495 ctrl_q_block=35227 overlap_haz=30366 spad_a_wait=31747 spad_b_wait=33374 spad_d_wait=35211 main_ex=35007
+dense_reuse matches the cpu reference (2048 values)
+sparse         total   1626  cpu_issue_done   1624  pairs  32  cyc/pair   50 | ex_active=45143 rs_full=47125 ctrl_q_block=48876 overlap_haz=48972 spad_a_wait=51149 spad_b_wait=50476 spad_d_wait=51345 main_ex=51715
+sparse matches the cpu reference (2048 values)
+sparse_reuse   total   1071  cpu_issue_done   1069  pairs  32  cyc/pair   33 | ex_active=24260 rs_full=27252 ctrl_q_block=25696 overlap_haz=25219 spad_a_wait=24036 spad_b_wait=27132 spad_d_wait=21693 main_ex=24993
+sparse_reuse matches the cpu reference (2048 values)
+sparse_batched total   1667  cpu_issue_done   1665  pairs  32  cyc/pair   52 | ex_active=48684 rs_full=50545 ctrl_q_block=48625 overlap_haz=47012 spad_a_wait=48539 spad_b_wait=50569 spad_d_wait=50853 main_ex=48497
+sparse_batched matches the cpu reference (2048 values)
+sparse_spad    total    884  cpu_issue_done    882  pairs  32  cyc/pair   27 | ex_active=19256 rs_full=16498 ctrl_q_block=19120 overlap_haz=18872 spad_a_wait=16478 spad_b_wait=19808 spad_d_wait=18521 main_ex=20167
+sparse_spad matches the cpu reference (2048 values)
+dense_loop     total     20  cpu_issue_done     18  pairs  64  cyc/pair    0 | ex_active=2343 rs_full=1762 ctrl_q_block=1300 overlap_haz=1547 spad_a_wait=1850 spad_b_wait=1565 spad_d_wait=1790 main_ex=1136
+dense_loop matches the cpu reference (2048 values)
+sparse_loop    total     23  cpu_issue_done     21  pairs  32  cyc/pair    0 | ex_active=2092 rs_full=2241 ctrl_q_block=1628 overlap_haz=1595 spad_a_wait=1459 spad_b_wait=1202 spad_d_wait=2040 main_ex=1723
+sparse_loop matches the cpu reference (2048 values)
+cpu only (no gemmini instructions issued):
+cpu_dense      total   1007  cpu_issue_done   1005  pairs  64  cyc/pair   15 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_dense_reuse total   1023  cpu_issue_done   1021  pairs  64  cyc/pair   15 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse     total   1318  cpu_issue_done   1316  pairs  32  cyc/pair   41 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse_reuse total    838  cpu_issue_done    836  pairs  32  cyc/pair   26 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse_batched total   1307  cpu_issue_done   1305  pairs  32  cyc/pair   40 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse_spad total    644  cpu_issue_done    642  pairs  32  cyc/pair   20 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_meta_only  total    704  cpu_issue_done    704  pairs  32  cyc/pair   22 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+fair_perf passed
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

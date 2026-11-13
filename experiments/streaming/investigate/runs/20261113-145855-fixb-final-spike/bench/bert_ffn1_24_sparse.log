@@ -1,0 +1,10 @@
+sbench: layer=bert_ffn1 M=128 K=768 N=3072 pattern=2:4 build=full run_mask=4 TI=8 TJ=4 data_seed=20261111
+poison reaches all of C (393216 values)
+sparse_stream total    1324640  cpu_issue_done    1324638 | ex_active=25418328 rdma_active=25446138 wdma_active=25430505 load_active=25425503 store_active=25370799 rs_full=25503371 loop_matmul_active=25463705 rdma_bytes=0
+sparse_stream check: hash 0x316709fccb222000 expected 0x316709fccb222000, sampled rows 8/8 -> verified
+sparse_stream overhead (untimed): poison 18954  evict_l2 14351  check 888209 cycles
+sbench end cycle 5460054
+sbench passed (1 of 1 runs verified)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

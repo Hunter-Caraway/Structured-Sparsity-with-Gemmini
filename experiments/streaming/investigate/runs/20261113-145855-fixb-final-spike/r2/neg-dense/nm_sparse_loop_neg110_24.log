@@ -1,0 +1,4 @@
+GEMMINI: sparse-loop-fix: LOAD_IDX (funct 27) on a dense build (nm_sparsity = None)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4
