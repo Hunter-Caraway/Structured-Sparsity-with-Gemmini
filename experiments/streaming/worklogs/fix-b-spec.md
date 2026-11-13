@@ -491,6 +491,10 @@ Not verified: nothing was built or run; all [E] items are paper arguments. C1, C
 Next: spawn RTL / Spike / software agents from 2.5, 3, 4, 6 (spec is FROZEN; C1, C2, C6 first).
 
 ## Changelog
+- 2026-11-13 (dense-build criterion, user decision "a"): "dense build unchanged" means logic-equivalent to stock, not identical Verilog. Allowed
+  differences: names, @[file:line], assert line numbers, the dense-build asserts of 2.5.7, and the Fix A funct-26 RS bypass (Controller.scala:536-568,
+  not nm-guarded; dense code never issues funct 26). Evidence: worklogs/dense-verilog-diff.md (server diff ~/fixb/dense-diff/). Also: LoopMatmul.scala:1371
+  N6 message escaped as `%%` (Chisel printf); printed text unchanged (RTL 11cc20cd).
 - 2026-11-13 (5.1 correction, measured): the [E] "somewhat more calls and 1-2% more instructions per call" is contradicted by Spike. RUN3
   (`investigate/runs/20261112-235246-fixb-spike-tests/bench/`) shows sparse_loop 2:4 at about 0.45x Berkeley's instret on qkv/rn50/ffn1/ffn2
   (bert_qkv 1,451 vs 3,214). qkv trace: 16 LOOP_WS calls at ~61 instr vs Berkeley's 20 at ~148 (worklogs/fixb-icount.md). Cause: specialised

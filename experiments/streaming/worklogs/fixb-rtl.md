@@ -133,11 +133,27 @@ Only `Controller.scala` edited. LoopMatmul.scala untouched: N13 lives in the Con
   `[success] Total time: 7 s, completed Nov 13, 2026, 2:47:11 PM`, pre-existing warnings only.
   Log: `experiments/streaming/worklogs/fixb-rtl-r2-sbt.log`.
 
+## Step 4 (2026-11-13): printf % fix (uncommitted, branch `sparse-loop-fix`, on top of 0db6cd09)
+Server elaboration of GemminiNMRocketConfig failed: `java.util.UnknownFormatConversionException` on the N-assert
+message at LoopMatmul.scala:1371. Chisel assert messages are printf formats, so a literal `%` is written `%%`.
+- LoopMatmul.scala:1371: `(K % 2*DIM)` changed to `(K %% 2*DIM)` in the source string. Printed text stays
+  `(K % 2*DIM)`, so Spike gemmini.cc:953 and run-flow.sh `loop_neg_msg` need no change. `// changed:` tag kept.
+- Scan of every added line with a `%` (`git diff 8c3f9923 -- src/`) and every string with a `%` in
+  `src/main/scala/gemmini/*.scala`: no other hazard in our code. The only other added `%` is the Scala modulo in
+  `require((meshRows * tileRows) % n == 0, ...)` (GemminiConfigs.scala:113), not in a string.
+- Added `s"..."` strings (GemminiConfigs.scala `require`, header `#define` lines, `IllegalArgumentException`) are
+  Scala elaboration-time strings, not Chisel printf formats; none holds a `%`.
+- sbt `;project gemmini; compile`: `[success] Total time: 7 s, completed Nov 13, 2026, 3:19:42 PM`.
+  Log: `experiments/streaming/worklogs/fixb-rtl-step4-sbt.log`.
+- Not confirmed by elaboration: that the emitted Verilog prints a single `%` (elaboration is server-only).
+
 ## RESUME HERE
-Done: rounds 1 and 2. All five RTL files edited, sbt compile passes (log above). Asserts in RTL: N1-N10, N12, N13
-(with range check), I1-I3. N11 / N14 are Spike-only (D1).
-Running: nothing. No server use, no elaboration, no simulator touched, no git writes.
+Done: rounds 1 and 2, and step 4 (`%%` escape at LoopMatmul.scala:1371). sbt compile passes (step 4 log above).
+Asserts in RTL: N1-N10, N12, N13 (with range check), I1-I3. N11 / N14 are Spike-only (D1).
+Running: nothing. No server use, no elaboration, no simulator touched, no git writes. LoopMatmul.scala has one
+uncommitted line on top of 0db6cd09.
 Spike must match for N13: abort when `addr + rows > sp_rows` (sp_rows = sp_banks * sp_bank_entries), legal when equal.
 Not done: elaboration of both NM configs and the dense config, dense Verilog diff against stock, any simulation,
 NEG / mutant runs (N13 range NEG test is with the tests agent).
-Next: server elaboration and Verilator runs, after user approval for the rebuild.
+Next: retry server elaboration with the step 4 line; check the NEG log prints `(K % 2*DIM)` with one `%`; then
+Verilator runs, after user approval for the rebuild.

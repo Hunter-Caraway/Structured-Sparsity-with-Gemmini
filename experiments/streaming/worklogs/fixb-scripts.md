@@ -69,3 +69,44 @@ Done: tasks 1-5 above; all edits uncommitted on `spad-index-fix`. Running: nothi
 `/tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/scripts/` (session
 scratch; copy out anything worth keeping). Next: the TODO list above; then RTL `rerun` on the server once a
 sparse-loop-fix simulator exists (not started, needs user approval for any rebuild).
+
+# Round 2: run-flow gaps
+2026-11-13. Only `run-flow.sh` edited (uncommitted, branch `spad-index-fix`, HEAD 7fd60dc). Scratch
+`<scratchpad>/runflow-r3`; run folder `experiments/streaming/investigate/runs/20261113-151044-runflow-r3/` (R below).
+Gaps came from `worklogs/fixb-final-spike.md` (stale `verification/build/fair_perf_*`; 2 of 54 dense tests).
+
+## Steps
+1. Gap 1, stale fair programs. New `build_fair <dir>` (the four `rv_cc_nm` lines, moved out of `step_fair_build`, which now
+   calls it for `verification/build`). `step_spike` calls `build_fair "$scratch/fair"` on every run and runs those
+   programs; it no longer reads `FAIR_BIN` / `verification/build`. `verification/bin` is never written.
+   A zero exit is no longer enough: `fair_perf_<pat>` must print "dense_loop matches the cpu reference" and
+   "sparse_loop matches ..."; `fair_perf_dense_only` must print the dense_loop line.
+2. Gap 2, dense tests. The Makefile-derived list moved from `step_tests` into `dense_tests` (global `dense_list`, dies
+   unless 54). `step_spike` dies if any of the 54 programs is missing, runs them all on the n:m lib `PAR` at a time
+   (`clamp_par`, cap 12; `timeout 600` each), prints one pass/FAIL line each in list order, and counts any non-zero exit.
+3. Header text updated (`spike`, `PAR`, `FAIR_BIN`).
+
+## Results (all in R)
+- `bash -n run-flow.sh`: clean.
+- `spike-lib nm24|dense24|nm48|dense48`: rc 0 (`spike-lib-*.out`); lib sha256 equal to the final-spike run (`run.info` of both).
+- `tests`: rc 0, "134 bare-metal tests built (54 dense ...)" (`tests.out`).
+- `spike nm24`, `spike nm48`: rc 0, 97 pass lines each, 0 FAIL (`spike-nm24.out`, `spike-nm48.out`): 54 dense, 6 nm_sparse,
+  3 fair, 6 NEG, 26 loop NEG, 2 dense-lib loop NEG. Fair lines: "pass  fair_perf_24 (dense_loop sparse_loop verified)",
+  same for `fair_perf_48`; Spike output `spike-nm24.log` / `spike-nm48.log` lines 694, 696, 719.
+- Negative checks, each rc 1: an aborting program in place of `conv-baremetal` -> "FAIL  conv (exit 255)"
+  (`neg-dense-fail.out`); `matmul-baremetal` moved away -> "missing ..." (`neg-dense-missing.out`); mutant script that
+  expects sparse_loop from `fair_perf_dense_only` -> "FAIL ... no 'matches the cpu reference' line for sparse_loop"
+  (`neg-loop-line.out`, `mutant-run-flow.sh`). Scratch programs restored afterwards.
+- `PAR=1`: rc 0, 97 pass (`spike-nm48-par1.out`). `PAR=40`: clamped to 12, rc 0, 97 pass (`spike-nm24-par40.out`).
+- `$RISCV/lib/libgemmini.so` and `verification/build/*` sha256 unchanged (`riscv-lib-before.sha`,
+  `verification-build-before.sha`; compared after the runs). gemmini-rocc-tests `git status`: clean.
+
+## Open
+- `./run-flow.sh fair-build` was not run after the `build_fair` refactor (it would overwrite the 2026-11-03 programs in
+  `verification/build`); the same helper is exercised by `spike`. `verification/build` is still stale for the RTL `fair` step.
+- `spike` now calls `restore_params_h` (through `build_fair`), as `tests` and `fair-build` already do.
+- `run-flow.sh` wrote its usual untracked logs to `logs/runs/` (`libgemmini-20261113-1508*.log`, `spike-20261113-15*.log`).
+
+## RESUME HERE
+Done: both gaps fixed in `run-flow.sh`, tested, outputs in R with `SHA256SUMS`. Running: nothing. No git writes.
+Next: coordinator review; decide whether to run `fair-build` to refresh `verification/build` before any RTL `fair` run.
