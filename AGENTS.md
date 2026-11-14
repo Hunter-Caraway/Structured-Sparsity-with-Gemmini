@@ -22,11 +22,9 @@ it with `git show e06b436:HANDOFF.md`), `worklogs/fix-a-spec.md` (spad-index-fix
 3. Never rebuild or overwrite a simulator without user approval. Berkeley's stock simulator
    (`GemminiRocketConfig`) is never built from modified sources.
 4. Compare cycle counts only within the same build. A cycle count counts only if the output check says verified.
-5. Git: never commit, push, stash, reset or checkout without asking. Never commit directly to `main`; use a
-   branch and a PR. Commit messages: short, say what and why.
+5. Git: commit, push, stash, reset or checkout without asking do this on a test branch. Never commit directly to `main`; Commit messages: short, say what and why.
 6. Scope: only the user's sparsity code (the diff from each Berkeley base, plus this repo). Read Berkeley code only
    to understand ours. Report bugs in Berkeley code; do not fix them.
-7. Never handle the server password.
 
 ## Spec before code
 Any ISA, protocol or hardware-behaviour change needs a spec in `experiments/streaming/worklogs/<fix>-spec.md`
