@@ -1,4 +1,4 @@
-STATUS: DRAFT (2026-11-17). Not frozen; the user freezes it. No code may be written from it until then.
+STATUS: FROZEN (2026-11-17, user "go" on design 1 + micro-test; Q answers in section 11). Later changes go in the Changelog.
 
 # bank-split-fix spec: put a_lo and a_hi of the sparse LOOP_WS loop in different scratchpad banks
 
@@ -166,5 +166,9 @@ Micro-test 1.5; spec freeze review 0.5; RTL 1.5; Spike 1; software tiler/tests 1
 - Q7. LdA 1-tile mvins in nm loops: accept (and measure) or require 2-tile mvins with a block stride (needs more RTL)?
 - Q8. Do this before the wide-act (4x) work? (Recommended: yes, the 4x array gain depends on it.)
 
+Answers (2026-11-17, user approved design 1 and the micro-test with "go"; other answers are the coordinator's recommended defaults, shown to the user, user may override):
+- Q1 design 1. Q2 yes (3 sims max). Q3 yes, README/paper only with user approval. Q4 implement "straddle" as default, keep B placement easy to change; micro-test result may change it via a changelog entry. Q5 yes. Q6 yes. Q7 accept 1-tile LdA mvins and measure. Q8 yes, before wide-act.
+
 ## Changelog
+- 2026-11-17: frozen; section 11 answers added.
 - 2026-11-17: first draft.
