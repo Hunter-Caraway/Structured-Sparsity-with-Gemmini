@@ -1,0 +1,142 @@
+run: nm816-spike (8:16 N:M build: Spike proof), laptop only, 2026-11-17 11:59, agent nm816-config
+worklog: experiments/streaming/worklogs/nm816-config.md
+spike: /home/hunter/chipyard/.conda-env/riscv-tools/bin/spike sha256 4a201fa115154db2daf8b72635b5ce951318d1491d52ce029b7d89e00d498824
+RISCV libgemmini.so sha256 (installed lib, untouched; never loaded, checked by run-flow's LD_DEBUG smoke run): 34578eb7dd40188639345b6d1986fd639672c8b216ecc3140f1abf71179a592a
+
+repos:
+  gemmini: nm816-config @ 11cc20cd (uncommitted: chipyard/GemminiConfigs.scala src/main/scala/gemmini/Configs.scala )
+  libgemmini: sparse-loop-fix @ d048776 
+  gemmini-rocc-tests: sparse-loop-fix @ 22158bf 
+  gemmini-sparsity: fixb-results-test @ 033f3f4 (uncommitted: run-flow.sh )
+
+commands (cwd ~/gemmini-sparsity, default SCRATCH_DIR=build-scratch):
+  0 sbt ';project gemmini; compile; project chipyard; compile' (in ~/chipyard) -> worklogs/nm816-sbt.log, both [success]
+  0b config_check.scala: scala.tools.nsc.MainGenericRunner on the gemmini runtime classpath: constructs the 2:4/4:8/8:16 configs
+     (runs the requires; no Chisel elaboration) and writes generateHeader() -> gemmini_params_816.generated.h
+  1 ./run-flow.sh spike-lib nm816|dense816|nm24|dense24|nm48|dense48 -> spike-lib.log, flow-logs/libgemmini-*.log
+  2 ./run-flow.sh tests -> tests-build.log (174 programs)
+  3 ./run-flow.sh spike nm816 -> spike-nm816.summary, flow-logs/spike-20261117-115553.log
+  4 ./run-flow.sh spike nm24 / nm48 (regression) -> spike-nm24.summary (flow-logs/spike-20261117-115624.log), spike-nm48.summary (flow-logs/spike-20261117-115631.log)
+  5 bench816.sh <run>/bench (nohup setsid) -> bench/summary.txt, bench/logs/, bench/STATUS
+  6 mutants m1 (idx -> m-1-idx) and m2 (idx & 7) in gemmini.cc:635, built NM_N=8 NM_M=16 in session scratch (deleted after);
+     sources mutant/gemmini.m{1,2}.cc.txt; 8:16 positive tests on each -> mutant/summary.txt, mutant/*.log
+  7 nm_sparse_spad.c built -DNM_N=8 -DNM_M=16 (rv_cc flags) on the nm816 lib -> extra/nm_sparse_spad_816.log
+
+libs (build-scratch/libgemmini-*/libgemmini.so):
+7617dce538fd6690483cd3d4810e9810d45bee8f17183bc79b62aaf2ae0a3745  libgemmini-dense24/libgemmini.so
+8eb89b8a7f9e1c83a8966677d5b82efdfcfd45e22ae210f1bb89cbdb8f2afef7  libgemmini-dense48/libgemmini.so
+8a2019e334f415dae68bab5dfe65d056be4189d101a8c95a0ba3ce9482f9855a  libgemmini-dense816/libgemmini.so
+0d30970a1be73a02ea33b44a2ae6a73826945b84fdbd9882bcc4ca96dc58b640  libgemmini-nm24/libgemmini.so
+9c5894d41210c745765c90ca4ae05e00c77a7ddee9263ae1bd2e45660e61440f  libgemmini-nm48/libgemmini.so
+645736570412256320ebd9370d58b432ecf9c609882d98c0db3f9b3c74d7dfe7  libgemmini-nm816/libgemmini.so
+sources: 8224264c50347886a019df69b2e9e4937c661b506662ef325ca48a513dd511a4 gemmini.cc, 402441cef1b5b65ecd9e7fe14fabcd4998ebd7365186d5e49afa02cbeabd1068 gemmini.h
+
+8:16 test binaries (build-scratch, sha256):
+d9f8e33c36c44172ac79ab3f041d187bf818c74b370c1e762c0726f636ce6ac7  tests/bareMetalC/nm_sparse_debug_816-baremetal
+01cbd1382fbf682eca7695f85df85e41ef3f2a81ac3ad9df113045a55da544ca  tests/bareMetalC/nm_sparse_loop_816-baremetal
+22f14880a715f93077bf3d6f738733c05d0c83526e2fc109e127b9b4d10e5eab  tests/bareMetalC/nm_sparse_loop_neg100_816-baremetal
+278a9cf9c2edf58ecd2d91f1d2c9918646277324bc353501fe8a5f943f69eae0  tests/bareMetalC/nm_sparse_loop_neg10_816-baremetal
+7bb2b469ba0b02dc2d12a533b4c80b32e06fcf13a5ab25ebdaee50520773e7a7  tests/bareMetalC/nm_sparse_loop_neg110_816-baremetal
+a00023284238c16cf199731b4a49e6d006c706993e351963d55b411ba85a1521  tests/bareMetalC/nm_sparse_loop_neg11_816-baremetal
+f851267a68f67eec6b92dc1db1307500d161dab2a616accf91bff83204885caa  tests/bareMetalC/nm_sparse_loop_neg120_816-baremetal
+249a55ba5c49519e5e5c417675157edb65ea50492f0fe1e80e4a277c234c6118  tests/bareMetalC/nm_sparse_loop_neg121_816-baremetal
+76c62d9d44b805e79ad9c3df2ef225251c184711661376d6de884f4511f60084  tests/bareMetalC/nm_sparse_loop_neg122_816-baremetal
+ecc77d9b2f026d1f356578e60529dd49737d286a012ea42d86bc8cd546b0c09e  tests/bareMetalC/nm_sparse_loop_neg130_816-baremetal
+db7b80cbb5c3cb8cdc6344932424e7b2376afb79b04f1ae5694e74baac8e411e  tests/bareMetalC/nm_sparse_loop_neg131_816-baremetal
+21a0646299cb9d46b8a8b5629f59395d439fdf9f602e59bcb08389635ad580b4  tests/bareMetalC/nm_sparse_loop_neg132_816-baremetal
+8cd70db3815ce67e4abe3a157bff8ccd22e70ffdb27bec695fe0f1067fc9c96b  tests/bareMetalC/nm_sparse_loop_neg133_816-baremetal
+9c0d7958d2afc18be0cdedb487a7310e7f08e24157570dbbc7860730bda5499d  tests/bareMetalC/nm_sparse_loop_neg140_816-baremetal
+44ba91d845989d6f8e9a6b82209d5b5185b95d9eee73c815e68c1c90c4f7e482  tests/bareMetalC/nm_sparse_loop_neg20_816-baremetal
+f54eefc10b8efb8f740f8d58847d5d16f687e967904594579963cec01e361a62  tests/bareMetalC/nm_sparse_loop_neg30_816-baremetal
+eaf6d46b0c12debc009b107e76b53b8947db2561165365eabf2470095f2895ba  tests/bareMetalC/nm_sparse_loop_neg40_816-baremetal
+31d3dd56eb2998d95fd3f5beffc0ba65e5bfdc69802b02c2f6817c2a5350192d  tests/bareMetalC/nm_sparse_loop_neg50_816-baremetal
+1032b17fba3d9824907cef3bd052f6ffb7b4b0768fcc7058ff2811a907761dd2  tests/bareMetalC/nm_sparse_loop_neg51_816-baremetal
+2a09b05855cc249434173ce05995cadb439c59d2c1d9f417a6df33ee446531bf  tests/bareMetalC/nm_sparse_loop_neg52_816-baremetal
+eeead0423fd2310ecb03b65df31675a4dc14f4d9f31744a4772c23d6a5d4b1c3  tests/bareMetalC/nm_sparse_loop_neg60_816-baremetal
+dd726cb9b5f3878dcfb7118406e105838734f59ca7c16ab8df6bccaad8a554f1  tests/bareMetalC/nm_sparse_loop_neg61_816-baremetal
+df64ec93945bb8ba163d4c4287c8e52fe626cf127a5ba5fab3a17d425761f240  tests/bareMetalC/nm_sparse_loop_neg70_816-baremetal
+10dff55e5d5c85a84157daccfd05fab65d1c322e38714b8d8f0fd11ad7de6917  tests/bareMetalC/nm_sparse_loop_neg71_816-baremetal
+3a8d0cee028752dd00aa20135aad5e2fa3a4ddb2e1977a4f83cc8021352cfd6e  tests/bareMetalC/nm_sparse_loop_neg72_816-baremetal
+1ce88910d923f20e96729c331bf477225ea647f9f54a6113321887127858e8bf  tests/bareMetalC/nm_sparse_loop_neg73_816-baremetal
+ffd42c39ee2f664c337c0c89748f51335641822f6ef083bc108dfa7d45b7f076  tests/bareMetalC/nm_sparse_loop_neg74_816-baremetal
+8026dc8c5ae357c12da0aa4763665f75c003cb314ef11ba045ad6dbf2a4427c9  tests/bareMetalC/nm_sparse_loop_neg80_816-baremetal
+976d63c01e1702b3b1d74d2aef2747c94b02a29626f2515e83a2c247d32efb69  tests/bareMetalC/nm_sparse_loop_neg90_816-baremetal
+b0c1075fb8ece58143c30e56af34ae481a41c368e3841f438c927e9d0f6d0130  tests/bareMetalC/nm_sparse_loop_neg91_816-baremetal
+2232dc9261396cd31bc0162baa6617a9dec377426fbb6b78064a7f95abe3e3df  tests/bareMetalC/nm_sparse_matmul_816-baremetal
+fac261376011dcc1add054f7e2bdc994b9b8c2cc02163bed23329d2b8e3ad066  tests/bareMetalC/nm_sparse_perf_816-baremetal
+58026f055afece2135617c7773eb54dcff278a47525b5b6ab11a89db83f2771c  tests/bareMetalC/nm_sparse_protocol_816-baremetal
+772e0572586219bd0257ac4a8d75740b2580e84b009dcb0540fffa6e48f184f7  tests/bareMetalC/nm_sparse_protocol_neg10_816-baremetal
+3ed00ab01d7b825ab754d1f2f51cd8a98e229cbd1bffc1677566c932ce4070a7  tests/bareMetalC/nm_sparse_protocol_neg14_816-baremetal
+140be1dc0b5b21c9ae69ef1effb221991795bd7108aef3a4a0493707c3f59e87  tests/bareMetalC/nm_sparse_protocol_neg4_816-baremetal
+2a7a5c735911ea726ef55c870e746ef2f08c37f5610a95b980d521cd5364e5ac  tests/bareMetalC/nm_sparse_protocol_neg6_816-baremetal
+f07b2b0c1bb5f135a15ab541e5512b5c92e60f8ad6e1b27eef3731d12ffd55bf  tests/bareMetalC/nm_sparse_protocol_neg7_816-baremetal
+84fea2170c23a13758beac602d3a71f98037468e5f227fde87c4c9a6c56ad56d  tests/bareMetalC/nm_sparse_protocol_neg9_816-baremetal
+9e376bb935a5e037dee3e0022166db0c6431d2fc73d45017bff01a6b40509295  tests/bareMetalC/nm_sparse_spad_816-baremetal
+cd3ba371ffe17c5a7c8a9c4db57da8afe097d7f6a432ad947bb84ce85ac02d2f  tests/bareMetalC/nm_sparse_sw_816-baremetal
+58947a6665f11192b5f453b865652fda6656b5f2efcf0efeec064d6b84e26801  fair/fair_perf_816-baremetal
+
+bench binaries and data .bin (moved to build-scratch/nm816-bench/, not kept in the repo; sha256 relative to bench/):
+fc4c0c92c234534c420f789c9b7b05d5651a18f8f62695c781269732558843b3  bin/bert_ffn1_816_fixa-baremetal
+969f0818efc1f067a1a613757e864d369c97e55b19b16e81e9713e407d4d91bf  bin/bert_ffn1_816_full-baremetal
+f1bb2f9f00d1270b30928323d06d08e8ccf4d3f0553613b8824b0bbf0a7068af  bin/bert_ffn1_816_loop-baremetal
+36938c48f7730ed55caa31e29c2f86ce2f9903576587df1d5cb52413e652e8a4  bin/bert_ffn2_816_fixa-baremetal
+236f8fd77012399c2a362fbc9ab129d37840fdeed940ee9af5e36e9e6062dca8  bin/bert_ffn2_816_full-baremetal
+6fce79648ce7ed26d345b1855f50b0b6fdc1634106d47021c2420f718a79e330  bin/bert_ffn2_816_loop-baremetal
+fb5c16650c40fe0763f3a15741b84776c2fd896a76709f8d7bd2e8a73d72adcc  bin/bert_qkv_816_fixa-baremetal
+5fa6bcf3bb43e931506feeabd5b52132158f9686c91e2245154dd5478980b59a  bin/bert_qkv_816_full-baremetal
+e79726e6cd9358d40040a78edc32f5de84de7612cd1a66b2270ef23ca5b21b3e  bin/bert_qkv_816_loop-baremetal
+cb2e6721ed30a9368ecf481f7d4d9132a2aea641ed6dc4113f86c11eb79337b3  bin/edge_816_fixa-baremetal
+396285f514d86fdda6abb86d4686e64da4b833b684003f6dcfc08d16ac749770  bin/edge_816_full-baremetal
+6fe9004991f757081f68152399eacad8fa24778f9eff8318825989968bce87e1  bin/edge_816_loop-baremetal
+2bba583ea7e28e500df1726bf47b1d6a84eb96e1a1f4f005ddff9949a953d75f  bin/rn50_conv_816_fixa-baremetal
+ad9174d911604f6697f9f36b9629faa3eaa0f587612f8794c4b3823579d3c531  bin/rn50_conv_816_full-baremetal
+7423e2ae3b2847f3b85a8cd6b8fc11ef72c3b7ae909b530db7b4d2ef9754ebcb  bin/rn50_conv_816_loop-baremetal
+e1d721e2cf3243b9ef0ccd3b50d71af02faa6605773a6870d5ee2fc1aa512191  bin/small_816_fixa-baremetal
+10fa193456b1243658343d74f772708212f78e2757541e6a000424014507078b  bin/small_816_full-baremetal
+900e895f579ad283af57f26ac6b43fe14d40e165ca53a203a1844775f086efc6  bin/small_816_loop-baremetal
+d007d5ab68bbad0e30f63854258ab163888ed1ee924031eb323964b570e3f61a  data/bert_ffn1/816/A.bin
+ae9cd4793cb55a4860e42b9c6213b5079db9606bb3133e824f2b9b1f5de98d04  data/bert_ffn1/816/IDX.bin
+3dbae1935df691e2bfe79db876827bca6cd25d5b0e5663010f2fe4220a2f7f37  data/bert_ffn1/816/META.bin
+a643549a7dbd2eaff73eacba18813f8a31e4418c0dee6e0101284d64d21e245d  data/bert_ffn1/816/SREF.bin
+80dab3c091a21dad0e4a408f6ef033f3e5f1389ea519df844772d4867f30185e  data/bert_ffn1/816/W.bin
+fafb405c0bf8d6879aacfe5acfc5e6372f6d2e6bb8d48b36d96296fa9f92b4b7  data/bert_ffn1/816/WC.bin
+f27f5cb42900312e694bc062b7cc29174015cc1dc28ccd5290efb1aa87dad741  data/bert_ffn2/816/A.bin
+3fd70ce3787e89a5d272ed1244a5ce67dbaf664295623b57549d48434ec56bb7  data/bert_ffn2/816/IDX.bin
+2d3c73717cf6cdba7c0e2e283eda9943a194e2b92d88a44311311aef143ebb0a  data/bert_ffn2/816/META.bin
+63e02f813a6761a269f14afa24ce144eacab35ba93670764d494d2f3c6183dae  data/bert_ffn2/816/SREF.bin
+6993a31b130e3f7ef3f5cb3f6fad98a09c940881298f3ba2fbd2cf942a84fd6d  data/bert_ffn2/816/W.bin
+3e1edccc95b7eebc97abe39f4c5389a66d1f95f93209077c78de08a5a982c50d  data/bert_ffn2/816/WC.bin
+7b0f02c20d7141334932bf0e90d1ef38cbc69b0fd67f2add743d3ad4716d19ac  data/bert_qkv/816/A.bin
+6b04a0b0d6e488e593de84790c279af66629de3b7e93215979eb84a02c0af21b  data/bert_qkv/816/IDX.bin
+7e343ed60a7e783639e563c963f6f30177991954513cd35f9123d30489048ff1  data/bert_qkv/816/META.bin
+15f092122185a64454605737d4e4e94803fd07fb7d307946e5af5efed49a2060  data/bert_qkv/816/SREF.bin
+c91d379cd1517f353f60ee1bc3e64457c459eaf0452d9e695ba176b68e3aab9b  data/bert_qkv/816/W.bin
+2ea80e0ba59e2e02ffedea877aa0f83511b3ddb7165e6b49fceaf9ee4ce1bdf8  data/bert_qkv/816/WC.bin
+04229817b8d8072368531b6ea3f7ebf7554be59d1e6da4c2c1b191b539bbcd6e  data/edge/816/A.bin
+056eb5da0a7696230ff363f477382bcc624c0e1fd33bcacc6afdc8bd3b54aef4  data/edge/816/IDX.bin
+6f3c4b76764a79dd49e2b5952e7f0d51ffb3ce5e203d8b3ea60bc2f2a55bbfb1  data/edge/816/META.bin
+8bcb13973c1b79fd07691810fdb4fe62a9c7e2e79d34c7f1514e8477023f60d0  data/edge/816/SREF.bin
+db7d293fe87ef4acbbc9d337809678eb1958aec917aa5603dcec36e4949c4fd5  data/edge/816/W.bin
+1bb9aa71a5faf97b7a0aaa7cf2a11b91a69ba6852b1de3e532562433ab1c6c48  data/edge/816/WC.bin
+9b6514afedafbc37a2a6a41bfa29ee60c854f6fa01d5bcffc8d966c39b6b6181  data/rn50_conv/816/A.bin
+4c53ef6daa1b1042ec3de7c7fb5846bf8b899e2fff4f30ebef81d52fb42ee063  data/rn50_conv/816/IDX.bin
+59723a03a4a10e5d9264d2ebbac4a04527aa556c051fe0f692af7738faed309e  data/rn50_conv/816/META.bin
+97bf8bb62b878d37a516373d35d37256ebd859ccbe02c29683faac49f59f5a70  data/rn50_conv/816/SREF.bin
+88c551df79c9b1776ee686bed80f57c254c91201b8d0f95a0acb32098251f0d1  data/rn50_conv/816/W.bin
+69c623d431333f7ba5786c3f8aed3ad5fd3080ae7aead634d40a3069996dbc1e  data/rn50_conv/816/WC.bin
+6d44e093e3a350f195cf926c6651432a92183659d4357e328d6b91911967bb62  data/small/816/A.bin
+ca6811d4ce368ce12c86de8e0d7bd0c21f6c4d69f642ef05e68c3a63c18859e8  data/small/816/IDX.bin
+7516acf5facc8c13084bd98fc9dfa22cca4a210a055635d4b4d2ce4b1a2ee7ba  data/small/816/META.bin
+bbb5cf9773d8ae5aa0c67f83b65c05bf0b1eb2aa4c5c3c4cb50e70b1abf89e3a  data/small/816/SREF.bin
+b3b8a6994de38aff766a278095b7fda4b3022c3f9bf69c3fdf68b27909c79d12  data/small/816/W.bin
+c64d6d9c658e9cff10feca8870c9bd821e76f6e662523bd79450a6a3590195b7  data/small/816/WC.bin
+
+note: bench/data/*/816/data.h .incbin the .bin files at their original run-folder paths; they now live in build-scratch/nm816-bench/data/
+
+results:
+  spike nm816: 97 pass, 0 FAIL (54 dense, 6 nm_sparse_*_816, 3 fair, 6 protocol NEG, 26 loop NEG, 2 loop NEG on dense816 lib)
+  spike nm24:  97 pass, 0 FAIL; nm48: 97 pass, 0 FAIL
+  nm24/nm48/dense24/dense48 lib sha256 identical to runs/20261113-145855-fixb-final-spike/run.info
+  bench: 18 of 18 programs 'sbench passed'; STATUS: PASS
+  mutants: 12 of 14 runs fail (all but nm_sparse_sw_816 on each mutant; sw never touches gemmini)
+  nm_sparse_spad_816: passed (spec section 9 byte check is #if-guarded to m 4/8, skipped for 8:16)

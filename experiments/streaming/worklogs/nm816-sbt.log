@@ -1,0 +1,52 @@
+[info] welcome to sbt 1.8.2 (N/A Java 20.0.2-internal)
+[info] loading settings for project chipyard-build from plugins.sbt ...
+[info] loading project definition from /home/hunter/chipyard/project
+[info] loading settings for project chipyardRoot from build.sbt ...
+[info] loading settings for project barf from build.sbt ...
+[info] loading settings for project constellation from build.sbt ...
+[info] loading settings for project icenet from build.sbt ...
+[info] loading settings for project cva6 from build.sbt ...
+[info] loading settings for project ibex from build.sbt ...
+[info] loading settings for project sodor from build.sbt ...
+[info] loading settings for project radiance from build.sbt ...
+[info] loading settings for project midas_target_utils from build.sbt ...
+[info] resolving key references (48737 settings) ...
+[info] set current project to chipyardRoot (in build file:/home/hunter/chipyard/)
+[info] set current project to gemmini (in build file:/home/hunter/chipyard/)
+[info] compiling 1 Scala source to /home/hunter/chipyard/generators/gemmini/src/target/scala-2.13/classes ...
+[warn] /home/hunter/chipyard/generators/gemmini/src/main/scala/gemmini/Configs.scala:266:21: value LazyModule in package diplomacy is deprecated (since rocketchip 2.0.0): Diplomacy has been split to a standalone library
+[warn]       val gemmini = LazyModule(new Gemmini(gemminiConfig))
+[warn]                     ^
+[warn] /home/hunter/chipyard/generators/gemmini/src/main/scala/gemmini/Configs.scala:279:21: value LazyModule in package diplomacy is deprecated (since rocketchip 2.0.0): Diplomacy has been split to a standalone library
+[warn]       val gemmini = LazyModule(new Gemmini(gemminiConfig))
+[warn]                     ^
+[warn] /home/hunter/chipyard/generators/gemmini/src/main/scala/gemmini/Configs.scala:294:21: value LazyModule in package diplomacy is deprecated (since rocketchip 2.0.0): Diplomacy has been split to a standalone library
+[warn]       val gemmini = LazyModule(new Gemmini(gemminiConfig))
+[warn]                     ^
+[warn] /home/hunter/chipyard/generators/gemmini/src/main/scala/gemmini/Configs.scala:306:21: value LazyModule in package diplomacy is deprecated (since rocketchip 2.0.0): Diplomacy has been split to a standalone library
+[warn]       val gemmini = LazyModule(new Gemmini(gemminiConfig))
+[warn]                     ^
+[warn] /home/hunter/chipyard/generators/gemmini/src/main/scala/gemmini/Configs.scala:318:21: value LazyModule in package diplomacy is deprecated (since rocketchip 2.0.0): Diplomacy has been split to a standalone library
+[warn]       val gemmini = LazyModule(new Gemmini(gemminiConfig))
+[warn]                     ^
+[warn] /home/hunter/chipyard/generators/gemmini/src/main/scala/gemmini/Configs.scala:332:21: value LazyModule in package diplomacy is deprecated (since rocketchip 2.0.0): Diplomacy has been split to a standalone library
+[warn]       int_gemmini = LazyModule(new Gemmini(GemminiConfigs.chipConfig.copy(
+[warn]                     ^
+[warn] /home/hunter/chipyard/generators/gemmini/src/main/scala/gemmini/Configs.scala:341:20: value LazyModule in package diplomacy is deprecated (since rocketchip 2.0.0): Diplomacy has been split to a standalone library
+[warn]       fp_gemmini = LazyModule(new Gemmini(GemminiFPConfigs.BF16DefaultConfig.copy(
+[warn]                    ^
+[warn] /home/hunter/chipyard/generators/gemmini/src/main/scala/gemmini/Configs.scala:357:7: value InModuleBody in package diplomacy is deprecated (since rocketchip 2.0.0): Diplomacy has been split to a standalone library
+[warn]       InModuleBody {
+[warn]       ^
+[warn] 38 feature warnings; re-run with -feature for details
+[warn] 9 warnings found
+[info] done compiling
+[success] Total time: 5 s, completed Nov 17, 2026, 11:52:20 AM
+[info] set current project to chipyard (in build file:/home/hunter/chipyard/)
+Warning: Tried to extract the base path for relative glob tools/stage/src/main/scala/**/*.{java,scala}. To disable this warning, re-run the program with java option, -Dsbt.io.implicit.relative.glob.conversion=allow
+Warning: Tried to extract the base path for relative glob tools/stage/src/main/scala/**/*.{java,scala}. To disable this warning, re-run the program with java option, -Dsbt.io.implicit.relative.glob.conversion=allow
+Warning: Tried to extract the base path for relative glob tools/firrtl2/src/main/java/**/*.{java,scala}. To disable this warning, re-run the program with java option, -Dsbt.io.implicit.relative.glob.conversion=allow
+Warning: Tried to extract the base path for relative glob tools/firrtl2/src/main/java/**/*.{java,scala}. To disable this warning, re-run the program with java option, -Dsbt.io.implicit.relative.glob.conversion=allow
+[info] compiling 1 Scala source to /home/hunter/chipyard/generators/chipyard/target/scala-2.13/classes ...
+[info] done compiling
+[success] Total time: 11 s, completed Nov 17, 2026, 11:52:31 AM

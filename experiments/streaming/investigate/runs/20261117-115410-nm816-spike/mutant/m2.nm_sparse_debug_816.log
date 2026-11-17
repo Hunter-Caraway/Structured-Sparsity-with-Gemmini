@@ -1,0 +1,14 @@
+nm_sparse_debug 8:16
+  correct sparse               0 / 256
+  index ignored (all 0)        0 / 256
+  index rows flipped           0 / 256
+  index transposed             0 / 256
+  dense, no a_hi               0 / 256
+  dense + a_hi as bias         0 / 256
+row 0 got: 6252 -22691 -215 -31803 12838 10650 23693 -10957 24205 -7396 -18879 -14994 32430 -381 2387 -16636 
+row 0 want: -14571 -23165 8843 12087 17948 -29595 6108 -13811 32260 3053 -16235 -41661 46679 1289 -16713 -8145 
+nm_sparse_debug FAILED
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 8:16
+*** FAILED *** (tohost = 1)

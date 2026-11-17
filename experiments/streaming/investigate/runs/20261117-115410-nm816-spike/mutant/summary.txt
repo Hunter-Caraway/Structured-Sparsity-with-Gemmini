@@ -1,0 +1,14 @@
+m1 nm_sparse_sw_816 rc=0 0 mismatch-lines; last: nm_sparse_sw passed
+m1 nm_sparse_matmul_816 rc=1 2 mismatch-lines; last: *** FAILED *** (tohost = 1)
+m1 nm_sparse_debug_816 rc=1 2 mismatch-lines; last: *** FAILED *** (tohost = 1)
+m1 nm_sparse_perf_816 rc=1 5 mismatch-lines; last: *** FAILED *** (tohost = 1)
+m1 nm_sparse_protocol_816 rc=1 11 mismatch-lines; last: *** FAILED *** (tohost = 1)
+m1 nm_sparse_loop_816 rc=1 24 mismatch-lines; last: *** FAILED *** (tohost = 1)
+m1 fair_perf_816 rc=1 2 mismatch-lines; last: *** FAILED *** (tohost = 1)
+m2 nm_sparse_sw_816 rc=0 0 mismatch-lines; last: nm_sparse_sw passed
+m2 nm_sparse_matmul_816 rc=1 2 mismatch-lines; last: *** FAILED *** (tohost = 1)
+m2 nm_sparse_debug_816 rc=1 2 mismatch-lines; last: *** FAILED *** (tohost = 1)
+m2 nm_sparse_perf_816 rc=1 5 mismatch-lines; last: *** FAILED *** (tohost = 1)
+m2 nm_sparse_protocol_816 rc=1 11 mismatch-lines; last: *** FAILED *** (tohost = 1)
+m2 nm_sparse_loop_816 rc=1 24 mismatch-lines; last: *** FAILED *** (tohost = 1)
+m2 fair_perf_816 rc=1 2 mismatch-lines; last: *** FAILED *** (tohost = 1)

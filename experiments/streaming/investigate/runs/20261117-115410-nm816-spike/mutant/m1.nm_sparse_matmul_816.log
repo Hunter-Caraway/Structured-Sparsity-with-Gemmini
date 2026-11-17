@@ -1,0 +1,9 @@
+nm_sparse_matmul: 8:16, i=32 k=64 j=32
+sparse mismatch at (0,0): got 25523 want 32849
+dense  cycles: 340 (16 preload/compute pairs)
+sparse cycles: 658 (8 preload/compute pairs, 8 meta cmds each)
+nm_sparse_matmul FAILED
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 8:16
+*** FAILED *** (tohost = 1)

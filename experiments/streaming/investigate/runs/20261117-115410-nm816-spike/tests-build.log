@@ -1,0 +1,3 @@
+
+== building the flow's test programs into build-scratch/tests/bareMetalC (gemmini-rocc-tests/build is left alone)
+174 bare-metal tests built (54 dense, without matmul_spad mvin_mvout_spad; nm_sparse_*_24 / _48 / _816, N:M checked)

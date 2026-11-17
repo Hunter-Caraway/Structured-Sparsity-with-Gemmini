@@ -1,0 +1,22 @@
+basic: mismatch at (0,0): got -17 want 4
+basic                  FAIL (235/256 wrong)
+a_stride 2: mismatch at (0,0): got -17 want 4
+a_stride 2             FAIL (238/256 wrong)
+weights at preload: mismatch at (0,0): got -17 want 4
+weights at preload     FAIL (235/256 wrong)
+clear: mismatch at (0,0): got -17 want 4
+clear                  FAIL (235/256 wrong)
+4 tiles ahead: mismatch at (0,0): got -17 want 4
+4 tiles ahead          FAIL (235/256 wrong)
+garbage keeps weights: mismatch at (0,0): got 3 want -2
+garbage keeps weights  FAIL (241/256 wrong)
+garbage does not pop: mismatch at (0,0): got 3 want -2
+garbage does not pop   FAIL (241/256 wrong)
+two tiles, stride 2: mismatch at (0,0): got 3 want -2
+two tiles, stride 2    FAIL (241/256 wrong)
+dense after sparse     ok (0/256 wrong)
+nm_sparse_protocol: 8 case(s) FAILED
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 8:16
+*** FAILED *** (tohost = 1)

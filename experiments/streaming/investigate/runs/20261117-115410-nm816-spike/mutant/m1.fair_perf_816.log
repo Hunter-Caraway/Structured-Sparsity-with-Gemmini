@@ -1,0 +1,39 @@
+fair_perf: 8:16, i=64 k=128 j=32
+fair_perf build: full (dense + sparse runs)
+prep_cold      prep   567122  prune   439492  compress   112178  pack_meta    15452  weights 4096
+prep_warm      prep   565544  prune   437914  compress   112178  pack_meta    15452  weights 4096
+poison reaches the accumulator (2048 values)
+dense          total   1327  cpu_issue_done   1325  pairs  64  cyc/pair   20 | ex_active=32374 rs_full=33018 ctrl_q_block=30030 overlap_haz=31309 spad_a_wait=32695 spad_b_wait=33868 spad_d_wait=32532 main_ex=30243
+dense matches the cpu reference (2048 values)
+dense_reuse    total   1391  cpu_issue_done   1389  pairs  64  cyc/pair   21 | ex_active=30175 rs_full=32340 ctrl_q_block=35212 overlap_haz=30670 spad_a_wait=31585 spad_b_wait=33610 spad_d_wait=35470 main_ex=34180
+dense_reuse matches the cpu reference (2048 values)
+sparse (warm-up) mismatch at (0,0): got -63184 want 3288
+sparse         total   2266  cpu_issue_done   2264  pairs  32  cyc/pair   70 | ex_active=80082 rs_full=86724 ctrl_q_block=86783 overlap_haz=77441 spad_a_wait=82985 spad_b_wait=84791 spad_d_wait=78162 main_ex=83652
+sparse mismatch at (0,0): got -63184 want 3288
+sparse_reuse (warm-up) mismatch at (0,0): got -63184 want 3288
+sparse_reuse   total   1231  cpu_issue_done   1229  pairs  32  cyc/pair   38 | ex_active=31884 rs_full=35698 ctrl_q_block=32121 overlap_haz=32091 spad_a_wait=31731 spad_b_wait=35083 spad_d_wait=30500 main_ex=32034
+sparse_reuse mismatch at (0,0): got -63184 want 3288
+sparse_batched (warm-up) mismatch at (0,0): got -63184 want 3288
+sparse_batched total   2307  cpu_issue_done   2305  pairs  32  cyc/pair   72 | ex_active=86472 rs_full=81368 ctrl_q_block=87610 overlap_haz=78178 spad_a_wait=81333 spad_b_wait=80515 spad_d_wait=81725 main_ex=85252
+sparse_batched mismatch at (0,0): got -63184 want 3288
+sparse_spad (warm-up) mismatch at (0,0): got -63184 want 3288
+sparse_spad    total    892  cpu_issue_done    890  pairs  32  cyc/pair   27 | ex_active=17826 rs_full=16807 ctrl_q_block=18854 overlap_haz=18079 spad_a_wait=17065 spad_b_wait=17928 spad_d_wait=21039 main_ex=16969
+sparse_spad mismatch at (0,0): got -63184 want 3288
+dense_loop     total     20  cpu_issue_done     18  pairs  64  cyc/pair    0 | ex_active=2019 rs_full=1590 ctrl_q_block=1197 overlap_haz=2013 spad_a_wait=1599 spad_b_wait=2153 spad_d_wait=571 main_ex=1333
+dense_loop matches the cpu reference (2048 values)
+sparse_loop (warm-up) mismatch at (0,0): got -63184 want 3288
+sparse_loop    total     23  cpu_issue_done     21  pairs  32  cyc/pair    0 | ex_active=1940 rs_full=2731 ctrl_q_block=1214 overlap_haz=1404 spad_a_wait=2581 spad_b_wait=1647 spad_d_wait=1359 main_ex=1518
+sparse_loop mismatch at (0,0): got -63184 want 3288
+cpu only (no gemmini instructions issued):
+cpu_dense      total   1007  cpu_issue_done   1005  pairs  64  cyc/pair   15 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_dense_reuse total   1023  cpu_issue_done   1021  pairs  64  cyc/pair   15 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse     total   1830  cpu_issue_done   1828  pairs  32  cyc/pair   57 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse_reuse total    966  cpu_issue_done    964  pairs  32  cyc/pair   30 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse_batched total   1819  cpu_issue_done   1817  pairs  32  cyc/pair   56 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse_spad total    652  cpu_issue_done    650  pairs  32  cyc/pair   20 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_meta_only  total   1216  cpu_issue_done   1216  pairs  32  cyc/pair   38 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+fair_perf FAILED
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 8:16
+*** FAILED *** (tohost = 1)

@@ -1,0 +1,18 @@
+
+== building libgemmini (spike extension) for 8:16 in build-scratch/libgemmini-nm816, not installed -> logs/runs/libgemmini-20261117-115417.log
+  built /home/hunter/gemmini-sparsity/build-scratch/libgemmini-nm816/libgemmini.so (8:16); spike loads it with --extlib
+
+== building libgemmini (spike extension) for 8:16, dense chip model in build-scratch/libgemmini-dense816, not installed -> logs/runs/libgemmini-20261117-115422.log
+  built /home/hunter/gemmini-sparsity/build-scratch/libgemmini-dense816/libgemmini.so (8:16, dense chip model); spike loads it with --extlib
+
+== building libgemmini (spike extension) for 2:4 in build-scratch/libgemmini-nm24, not installed -> logs/runs/libgemmini-20261117-115426.log
+  built /home/hunter/gemmini-sparsity/build-scratch/libgemmini-nm24/libgemmini.so (2:4); spike loads it with --extlib
+
+== building libgemmini (spike extension) for 2:4, dense chip model in build-scratch/libgemmini-dense24, not installed -> logs/runs/libgemmini-20261117-115429.log
+  built /home/hunter/gemmini-sparsity/build-scratch/libgemmini-dense24/libgemmini.so (2:4, dense chip model); spike loads it with --extlib
+
+== building libgemmini (spike extension) for 4:8 in build-scratch/libgemmini-nm48, not installed -> logs/runs/libgemmini-20261117-115433.log
+  built /home/hunter/gemmini-sparsity/build-scratch/libgemmini-nm48/libgemmini.so (4:8); spike loads it with --extlib
+
+== building libgemmini (spike extension) for 4:8, dense chip model in build-scratch/libgemmini-dense48, not installed -> logs/runs/libgemmini-20261117-115437.log
+  built /home/hunter/gemmini-sparsity/build-scratch/libgemmini-dense48/libgemmini.so (4:8, dense chip model); spike loads it with --extlib

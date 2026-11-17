@@ -8,19 +8,19 @@
 #    check             tools, simulators, branches, python libraries
 #  build (one at a time; never run two builds at once)
 #    spike-lib [pat]   build the Gemmini Spike extension (libgemmini) in a scratch dir (never installed) for
-#                      pat = nm24 (default) | nm48 | dense24 | dense48 (the model of a dense chip, NM_DENSE_BUILD=1;
+#                      pat = nm24 (default) | nm48 | nm816 | dense24 | dense48 | dense816 (the model of a dense chip, NM_DENSE_BUILD=1;
 #                      `spike` needs it for the N11 / N14 checks); loaded with --extlib, which must come before --extension
 #    tests             build the programs this flow uses into a scratch dir (never gemmini-rocc-tests/build): Berkeley's
-#                      54 dense tests for normal configs, plus nm_sparse_*_24 / _48 built with explicit -DNM_N/-DNM_M
+#                      54 dense tests for normal configs, plus nm_sparse_*_24 / _48 / _816 built with explicit -DNM_N/-DNM_M
 #    fair-build        build the fair benchmark (and berkeley_dense_perf) into verification/build/, check each
 #                      program's N:M, and compare it with the old programs in verification/bin/
-#    sim <cfg>         build a Verilator simulator. cfg = nm24 | nm48 | dense (see the note on dense below);
+#    sim <cfg>         build a Verilator simulator. cfg = nm24 | nm48 | nm816 | dense (see the note on dense below);
 #                      needs FORCE_REBUILD=1 and backs up the old simulator + generated-src first
 #  simulate (slow; sleep is blocked while these run; every run uses BREAK_SIM_PREREQ=1, so build sims first)
-#    spike [pat]       functional tests on Spike for pat = nm24 (default) | nm48: Berkeley's 54 dense tests and the
+#    spike [pat]       functional tests on Spike for pat = nm24 (default) | nm48 | nm816: Berkeley's 54 dense tests and the
 #                      nm_sparse_* tests from `tests`, plus the fair benchmark, which it builds from the current
 #                      source into scratch (never verification/build or bin). needs spike-lib <pat>, spike-lib
-#                      dense24 | dense48 (same pattern) and tests
+#                      dense24 | dense48 | dense816 (same pattern) and tests
 #    fair [which]      fair benchmark on RTL, once per seed in SEEDS. which = all (default) | nm24 | nm48 |
 #                      berkeley | sameprog. -> verification/runs/fair-<stamp>/<chip>.seed<S>.log + run.info
 #    rerun             the nm_sparse_* RTL tests once per seed, plus the NEG asserts -> verification/runs/rerun-<stamp>/
@@ -47,7 +47,7 @@
 #   PAR             how many simulations run at once (default: number of CPUs, capped at 12). Runs go through
 #                      make in sims/verilator, which must never run in parallel, so they are serialized for now
 #                      (`spike` does run its dense tests PAR at a time: no make is involved)
-#   FORCE_REBUILD=1 required by `sim nm24|nm48` (a rebuild replaces the simulator; the old one is backed up first)
+#   FORCE_REBUILD=1 required by `sim nm24|nm48|nm816` (a rebuild replaces the simulator; the old one is backed up first)
 #   SCRATCH_DIR     scratch for libgemmini, test programs and backups (default <repo>/build-scratch)
 #   TIMEOUT_CYCLES  simulation cycle limit (default 150M; chipyard's own 10M is too short)
 #   FAIR_BIN        folder with the fair benchmark programs (default verification/build, from fair-build;
@@ -129,14 +129,16 @@ cfg_name() {
     dense) echo GemminiRocketConfig ;;
     nm24)  echo GemminiNMRocketConfig ;;
     nm48)  echo GemminiNM48RocketConfig ;;
-    *) die "unknown config '$1' (want nm24, nm48 or dense)" ;;
+    nm816) echo GemminiNM816RocketConfig ;;
+    *) die "unknown config '$1' (want nm24, nm48, nm816 or dense)" ;;
   esac
 }
 pat_nm() {
   case "$1" in
     nm24) echo "2 4" ;;
     nm48) echo "4 8" ;;
-    *) die "unknown pattern '$1' (want nm24 or nm48)" ;;
+    nm816) echo "8 16" ;;
+    *) die "unknown pattern '$1' (want nm24, nm48 or nm816)" ;;
   esac
 }
 # pattern of a libgemmini build; dense24 / dense48 model a dense chip but still compile with a pattern
@@ -144,7 +146,8 @@ lib_nm() {
   case "$1" in
     nm24|dense24) echo "2 4" ;;
     nm48|dense48) echo "4 8" ;;
-    *) die "unknown libgemmini build '$1' (want nm24, nm48, dense24 or dense48)" ;;
+    nm816|dense816) echo "8 16" ;;
+    *) die "unknown libgemmini build '$1' (want nm24, nm48, nm816, dense24, dense48 or dense816)" ;;
   esac
 }
 sim_path() { echo "$cy/sims/verilator/simulator-chipyard.harness-$1"; }
@@ -393,13 +396,13 @@ step_check() {
   for t in spike verilator firtool riscv64-unknown-elf-gcc; do
     printf '  %-24s %s\n' "$t" "$(command -v "$t" || echo MISSING)"
   done
-  for c in nm24 nm48 dense24 dense48; do
+  for c in nm24 nm48 nm816 dense24 dense48 dense816; do
     if [ -f "$(libgemmini_path "$c")" ]; then echo "  libgemmini $c built: $(libgemmini_path "$c")"
     else echo "  libgemmini $c MISSING (run spike-lib $c)"; fi
   done
   say "simulators"
   local c s
-  for c in dense nm24 nm48; do
+  for c in dense nm24 nm48 nm816; do
     s="$(sim_path "$(cfg_name $c)")"
     if [ -x "$s" ]; then printf '  %-6s %s  (built %s)\n' "$c" "$(basename "$s")" "$(date -r "$s" '+%Y-%m-%d %H:%M')"
     else printf '  %-6s MISSING (run: ./run-flow.sh sim %s)\n' "$c" "$c"; fi
@@ -465,33 +468,38 @@ step_tests() {
   restore_params_h
   dense_tests
   for t in "${dense_list[@]}"; do rv_cc "$tests_dir/bareMetalC/$t.c" "$bm/$t-baremetal"; done
-  # both patterns of the sparse tests, with explicit -D flags so they don't depend on the last elaboration
+  # every pattern of the sparse tests, with explicit -D flags so they don't depend on the last elaboration
   for t in nm_sparse_sw "${nm_tests[@]}"; do
     rv_cc_nm "$tests_dir/bareMetalC/$t.c" "$bm/${t}_24-baremetal" 2 4
     rv_cc_nm "$tests_dir/bareMetalC/$t.c" "$bm/${t}_48-baremetal" 4 8
+    rv_cc_nm "$tests_dir/bareMetalC/$t.c" "$bm/${t}_816-baremetal" 8 16
   done
   for n in "${neg_spike[@]}"; do
     rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_protocol.c" "$bm/nm_sparse_protocol_neg${n}_24-baremetal" 2 4 -DNEG="$n"
     rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_protocol.c" "$bm/nm_sparse_protocol_neg${n}_48-baremetal" 4 8 -DNEG="$n"
+    rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_protocol.c" "$bm/nm_sparse_protocol_neg${n}_816-baremetal" 8 16 -DNEG="$n"
   done
   for n in "${loop_neg[@]}" "${loop_neg_dense[@]}"; do
     rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_loop.c" "$bm/nm_sparse_loop_neg${n}_24-baremetal" 2 4 -DNEG="$n"
     rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_loop.c" "$bm/nm_sparse_loop_neg${n}_48-baremetal" 4 8 -DNEG="$n"
+    rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_loop.c" "$bm/nm_sparse_loop_neg${n}_816-baremetal" 8 16 -DNEG="$n"
   done
   built=("$bm"/*-baremetal)
-  echo "${#built[@]} bare-metal tests built (${#dense_list[@]} dense, without $dense_no_spad; nm_sparse_*_24 / _48, N:M checked)"
+  echo "${#built[@]} bare-metal tests built (${#dense_list[@]} dense, without $dense_no_spad; nm_sparse_*_24 / _48 / _816, N:M checked)"
 }
 
-# the four fair benchmark programs from the current source: build_fair <out dir>
+# the four fair benchmark programs from the current source: build_fair <out dir> [pat]
+# pat = nm816 also builds fair_perf_816 (only `spike nm816` asks; fair-build and the RTL fair runs stay 2:4 / 4:8)
 build_fair() {
-  local out="$1"
+  local out="$1" pat="${2:-}"
   mkdir -p "$out"
   restore_params_h
   rv_cc_nm "$ver/fair_perf.c" "$out/fair_perf_24-baremetal" 2 4
   rv_cc_nm "$ver/fair_perf.c" "$out/fair_perf_48-baremetal" 4 8
+  [ "$pat" != nm816 ] || rv_cc_nm "$ver/fair_perf.c" "$out/fair_perf_816-baremetal" 8 16
   rv_cc_nm "$ver/fair_perf.c" "$out/fair_perf_dense_only-baremetal" 2 4 -DDENSE_ONLY
   rv_cc_nm "$ver/berkeley_dense_perf.c" "$out/berkeley_dense_perf-baremetal" 2 4
-  echo "  N:M checked: fair_perf_24 = 2:4, fair_perf_48 = 4:8, fair_perf_dense_only = berkeley_dense_perf = 2:4"
+  echo "  N:M checked: fair_perf_24 = 2:4, fair_perf_48 = 4:8,$([ "$pat" != nm816 ] || echo " fair_perf_816 = 8:16,") fair_perf_dense_only = berkeley_dense_perf = 2:4"
 }
 
 step_fair_build() {
@@ -549,7 +557,7 @@ src_sha_list() {
 
 step_sim() {
   local which="${1:-}" cfg jobs log s
-  [ -n "$which" ] || die "usage: ./run-flow.sh sim nm24|nm48|dense"
+  [ -n "$which" ] || die "usage: ./run-flow.sh sim nm24|nm48|nm816|dense"
   cfg="$(cfg_name "$which")"
   s="$(sim_path "$cfg")"
   if [ "$which" = dense ]; then
@@ -616,7 +624,7 @@ step_spike() {
   dense_tests
   for t in "${dense_list[@]}"; do [ -f "$bm/$t-baremetal" ] || die "missing $bm/$t-baremetal (./run-flow.sh tests)"; done
   say "building the fair benchmark for spike into ${fair_spike#"$here"/} (current source; verification/build is not used)"
-  build_fair "$fair_spike"
+  build_fair "$fair_spike" "$pat"
   say "spike tests ($pat; libgemmini from ${extlib#"$here"/}) -> ${log#"$here"/}"
   # --extlib must come before --extension or spike also dlopens the installed $RISCV/lib/libgemmini.so (old layout, garbage state)
   # smoke run: the installed lib must never be mapped

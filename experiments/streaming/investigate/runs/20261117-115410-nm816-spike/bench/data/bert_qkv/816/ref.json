@@ -1,0 +1,37 @@
+{
+ "layer": "bert_qkv",
+ "M": 128,
+ "K": 768,
+ "N": 768,
+ "n": 8,
+ "m": 16,
+ "seed": 20261110,
+ "hash": "0x88fad94e5ea841ab",
+ "sample_rows": [
+  0,
+  1,
+  62,
+  64,
+  112,
+  113,
+  126,
+  127
+ ],
+ "sha256": {
+  "A.bin": "7b0f02c20d7141334932bf0e90d1ef38cbc69b0fd67f2add743d3ad4716d19ac",
+  "W.bin": "c91d379cd1517f353f60ee1bc3e64457c459eaf0452d9e695ba176b68e3aab9b",
+  "WC.bin": "2ea80e0ba59e2e02ffedea877aa0f83511b3ddb7165e6b49fceaf9ee4ce1bdf8",
+  "IDX.bin": "6b04a0b0d6e488e593de84790c279af66629de3b7e93215979eb84a02c0af21b",
+  "META.bin": "7e343ed60a7e783639e563c963f6f30177991954513cd35f9123d30489048ff1",
+  "SREF.bin": "15f092122185a64454605737d4e4e94803fd07fb7d307946e5af5efed49a2060"
+ },
+ "kept_fraction": 0.5,
+ "meta_words_per_tile": 16,
+ "bytes": {
+  "A": 98304,
+  "W": 589824,
+  "WC": 294912,
+  "META": 147456,
+  "C_int32": 393216
+ }
+}

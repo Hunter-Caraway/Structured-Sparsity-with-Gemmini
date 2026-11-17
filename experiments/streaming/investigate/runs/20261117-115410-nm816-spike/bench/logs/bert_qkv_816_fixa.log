@@ -1,0 +1,10 @@
+sbench: layer=bert_qkv M=128 K=768 N=768 pattern=8:16 build=full run_mask=8 TI=8 TJ=4 data_seed=20261110
+poison reaches all of C (98304 values)
+sparse_fixa   total     301256  cpu_issue_done     301254 | ex_active=5392005 rdma_active=5367873 wdma_active=5456585 load_active=5393873 store_active=5371152 rs_full=5384608 loop_matmul_active=5412685 rdma_bytes=13
+sparse_fixa check: hash 0x88fad94e5ea841ab expected 0x88fad94e5ea841ab, sampled rows 8/8 -> verified
+sparse_fixa overhead (untimed): poison 5129  evict_l2 14351  check 245642 cycles
+sbench end cycle 1770053
+sbench passed (1 of 1 runs verified)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 8:16
