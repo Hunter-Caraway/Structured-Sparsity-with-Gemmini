@@ -1,0 +1,6 @@
+# bank-split-spec (worklog, spec agent)
+2026-11-17 Read loop-bank-check.md, fix-b-spec.md (2.5.4, 5.2, 8), wide-act-fix-spec.md (sec 0,1.4,2,3.4,Q1), investigate.md sec 3-5, RTL LoopMatmul.scala:590-625, ExecuteController.scala:361,420-470,1262-1268, LocalAddr.scala:25-45, micro2.c, nm_sparse_loop.c header, gemmini_nm.h loop helpers, libgemmini loop code.
+Findings: (1) a_lo/a_hi can never straddle a bank in the loop (32-row aligned pair, bank 4096): software-only fix impossible. (2) scheduler fix impossible (single-ported bank). (3) spad_a/b_wait counters do not count must_wait_for stalls (ExecuteController.scala:1265-1268): the 1340 value in loop-bank-check.md is not evidence either way. (4) qkv tile 5x6x48 fits with the pair layout (E=1920, B=2304 straddling, O at 4224, idx 576).
+Wrote bank-split-fix-spec.md (DRAFT): designs 1-4, recommendation design 1, asserts BS1-BS4 (BS1/BS2 may be implied by N9), mutants M1-M4, micro-test plan (micro_loop.c, layouts L0-L4, 2 sims), effort, Q1-Q8.
+## RESUME HERE
+Done: spec draft + this worklog. Running: nothing. Findings: above. Next: user reviews Q1-Q8; if approved, write investigate/src/micro_loop.c, run Spike, then request server sims. BS1/BS2 found implied by N9 (arithmetic); only BS3 (mutant-tested) is new.
