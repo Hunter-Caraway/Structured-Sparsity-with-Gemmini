@@ -6,7 +6,8 @@ and its own "at <File>.scala:<line>" line. The message is read from the "Asserti
 from the "at" line, which echoes the assert's source text. Source line numbers are printed, not checked: they move
 with every RTL edit.
 Berkeley's dense tests (DENSE below) print no pass line of their own; they are judged on the simulator's ending.
-Logs of all three chips (nm24, nm48, stock) are judged; KNOWN_BERKELEY failures are listed apart and not counted."""
+Logs of every chip run.info lists as sim.<chip> (stock, nm24, nm48, nm816, ...) are judged; a log of a chip run.info does
+not list fails. KNOWN_BERKELEY failures are listed apart and not counted. Other .log files are listed as NOT JUDGED."""
 import re, sys, os, csv, collections
 
 run = sys.argv[1]
@@ -16,6 +17,13 @@ with open(os.path.join(run, 'jobs.tsv')) as f:
         # the program column is named 'binary' in the server runs and 'program' in older job tables
         prog = r['binary'] if 'binary' in r else r['program']
         jobs[(r['chip'], prog.replace('-baremetal', ''), r['seed'])] = r
+# the run's chips are its run.info sim.<chip>=<config> lines, so a new pattern's chip needs no edit here
+sims = {}
+if os.path.exists(os.path.join(run, 'run.info')):
+    for l in open(os.path.join(run, 'run.info')):
+        mm = re.match(r'sim\.(\w+)=(\S+)', l)
+        if mm:
+            sims[mm.group(1)] = mm.group(2)
 
 # Expected RTL assert message(s) per NEG case. A NEG log passes only if it has at least one
 # "Assertion failed: <msg>" line, every such line is followed by an "at <File>.scala:<line>" line, and every message
@@ -128,17 +136,22 @@ def assert_pairs(lines):
     return out
 
 logs = sorted(f for f in os.listdir(run) if f.endswith('.log'))
-tests, fair, stream = [], [], []
+tests, fair, stream, unjudged = [], [], [], []
 for f in logs:
-    m = re.match(r'(nm24|nm48|stock)\.(.+)\.seed(\d+)\.log$', f)
+    m = re.match(r'([^.]+)\.(.+)\.seed(\d+)\.log$', f)
     if not m:
+        unjudged.append(f)
         continue
     chip, name, seed = m.groups()
     text = open(os.path.join(run, f), errors='replace').read()
     j = jobs.get((chip, name, seed), {})
     rc = j.get('exit', '?'); wall = j.get('wall_s', '?')
     asserts = [l.strip() for l in text.splitlines() if 'Assertion failed' in l]
-    base = re.sub(r'_(24|48)$', '', name)
+    if chip not in sims:
+        tests.append((chip, name, seed, 'FAIL', rc, wall, 'no sim.%s line in run.info: not a chip of this run' % chip, f))
+        continue
+    # an N:M chip's programs end in its name without "nm" (nm816 -> fair_perf_816); stock programs keep their name
+    base = re.sub(r'_%s$' % chip[2:], '', name) if re.match(r'nm\d+$', chip) else name
     pm = PROTO_NEG_RE.match(base)
     if pm:
         base = 'proto_neg' + pm.group(1)
@@ -264,6 +277,8 @@ for (chip, name, k), v in sorted(sb.items()):
 missing = sorted('%s.%s.seed%s.log' % k for k in jobs if '%s.%s.seed%s.log' % k not in logs)
 for f in missing:
     print('MISSING LOG', f)
+for f in unjudged:
+    print('NOT JUDGED %s (not a <chip>.<program>.seed<S>.log name, so not a job log)' % f)
 nfail = (sum(t[3] == 'FAIL' for t in tests) + sum(not r[2] for r in fair) + sum(not r[3] for r in stream)
          + len(missing))
 if nfail or not (tests or fair or stream):

@@ -11,6 +11,8 @@ counters), one "check" line per variant, "sbench passed". A row is verified=yes 
     (+verilator+seed+S) equals the seed in the file name
   - sparse_loop only: the log has its "sparse_loop tiles: tile_I= tile_J= tile_K=" line (columns loop_tile_*)
 Rows from logs that did not finish (timeout, crash) are reported with verified=no and empty cycle columns.
+The chips are the run's own run.info sim.<chip>=<config> lines (stock, nm24, nm48, nm816, ...); a log of a chip run.info
+does not list, or a .log that is not named <chip>.<program>.seed<S>.log, stops the script.
 Every number in the outputs comes from the logs; nothing is typed in.
 """
 import csv
@@ -21,14 +23,13 @@ from collections import defaultdict
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent.parent
-CHIP_CFG = {"stock": "GemminiRocketConfig", "nm24": "GemminiNMRocketConfig", "nm48": "GemminiNM48RocketConfig"}
 CTRS = ["ex_active", "rdma_active", "wdma_active", "load_active", "store_active", "rs_full", "loop_matmul_active",
         "rdma_bytes"]
 COLS = ["layer", "M", "K", "N", "chip", "program", "pattern", "build", "variant", "seed", "total_cycles",
         "cpu_issue_done"] + CTRS + ["TI", "TJ", "hash", "hash_ref", "sampled_rows_ok", "verified", "sim_wall_s",
                                    "sim_end_cycle", "host", "sim_sha256", "log", "loop_tile_I", "loop_tile_J",
                                    "loop_tile_K"]
-LOGNAME = re.compile(r"^(stock|nm24|nm48)\.(.+)\.seed(\d+)\.log$")
+LOGNAME = re.compile(r"^([^.]+)\.(.+)\.seed(\d+)\.log$")
 HDR = re.compile(r"^sbench: layer=(\S+) M=(\d+) K=(\d+) N=(\d+) pattern=(\d+):(\d+) build=(\S+) run_mask=(\d+) "
                  r"TI=(\d+) TJ=(\d+)")
 VARIANTS = ("berkeley", "dense_stream", "sparse_stream", "sparse_fixa", "sparse_loop")
@@ -41,12 +42,24 @@ LOOP_TILES = re.compile(r"^sparse_loop tiles: tile_I=(\d+) tile_J=(\d+) tile_K=(
 MASK_VARIANTS = {1: "berkeley", 2: "dense_stream", 4: "sparse_stream", 8: "sparse_fixa", 16: "sparse_loop"}
 
 
-def hosts(run):
+def chip_cfg(run):
+    """chip -> chipyard config, from the run's run.info sim.<chip>=<config> lines (in file order)."""
+    out = {}
+    for l in (run / "run.info").read_text().splitlines():
+        m = re.match(r"sim\.(\w+)=(\S+)", l)
+        if m:
+            out[m.group(1)] = m.group(2)
+    if not out:
+        sys.exit(f"collect.py: {run / 'run.info'} has no sim.<chip>=<config> line, so the run's chips are unknown")
+    return out
+
+
+def hosts(run, cfgs):
     """(chip, program, seed) -> (host, simulator sha256). Laptop jobs: run.info; jobs run elsewhere are listed in
     remote/jobs.tsv with that host's remote/host.info (copied back with their logs)."""
     info = dict(l.split("=", 1) for l in (run / "run.info").read_text().splitlines() if "=" in l)
     local_host = info.get("host", "laptop").split()[0]
-    local = {c: re.search(r"sha256=(\w+)", info.get(f"sim.{c}", "")) for c in CHIP_CFG}
+    local = {c: re.search(r"sha256=(\w+)", info.get(f"sim.{c}", "")) for c in cfgs}
     local = {c: (m.group(1) if m else "") for c, m in local.items()}
     out = {"_default": (local_host, local)}
     rj, rh = run / "remote" / "jobs.tsv", run / "remote" / "host.info"
@@ -59,7 +72,7 @@ def hosts(run):
             if m:
                 rsha[m.group(1)] = m.group(2)
         for r in csv.DictReader(rj.open(), delimiter="\t"):
-            out[(r["chip"], r["program"], r["seed"])] = (rhost, rsha.get(CHIP_CFG[r["chip"]], ""))
+            out[(r["chip"], r["program"], r["seed"])] = (rhost, rsha.get(cfgs[r["chip"]], ""))
     return out
 
 
@@ -72,16 +85,18 @@ def wall_times(run):
     return out
 
 
-def parse(log, walls):
+def parse(log, walls, cfgs):
     m = LOGNAME.match(log.name)
     if not m:
-        return []
+        sys.exit(f"collect.py: {log}: not a <chip>.<program>.seed<S>.log name")
     chip, prog, seed = m.group(1), m.group(2), m.group(3)
+    if chip not in cfgs:
+        sys.exit(f"collect.py: {log}: chip {chip} has no sim.{chip}= line in {log.parent / 'run.info'}")
     text = log.read_text(errors="replace")
     lines = text.splitlines()
     hdr = next((HDR.match(l) for l in lines if HDR.match(l)), None)
     seed_ok = re.search(r"\+verilator\+seed\+%s(\s|$)" % seed, text) is not None
-    cfg_ok = CHIP_CFG[chip] in text
+    cfg_ok = cfgs[chip] in text
     passed = any(l.startswith("sbench passed") for l in lines)
     end = next((int(l.split()[-1]) for l in lines if l.startswith("sbench end cycle")), None)
     layer = prog.rsplit("_", 2)[0]
@@ -140,12 +155,14 @@ def main():
     runs = [Path(a).resolve() for a in args if a != "--allow-mixed-sims"]
     if not runs:
         sys.exit("usage: collect.py [--allow-mixed-sims] <run_dir> [...]")
-    rows = []
+    rows, chips = [], []
     for run in runs:
         walls = wall_times(run)
-        hs = hosts(run)
+        cfgs = chip_cfg(run)
+        chips += [c for c in cfgs if c not in chips]
+        hs = hosts(run, cfgs)
         for log in sorted(run.glob("*.log")):
-            got = parse(log, walls)
+            got = parse(log, walls, cfgs)
             for r in got:
                 key = (r["chip"], r["program"], r["seed"])
                 if key in hs:
@@ -172,7 +189,8 @@ def main():
             agg[(r["layer"], r["chip"], r["variant"])].append(r)
     order = ["edge", "small", "bert_qkv", "bert_ffn1", "bert_ffn2", "rn50_conv"]
     md = ["# Streaming benchmark results (generated by scripts/collect.py from the logs)", "",
-          f"Run folder(s): {', '.join(str(r.relative_to(HERE)) for r in runs)}", "",
+          f"Run folder(s): {', '.join(str(r.relative_to(HERE)) if r.is_relative_to(HERE) else str(r) for r in runs)}",
+          "",
           f"Rows: {len(rows)}, verified: {len(rows) - len(bad)}, NOT verified: {len(bad)}", ""]
     if mix:  # disclose the mix in the output
         md += ["## WARNING: mixed simulator builds (--allow-mixed-sims)", ""]
@@ -187,7 +205,7 @@ def main():
     for L in layers:
         base = agg.get((L, "stock", "berkeley"))
         bmean = sum(r["total_cycles"] for r in base) / len(base) if base else None
-        for chip in ("stock", "nm24", "nm48"):
+        for chip in sorted(chips, key=lambda c: c != "stock"):  # stock first, then run.info order
             for v in VARIANTS:
                 rs = agg.get((L, chip, v))
                 if not rs:

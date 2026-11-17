@@ -1245,17 +1245,11 @@ step_pattern_finish() {
   { printf 'chip\tprogram\tseed\twall_s\n'; tail -n +2 "$dest/jobs.tsv" | awk -F'\t' -v OFS='\t' '{sub(/-baremetal$/, "", $2); print $1, $2, $3, $7}'; } > "$c/jobs.tsv"
   rc=0; "$py" "$streaming/scripts/collect.py" "$c" > "$flow/collect.out" 2>&1 || rc=$?
   stage+=("collect.py rc=$rc (${flow#"$here"/}/collect.out, staging ${c#"$here"/})"); [ "$rc" -eq 0 ] || rc_all=1
-  # verify_all.py takes a fair-run folder: <chip>.seed<S>.log (pattern chip, sameprog, berkeley = stock)
-  local v="$flow/verify/fair-$pat"; rm -rf "$flow/verify"; mkdir -p "$v"
-  for s in $seeds; do
-    cp "$dest/$pat.fair_perf_${pat#nm}.seed$s.log" "$v/$pat.seed$s.log"
-    cp "$dest/$pat.fair_perf_dense_only.seed$s.log" "$v/sameprog.seed$s.log"
-    f="$dest/stock.fair_perf_dense_only.seed$s.log"
-    [ -f "$f" ] || f="$(awk -F'\t' -v s="$s" '$1 == "stock" && $3 == "fair_perf_dense_only-baremetal" && $4 == s {print $8}' "$flow/stock-reused.tsv")"
-    cp "$f" "$v/berkeley.seed$s.log"
-  done
-  rc=0; "$py" "$ver/verify_all.py" --skip-patches "$v" > "$flow/verify_all.out" 2>&1 || rc=$?
-  stage+=("verify_all.py rc=$rc (${flow#"$here"/}/verify_all.out, staging ${v#"$here"/})"); [ "$rc" -eq 0 ] || rc_all=1
+  # verify_all.py --mode run: integrity of the recorded run itself (reads only); reused stock logs are checked in their own folders
+  local xargs_=()
+  while read -r log; do xargs_+=(--extra-log "$log"); done < <(awk -F'\t' 'NR > 1 {print $8}' "$flow/stock-reused.tsv")
+  rc=0; "$py" "$ver/verify_all.py" --mode run "$dest" "${xargs_[@]}" > "$flow/verify_all.out" 2>&1 || rc=$?
+  stage+=("verify_all.py --mode run rc=$rc (${flow#"$here"/}/verify_all.out)"); [ "$rc" -eq 0 ] || rc_all=1
 
   say "area (${AREA_FLOW:-$streaming/area/synth_area.sh})"
   local area_flow="${AREA_FLOW:-$streaming/area/synth_area.sh}"
