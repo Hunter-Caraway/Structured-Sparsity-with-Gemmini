@@ -1,0 +1,11 @@
+--- a/src/main/scala/gemmini/LoopMatmul.scala	2026-11-17 14:25:17.055172676 -0500
++++ b/src/main/scala/gemmini/LoopMatmul.scala	2026-11-17 14:32:51.562992051 -0500
+@@ -1560,7 +1560,7 @@
+     def nm_ea(l: LoopMatmulState) = (l.max_i * (l.max_k >> 1) * block_size.U)(sp_w-1, 0) // changed: bank-split-fix, rows of E (and of O)
+     def nm_bsz(l: LoopMatmulState) = ((l.max_k >> 1) * l.max_j * block_size.U)(sp_w-1, 0) // changed: bank-split-fix, rows of B
+     def nm_b_off(l: LoopMatmulState) = nm_ea(l) // changed: bank-split-fix, "straddle": B right after E, may cross into the second bank
+-    def nm_o_off(l: LoopMatmulState) = { val b_end = nm_b_off(l) +& nm_bsz(l); Mux(b_end > bank, b_end, bank) } // changed: bank-split-fix, O after B, never below the second bank
++    def nm_o_off(l: LoopMatmulState) = bank // mutant M5: O at the second bank, overlaps a straddling B // changed: bank-split-fix, O after B, never below the second bank
+     def nm_b_end(l: LoopMatmulState) = (a_base(l) + nm_b_off(l) + nm_bsz(l))(sp_w-1, 0) // changed: bank-split-fix, B's end, from which LdB and ex take B's start
+ 
+     when (loop_requesting_ldB.nm.get) { // changed: sparse-loop-fix, sparse loop wiring is new

@@ -1,0 +1,11 @@
+sbench: layer=edge M=36 K=128 N=64 pattern=4:8 build=full run_mask=16 TI=3 TJ=4 data_seed=20261114
+poison reaches all of C (2304 values)
+sparse_loop tiles: tile_I=3 tile_J=4 tile_K=8
+sparse_loop   total        378  cpu_issue_done        376 | ex_active=2196 rdma_active=2995 wdma_active=4293 load_active=3799 store_active=4519 rs_full=4878 loop_matmul_active=4869 rdma_bytes=2
+sparse_loop check: hash 0x94291083aaf3017f expected 0x94291083aaf3017f, sampled rows 8/8 -> verified
+sparse_loop overhead (untimed): poison 648  evict_l2 14351  check 32138 cycles
+sbench end cycle 110049
+sbench passed (1 of 1 runs verified)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

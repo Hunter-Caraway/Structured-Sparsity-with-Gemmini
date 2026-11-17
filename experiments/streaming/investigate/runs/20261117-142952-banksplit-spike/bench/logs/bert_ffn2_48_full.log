@@ -1,0 +1,16 @@
+sbench: layer=bert_ffn2 M=128 K=3072 N=768 pattern=4:8 build=full run_mask=7 TI=8 TJ=4 data_seed=20261112
+poison reaches all of C (98304 values)
+berkeley      total      10057  cpu_issue_done      10055 | ex_active=121565 rdma_active=125884 wdma_active=129592 load_active=126433 store_active=127847 rs_full=127381 loop_matmul_active=130551 rdma_bytes=5
+berkeley check: hash 0x7f58930d12fc3b73 expected 0x7f58930d12fc3b73, sampled rows 8/8 -> verified
+berkeley overhead (untimed): poison 5129  evict_l2 14351  check 244724 cycles
+dense_stream  total    1443940  cpu_issue_done    1443938 | ex_active=39520725 rdma_active=39540260 wdma_active=39595568 load_active=39494681 store_active=39534763 rs_full=39598921 loop_matmul_active=39544501 rdma_bytes=0
+dense_stream check: hash 0x7f58930d12fc3b73 expected 0x7f58930d12fc3b73, sampled rows 8/8 -> verified
+dense_stream overhead (untimed): poison 5129  evict_l2 14351  check 242236 cycles
+sparse_stream total    1386089  cpu_issue_done    1386087 | ex_active=29855382 rdma_active=29861945 wdma_active=29866921 load_active=29781430 store_active=29877415 rs_full=29779409 loop_matmul_active=29782301 rdma_bytes=10
+sparse_stream check: hash 0x7f58930d12fc3b73 expected 0x7f58930d12fc3b73, sampled rows 8/8 -> verified
+sparse_stream overhead (untimed): poison 5129  evict_l2 14351  check 243749 cycles
+sbench end cycle 4495055
+sbench passed (3 of 3 runs verified)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

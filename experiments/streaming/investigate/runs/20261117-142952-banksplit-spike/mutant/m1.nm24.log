@@ -1,0 +1,13 @@
+nm_sparse_loop: 2:4, R = 4 rows per index tile, 4 tiles per LOAD_IDX
+GEMMINI: bank-split-fix: internal: a_lo and a_hi of a sparse loop compute are in the same scratchpad bank
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4
+GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank); bank-split-fix: even and odd A K tiles need one bank each
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4
+GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank); bank-split-fix: even and odd A K tiles need one bank each
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

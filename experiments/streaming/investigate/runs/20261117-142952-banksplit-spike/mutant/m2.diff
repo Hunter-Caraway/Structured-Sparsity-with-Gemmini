@@ -1,0 +1,4 @@
+1083c1083
+<             mvin(dram_addr + DIM * sizeof(elem_t), (rows << 48) | (cols << 32) | A_hi_sp_addr, 0); // changed: sparse-loop-fix, second A tile of the sparse loop; bank-split-fix, to the O region
+---
+>             mvin(dram_addr + DIM * sizeof(elem_t), (rows << 48) | (cols << 32) | (A_sp_addr + DIM), 0); // changed: sparse-loop-fix, second A tile of the sparse loop; bank-split-fix, to the O region

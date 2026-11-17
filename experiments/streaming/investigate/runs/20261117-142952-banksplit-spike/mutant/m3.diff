@@ -1,0 +1,4 @@
+957c957
+<       nm_loop_abort("A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank); bank-split-fix: even and odd A K tiles need one bank each"); // changed: sparse-loop-fix, N9; bank-split-fix, N9 text (spec Q6)
+---
+>       if (0) nm_loop_abort("A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank); bank-split-fix: even and odd A K tiles need one bank each"); // changed: sparse-loop-fix, N9; bank-split-fix, N9 text (spec Q6)

@@ -1,0 +1,12 @@
+NEG 92 nm24 rc=255 GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank); bank-split-fix: even and odd A K tiles need one bank each
+NEG 92 dense24 rc=255 GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) on a dense build (nm_sparsity = None)
+NEG 90 nm24 rc=255 GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank); bank-split-fix: even and odd A K tiles need one bank each
+NEG 91 nm24 rc=255 GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank); bank-split-fix: even and odd A K tiles need one bank each
+NEG 92 nm48 rc=255 GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank); bank-split-fix: even and odd A K tiles need one bank each
+NEG 92 dense48 rc=255 GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) on a dense build (nm_sparsity = None)
+NEG 90 nm48 rc=255 GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank); bank-split-fix: even and odd A K tiles need one bank each
+NEG 91 nm48 rc=255 GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank); bank-split-fix: even and odd A K tiles need one bank each
+NEG 92 nm816 rc=255 GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank); bank-split-fix: even and odd A K tiles need one bank each
+NEG 92 dense816 rc=255 GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) on a dense build (nm_sparsity = None)
+NEG 90 nm816 rc=255 GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank); bank-split-fix: even and odd A K tiles need one bank each
+NEG 91 nm816 rc=255 GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank); bank-split-fix: even and odd A K tiles need one bank each

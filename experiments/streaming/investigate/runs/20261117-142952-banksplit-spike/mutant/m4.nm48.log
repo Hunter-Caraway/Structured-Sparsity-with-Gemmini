@@ -1,0 +1,61 @@
+nm_sparse_loop: 4:8, R = 6 rows per index tile, 2 tiles per LOAD_IDX
+T=1 i1 j1: mismatch at (0,0): got -6605 want -29091
+T=1 i1 j1                          FAIL (256/256 wrong)
+T=2 i2 j2 repeating bias: mismatch at (0,0): got 114890 want 105367
+T=2 i2 j2 repeating bias           FAIL (1024/1024 wrong)
+T=3 i1 j3 row bias: mismatch at (0,0): got 499403 want 473311
+T=3 i1 j3 row bias                 FAIL (768/768 wrong)
+T=4 i2 j2: mismatch at (0,0): got -25470 want -24542
+T=4 i2 j2                          FAIL (1024/1024 wrong)
+T=5 i2 j5: mismatch at (0,0): got 4279 want 3074
+T=5 i2 j5                          FAIL (2560/2560 wrong)
+T=10 i3 j5 partial i, row bias: mismatch at (0,0): got -727510 want -678350
+T=10 i3 j5 partial i, row bias     FAIL (3200/3200 wrong)
+8 loops, partial i and j, rep. bias: mismatch at (0,0): got 505747 want 421294
+8 loops, partial i and j, rep. bias FAIL (2016/2016 wrong)
+8 loops, no bias: mismatch at (0,0): got 9643 want -14502
+8 loops, no bias                   FAIL (3072/3072 wrong)
+4 loops, T=3 and T=1, row bias: mismatch at (0,0): got -778787 want -730838
+4 loops, T=3 and T=1, row bias     FAIL (1024/1024 wrong)
+K=40 padded to 64: mismatch at (0,0): got 40556 want 24010
+K=40 padded to 64                  FAIL (512/512 wrong)
+nm_loop_tiles, row bias: mismatch at (0,0): got -143152 want -205511
+nm_loop_tiles, row bias            FAIL (4608/4608 wrong)
+pad_J: N=5, T=1: mismatch at (0,0): got 10004 want 28903
+pad_J: N=5, T=1                    FAIL (80/80 wrong)
+pad_J: N=DIM+1, T=4, rep. bias: mismatch at (0,0): got 137637 want 128383
+pad_J: N=DIM+1, T=4, rep. bias     FAIL (544/544 wrong)
+pad_J: N=4*DIM+13, partial i, row bias: mismatch at (0,0): got 571812 want 585765
+pad_J: N=4*DIM+13, partial i, row bias FAIL (1463/1463 wrong)
+pad_J: N=5*DIM-1, 4 loops: mismatch at (0,0): got -85668 want -21928
+pad_J: N=5*DIM-1, 4 loops          FAIL (2528/2528 wrong)
+pad_J: N=5*DIM+7, nm_loop_tiles, K=40: mismatch at (0,0): got 826246 want 814979
+pad_J: N=5*DIM+7, nm_loop_tiles, K=40 FAIL (3567/3567 wrong)
+seq: sparse loop: mismatch at (0,0): got -33615 want -46399
+seq: sparse loop                   FAIL (1024/1024 wrong)
+seq: dense loop (pruned W)         ok (0/1024 wrong)
+seq: per-tile, LOAD_IDX groups     ok (0/1024 wrong)
+seq: sparse loop again: mismatch at (0,0): got -39733 want -46399
+seq: sparse loop again             FAIL (1024/1024 wrong)
+seq: per-tile, LOAD_IDX by tile    ok (0/1024 wrong)
+seq: sparse loop, 2 calls: mismatch at (0,0): got -39733 want -46399
+seq: sparse loop, 2 calls          FAIL (1024/1024 wrong)
+bank: B ends at the bank boundary: mismatch at (0,0): got 58454
+bank: B ends at the bank boundary  FAIL (32/32 wrong)
+bank: B straddles, pad_I and pad_J: mismatch at (0,0): got 472598
+bank: B straddles, pad_I and pad_J FAIL (81/81 wrong)
+bank: B straddles, 2 loops: mismatch at (0,0): got -145682
+bank: B straddles, 2 loops         FAIL (32/32 wrong)
+nm_sparse_loop: 22 case(s) FAILED
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+*** FAILED *** (tohost = 1)
+GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank); bank-split-fix: even and odd A K tiles need one bank each
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank); bank-split-fix: even and odd A K tiles need one bank each
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

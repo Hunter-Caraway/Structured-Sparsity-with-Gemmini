@@ -1,0 +1,4 @@
+1016c1016
+<   const uint32_t nm_o_off = nm_b_off + nm_bsz > BANK_ROWS ? nm_b_off + nm_bsz : BANK_ROWS; // changed: bank-split-fix, O after B, never below the second bank
+---
+>   const uint32_t nm_o_off = BANK_ROWS; // changed: bank-split-fix, O after B, never below the second bank

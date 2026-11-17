@@ -1,0 +1,5 @@
+GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank); bank-split-fix: even and odd A K tiles need one bank each
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 8:16
+rc=255

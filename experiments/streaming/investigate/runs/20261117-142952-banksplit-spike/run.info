@@ -1,0 +1,71 @@
+run: banksplit-spike (bank-split-fix design 1: Spike proof, tests, NEG, mutants), laptop only, 2026-11-17 14:29-14:40, agent bank-split impl
+worklog: experiments/streaming/worklogs/bank-split-impl.md   spec: experiments/streaming/worklogs/bank-split-fix-spec.md (FROZEN)
+spike: /home/hunter/chipyard/.conda-env/riscv-tools/bin/spike sha256 4a201fa115154db2daf8b72635b5ce951318d1491d52ce029b7d89e00d498824
+RISCV libgemmini.so sha256 (installed lib, untouched; never loaded, run-flow LD_DEBUG smoke run): 34578eb7dd40188639345b6d1986fd639672c8b216ecc3140f1abf71179a592a
+
+repos (at the end of the run):
+  gemmini: bank-split-fix @ 59d8f546
+  libgemmini: bank-split-fix @ 4886238
+  gemmini-rocc-tests: bank-split-fix @ 95a6a73
+  gemmini-sparsity: fixb-results-test @ 3de6d0e (uncommitted: experiments/streaming/worklogs/fix-b-spec.md experiments/streaming/investigate/runs/20261117-142952-banksplit-spike/ experiments/streaming/worklogs/bank-split-impl.md logs/runs/libgemmini-20261117-142742.log logs/runs/libgemmini-20261117-142746.log logs/runs/libgemmini-20261117-142750.log logs/runs/libgemmini-20261117-142754.log logs/runs/libgemmini-20261117-142758.log logs/runs/libgemmini-20261117-142801.log logs/runs/libgemmini-20261117-143449.log logs/runs/libgemmini-20261117-143453.log logs/runs/libgemmini-20261117-143457.log logs/runs/libgemmini-20261117-143501.log logs/runs/libgemmini-20261117-143504.log logs/runs/libgemmini-20261117-143508.log logs/runs/spike-20261117-142923.log logs/runs/spike-20261117-142929.log logs/runs/spike-20261117-142935.log )
+  runs used libgemmini e33244f; 4886238 changes one comment only; all 6 libs rebuilt from 4886238 are byte-identical (sha256 below = both)
+  pass 1 (14:29-14:33) used rocc-tests 95a6a73 -> pass1-tests-95a6a73/ (spike summaries, NEG, mutants; flow-logs/spike-20261117-1429*.log)
+  final pass (14:43-14:47) uses rocc-tests 2ad1fd3 (bank cases with fewer C rows: 82,292,574 -> 59,512,572 Spike instructions, icount/)
+  -> spike-nm*.summary, flow-logs/spike-20261117-144351.log (nm24), -144357 (nm48), -144402 (nm816); neg/, mutant/ via neg_mutants.sh
+  bench (step 5) ran once, on 95a6a73 headers; 2ad1fd3 changes only nm_sparse_loop.c, which the bench does not include
+
+commands (cwd ~/gemmini-sparsity, SCRATCH_DIR=build-scratch/banksplit so other agents' build-scratch is untouched):
+  0 sbt ';project gemmini; compile; project chipyard; compile' (in ~/chipyard) after each RTL edit -> sbt-first.log (ec91f132), sbt-final.log (d185001a): [success]
+  1 ./run-flow.sh spike-lib nm24|dense24|nm48|dense48|nm816|dense816 -> flow-logs/libgemmini-*.log
+  2 ./run-flow.sh tests (174 programs; console output not kept, the spike step checks every program exists)
+  3 ./run-flow.sh spike nm24|nm48|nm816 -> spike-nm*.summary, flow-logs/spike-20261117-142923.log (nm24), -142929 (nm48), -142935 (nm816)
+  4 neg_mutants.sh <run> <mutant dir>: NEG 92 programs (run-flow rv_cc flags), NEG 90/91/92 runs -> neg/summary.txt, neg/*.log
+  5 bench.sh <run>/bench (nohup setsid): 6 layers x 3 patterns x full/fixa/loop on Spike -> bench/summary.txt, bench/STATUS, bench/logs
+     bench binaries and data (except ref.json) moved to build-scratch/banksplit/bench-moved (sha256: bench/moved-bin.sha256, bench/moved-data.sha256)
+  6 mutant/make_mutants.py (then neg_mutants.sh) on gemmini.cc (e33244f) -> M1-M5 (mutant/m*.diff), built NM_N/NM_M 2:4, 4:8, 8:16 in the session scratchpad,
+     run: nm_sparse_loop, NEG 90/92 per pattern, fair_perf_24 -> mutant/summary.txt, mutant/*.log
+  7 rtl-mutant/rtl-m1.patch, rtl-m5.patch: applied, sbt compile [success] (rtl-mutant/sbt-m*.log), reverted. NOT elaborated (server, needs approval)
+
+libs (build-scratch/banksplit/libgemmini-*/libgemmini.so):
+  b249850243bb94d4b61dbb85be5e3c323c850b98cc925bc83a624c42dfe541e1  libgemmini-dense24/libgemmini.so
+  0763ce4c7225f586162a5d2f136609479857e80b8c714ccb67bba7d8e523b0f0  libgemmini-dense48/libgemmini.so
+  76e5a9333845846fe6a8f9978a33e15cbaabdcf1bdbc22c28cd25523b72c7b67  libgemmini-dense816/libgemmini.so
+  42dc84a4445c79f06ab67a27c14a372436aa60ae4bbb8d3e7ead6e97ca9a9af4  libgemmini-nm24/libgemmini.so
+  cc15c41f4508478a5afb4f6879c054d6fc3dbb415a8845fb9bcd39f3d2d0c8af  libgemmini-nm48/libgemmini.so
+  172fe4d1f6a63c51b6597d98b35d0f58d4e84b4190fecab42d766acb4eeb268a  libgemmini-nm816/libgemmini.so
+sources: f1ca06522255ebfbf84f6ad441202195f0a060d6fb79462768d9d8b7566cd80b gemmini.cc (4886238), 402441cef1b5b65ecd9e7fe14fabcd4998ebd7365186d5e49afa02cbeabd1068 gemmini.h
+mutant libs (session scratchpad, deleted after):
+  8cf126bedd658cb0230054b8e4a14e0cbd52976452985fb7af692731bcd137bd  m1/nm24/libgemmini.so
+  9a2dc6c2ca8a47b21288265e8ebe1b074d007d22263c2b57894f644cdef4ab27  m1/nm48/libgemmini.so
+  eebcadeec879a3d0b764f7b96013ad95d7366893843bd465f03535056944ddc3  m1/nm816/libgemmini.so
+  ca06ba3dbee57aacf58b9e2b3b9a0a177c3a454e1a7f9f05d503ee6a72a84d80  m2/nm24/libgemmini.so
+  50adced4462b21b581f5b670be7c7576e86387e43f7a37ee59b8d87691e409b2  m2/nm48/libgemmini.so
+  fb33143f31534620d572c6fe742761d1615c8711ad1501701d99df5b4b4beca0  m2/nm816/libgemmini.so
+  17a1c310f10f1f3378ce27277387f6a455922421e6b2dc36cde6eeffa0ae6aec  m3/nm24/libgemmini.so
+  83170f784be4e945b16f0832699af2a9e2aea3180927b5f915f78af64ae91760  m3/nm48/libgemmini.so
+  129e62efddcf11aa78b1ef71d8735e09b04e8cc7d261b92163460b439843cf5d  m3/nm816/libgemmini.so
+  9c81933c7afc2bd0bd619753c1bd0fdc67bc2023a47cd5e7df62b9af2670da99  m4/nm24/libgemmini.so
+  7cb70308757c6d95e3a0e2cbf4c76e5e6fb836e7a827c32304c9e3ee696929d8  m4/nm48/libgemmini.so
+  b334efc386ea053d374014e6ae8adc00e877ab03275cd3fd0013926a25677537  m4/nm816/libgemmini.so
+  db3e00c6b82e55f478f468ac4cc5c5e07dcbe663473f44be5cab6fa3c92c624b  m5/nm24/libgemmini.so
+  482e6351e52bc71b070774d0fc6970a5d4d62c8a47c0937170389f6b9c5a9bb8  m5/nm48/libgemmini.so
+  968b440a3c541dc33abcb170f0356e45a0a0d3f12ca3eca0b96a97ca4ff56339  m5/nm816/libgemmini.so
+test binaries used, final pass (build-scratch/banksplit/tests/bareMetalC):
+  d4ae1dc820470771d626e3989da7b37843ed4846a7f05bbc3bf75a04d1748114  nm_sparse_loop_24-baremetal
+  acb01958ea2923f3a3100e953fedb6876e0d37b13ec6f0500f69dd3983681f19  nm_sparse_loop_48-baremetal
+  457e7acedc410f5ca2979b848822c1b2ede1fb309b2a0c888721586766a22ae9  nm_sparse_loop_816-baremetal
+  79a63a69ed1b49c3830efd3be92cedaf35f755adff222b405812c33e78782561  nm_sparse_loop_neg90_24-baremetal
+  6e6a1172eb5089ebcfd3d0ecf4482abed4dc9858f5fe9a287836ab27ed807c38  nm_sparse_loop_neg90_48-baremetal
+  ca990c4329b80fbf22ed01bf33512ba99d23f7b2fea8d2c4174709d14282a7f4  nm_sparse_loop_neg90_816-baremetal
+  00924afec913539e685257cd268742a8cb50092e6171820edcaf6821f4e93530  nm_sparse_loop_neg91_24-baremetal
+  519e36db7a2331b7ebc04776d4ebc7eca8a7e255a35f8bb75d0b25cc73f2c51e  nm_sparse_loop_neg91_48-baremetal
+  f44bdd9cf78bafa467674ec848ead47504aa15185fbda5e9dc0bde3c6db30b43  nm_sparse_loop_neg91_816-baremetal
+  b6b6bfa649cec194429977eb96115d63130905bf9c83fa692877fa1841240849  nm_sparse_loop_neg92_24-baremetal
+  eb4592e2c1b6d5bfc9a809447ca897925c24a1e224c85f4bd29b930112a2326b  nm_sparse_loop_neg92_48-baremetal
+  560c33a730130c52aecaed456c01e18e1e2aba52207bcd3580146f44965609c2  nm_sparse_loop_neg92_816-baremetal
+fair (build-scratch/banksplit/fair):
+  f5acecea3eba338df492adbf9fb16ea20e3aa8b5d79737d7c66caf41f7da2e33  berkeley_dense_perf-baremetal
+  404719a9c6846f63ccc7503373b652b4afff92e508879b5a5dbce2f26f020092  fair_perf_24-baremetal
+  5dcd623afa64aae4149c6ef1c2a3ede51ec7f690c57e7fb328e24f8e25b3e5fa  fair_perf_48-baremetal
+  b14ded1be66090ad86857d7db34ae7a51ec048409bf2b789a164f98932e977fb  fair_perf_816-baremetal
+  254e79b68b60eb57c04e8f62a900ca0fe6ee79ef08ca9808a118cebe4a44508d  fair_perf_dense_only-baremetal

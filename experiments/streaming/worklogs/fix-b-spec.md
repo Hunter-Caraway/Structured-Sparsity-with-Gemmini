@@ -491,6 +491,14 @@ Not verified: nothing was built or run; all [E] items are paper arguments. C1, C
 Next: spawn RTL / Spike / software agents from 2.5, 3, 4, 6 (spec is FROZEN; C1, C2, C6 first).
 
 ## Changelog
+- 2026-11-17 (bank-split-fix, user "go" on design 1; bank-split-fix-spec.md FROZEN, Q5): inside a sparse loop the A layout of 1.3/2.5.4 is
+  SUPERSEDED. From the loop's A start (a half, bank aligned; S = 4096 rows, kb = max_k/2, ea = max_i*kb*DIM, bsz = kb*max_j*DIM): even A K tiles
+  (a_lo) at `[0, ea)`, tile (i, 2k) at `(i*kb + k)*DIM`; B at `[ea, ea + bsz)` ("straddle", may cross the bank boundary); odd A K tiles (a_hi) at
+  `o_off = max(S, ea + bsz)`, tile (i, 2k+1) at `o_off + (i*kb + k)*DIM`; index rows unchanged at the top of the half. Compute rs2 = a_lo + o_off
+  (was a_lo + DIM). LdA mvins one tile per command in a sparse loop. Fit rule (2.5.4, N9) unchanged: it already implies ea <= S and the O region
+  fits (bank-split-fix-spec.md 3.2). N9 message gains the suffix `; bank-split-fix: even and odd A K tiles need one bank each` (Q6); new internal
+  assert BS3 `bank-split-fix: internal: a_lo and a_hi of a sparse loop compute are in the same scratchpad bank`. Dense loops unchanged.
+  Implementation and tests: worklogs/bank-split-impl.md.
 - 2026-11-13 (dense-build criterion, user decision "a"): "dense build unchanged" means logic-equivalent to stock, not identical Verilog. Allowed
   differences: names, @[file:line], assert line numbers, the dense-build asserts of 2.5.7, and the Fix A funct-26 RS bypass (Controller.scala:536-568,
   not nm-guarded; dense code never issues funct 26). Evidence: worklogs/dense-verilog-diff.md (server diff ~/fixb/dense-diff/). Also: LoopMatmul.scala:1371

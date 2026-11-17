@@ -1,0 +1,4 @@
+Spike instructions of nm_sparse_loop_24 (spike -l, lines starting 'core'): old = sparse-loop-fix test (build-scratch/tests, 11:55), new = 95a6a73, new2 = 2ad1fd3
+old build-scratch/tests/bareMetalC/nm_sparse_loop_24-baremetal 311cc4c0a5a4cdab instret_lines=23101494
+new build-scratch/banksplit/tests/bareMetalC/nm_sparse_loop_24-baremetal 87c6f6f0a937f6a1 instret_lines=82292574
+new2 build-scratch/banksplit/tests/bareMetalC/nm_sparse_loop_24-baremetal aa8a0d8e63d8908d instret_lines=59512572

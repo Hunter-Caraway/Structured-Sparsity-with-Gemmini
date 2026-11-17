@@ -1,0 +1,50 @@
+m1 nm24 nm_sparse_loop rc=255 failing_cases=0 new_bank_cases_failing=0 bs3_abort=1 -> DETECTED
+m1 nm24 NEG 90: aborts with N9 text (NEG passes)
+m1 nm24 NEG 92: aborts with N9 text (NEG passes)
+m1 nm48 nm_sparse_loop rc=255 failing_cases=0 new_bank_cases_failing=0 bs3_abort=1 -> DETECTED
+m1 nm48 NEG 90: aborts with N9 text (NEG passes)
+m1 nm48 NEG 92: aborts with N9 text (NEG passes)
+m1 nm816 nm_sparse_loop rc=255 failing_cases=0 new_bank_cases_failing=0 bs3_abort=1 -> DETECTED
+m1 nm816 NEG 90: aborts with N9 text (NEG passes)
+m1 nm816 NEG 92: aborts with N9 text (NEG passes)
+m2 nm24 nm_sparse_loop rc=1 failing_cases=22 new_bank_cases_failing=3 bs3_abort=0 -> DETECTED
+m2 nm24 NEG 90: aborts with N9 text (NEG passes)
+m2 nm24 NEG 92: aborts with N9 text (NEG passes)
+m2 nm48 nm_sparse_loop rc=1 failing_cases=22 new_bank_cases_failing=3 bs3_abort=0 -> DETECTED
+m2 nm48 NEG 90: aborts with N9 text (NEG passes)
+m2 nm48 NEG 92: aborts with N9 text (NEG passes)
+m2 nm816 nm_sparse_loop rc=1 failing_cases=22 new_bank_cases_failing=3 bs3_abort=0 -> DETECTED
+m2 nm816 NEG 90: aborts with N9 text (NEG passes)
+m2 nm816 NEG 92: aborts with N9 text (NEG passes)
+m3 nm24 nm_sparse_loop rc=0 failing_cases=0 new_bank_cases_failing=0 bs3_abort=0 -> MISSED
+m3 nm24 NEG 90: NEG FAILS (rc=1, no N9 text) -> DETECTED
+m3 nm24 NEG 92: NEG FAILS (rc=1, no N9 text) -> DETECTED
+m3 nm48 nm_sparse_loop rc=0 failing_cases=0 new_bank_cases_failing=0 bs3_abort=0 -> MISSED
+m3 nm48 NEG 90: NEG FAILS (rc=1, no N9 text) -> DETECTED
+m3 nm48 NEG 92: NEG FAILS (rc=1, no N9 text) -> DETECTED
+m3 nm816 nm_sparse_loop rc=0 failing_cases=0 new_bank_cases_failing=0 bs3_abort=0 -> MISSED
+m3 nm816 NEG 90: NEG FAILS (rc=1, no N9 text) -> DETECTED
+m3 nm816 NEG 92: NEG FAILS (rc=1, no N9 text) -> DETECTED
+m4 nm24 nm_sparse_loop rc=1 failing_cases=22 new_bank_cases_failing=3 bs3_abort=0 -> DETECTED
+m4 nm24 NEG 90: aborts with N9 text (NEG passes)
+m4 nm24 NEG 92: aborts with N9 text (NEG passes)
+m4 nm48 nm_sparse_loop rc=1 failing_cases=22 new_bank_cases_failing=3 bs3_abort=0 -> DETECTED
+m4 nm48 NEG 90: aborts with N9 text (NEG passes)
+m4 nm48 NEG 92: aborts with N9 text (NEG passes)
+m4 nm816 nm_sparse_loop rc=1 failing_cases=22 new_bank_cases_failing=3 bs3_abort=0 -> DETECTED
+m4 nm816 NEG 90: aborts with N9 text (NEG passes)
+m4 nm816 NEG 92: aborts with N9 text (NEG passes)
+m5 nm24 nm_sparse_loop rc=0 failing_cases=0 new_bank_cases_failing=0 bs3_abort=0 -> MISSED
+m5 nm24 NEG 90: aborts with N9 text (NEG passes)
+m5 nm24 NEG 92: aborts with N9 text (NEG passes)
+m5 nm48 nm_sparse_loop rc=0 failing_cases=0 new_bank_cases_failing=0 bs3_abort=0 -> MISSED
+m5 nm48 NEG 90: aborts with N9 text (NEG passes)
+m5 nm48 NEG 92: aborts with N9 text (NEG passes)
+m5 nm816 nm_sparse_loop rc=0 failing_cases=0 new_bank_cases_failing=0 bs3_abort=0 -> MISSED
+m5 nm816 NEG 90: aborts with N9 text (NEG passes)
+m5 nm816 NEG 92: aborts with N9 text (NEG passes)
+m1 nm24 fair_perf_24 rc=255 sparse_loop_verified=0
+m2 nm24 fair_perf_24 rc=0 sparse_loop_verified=1
+m3 nm24 fair_perf_24 rc=0 sparse_loop_verified=1
+m4 nm24 fair_perf_24 rc=1 sparse_loop_verified=0
+m5 nm24 fair_perf_24 rc=0 sparse_loop_verified=1
