@@ -1,0 +1,6 @@
+small      2:4  M=  64 K=  256 N=  128  hash=0x8f3286c5fe0a381a  samples=[0, 1, 14, 32, 33, 44, 62, 63]
+bert_qkv   2:4  M= 128 K=  768 N=  768  hash=0xd5404d88bcec50e3  samples=[0, 1, 62, 64, 112, 113, 126, 127]
+bert_ffn1  2:4  M= 128 K=  768 N= 3072  hash=0x316709fccb222000  samples=[0, 1, 53, 61, 64, 83, 126, 127]
+bert_ffn2  2:4  M= 128 K= 3072 N=  768  hash=0x1057a6d75e1d6814  samples=[0, 1, 7, 50, 64, 89, 126, 127]
+rn50_conv  2:4  M= 196 K= 2304 N=  256  hash=0x8fbce2c036945328  samples=[0, 1, 22, 98, 169, 192, 194, 195]
+edge       2:4  M=  36 K=  128 N=   64  hash=0x7aff8816ae684b00  samples=[0, 1, 8, 13, 18, 32, 34, 35]

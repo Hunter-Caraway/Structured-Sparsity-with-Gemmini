@@ -1,0 +1,9 @@
+stamp=20261117-145939
+pattern=nm24
+libgemmini.nm24=42dc84a4445c79f06ab67a27c14a372436aa60ae4bbb8d3e7ead6e97ca9a9af4
+libgemmini.dense24=b249850243bb94d4b61dbb85be5e3c323c850b98cc925bc83a624c42dfe541e1
+git.gemmini-sparsity=c9b9a29505f5f473bef350ac871e320771de2dc5 (uncommitted changes)
+git.gemmini=7b19c038cac38d615c25fbbc6b004d9f047edba0
+git.libgemmini=4886238de2b7ec182b46a78f135d5f43e60a42cd
+git.gemmini-rocc-tests=2ad1fd36a7f850b256afefccd4b9d689357ec97b
+spike.log=spike.log (884 lines); programs=119 (bin.sha256)

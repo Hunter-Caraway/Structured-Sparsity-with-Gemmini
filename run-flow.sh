@@ -36,6 +36,22 @@
 #    split [run]       preprocessing vs runtime of a fair run -> <run>/derived/split.*
 #    area              chip area of the three simulators' generated verilog (yosys, sky130) -> analysis/area/
 #    checks [run...]   math + patterns + verify + figures
+#  one N:M chip end to end (pat = a row of nm_table below: nm24 | nm48 | nm816 | ...)
+#    pattern <pat>     1. spike stage on the laptop: spike-lib <pat> + dense<suffix>, tests, spike <pat>, and the
+#                         streaming bench (<layer>_<suffix>_full/_fixa/_loop, stock's _dense) generated, built and
+#                         verified on Spike; every program the server runs goes to <flow>/bin
+#                      2. server simulator check: the server's gemmini sources must equal the laptop's, and the
+#                         simulator must carry a build-time source list (<sim>.src.sha256) of those sources. Else it
+#                         stops and prints the rebuild command; APPROVED_REBUILD=1 rebuilds (backup first; never stock)
+#                      3. server Verilator run: 54 dense tests, nm_sparse_*, RTL NEG, benches and fair_perf on the
+#                         pattern chip, plus stock benches unless a recorded run on the same stock simulator has the
+#                         same program verified (tools/pattern_flow.py reuse); jobs ordered longest first from
+#                         recorded wall times, predicted schedule printed; launched under nohup setsid in
+#                         ~/sinv/runs/<stamp>-<pat>-srv (tools/pattern_srv_driver.sh), not waited for
+#                      -> experiments/streaming/investigate/runs/<stamp>-<pat>-flow/ (DRY_RUN=1: build-scratch/)
+#    pattern-finish <pat> <flow>   when the server STATUS is ALL_DONE (else prints progress, exit 3): copy back with
+#                      sha256 checks, parse_fixa.py, collect.py and verify_all.py (staging copies, rc 0 required),
+#                      the area flow (AREA_FLOW), and <flow>/summary.md (tools/pattern_flow.py summary)
 #  pipelines
 #    all               spike-lib (nm24, dense24), tests, fair-build, spike, sim nm24, sim nm48, fair all, checks
 #                      (needs Berkeley's stock simulator already built; see the note on dense below)
@@ -57,6 +73,19 @@
 #   AREA_LIB        sky130 hd liberty file for `area` (default ~/gemmini-fixwork/pdk/sky130hd/...tt_025C_1v80.lib)
 #   PYTHON          python to use (default: chipyard's conda env, which has numpy/pandas/matplotlib)
 #   FORCE=1         allow `sim dense` to replace an existing stock simulator (still only from Berkeley's sources)
+#   pattern / pattern-finish:
+#   STAGES          stages of `pattern` to run (default "spike sim srv"; srv needs sim in the same call)
+#   FLOW            existing flow folder to continue (its bin/ from an earlier spike stage is used)
+#   DRY_RUN=1       server stages only read (ls, sha256sum, pgrep, source lists) and print every command and the
+#                   predicted schedule; no upload, launch or build. Outputs go to build-scratch/pattern-dryrun-*
+#   APPROVED_REBUILD=1  allows the server rebuild of the pattern simulator (user approval; AGENTS rule 3)
+#   SRV_JOBS        make -j of that rebuild (default 4)
+#   QUOTA           simulations this run may hold at once (default: free slots of 12 now); the driver also never
+#                   starts a job while 12 simulator-chip* processes run on the server; changeable live (<run>/QUOTA)
+#   SCHED_HINTS     schedule hints, one "<program regex>=<factor>:<source>" per line (see default_hints)
+#   SPIKE_BENCH_TIMEOUT  seconds per Spike bench run (default 7200)
+#   AREA_FLOW       area flow called as "$AREA_FLOW <config> <lib>" (default experiments/streaming/area/synth_area.sh)
+#   AREA_LIBS       libraries for it (default nangate45)
 #
 # notes learned the hard way
 #   * Berkeley's stock simulator (GemminiRocketConfig) must be built from UNMODIFIED Gemmini sources: `sim dense`
@@ -98,7 +127,7 @@ neg_msg() {
 # nm_sparse_loop -DNEG=<n> (sparse-loop-fix): n / 10 = the assert N1..N14 of fix-b-spec.md 2.5.6 it must trigger.
 # 110 and 140 (N11, N14) are illegal only on a dense build and Spike only (fix-b-spec.md changelog 2026-11-13 D1):
 # `spike` runs them on the dense libgemmini, never on the n:m libs or on RTL
-loop_neg=(10 11 20 30 40 50 51 52 60 61 70 71 72 73 74 80 90 91 100 120 121 122 130 131 132 133) loop_neg_dense=(110 140)
+loop_neg=(10 11 20 30 40 50 51 52 60 61 70 71 72 73 74 80 90 91 92 100 120 121 122 130 131 132 133) loop_neg_dense=(110 140)
 # the message (same text in the RTL assert and the Spike abort) each of them must show
 loop_neg_msg() {
   case "$(($1 / 10))" in
@@ -124,30 +153,30 @@ base_gem=8c3f9923 base_lib=ea8f7ed base_tests=7c540b3
 
 say()  { printf '\n== %s\n' "$*"; }
 die()  { printf 'error: %s\n' "$*" >&2; exit 1; }
+# the N:M patterns this flow knows, one row each: name, n, m, chipyard config of its chip. A new pattern (e.g. 1:4 once
+# its config exists) is one new row; tests, spike-lib, spike, sim and pattern read the table. The suffix of a pattern's
+# programs is its name without "nm" (nm24 -> _24); dense<suffix> names the dense-chip model of libgemmini
+nm_table="
+nm24   2  4  GemminiNMRocketConfig
+nm48   4  8  GemminiNM48RocketConfig
+nm816  8 16  GemminiNM816RocketConfig
+"
+pat_names() { awk 'NF {print $1}' <<<"$nm_table"; }
+pat_field() { awk -v p="$1" -v f="$2" '$1 == p {print $f; found = 1} END {exit !found}' <<<"$nm_table"; }
 cfg_name() {
-  case "$1" in
-    dense) echo GemminiRocketConfig ;;
-    nm24)  echo GemminiNMRocketConfig ;;
-    nm48)  echo GemminiNM48RocketConfig ;;
-    nm816) echo GemminiNM816RocketConfig ;;
-    *) die "unknown config '$1' (want nm24, nm48, nm816 or dense)" ;;
-  esac
+  [ "$1" = dense ] && { echo GemminiRocketConfig; return; }
+  pat_field "$1" 4 || die "unknown config '$1' (want dense or one of: $(pat_names | xargs))"
 }
 pat_nm() {
-  case "$1" in
-    nm24) echo "2 4" ;;
-    nm48) echo "4 8" ;;
-    nm816) echo "8 16" ;;
-    *) die "unknown pattern '$1' (want nm24, nm48 or nm816)" ;;
-  esac
+  local n m
+  if ! n="$(pat_field "$1" 2)" || ! m="$(pat_field "$1" 3)"; then die "unknown pattern '$1' (want one of: $(pat_names | xargs))"; fi
+  echo "$n $m"
 }
-# pattern of a libgemmini build; dense24 / dense48 model a dense chip but still compile with a pattern
+# pattern of a libgemmini build; dense<suffix> (dense24, dense48, ...) models a dense chip but still compiles with a pattern
 lib_nm() {
   case "$1" in
-    nm24|dense24) echo "2 4" ;;
-    nm48|dense48) echo "4 8" ;;
-    nm816|dense816) echo "8 16" ;;
-    *) die "unknown libgemmini build '$1' (want nm24, nm48, nm816, dense24, dense48 or dense816)" ;;
+    dense*) pat_nm "nm${1#dense}" ;;
+    *) pat_nm "$1" ;;
   esac
 }
 sim_path() { echo "$cy/sims/verilator/simulator-chipyard.harness-$1"; }
@@ -283,7 +312,8 @@ prog_timeout() {
   local t="${TIMEOUT_CYCLES:-150000000}" need=0
   case "$(basename "$1")" in
     # full 22 cases passed at 600M (investigate/runs/20261115-225958-fixbfail-srv); cases 7-17 alone took 28,576,528 / 29,693,573 cycles (20261115-230636-fixbfail2-srv CYC lines)
-    nm_sparse_loop_[0-9][0-9]-baremetal) need=300000000 ;;
+    # bank-split-fix sources: nm_sparse_loop_24 estimated ~162M cycles, under this floor (worklogs/pattern-flow.md step 2)
+    nm_sparse_loop_[0-9]*-baremetal) [[ "$(basename "$1")" =~ ^nm_sparse_loop_[0-9]+-baremetal$ ]] && need=300000000 ;;
     # never finished within 150M on any chip (investigate/runs/20261113-160015-fixb-srv, fixb-verify.md Verdict); unresolved
     conv_with_input_dilation*-baremetal) need=300000000 ;;
   esac
@@ -469,37 +499,40 @@ step_tests() {
   dense_tests
   for t in "${dense_list[@]}"; do rv_cc "$tests_dir/bareMetalC/$t.c" "$bm/$t-baremetal"; done
   # every pattern of the sparse tests, with explicit -D flags so they don't depend on the last elaboration
-  for t in nm_sparse_sw "${nm_tests[@]}"; do
-    rv_cc_nm "$tests_dir/bareMetalC/$t.c" "$bm/${t}_24-baremetal" 2 4
-    rv_cc_nm "$tests_dir/bareMetalC/$t.c" "$bm/${t}_48-baremetal" 4 8
-    rv_cc_nm "$tests_dir/bareMetalC/$t.c" "$bm/${t}_816-baremetal" 8 16
-  done
-  for n in "${neg_spike[@]}"; do
-    rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_protocol.c" "$bm/nm_sparse_protocol_neg${n}_24-baremetal" 2 4 -DNEG="$n"
-    rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_protocol.c" "$bm/nm_sparse_protocol_neg${n}_48-baremetal" 4 8 -DNEG="$n"
-    rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_protocol.c" "$bm/nm_sparse_protocol_neg${n}_816-baremetal" 8 16 -DNEG="$n"
-  done
-  for n in "${loop_neg[@]}" "${loop_neg_dense[@]}"; do
-    rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_loop.c" "$bm/nm_sparse_loop_neg${n}_24-baremetal" 2 4 -DNEG="$n"
-    rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_loop.c" "$bm/nm_sparse_loop_neg${n}_48-baremetal" 4 8 -DNEG="$n"
-    rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_loop.c" "$bm/nm_sparse_loop_neg${n}_816-baremetal" 8 16 -DNEG="$n"
+  local p pn pm ps sfxs=()
+  for p in $(pat_names); do
+    read -r pn pm <<<"$(pat_nm "$p")"; ps="${p#nm}"; sfxs+=("_$ps")
+    for t in nm_sparse_sw "${nm_tests[@]}"; do
+      rv_cc_nm "$tests_dir/bareMetalC/$t.c" "$bm/${t}_$ps-baremetal" "$pn" "$pm"
+    done
+    for n in "${neg_spike[@]}"; do
+      rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_protocol.c" "$bm/nm_sparse_protocol_neg${n}_$ps-baremetal" "$pn" "$pm" -DNEG="$n"
+    done
+    for n in "${loop_neg[@]}" "${loop_neg_dense[@]}"; do
+      rv_cc_nm "$tests_dir/bareMetalC/nm_sparse_loop.c" "$bm/nm_sparse_loop_neg${n}_$ps-baremetal" "$pn" "$pm" -DNEG="$n"
+    done
   done
   built=("$bm"/*-baremetal)
-  echo "${#built[@]} bare-metal tests built (${#dense_list[@]} dense, without $dense_no_spad; nm_sparse_*_24 / _48 / _816, N:M checked)"
+  echo "${#built[@]} bare-metal tests built (${#dense_list[@]} dense, without $dense_no_spad; nm_sparse_*$(printf ' / %s' "${sfxs[@]}" | cut -c4-), N:M checked)"
 }
 
 # the four fair benchmark programs from the current source: build_fair <out dir> [pat]
-# pat = nm816 also builds fair_perf_816 (only `spike nm816` asks; fair-build and the RTL fair runs stay 2:4 / 4:8)
+# a pattern other than nm24 / nm48 also builds its own fair_perf_<suffix> (only `spike <pat>` and `pattern <pat>` ask;
+# fair-build and the RTL fair runs stay 2:4 / 4:8)
 build_fair() {
-  local out="$1" pat="${2:-}"
+  local out="$1" pat="${2:-}" pn pm extra=""
   mkdir -p "$out"
   restore_params_h
   rv_cc_nm "$ver/fair_perf.c" "$out/fair_perf_24-baremetal" 2 4
   rv_cc_nm "$ver/fair_perf.c" "$out/fair_perf_48-baremetal" 4 8
-  [ "$pat" != nm816 ] || rv_cc_nm "$ver/fair_perf.c" "$out/fair_perf_816-baremetal" 8 16
+  if [ -n "$pat" ] && [ "$pat" != nm24 ] && [ "$pat" != nm48 ]; then
+    read -r pn pm <<<"$(pat_nm "$pat")"
+    rv_cc_nm "$ver/fair_perf.c" "$out/fair_perf_${pat#nm}-baremetal" "$pn" "$pm"
+    extra=" fair_perf_${pat#nm} = $pn:$pm,"
+  fi
   rv_cc_nm "$ver/fair_perf.c" "$out/fair_perf_dense_only-baremetal" 2 4 -DDENSE_ONLY
   rv_cc_nm "$ver/berkeley_dense_perf.c" "$out/berkeley_dense_perf-baremetal" 2 4
-  echo "  N:M checked: fair_perf_24 = 2:4, fair_perf_48 = 4:8,$([ "$pat" != nm816 ] || echo " fair_perf_816 = 8:16,") fair_perf_dense_only = berkeley_dense_perf = 2:4"
+  echo "  N:M checked: fair_perf_24 = 2:4, fair_perf_48 = 4:8,$extra fair_perf_dense_only = berkeley_dense_perf = 2:4"
 }
 
 step_fair_build() {
@@ -835,6 +868,417 @@ step_bench() {
   echo "all runs passed; $(($(wc -l < "$run/cycles.csv") - 1)) rows in ${run#"$here"/}/cycles.csv"
 }
 
+# ---------------------------------------------------------------- pattern: one N:M chip end to end
+# ./run-flow.sh pattern <pat>: Spike stage on the laptop, server simulator check (rebuild only with APPROVED_REBUILD=1),
+# Verilator run on the server (launched, not waited for); ./run-flow.sh pattern-finish <pat> <flow folder> later copies
+# the run back, runs the parsers and the area flow and writes the summary. See the header for the variables.
+streaming="$here/experiments/streaming"
+tools="$streaming/tools"
+srv_host="ai-user@ai-1769.floridapoly.org"
+srv_opts=(-o "ControlPath=/tmp/claude-1000/cm-%C" -o BatchMode=yes)
+srv_cy="/home/ai-user/chipyard"
+srv_runs="/home/ai-user/sinv/runs"
+srv_cap=12  # project limit: simulations at once on the server, all agents together
+bench_layers=(edge small bert_qkv bert_ffn1 bert_ffn2 rn50_conv)
+# schedule hints (predicted wall time only, never a cycle budget): <program regex>=<factor>:<source>. SCHED_HINTS (one
+# per line) replaces them; clear it once a run on the current sources is recorded, or the factor counts twice
+default_hints="nm_sparse_loop_[0-9]+=2.576:bank-split-impl.md step 9, nm_sparse_loop_24 Spike instructions 59,512,572 (rocc-tests 2ad1fd3) / 23,101,494 (22158bf)"
+# gemmini_params.h is rewritten by every elaboration (see restore_params_h); it is an output, so source comparisons skip it
+src_skip='  gemmini-rocc-tests/include/gemmini_params.h$'
+
+dry() { [ "${DRY_RUN:-0}" = 1 ]; }
+srv() { ssh "${srv_opts[@]}" "$srv_host" "$@"; }
+srv_up() {
+  ssh "${srv_opts[@]}" -O check "$srv_host" 2>/dev/null && return 0
+  die "the SSH socket to $srv_host is down (VPN dropped?). Stop here; reconnect with
+  sudo -E gpclient connect --browser default vpn.floridapoly.edu
+  ssh -o ControlMaster=yes -o ControlPath=/tmp/claude-1000/cm-%C -o ControlPersist=12h -fN $srv_host"
+}
+# stdin script run by bash on the server with the chipyard env loaded (read-only uses)
+srv_env='set +u; source ~/miniforge3/etc/profile.d/conda.sh; source ~/chipyard/env.sh > /dev/null; set -u'
+srv_src_list() {
+  { echo "$srv_env"
+    echo "gem=$srv_cy/generators/gemmini lib_dir=$srv_cy/generators/gemmini/software/libgemmini tests_dir=$srv_cy/generators/gemmini/software/gemmini-rocc-tests"
+    declare -f src_sha_list
+    echo src_sha_list; } | srv 'bash -s'
+}
+src_files() { grep -v '^#' "$1" | grep -v -- "$src_skip" | sort || true; }
+in_stages() { [[ " ${STAGES:-spike sim srv} " == *" $1 "* ]]; }
+
+# the streaming bench for one pattern: data, programs (_full/_fixa/_loop on the pattern chip, _dense for stock) and a
+# Spike run of each, all verified. pattern_bench_spike <out> <pat>
+pattern_bench_spike() {
+  local out="$1" pat="$2" n m sfx d L v data b want got rc fails=0 par i extlib dlib t
+  read -r n m <<<"$(pat_nm "$pat")"; sfx="${pat#nm}"
+  d="$out/bench"; mkdir -p "$d/data" "$d/bin" "$d/logs" "$d/ref"
+  say "streaming bench for $n:$m: data, programs and Spike runs -> ${d#"$here"/}"
+  # gen_data.py with only this pattern in PATTERNS: its data is the same as in a full run (pruning is per pattern, the
+  # random draws are per layer)
+  "$py" -I -c "import sys; sys.path.insert(0, sys.argv[1]); import gen_data as g; g.PATTERNS = {sys.argv[2]: (int(sys.argv[3]), int(sys.argv[4]))}; sys.argv = ['gen_data.py', sys.argv[5]]; g.main()" \
+    "$streaming/gen" "$sfx" "$n" "$m" "$d/data" > "$d/gen_data.out" || die "gen_data.py failed, see $d/gen_data.out"
+  restore_params_h
+  for L in "${bench_layers[@]}"; do
+    data="$d/data/$L/$sfx/data.h"
+    [ -f "$data" ] || die "gen_data.py wrote no $data"
+    cp "$d/data/$L/$sfx/ref.json" "$d/ref/${L}_$n$m.json"  # collect.py reads ref/<layer>_<n><m>.json
+    rv_cc_nm "$streaming/src/stream_bench.c" "$d/bin/${L}_${sfx}_full-baremetal" "$n" "$m" -DSBENCH_DATA=\""$data"\" -DRUN_MASK=7
+    rv_cc_nm "$streaming/src/stream_bench.c" "$d/bin/${L}_${sfx}_fixa-baremetal" "$n" "$m" -DSBENCH_DATA=\""$data"\" -DRUN_MASK=8
+    rv_cc_nm "$streaming/src/stream_bench.c" "$d/bin/${L}_${sfx}_loop-baremetal" "$n" "$m" -DSBENCH_DATA=\""$data"\" -DRUN_MASK=16
+    rv_cc_nm "$streaming/src/stream_bench.c" "$d/bin/${L}_${sfx}_dense-baremetal" "$n" "$m" -DSBENCH_DATA=\""$data"\" -DRUN_MASK=3 -DDENSE_ONLY
+    # the four builds differ only in volatile flags (as in scripts/build.sh): same .text, so one program is measured
+    want=""
+    for v in full fixa loop dense; do
+      b="$(mktemp)"; riscv64-unknown-elf-objcopy -O binary -j .text "$d/bin/${L}_${sfx}_$v-baremetal" "$b"
+      got="$(sha256sum < "$b" | cut -c1-16)"; rm -f "$b"
+      [ -n "$want" ] || want="$got"
+      [ "$got" = "$want" ] || die "$L: .text of ${L}_${sfx}_$v differs from ${L}_${sfx}_full ($got vs $want)"
+    done
+    echo "  $L: 4 programs (_full _fixa _loop _dense), .text identical (sha256 $want)"
+  done
+  extlib="$(libgemmini_path "$pat")"; dlib="$(libgemmini_path "dense$sfx")"
+  par="$(clamp_par)"
+  local progs=()
+  for L in "${bench_layers[@]}"; do for v in full fixa loop dense; do progs+=("${L}_${sfx}_$v"); done; done
+  for ((i = 0; i < ${#progs[@]}; i += par)); do
+    pids=()
+    for t in "${progs[@]:i:par}"; do
+      # _dense is the stock chip's program: it runs on the dense-chip model of the same pattern
+      lib="$extlib"; [[ "$t" == *_dense ]] && lib="$dlib"
+      ( rc=0; timeout "${SPIKE_BENCH_TIMEOUT:-7200}" spike --extlib="$lib" --extension=gemmini "$d/bin/$t-baremetal" \
+          > "$d/logs/$t.log" 2>&1 || rc=$?; echo "$rc" > "$d/logs/$t.rc" ) &
+      pids+=($!)
+    done
+    wait "${pids[@]}" || true
+    pids=()
+  done
+  for t in "${progs[@]}"; do
+    rc="$(cat "$d/logs/$t.rc" 2>/dev/null || echo none)"
+    got="$(grep -E '^sbench passed \(([0-9]+) of \1 runs verified\)$' "$d/logs/$t.log" || true)"
+    if [ "$rc" = 0 ] && [ -n "$got" ]; then echo "pass  $t  $got"
+    else echo "FAIL  $t (exit $rc; see ${d#"$here"/}/logs/$t.log)"; fails=$((fails + 1)); fi
+  done
+  [ "$fails" -eq 0 ] || die "$fails Spike bench run(s) failed"
+}
+
+# Spike stage: libs, test programs, `spike <pat>`, the bench; then every program the server runs goes to <out>/bin
+pattern_spike() {
+  local out="$1" pat="$2" sfx t n f
+  sfx="${pat#nm}"
+  export PAR="${PAR:-4}"  # the laptop CPU is shared
+  step_spike_lib "$pat"; cp "$logs/runs/libgemmini-$stamp.log" "$out/libgemmini-$pat.log"
+  step_spike_lib "dense$sfx"; cp "$logs/runs/libgemmini-$stamp.log" "$out/libgemmini-dense$sfx.log"
+  step_tests
+  step_spike "$pat"
+  cp "$logs/runs/spike-$stamp.log" "$out/spike.log"
+  pattern_bench_spike "$out" "$pat"
+  say "programs for the server -> ${out#"$here"/}/bin"
+  mkdir -p "$out/bin"
+  dense_tests
+  local files=()
+  for t in "${dense_list[@]}"; do files+=("$bm/$t-baremetal"); done
+  for t in nm_sparse_sw "${nm_tests[@]}"; do files+=("$bm/${t}_$sfx-baremetal"); done
+  for n in "${neg_rtl[@]}"; do files+=("$bm/nm_sparse_protocol_neg${n}_$sfx-baremetal"); done
+  for n in "${loop_neg[@]}"; do files+=("$bm/nm_sparse_loop_neg${n}_$sfx-baremetal"); done
+  files+=("$fair_spike/fair_perf_$sfx-baremetal" "$fair_spike/fair_perf_dense_only-baremetal" "$fair_spike/berkeley_dense_perf-baremetal")
+  files+=("$out/bench/bin/"*-baremetal)
+  for f in "${files[@]}"; do [ -f "$f" ] || die "missing program $f"; cp "$f" "$out/bin/"; done
+  (cd "$out/bin" && sha256sum -- *-baremetal) > "$out/bin.sha256"
+  {
+    echo "stamp=$stamp"; echo "pattern=$pat"
+    for t in "$pat" "dense$sfx"; do echo "libgemmini.$t=$(sha256sum "$(libgemmini_path "$t")" | cut -d' ' -f1)"; done
+    for f in "$here" "$gem" "$lib_dir" "$tests_dir"; do
+      echo "git.$(basename "$f")=$(git -C "$f" rev-parse HEAD)$(git -C "$f" diff --quiet HEAD && echo '' || echo ' (uncommitted changes)')"
+    done
+    echo "spike.log=spike.log ($(grep -c '^' "$out/spike.log") lines); programs=$(wc -l < "$out/bin.sha256") (bin.sha256)"
+  } > "$out/spike.info"
+  touch "$out/spike.ok"
+  echo "  Spike stage passed; $(wc -l < "$out/bin.sha256") programs in ${out#"$here"/}/bin"
+}
+
+# simulator check on the server; sets sim_ok=1 when the pattern simulator was built by pattern_srv_build.sh from
+# exactly the sources the laptop has (gemmini_params.h aside). Otherwise stops, or rebuilds with APPROVED_REBUILD=1
+pattern_sim() {
+  local out="$1" pat="$2" cfg="$3" s ndiff msg="" cmd
+  srv_up
+  s="$srv_cy/sims/verilator/simulator-chipyard.harness-$cfg"
+  say "server simulator check: $cfg"
+  src_sha_list > "$out/src.laptop.sha256"
+  srv_src_list > "$out/src.server.sha256" || die "could not list the server's gemmini sources"
+  diff <(src_files "$out/src.laptop.sha256") <(src_files "$out/src.server.sha256") > "$out/src.diff-laptop-server.txt" || true
+  ndiff="$(grep -c '^[<>]' "$out/src.diff-laptop-server.txt" || true)"
+  echo "  laptop sources: $(src_files "$out/src.laptop.sha256" | wc -l) files; server: $(src_files "$out/src.server.sha256" | wc -l) files; differing lines: $ndiff (${out#"$here"/}/src.diff-laptop-server.txt)"
+  sim_sha="$(srv "sha256sum $s 2>/dev/null | cut -d' ' -f1" || true)"
+  rm -f "$out/src.simbuild.sha256"
+  srv "cat $s.src.sha256 2>/dev/null" > "$out/src.simbuild.sha256" || rm -f "$out/src.simbuild.sha256"
+  [ -s "$out/src.simbuild.sha256" ] || rm -f "$out/src.simbuild.sha256"
+  sim_ok=0
+  if [ "$ndiff" -gt 0 ]; then
+    echo "  the server's gemmini sources differ from the laptop's ($ndiff lines in ${out#"$here"/}/src.diff-laptop-server.txt)"
+  fi
+  if [ -z "$sim_sha" ]; then msg="no $cfg simulator on the server"
+  elif [ ! -f "$out/src.simbuild.sha256" ]; then msg="the $cfg simulator has no build-time source list ($s.src.sha256), so its sources are not proven"
+  elif [ "$(sed -n 's/^# sim sha256=//p' "$out/src.simbuild.sha256")" != "$sim_sha" ]; then msg="$s.src.sha256 names another simulator (stale list)"
+  elif ! diff -q <(src_files "$out/src.simbuild.sha256") <(src_files "$out/src.server.sha256") > /dev/null; then
+    msg="the $cfg simulator was built from other sources than the server has now"
+  else sim_ok=1; fi
+  [ -z "$msg" ] || echo "  simulator: $msg"
+  if [ "$ndiff" -gt 0 ]; then
+    sim_ok=0
+    msg="sync the server's three gemmini repos to the laptop's commits first (this script does not sync), then rerun"
+    dry && { echo "  [dry-run] would STOP: $msg"; return 0; }
+    die "$msg"
+  fi
+  if [ "$sim_ok" = 1 ]; then echo "  ok: $cfg sha256 $sim_sha was built from the current sources (build-time list matches)"; return 0; fi
+  cmd="STAGES=\"sim srv\" FLOW=$out APPROVED_REBUILD=1 ./run-flow.sh pattern $pat"
+  if [ "${APPROVED_REBUILD:-0}" != 1 ] || dry; then
+    if dry; then echo "  [dry-run] would STOP: $msg. Rebuild (user approval needed): $cmd"; pattern_rebuild "$out" "$cfg"; return 0; fi
+    die "$msg.
+  A rebuild replaces the simulator (backup of it and its generated-src first). With the user's approval run:
+    $cmd"
+  fi
+  pattern_rebuild "$out" "$cfg"
+  pattern_sim "$out" "$pat" "$cfg"
+  [ "$sim_ok" = 1 ] || die "the rebuilt $cfg simulator still does not match the sources"
+}
+
+pattern_rebuild() {
+  local out="$1" cfg="$2" d="/home/ai-user/sinv/builds/$stamp-$2" st j="${SRV_JOBS:-4}"
+  [ "$cfg" != GemminiRocketConfig ] || die "refusing to build the stock simulator"
+  say "rebuilding $cfg on the server in $d (make -j$j; backup first)"
+  declare -f src_sha_list > "$out/src_sha_list.sh"
+  if dry; then
+    echo "  [dry-run] ssh: mkdir -p $d; copy pattern_srv_build.sh and src_sha_list.sh there"
+    echo "  [dry-run] ssh: cd $d && nohup setsid bash pattern_srv_build.sh $cfg $j > build.out 2>&1 < /dev/null &"
+    echo "  [dry-run] then wait for $d/STATUS = BUILD_DONE (polled every 60 s), and check the simulator again"
+    return 0
+  fi
+  srv "mkdir -p $d"
+  srv "cat > $d/pattern_srv_build.sh" < "$tools/pattern_srv_build.sh"
+  srv "cat > $d/src_sha_list.sh" < "$out/src_sha_list.sh"
+  srv "cd $d && nohup setsid bash pattern_srv_build.sh $cfg $j > build.out 2>&1 < /dev/null &"
+  echo "  started; waiting for $d/STATUS (an SSH drop stops this wait, not the build)"
+  while :; do
+    sleep 60
+    st="$(srv "cat $d/STATUS 2>/dev/null" || die "lost the server while waiting for the build ($d keeps running)")"
+    case "$st" in
+      BUILD_DONE*) echo "  $st"; break ;;
+      BUILD_FAILED*) die "server build failed: $st (see $d/build.log)" ;;
+    esac
+  done
+  echo "  backup and logs: $d"
+}
+
+# the job plan of one pattern (TSV, see tools/pattern_flow.py): pattern chip and stock
+pattern_plan() {
+  local pat="$1" cfg="$2" sfx t n L v s s1 p
+  sfx="${pat#nm}"; s1="${seeds%% *}"
+  dense_tests
+  printf 'chip\tcfg\tprogram\tseed\ttimeout\tkind\texpect\n'
+  row() { printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$1" "$2" "$3" "$4" "$(prog_timeout "$3")" "$5" "${6:-}"; }
+  for t in "${dense_list[@]}"; do row "$pat" "$cfg" "$t-baremetal" "$s1" dense; done
+  for t in nm_sparse_sw "${nm_tests[@]}"; do row "$pat" "$cfg" "${t}_$sfx-baremetal" "$s1" sparse "^$t passed$"; done
+  for n in "${neg_rtl[@]}"; do row "$pat" "$cfg" "nm_sparse_protocol_neg${n}_$sfx-baremetal" "$s1" neg "$(neg_msg "$n")"; done
+  for n in "${loop_neg[@]}"; do row "$pat" "$cfg" "nm_sparse_loop_neg${n}_$sfx-baremetal" "$s1" neg "$(loop_neg_msg "$n")"; done
+  for L in "${bench_layers[@]}"; do
+    for v in full fixa loop; do row "$pat" "$cfg" "${L}_${sfx}_$v-baremetal" "$s1" bench; done
+    row stock GemminiRocketConfig "${L}_${sfx}_dense-baremetal" "$s1" bench
+  done
+  for s in $seeds; do
+    row "$pat" "$cfg" "fair_perf_$sfx-baremetal" "$s" fair
+    # sameprog: our chip with sparsity off, Berkeley's program (verify_all.py section D)
+    row "$pat" "$cfg" "fair_perf_dense_only-baremetal" "$s" fair
+    for p in fair_perf_dense_only berkeley_dense_perf; do row stock GemminiRocketConfig "$p-baremetal" "$s" fair; done
+  done
+}
+
+# server stage: plan, stock reuse, schedule, upload, launch (nothing launched under DRY_RUN=1)
+pattern_srv() {
+  local out="$1" pat="$2" cfg="$3" bindir="$4" sfx rrun info running free quota slots hist=() hints=() h progs=()
+  sfx="${pat#nm}"
+  srv_up
+  [ -f "$(dirname "$bindir")/spike.ok" ] || die "no passed Spike stage at $(dirname "$bindir") (run the spike stage, or FLOW=<flow folder>)"
+  say "server Verilator stage: $pat ($cfg) + stock"
+  pattern_plan "$pat" "$cfg" > "$out/jobs.plan.tsv"
+  info="$(srv "for c in $cfg GemminiRocketConfig; do s=$srv_cy/sims/verilator/simulator-chipyard.harness-\$c; if [ -x \$s ]; then echo \"\$c \$(date -r \$s +%Y-%m-%dT%H:%M:%S) \$(sha256sum \$s | cut -d' ' -f1)\"; else echo \"\$c MISSING MISSING\"; fi; done")"
+  read -r _ sim_mtime sim_sha <<<"$(grep "^$cfg " <<<"$info")"
+  read -r _ stock_mtime stock_sha <<<"$(grep '^GemminiRocketConfig ' <<<"$info")"
+  [ "$stock_sha" != MISSING ] || die "no stock simulator on the server"
+  echo "  $cfg: $sim_mtime sha256 $sim_sha; stock: $stock_mtime sha256 $stock_sha"
+  "$py" "$tools/pattern_flow.py" reuse --plan "$out/jobs.plan.tsv" --bin "$bindir" --runs-root "$streaming/investigate/runs" \
+    --stock-sha "$stock_sha" --objcopy "$(command -v riscv64-unknown-elf-objcopy)" \
+    --out "$out/jobs.after-reuse.tsv" --reused "$out/stock-reused.tsv" || die "stock reuse check failed"
+  running="$(srv "pgrep -fc '^[^ ]*simulator-chip' || true")"
+  free=$((srv_cap - running))
+  quota="${QUOTA:-$free}"
+  [[ "$quota" =~ ^[0-9]+$ ]] || die "QUOTA must be a whole number"
+  [ "$quota" -le "$srv_cap" ] || quota="$srv_cap"
+  slots="$quota"
+  echo "  server: $running simulation(s) running, $free free slot(s) of $srv_cap; quota $quota"
+  if [ "$quota" -lt 1 ]; then
+    dry || die "no free simulation slot on the server; pass QUOTA=<n> to queue (the driver starts a job only below $srv_cap machine-wide)"
+    slots="$srv_cap"; echo "  [dry-run] no free slot now; the schedule below assumes $slots slots"
+  fi
+  for h in "$streaming"/investigate/runs/*-srv; do [ -f "$h/jobs.tsv" ] && hist+=("$h"); done
+  while IFS= read -r h; do [ -z "$h" ] || hints+=(--hint "$h"); done <<<"${SCHED_HINTS-$default_hints}"
+  "$py" "$tools/pattern_flow.py" schedule --plan "$out/jobs.after-reuse.tsv" --slots "$slots" --sfx "$sfx" \
+    --history "${hist[@]}" "${hints[@]}" --out "$out/jobs.ordered.tsv" | tee "$out/schedule.txt"
+  rrun="$srv_runs/$stamp-$pat-srv"
+  mapfile -t progs < <(tail -n +2 "$out/jobs.ordered.tsv" | cut -f3 | sort -u)
+  # run.info: what this run is made of, taken now (the simulator's own source list was taken at its build)
+  {
+    echo "stamp=$(basename "$rrun")"
+    echo "pattern=$pat n:m=$(pat_nm "$pat" | tr ' ' ':') config=$cfg"
+    echo "host=$(srv 'echo "$(hostname) $(uname -r) nproc=$(nproc)"')"
+    echo "quota=$quota (QUOTA file; the driver never starts a job while $srv_cap simulator-chip* processes run)"
+    for f in "$here" "$gem" "$lib_dir" "$tests_dir"; do
+      echo "git.laptop.$(basename "$f")=$(git -C "$f" rev-parse HEAD)$(git -C "$f" diff --quiet HEAD && echo '' || echo ' (uncommitted changes)')"
+    done
+    echo "src.laptop.sha256list=$(sha256sum < "$out/src.laptop.sha256" | cut -c1-64) (src.laptop.sha256)"
+    echo "src.server.sha256list=$(sha256sum < "$out/src.server.sha256" | cut -c1-64) (src.server.sha256, taken at launch)"
+    echo "src.server_vs_laptop=$([ -s "$out/src.diff-laptop-server.txt" ] && echo DIFFERENT || echo identical) ($(src_files "$out/src.laptop.sha256" | wc -l) files; include/gemmini_params.h not compared: elaboration output)"
+    if [ -f "$out/src.simbuild.sha256" ]; then
+      echo "src.$cfg.build_list=$(sha256sum < "$out/src.simbuild.sha256" | cut -c1-64) (sim.src.sha256: taken right before make by pattern_srv_build.sh; names sim sha256 $(sed -n 's/^# sim sha256=//p' "$out/src.simbuild.sha256"))"
+    else echo "src.$cfg.build_list=none"; fi
+    echo "sim.$pat=$cfg mtime=$sim_mtime sha256=$sim_sha"
+    echo "sim.stock=GemminiRocketConfig mtime=$stock_mtime sha256=$stock_sha"
+    echo "timeout_cycles=${TIMEOUT_CYCLES:-150000000} per job, raised by prog_timeout (nm_sparse_loop_<NN>, conv_with_input_dilation* >= 300000000); per-job value in jobs.tsv"
+    echo "runner=pattern_srv_driver.sh: the simulator is called directly with make run-binary-fast LOADMEM=1 arguments (no make in sims/)"
+    echo "programs=built on the laptop by run-flow.sh (tests, build_fair, pattern_bench_spike), Spike stage passed; sha256 in bin.sha256, checked on the server before launch"
+    echo "stock_reused=$(($(wc -l < "$out/stock-reused.tsv") - 1)) job(s), recorded logs listed in stock-reused.tsv"
+  } > "$out/srv.run.info"
+  awk 'NR == FNR {want[$1]; next} ($2 in want)' <(printf '%s\n' "${progs[@]}") "$(dirname "$bindir")/bin.sha256" > "$out/srv.bin.sha256"
+  [ "$(wc -l < "$out/srv.bin.sha256")" -eq "${#progs[@]}" ] || die "bin.sha256 lacks some of the ${#progs[@]} programs"
+  echo "$quota" > "$out/QUOTA"
+  if dry; then
+    say "[dry-run] would create $rrun and launch (nothing done)"
+    echo "  [dry-run] ssh: mkdir -p $rrun/bin $rrun/ref"
+    echo "  [dry-run] upload ${#progs[@]} programs (tar | python3 tarfile on the server) to $rrun/bin, then: cd $rrun && sha256sum -c --quiet bin.sha256"
+    echo "  [dry-run] upload run.info, jobs.ordered.tsv, QUOTA, bin.sha256, src.*.sha256, ref/*.json, pattern_srv_driver.sh"
+    echo "  [dry-run] ssh: cd $rrun && nohup setsid bash pattern_srv_driver.sh > driver.out 2>&1 < /dev/null &"
+    echo "  dry-run outputs: ${out#"$here"/}/ (jobs.plan.tsv, jobs.after-reuse.tsv, stock-reused.tsv, jobs.ordered.tsv, schedule.txt, srv.run.info)"
+    return 0
+  fi
+  srv "[ ! -e $rrun ]" || die "$rrun already exists on the server"
+  srv "mkdir -p $rrun/bin $rrun/ref"
+  (cd "$bindir" && tar -cf - -- "${progs[@]}") |
+    srv "python3 -c 'import sys, tarfile; tarfile.open(fileobj=sys.stdin.buffer, mode=\"r|\").extractall(\"$rrun/bin\", filter=\"data\")'" ||
+    die "program upload failed"
+  srv "cat > $rrun/run.info" < "$out/srv.run.info"
+  srv "cat > $rrun/jobs.ordered.tsv" < "$out/jobs.ordered.tsv"
+  srv "cat > $rrun/QUOTA" < "$out/QUOTA"
+  srv "cat > $rrun/bin.sha256" < "$out/srv.bin.sha256"
+  srv "cat > $rrun/src.laptop.sha256" < "$out/src.laptop.sha256"
+  srv "cat > $rrun/src.server.sha256" < "$out/src.server.sha256"
+  [ ! -f "$out/src.simbuild.sha256" ] || srv "cat > $rrun/sim.src.sha256" < "$out/src.simbuild.sha256"
+  for h in "$(dirname "$bindir")"/bench/ref/*.json; do srv "cat > $rrun/ref/$(basename "$h")" < "$h"; done
+  srv "cat > $rrun/pattern_srv_driver.sh" < "$tools/pattern_srv_driver.sh"
+  srv "cd $rrun/bin && sha256sum -c --quiet ../bin.sha256" || die "program checksums differ on the server"
+  srv "cd $rrun && nohup setsid bash pattern_srv_driver.sh > driver.out 2>&1 < /dev/null &"
+  sleep 10
+  echo "  server STATUS: $(srv "cat $rrun/STATUS" || echo none)"
+  { echo "pattern=$pat"; echo "cfg=$cfg"; echo "srv_run=$rrun"; echo "launched=$(date '+%Y-%m-%dT%H:%M:%S')"; } > "$out/flow.state"
+  echo "launched $rrun ($(($(wc -l < "$out/jobs.ordered.tsv") - 1)) jobs). Check: ssh ... 'cat $rrun/STATUS'
+then: ./run-flow.sh pattern-finish $pat ${out#"$here"/}"
+}
+
+step_pattern() {
+  local pat="${1:-}" cfg out bindir
+  [ -n "$pat" ] || die "usage: ./run-flow.sh pattern <$(pat_names | xargs | tr ' ' '|')>"
+  pat_nm "$pat" > /dev/null; cfg="$(cfg_name "$pat")"
+  [ "$cfg" != GemminiRocketConfig ] || die "pattern needs an N:M chip"
+  load_env; need_py
+  if dry; then out="$scratch/pattern-dryrun-$stamp-$pat"
+  else out="${FLOW:-$streaming/investigate/runs/$stamp-$pat-flow}"; fi
+  [[ "$out" = /* ]] || out="$here/$out"
+  bindir="${FLOW:-$out}/bin"; [[ "$bindir" = /* ]] || bindir="$here/$bindir"
+  mkdir -p "$out"
+  exec > >(tee -a "$out/pattern.out") 2>&1
+  say "pattern $pat ($cfg), stages: ${STAGES:-spike sim srv}${DRY_RUN:+, DRY_RUN=$DRY_RUN} -> ${out#"$here"/}"
+  stay_awake "pattern $pat"
+  if in_stages spike; then pattern_spike "$out" "$pat"; fi
+  if in_stages sim; then pattern_sim "$out" "$pat" "$cfg"; fi
+  if in_stages srv; then
+    in_stages sim || dry || die "the srv stage needs the sim stage in the same call (it proves the simulator first)"
+    pattern_srv "$out" "$pat" "$cfg" "$bindir"
+  fi
+}
+
+# copy back, parsers, area, summary. pattern-finish <pat> <flow folder>
+step_pattern_finish() {
+  local pat="${1:-}" flow="${2:-${FLOW:-}}" rrun cfg st dest name rc_all=0 rc f s L lib area_out=() stage=() chip
+  [ -n "$pat" ] && [ -n "$flow" ] || die "usage: ./run-flow.sh pattern-finish <pat> <flow folder>"
+  [[ "$flow" = /* ]] || flow="$here/$flow"
+  [ -f "$flow/flow.state" ] || die "no $flow/flow.state (was the server stage launched from this folder?)"
+  rrun="$(sed -n 's/^srv_run=//p' "$flow/flow.state")"; cfg="$(sed -n 's/^cfg=//p' "$flow/flow.state")"
+  [ "$(sed -n 's/^pattern=//p' "$flow/flow.state")" = "$pat" ] || die "$flow is not a $pat flow"
+  load_env; need_py
+  srv_up
+  st="$(srv "cat $rrun/STATUS 2>/dev/null" || true)"
+  if [[ "$st" != ALL_DONE* ]]; then
+    echo "server run $rrun: STATUS '${st:-none}'; $(srv "tail -n +2 $rrun/jobs.tsv 2>/dev/null | wc -l") of $(($(wc -l < "$flow/jobs.ordered.tsv") - 1)) jobs done; $(srv "pgrep -fc '^[^ ]*simulator-chip' || true") simulations running on the machine"
+    exit 3
+  fi
+  exec > >(tee -a "$flow/finish.out") 2>&1
+  name="$(basename "$rrun")"; dest="$streaming/investigate/runs/$name"
+  say "copy back $rrun -> ${dest#"$here"/}"
+  if dry; then echo "  [dry-run] would copy back, check, parse, run the area flow and summarize"; return 0; fi
+  [ ! -e "$dest" ] || die "$dest already exists"
+  srv "python3 -c 'import sys, tarfile; t = tarfile.open(fileobj=sys.stdout.buffer, mode=\"w|\"); t.add(\"$rrun\", arcname=\"$name\"); t.close()'" |
+    tar -xf - -C "$streaming/investigate/runs" || die "copy back failed"
+  (cd "$dest" && sha256sum -c --quiet SHA256SUMS) || die "SHA256SUMS check failed in $dest"
+  srv "cd $rrun && find . -type f -printf '%P\0' | sort -z | xargs -0 sha256sum" > "$flow/copyback.server.sha256"
+  (cd "$dest" && find . -type f -printf '%P\0' | sort -z | xargs -0 sha256sum) > "$flow/copyback.local.sha256"
+  diff "$flow/copyback.server.sha256" "$flow/copyback.local.sha256" || die "server and local file lists differ after copy back"
+  echo "  $(wc -l < "$flow/copyback.local.sha256") files, sha256 identical on both ends; SHA256SUMS ok"
+
+  say "parsers"
+  rc=0; "$py" "$tools/parse_fixa.py" "$dest" > "$flow/parse_fixa.out" 2>&1 || rc=$?
+  stage+=("parse_fixa.py rc=$rc (${flow#"$here"/}/parse_fixa.out)"); [ "$rc" -eq 0 ] || rc_all=1
+  # collect.py writes into its run folder: it gets a staging copy of the bench logs (recorded run untouched)
+  local c="$flow/collect"; rm -rf "$c"; mkdir -p "$c/ref"
+  cp "$dest"/ref/*.json "$c/ref/"
+  for L in "${bench_layers[@]}"; do cp "$dest"/*."${L}_${pat#nm}"_*.seed*.log "$c/" 2>/dev/null || true; done
+  # (awk: empty TSV fields would collapse under read)
+  awk -F'\t' 'NR > 1 && $6 == "bench" {print $3, $4, $8}' "$flow/stock-reused.tsv" | while read -r f s log; do
+    cp "$log" "$c/stock.${f%-baremetal}.seed$s.log"; done
+  grep -E '^(host|sim\.)' "$dest/run.info" > "$c/run.info"
+  { printf 'chip\tprogram\tseed\twall_s\n'; tail -n +2 "$dest/jobs.tsv" | awk -F'\t' -v OFS='\t' '{sub(/-baremetal$/, "", $2); print $1, $2, $3, $7}'; } > "$c/jobs.tsv"
+  rc=0; "$py" "$streaming/scripts/collect.py" "$c" > "$flow/collect.out" 2>&1 || rc=$?
+  stage+=("collect.py rc=$rc (${flow#"$here"/}/collect.out, staging ${c#"$here"/})"); [ "$rc" -eq 0 ] || rc_all=1
+  # verify_all.py takes a fair-run folder: <chip>.seed<S>.log (pattern chip, sameprog, berkeley = stock)
+  local v="$flow/verify/fair-$pat"; rm -rf "$flow/verify"; mkdir -p "$v"
+  for s in $seeds; do
+    cp "$dest/$pat.fair_perf_${pat#nm}.seed$s.log" "$v/$pat.seed$s.log"
+    cp "$dest/$pat.fair_perf_dense_only.seed$s.log" "$v/sameprog.seed$s.log"
+    f="$dest/stock.fair_perf_dense_only.seed$s.log"
+    [ -f "$f" ] || f="$(awk -F'\t' -v s="$s" '$1 == "stock" && $3 == "fair_perf_dense_only-baremetal" && $4 == s {print $8}' "$flow/stock-reused.tsv")"
+    cp "$f" "$v/berkeley.seed$s.log"
+  done
+  rc=0; "$py" "$ver/verify_all.py" --skip-patches "$v" > "$flow/verify_all.out" 2>&1 || rc=$?
+  stage+=("verify_all.py rc=$rc (${flow#"$here"/}/verify_all.out, staging ${v#"$here"/})"); [ "$rc" -eq 0 ] || rc_all=1
+
+  say "area (${AREA_FLOW:-$streaming/area/synth_area.sh})"
+  local area_flow="${AREA_FLOW:-$streaming/area/synth_area.sh}"
+  if [ ! -x "$area_flow" ]; then
+    echo "  error: the area flow is missing or not executable: $area_flow (interface: worklogs/area-run.md; set AREA_FLOW)"
+    stage+=("area: MISSING $area_flow"); rc_all=1
+  else
+    for lib in ${AREA_LIBS:-nangate45}; do
+      rc=0; "$area_flow" "$cfg" "$lib" > "$flow/area-$lib.out" 2>&1 || rc=$?
+      area_out+=("$flow/area-$lib.out")
+      stage+=("area $cfg $lib rc=$rc (${flow#"$here"/}/area-$lib.out)"); [ "$rc" -eq 0 ] || rc_all=1
+    done
+  fi
+  say "summary -> ${flow#"$here"/}/summary.md"
+  local sargs=()
+  for s in "${stage[@]}"; do sargs+=(--stage "$s"); done
+  rc=0; "$py" "$tools/pattern_flow.py" summary --run "$dest" --plan "$flow/jobs.ordered.tsv" --reused "$flow/stock-reused.tsv" \
+    --pattern "$pat" --cfg "$cfg" --root "$here" --area "${area_out[@]}" "${sargs[@]}" --out "$flow/summary.md" || rc=$?
+  [ "$rc" -eq 0 ] || rc_all=1
+  [ "$rc_all" -eq 0 ] || die "pattern $pat: not all checks passed (see ${flow#"$here"/}/summary.md)"
+  echo "pattern $pat: everything passed (${flow#"$here"/}/summary.md)"
+}
+
 # ---------------------------------------------------------------- check and report (python)
 step_verify()   { need_py; say "verify_all.py"; "$py" "$ver/verify_all.py" "$@"; }
 step_compare()  { need_py; [ -n "${1:-}" ] || die "usage: ./run-flow.sh compare <run> [reference run]"; "$py" "$ver/compare_runs.py" "$@"; }
@@ -877,6 +1321,8 @@ case "$step" in
   split)      step_split "$@" ;;
   area)       step_area ;;
   checks)     step_checks "$@" ;;
+  pattern)    step_pattern "$@" ;;
+  pattern-finish) step_pattern_finish "$@" ;;
   all)
     step_spike_lib nm24
     step_spike_lib dense24

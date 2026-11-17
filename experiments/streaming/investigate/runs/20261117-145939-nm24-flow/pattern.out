@@ -1,0 +1,150 @@
+
+== pattern nm24 (GemminiNMRocketConfig), stages: spike -> experiments/streaming/investigate/runs/20261117-145939-nm24-flow
+sleep blocked while this runs (closing the lid may still suspend, depending on the lid setting)
+
+== building libgemmini (spike extension) for 2:4 in build-scratch/pattern-flow/libgemmini-nm24, not installed -> logs/runs/libgemmini-20261117-145939.log
+  built build-scratch/pattern-flow/libgemmini-nm24/libgemmini.so (2:4); spike loads it with --extlib
+
+== building libgemmini (spike extension) for 2:4, dense chip model in build-scratch/pattern-flow/libgemmini-dense24, not installed -> logs/runs/libgemmini-20261117-145939.log
+  built build-scratch/pattern-flow/libgemmini-dense24/libgemmini.so (2:4, dense chip model); spike loads it with --extlib
+
+== building the flow's test programs into build-scratch/pattern-flow/tests/bareMetalC (gemmini-rocc-tests/build is left alone)
+177 bare-metal tests built (54 dense, without matmul_spad mvin_mvout_spad; nm_sparse_*_24 / _48 / _816, N:M checked)
+
+== building the fair benchmark for spike into build-scratch/pattern-flow/fair (current source; verification/build is not used)
+  N:M checked: fair_perf_24 = 2:4, fair_perf_48 = 4:8, fair_perf_dense_only = berkeley_dense_perf = 2:4
+
+== spike tests (nm24; libgemmini from build-scratch/pattern-flow/libgemmini-nm24/libgemmini.so) -> logs/runs/spike-20261117-145939.log
+pass  mvin_mvout
+pass  mvin_mvout_zeros
+pass  mvin_mvout_stride
+pass  mvin_mvout_block_stride
+pass  mvin_mvout_acc
+pass  mvin_mvout_acc_zero_stride
+pass  mvin_mvout_acc_stride
+pass  mvin_mvout_acc_full
+pass  mvin_mvout_acc_full_stride
+pass  matmul_os
+pass  matmul_ws
+pass  matmul
+pass  raw_hazard
+pass  aligned
+pass  padded
+pass  mvin_scale
+pass  conv
+pass  conv_stride
+pass  conv_rect
+pass  conv_rect_pool
+pass  conv_with_pool
+pass  conv_with_rot180
+pass  conv_with_kernel_dilation
+pass  conv_with_input_dilation
+pass  conv_with_input_dilation_and_rot180
+pass  conv_with_input_dilation_and_neg_padding
+pass  conv_trans_output_1203
+pass  conv_trans_weight_1203
+pass  conv_trans_weight_0132
+pass  conv_trans_input_3120
+pass  conv_trans_input_3120_with_kernel_dilation
+pass  conv_first_layer
+pass  conv_dw
+pass  conv_perf
+pass  conv_dw_perf
+pass  tiled_matmul_os
+pass  tiled_matmul_ws
+pass  tiled_matmul_ws_At
+pass  tiled_matmul_ws_Bt
+pass  tiled_matmul_ws_full_C
+pass  tiled_matmul_ws_low_D
+pass  tiled_matmul_ws_igelu
+pass  tiled_matmul_ws_layernorm
+pass  tiled_matmul_ws_softmax
+pass  tiled_matmul_ws_perf
+pass  tiled_matmul_cpu
+pass  tiled_matmul_option
+pass  transpose
+pass  matrix_add
+pass  resadd
+pass  resadd_stride
+pass  global_average
+pass  gemmini_counter
+pass  template
+pass  nm_sparse_sw_24
+pass  nm_sparse_matmul_24
+pass  nm_sparse_debug_24
+pass  nm_sparse_perf_24
+pass  nm_sparse_protocol_24
+pass  nm_sparse_loop_24
+pass  fair_perf_24 (dense_loop sparse_loop verified)
+pass  fair_perf_dense_only (dense_loop verified)
+pass  berkeley_dense_perf
+pass  NEG=4 aborts: GEMMINI: index FIFO full (4 tiles): send at most 4 tiles ahead of their preloads
+pass  NEG=6 aborts: GEMMINI: sparse compute with a GARBAGE A operand
+pass  NEG=7 aborts: GEMMINI: sparse compute on weights preloaded in dense mode
+pass  NEG=9 aborts: GEMMINI: sparse mode needs WS dataflow and no A/B transpose
+pass  NEG=10 aborts: GEMMINI: sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+pass  NEG=14 aborts: GEMMINI: sparse compute on weights preloaded in dense mode
+pass  loop NEG=10 aborts: sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+pass  loop NEG=11 aborts: sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+pass  loop NEG=20 aborts: sparse-loop-fix: LOOP_CONV_WS issued while n:m sparse mode (config_ex rs1[10]) is on
+pass  loop NEG=30 aborts: sparse-loop-fix: LOOP_WS with rs1[3] set needs LOOP_WS_CONFIG_NM (funct 28) first
+pass  loop NEG=40 aborts: sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) without LOOP_WS rs1[3]
+pass  loop NEG=50 aborts: sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+pass  loop NEG=51 aborts: sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+pass  loop NEG=52 aborts: sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+pass  loop NEG=60 aborts: sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)
+pass  loop NEG=61 aborts: sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)
+pass  loop NEG=70 aborts: sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+pass  loop NEG=71 aborts: sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+pass  loop NEG=72 aborts: sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+pass  loop NEG=73 aborts: sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+pass  loop NEG=74 aborts: sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+pass  loop NEG=80 aborts: sparse-loop-fix: sparse loop needs A_stride == 1
+pass  loop NEG=90 aborts: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank)
+pass  loop NEG=91 aborts: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank)
+pass  loop NEG=92 aborts: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank)
+pass  loop NEG=100 aborts: sparse-loop-fix: sparse loop started with index tiles pending in the FIFO: gemmini_nm_reset() first
+pass  loop NEG=120 aborts: sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+pass  loop NEG=121 aborts: sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+pass  loop NEG=122 aborts: sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+pass  loop NEG=130 aborts: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+pass  loop NEG=131 aborts: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+pass  loop NEG=132 aborts: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+pass  loop NEG=133 aborts: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+pass  loop NEG=110 aborts (dense lib build-scratch/pattern-flow/libgemmini-dense24/libgemmini.so): sparse-loop-fix: LOAD_IDX (funct 27) on a dense build (nm_sparsity = None)
+pass  loop NEG=140 aborts (dense lib build-scratch/pattern-flow/libgemmini-dense24/libgemmini.so): sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) on a dense build (nm_sparsity = None)
+
+== streaming bench for 2:4: data, programs and Spike runs -> experiments/streaming/investigate/runs/20261117-145939-nm24-flow/bench
+  edge: 4 programs (_full _fixa _loop _dense), .text identical (sha256 f173f6b08ada92e5)
+  small: 4 programs (_full _fixa _loop _dense), .text identical (sha256 d435413a85818794)
+  bert_qkv: 4 programs (_full _fixa _loop _dense), .text identical (sha256 d9c2c931ac19d5e1)
+  bert_ffn1: 4 programs (_full _fixa _loop _dense), .text identical (sha256 55a5cee7e9c46a88)
+  bert_ffn2: 4 programs (_full _fixa _loop _dense), .text identical (sha256 de2037f06439147e)
+  rn50_conv: 4 programs (_full _fixa _loop _dense), .text identical (sha256 d62d4fce9b0b46bf)
+pass  edge_24_full  sbench passed (3 of 3 runs verified)
+pass  edge_24_fixa  sbench passed (1 of 1 runs verified)
+pass  edge_24_loop  sbench passed (1 of 1 runs verified)
+pass  edge_24_dense  sbench passed (2 of 2 runs verified)
+pass  small_24_full  sbench passed (3 of 3 runs verified)
+pass  small_24_fixa  sbench passed (1 of 1 runs verified)
+pass  small_24_loop  sbench passed (1 of 1 runs verified)
+pass  small_24_dense  sbench passed (2 of 2 runs verified)
+pass  bert_qkv_24_full  sbench passed (3 of 3 runs verified)
+pass  bert_qkv_24_fixa  sbench passed (1 of 1 runs verified)
+pass  bert_qkv_24_loop  sbench passed (1 of 1 runs verified)
+pass  bert_qkv_24_dense  sbench passed (2 of 2 runs verified)
+pass  bert_ffn1_24_full  sbench passed (3 of 3 runs verified)
+pass  bert_ffn1_24_fixa  sbench passed (1 of 1 runs verified)
+pass  bert_ffn1_24_loop  sbench passed (1 of 1 runs verified)
+pass  bert_ffn1_24_dense  sbench passed (2 of 2 runs verified)
+pass  bert_ffn2_24_full  sbench passed (3 of 3 runs verified)
+pass  bert_ffn2_24_fixa  sbench passed (1 of 1 runs verified)
+pass  bert_ffn2_24_loop  sbench passed (1 of 1 runs verified)
+pass  bert_ffn2_24_dense  sbench passed (2 of 2 runs verified)
+pass  rn50_conv_24_full  sbench passed (3 of 3 runs verified)
+pass  rn50_conv_24_fixa  sbench passed (1 of 1 runs verified)
+pass  rn50_conv_24_loop  sbench passed (1 of 1 runs verified)
+pass  rn50_conv_24_dense  sbench passed (2 of 2 runs verified)
+
+== programs for the server -> experiments/streaming/investigate/runs/20261117-145939-nm24-flow/bin
+  Spike stage passed; 119 programs in experiments/streaming/investigate/runs/20261117-145939-nm24-flow/bin
