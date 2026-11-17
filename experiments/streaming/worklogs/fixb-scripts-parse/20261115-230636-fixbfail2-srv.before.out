@@ -1,0 +1,11 @@
+== tests
+tests: 0 PASS, 0 FAIL
+
+== fair_perf
+fair ranges (seeds):
+
+== streaming
+nm24 nm_loop7_24              s1 FAIL (no sbench passed) | 
+nm48 nm_loop7_48              s1 FAIL (no sbench passed) | 
+stream ranges (total, seeds):
+parse_fixa: 2 failed or missing logs, 2 logs judged

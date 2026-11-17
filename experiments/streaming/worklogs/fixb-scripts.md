@@ -157,3 +157,33 @@ cycles); each on nm24 and nm48. All 12 have exit 2 in B's `jobs.tsv`.
 ## RESUME HERE
 Done: all three items, tested on A and B. Running: nothing. No git writes. Next: coordinator review; decide whether the parser
 should judge the `stock.*` logs.
+
+## Blocker fixes 2026-11-17
+Scope: run-flow.sh, tools/parse_fixa.py (fixb-verify.md Verdict blockers). No sims, server or commits.
+Parser outputs before/after: `worklogs/fixb-scripts-parse/<run>.{before,after}.out`.
+- parse_fixa.py: judges `stock.*` logs (streaming `<layer>_24_dense` by `sbench passed (N of N runs verified)`;
+  berkeley_dense_perf / fair_perf_dense_only by their pass line and one `matches the cpu reference` per non-cpu row,
+  rule now applied to all fair programs; stock dense tests by the dense rule). Fair ranges labelled `<chip> <program>`
+  except nm fair_perf_24/48 (stock's two programs share row names).
+- `nm_*` logs that are not NEG cases are tests: nm_sparse_* need `^<base> passed$`; other nm_ (nm_loop7) need
+  `^nm_sparse_\w+ passed$`; all need exit 0, no assert, last line `Verilog $finish`.
+- KNOWN_BERKELEY allowlist (gemmini_counter B4, global_average B5): only when the log carries the B4/B5 signature;
+  printed as KNOWN-BERKELEY FAIL in its own section, not counted in rc. conv_with_input_dilation* not allowlisted.
+  B6 note printed on igelu/layernorm/softmax passes.
+- Mutant checks (scratch copies): gemmini_counter without its signature -> FAIL rc 1; nm_loop7 without $finish -> FAIL rc 1;
+  nm_sparse_loop without pass line -> FAIL.
+- Results: fixa-srv rc 0, 56 PASS, output byte-identical. fixb-srv rc 1: 170 PASS, 8 FAIL (conv_with_input_dilation* x3
+  x2 chips, nm_sparse_loop_24/48), 4 KNOWN-BERKELEY; 12 stock logs all ok; 224 judged. fixbfail-srv rc 0: 2 PASS,
+  2 KNOWN-BERKELEY (stock). fixbfail2-srv rc 0: nm_loop7_24/48 PASS.
+- run-flow.sh: `prog_timeout` raises TIMEOUT_CYCLES to 300M for nm_sparse_loop_NN and conv_with_input_dilation*
+  (cites 20261115-225958-fixbfail-srv / 20261115-230636-fixbfail2-srv). `sim` now writes `<sim>.src.sha256`
+  (sha256 of all 3 gemmini repos' files + HEADs, taken right before make, plus `# sim sha256=` after); write_info
+  prints `src.<cfg>.sha256list=<sha>` or `none` / `STALE`. backup_sim backs the list up too. `bash -n` OK; helper
+  test: list = 231 files + 3 HEAD lines on laptop.
+- Out of scope: the 20M nm_sparse_loop budget and the wrong run.info `src.gemmini.sha256list` come from the server
+  ad-hoc scripts, not run-flow.sh: job list hand-written in session scratchpad `fixb-srv/jobs.txt:43` (== run's
+  jobs-20261113-160018.txt), run.info written by server `~/fixb/run_jobs.sh` / `~/fixb/build_run.sh` (not in repo).
+
+## RESUME HERE
+Done: blocker fixes above. Running: nothing. Next: coordinator review; a future server run should use run-flow.sh's
+prog_timeout values and record the build-time source list (server scripts need the same change).

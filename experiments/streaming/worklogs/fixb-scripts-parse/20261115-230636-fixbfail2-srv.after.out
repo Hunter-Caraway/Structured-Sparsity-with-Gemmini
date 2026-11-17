@@ -1,0 +1,10 @@
+== tests
+nm24  nm_loop7_24                  s1 PASS rc=0   39772s  nm_sparse_loop passed
+nm48  nm_loop7_48                  s1 PASS rc=0   41157s  nm_sparse_loop passed
+tests: 2 PASS, 0 FAIL
+
+== fair_perf
+fair ranges (seeds):
+
+== streaming
+stream ranges (total, seeds):

@@ -5,7 +5,8 @@ NEG builds pass only if every RTL assert they print carries one of the case's ex
 and its own "at <File>.scala:<line>" line. The message is read from the "Assertion failed: <msg>" line only, never
 from the "at" line, which echoes the assert's source text. Source line numbers are printed, not checked: they move
 with every RTL edit.
-Berkeley's dense tests (DENSE below) print no pass line of their own; they are judged on the simulator's ending."""
+Berkeley's dense tests (DENSE below) print no pass line of their own; they are judged on the simulator's ending.
+Logs of all three chips (nm24, nm48, stock) are judged; KNOWN_BERKELEY failures are listed apart and not counted."""
 import re, sys, os, csv, collections
 
 run = sys.argv[1]
@@ -76,6 +77,16 @@ tiled_matmul_option transpose matrix_add resadd resadd_stride global_average gem
 """.split())
 assert len(DENSE) == 54
 DENSE_BAD = ('*** FAILED ***', 'Assertion', '%Error', '%Fatal', 'Verilog $stop')
+# KNOWN-BERKELEY allowlist: dense tests that fail the same way on Berkeley's unmodified stock chip
+# (worklogs/berkeley-issues.md B4, B5). A log matching its signature is printed as KNOWN-BERKELEY FAIL and does not
+# count toward the exit status; any other failure of these tests still fails. conv_with_input_dilation* are NOT here:
+# their timeouts are unresolved.
+KNOWN_BERKELEY = {
+    'gemmini_counter': ('B4', ('Counter values changed too little after snapshot reset', '*** FAILED *** (tohost = 1)')),
+    'global_average': ('B5', ('\nFail\n', '*** FAILED *** (tohost = 1)')),
+}
+# berkeley-issues.md B6: these exit 0 before testing anything on our configs, so their PASS is not evidence
+VACUOUS = frozenset(('tiled_matmul_ws_igelu', 'tiled_matmul_ws_layernorm', 'tiled_matmul_ws_softmax'))
 
 # sparse-loop-fix NEG builds (nm_sparse_loop -DNEG=<n>, n / 10 = assert N1..N14 of fix-b-spec.md 2.5.6; same texts as
 # run-flow.sh loop_neg_msg). The source lines are not pinned here: a case passes if every assert it prints carries its
@@ -119,7 +130,7 @@ def assert_pairs(lines):
 logs = sorted(f for f in os.listdir(run) if f.endswith('.log'))
 tests, fair, stream = [], [], []
 for f in logs:
-    m = re.match(r'(nm24|nm48)\.(.+)\.seed(\d+)\.log$', f)
+    m = re.match(r'(nm24|nm48|stock)\.(.+)\.seed(\d+)\.log$', f)
     if not m:
         continue
     chip, name, seed = m.groups()
@@ -154,8 +165,13 @@ for f in logs:
         if not ok:
             detail += '  [expected: %s]' % (exp or 'no RTL assert exists for this case (Spike-only or unknown NEG)')
         tests.append((chip, name, seed, 'PASS' if ok else 'FAIL', rc, wall, detail, f))
-    elif base.startswith('nm_sparse'):
-        ok = rc == '0' and re.search(r'^%s passed$' % base, text, re.M) is not None and not asserts
+    elif base.startswith('nm_'):
+        # nm_sparse_* print "<base> passed"; case-subset builds of them (e.g. nm_loop7 = nm_sparse_loop cases 7-17)
+        # print their parent's "nm_sparse_<x> passed". Both must end on the simulator's "Verilog $finish".
+        pline = re.escape(base) if base.startswith('nm_sparse') else r'nm_sparse_\w+'
+        ll = [l for l in text.splitlines() if l.strip()]
+        fin = bool(ll) and 'Verilog $finish' in ll[-1]
+        ok = rc == '0' and re.search(r'^%s passed$' % pline, text, re.M) is not None and not asserts and fin
         last = [l for l in text.splitlines() if 'passed' in l or 'FAIL' in l or 'mismatch' in l or 'Assertion' in l]
         tests.append((chip, name, seed, 'PASS' if ok else 'FAIL', rc, wall, (last or ['(none)'])[-1][:160], f))
     elif name in DENSE:
@@ -165,16 +181,29 @@ for f in logs:
         ok = rc == '0' and fin and not bad
         detail = 'dense: ' + (bad[0].strip() if bad else 'Verilog $finish' if fin else
                               'no Verilog $finish at the end: ' + (ll[-1].strip() if ll else '(empty log)'))
-        tests.append((chip, name, seed, 'PASS' if ok else 'FAIL', rc, wall, detail[:160], f))
-    elif base.startswith('fair_perf'):
+        status = 'PASS' if ok else 'FAIL'
+        kb = KNOWN_BERKELEY.get(name)
+        if not ok and kb and rc not in ('0', '?') and all(sig in text for sig in kb[1]):
+            status = 'KNOWN-BERKELEY FAIL'
+            detail = '%s (berkeley-issues.md %s, not counted)' % (detail[:110], kb[0])
+        elif ok and name in VACUOUS:
+            detail += ' [NOTE berkeley-issues.md B6: exits before testing, vacuous pass]'
+        tests.append((chip, name, seed, status, rc, wall, detail[:180], f))
+    elif base.startswith('fair_perf') or base == 'berkeley_dense_perf':
         rows = {mm.group(1): int(mm.group(2)) for mm in re.finditer(r'^(\w+)\s+total\s+(\d+)', text, re.M)}
-        # hardware-loop variants (dense_loop, sparse_loop): a total line counts only with its own reference match
-        loop_bad = [k for k in rows if k.endswith('_loop') and not k.startswith('cpu_')
+        # every Gemmini variant's total line counts only with its own reference match (cpu_* rows have none)
+        loop_bad = [k for k in rows if not k.startswith('cpu_')
                     and not re.search(r'^%s matches the cpu reference' % k, text, re.M)]
-        ok = rc == '0' and 'fair_perf passed' in text and not asserts and not loop_bad
+        pname = 'berkeley_dense_perf' if base == 'berkeley_dense_perf' else 'fair_perf'
+        ok = rc == '0' and re.search(r'^%s passed$' % pname, text, re.M) is not None and not asserts and not loop_bad
         hdr = re.search(r'^fair_perf: (\S+),', text, re.M)
         nmatch = len(re.findall(r'matches the cpu reference', text))
-        fair.append((chip, seed, ok, hdr.group(1) if hdr else '?', rows, nmatch, f))
+        if base == 'berkeley_dense_perf':
+            hdr = re.search(r'^berkeley_dense_perf: [^,]*, (\S+)', text, re.M)
+        # stock runs two programs that share row names (dense, dense_reuse): label them apart; nm fair_perf_24/48 keep
+        # the bare chip label
+        label = chip if base == 'fair_perf' else '%s %s' % (chip, base)
+        fair.append((label, seed, ok, hdr.group(1) if hdr else '?', rows, nmatch, f))
     else:
         rows = {}
         for mm in re.finditer(r'^(\w+)\s+total\s+(\d+)\s+cpu_issue_done\s+(\d+) \| ex_active=(\d+)', text, re.M):
@@ -196,7 +225,13 @@ for f in logs:
 print('== tests')
 for t in sorted(tests):
     print('%-5s %-28s s%s %-4s rc=%-3s %5ss  %s' % (t[0], t[1], t[2], t[3], t[4], t[5], t[6]))
-print('tests: %d PASS, %d FAIL' % (sum(t[3] == 'PASS' for t in tests), sum(t[3] != 'PASS' for t in tests)))
+known = [t for t in tests if t[3] == 'KNOWN-BERKELEY FAIL']
+print('tests: %d PASS, %d FAIL' % (sum(t[3] == 'PASS' for t in tests), sum(t[3] == 'FAIL' for t in tests))
+      + (', %d KNOWN-BERKELEY FAIL (not counted)' % len(known) if known else ''))
+if known:
+    print('\n== KNOWN-BERKELEY FAIL (fail on stock RTL too; berkeley-issues.md; not counted in the exit status)')
+    for t in sorted(known):
+        print('%-5s %-28s s%s rc=%-3s %s' % (t[0], t[1], t[2], t[4], t[6]))
 
 print('\n== fair_perf')
 # the file name breaks ties (two fair programs on one chip and seed), so the row dicts are never compared
@@ -229,7 +264,7 @@ for (chip, name, k), v in sorted(sb.items()):
 missing = sorted('%s.%s.seed%s.log' % k for k in jobs if '%s.%s.seed%s.log' % k not in logs)
 for f in missing:
     print('MISSING LOG', f)
-nfail = (sum(t[3] != 'PASS' for t in tests) + sum(not r[2] for r in fair) + sum(not r[3] for r in stream)
+nfail = (sum(t[3] == 'FAIL' for t in tests) + sum(not r[2] for r in fair) + sum(not r[3] for r in stream)
          + len(missing))
 if nfail or not (tests or fair or stream):
     sys.exit('parse_fixa: %d failed or missing logs, %d logs judged' % (nfail, len(tests) + len(fair) + len(stream)))

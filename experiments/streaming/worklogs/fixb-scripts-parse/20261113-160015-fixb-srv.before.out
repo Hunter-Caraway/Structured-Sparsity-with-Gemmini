@@ -1,0 +1,299 @@
+== tests
+nm24  aligned                      s1 PASS rc=0      18s  dense: Verilog $finish
+nm24  conv                         s1 PASS rc=0   13764s  dense: Verilog $finish
+nm24  conv_dw                      s1 PASS rc=0    2359s  dense: Verilog $finish
+nm24  conv_dw_perf                 s1 PASS rc=0    5281s  dense: Verilog $finish
+nm24  conv_first_layer             s1 PASS rc=0    3797s  dense: Verilog $finish
+nm24  conv_perf                    s1 PASS rc=0    4031s  dense: Verilog $finish
+nm24  conv_rect                    s1 PASS rc=0    3386s  dense: Verilog $finish
+nm24  conv_rect_pool               s1 PASS rc=0    5340s  dense: Verilog $finish
+nm24  conv_stride                  s1 PASS rc=0    2751s  dense: Verilog $finish
+nm24  conv_trans_input_3120        s1 PASS rc=0   14540s  dense: Verilog $finish
+nm24  conv_trans_input_3120_with_kernel_dilation s1 PASS rc=0   48412s  dense: Verilog $finish
+nm24  conv_trans_output_1203       s1 PASS rc=0   12945s  dense: Verilog $finish
+nm24  conv_trans_weight_0132       s1 PASS rc=0   12846s  dense: Verilog $finish
+nm24  conv_trans_weight_1203       s1 PASS rc=0   13066s  dense: Verilog $finish
+nm24  conv_with_input_dilation     s1 FAIL rc=2   125064s  dense: *** FAILED ***                       (timeout) after            150000001 simulation cycles
+nm24  conv_with_input_dilation_and_neg_padding s1 FAIL rc=2   126828s  dense: *** FAILED ***                       (timeout) after            150000001 simulation cycles
+nm24  conv_with_input_dilation_and_rot180 s1 FAIL rc=2   124932s  dense: *** FAILED ***                       (timeout) after            150000001 simulation cycles
+nm24  conv_with_kernel_dilation    s1 PASS rc=0   99170s  dense: Verilog $finish
+nm24  conv_with_pool               s1 PASS rc=0   14741s  dense: Verilog $finish
+nm24  conv_with_rot180             s1 PASS rc=0   77315s  dense: Verilog $finish
+nm24  gemmini_counter              s1 FAIL rc=2     105s  dense: *** FAILED *** (tohost = 1)
+nm24  global_average               s1 FAIL rc=2     733s  dense: *** FAILED *** (tohost = 1)
+nm24  matmul                       s1 PASS rc=0   22588s  dense: Verilog $finish
+nm24  matmul_os                    s1 PASS rc=0    6615s  dense: Verilog $finish
+nm24  matmul_ws                    s1 PASS rc=0    8524s  dense: Verilog $finish
+nm24  matrix_add                   s1 PASS rc=0     511s  dense: Verilog $finish
+nm24  mvin_mvout                   s1 PASS rc=0      56s  dense: Verilog $finish
+nm24  mvin_mvout_acc               s1 PASS rc=0     378s  dense: Verilog $finish
+nm24  mvin_mvout_acc_full          s1 PASS rc=0     129s  dense: Verilog $finish
+nm24  mvin_mvout_acc_full_stride   s1 PASS rc=0     632s  dense: Verilog $finish
+nm24  mvin_mvout_acc_stride        s1 PASS rc=0    8153s  dense: Verilog $finish
+nm24  mvin_mvout_acc_zero_stride   s1 PASS rc=0      38s  dense: Verilog $finish
+nm24  mvin_mvout_block_stride      s1 PASS rc=0      31s  dense: Verilog $finish
+nm24  mvin_mvout_stride            s1 PASS rc=0     680s  dense: Verilog $finish
+nm24  mvin_mvout_zeros             s1 PASS rc=0      12s  dense: Verilog $finish
+nm24  mvin_scale                   s1 PASS rc=0      96s  dense: Verilog $finish
+nm24  nm_sparse_debug_24           s1 PASS rc=0    1470s  nm_sparse_debug passed
+nm24  nm_sparse_loop_24            s1 FAIL rc=2   16995s  [20000001000] %Fatal: TestDriver.v:147: Assertion failed in TOP.TestDriver
+nm24  nm_sparse_loop_neg100_24     s1 PASS rc=2     262s  Controller.scala:653 @ sparse-loop-fix: sparse loop started with index tiles pending in the FIFO: gemmini_nm_rese
+nm24  nm_sparse_loop_neg10_24      s1 PASS rc=2     349s  Controller.scala:298 @ sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+nm24  nm_sparse_loop_neg11_24      s1 PASS rc=2     343s  Controller.scala:298 @ sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+nm24  nm_sparse_loop_neg120_24     s1 PASS rc=2     296s  Controller.scala:608 @ sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+nm24  nm_sparse_loop_neg121_24     s1 PASS rc=2     331s  Controller.scala:608 @ sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+nm24  nm_sparse_loop_neg122_24     s1 PASS rc=2     346s  Controller.scala:608 @ sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+nm24  nm_sparse_loop_neg130_24     s1 PASS rc=2     303s  Controller.scala:611 @ sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm24  nm_sparse_loop_neg131_24     s1 PASS rc=2     288s  Controller.scala:611 @ sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm24  nm_sparse_loop_neg132_24     s1 PASS rc=2     272s  Controller.scala:611 @ sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm24  nm_sparse_loop_neg133_24     s1 PASS rc=2     252s  Controller.scala:611 @ sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm24  nm_sparse_loop_neg20_24      s1 PASS rc=2     280s  Controller.scala:300 @ sparse-loop-fix: LOOP_CONV_WS issued while n:m sparse mode (config_ex rs1[10]) is on
+nm24  nm_sparse_loop_neg30_24      s1 PASS rc=2     269s  Controller.scala:310 @ sparse-loop-fix: LOOP_WS with rs1[3] set needs LOOP_WS_CONFIG_NM (funct 28) first
+nm24  nm_sparse_loop_neg40_24      s1 PASS rc=2     278s  Controller.scala:311 @ sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) without LOOP_WS rs1[3]
+nm24  nm_sparse_loop_neg50_24      s1 PASS rc=2     240s  Controller.scala:305 @ sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+nm24  nm_sparse_loop_neg51_24      s1 PASS rc=2     227s  Controller.scala:305 @ sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+nm24  nm_sparse_loop_neg52_24      s1 PASS rc=2     223s  Controller.scala:305 @ sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+nm24  nm_sparse_loop_neg60_24      s1 PASS rc=2     320s  LoopMatmul.scala:1370 @ sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)
+nm24  nm_sparse_loop_neg61_24      s1 PASS rc=2     279s  LoopMatmul.scala:1370 @ sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)
+nm24  nm_sparse_loop_neg70_24      s1 PASS rc=2     249s  LoopMatmul.scala:1368 @ sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm24  nm_sparse_loop_neg71_24      s1 PASS rc=2     258s  LoopMatmul.scala:1368 @ sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm24  nm_sparse_loop_neg72_24      s1 PASS rc=2     261s  LoopMatmul.scala:1368 @ sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm24  nm_sparse_loop_neg73_24      s1 PASS rc=2     297s  LoopMatmul.scala:1368 @ sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm24  nm_sparse_loop_neg74_24      s1 PASS rc=2     315s  LoopMatmul.scala:1368 @ sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm24  nm_sparse_loop_neg80_24      s1 PASS rc=2     293s  Controller.scala:312 @ sparse-loop-fix: sparse loop needs A_stride == 1
+nm24  nm_sparse_loop_neg90_24      s1 PASS rc=2     266s  LoopMatmul.scala:1372 @ sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index
+nm24  nm_sparse_loop_neg91_24      s1 PASS rc=2     248s  LoopMatmul.scala:1372 @ sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index
+nm24  nm_sparse_matmul_24          s1 PASS rc=0    1629s  nm_sparse_matmul passed
+nm24  nm_sparse_perf_24            s1 PASS rc=0    6381s  nm_sparse_perf passed
+nm24  nm_sparse_protocol_24        s1 PASS rc=0    1436s  nm_sparse_protocol passed
+nm24  nm_sparse_protocol_neg10_24  s1 PASS rc=2      54s  Controller.scala:298 @ sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+nm24  nm_sparse_protocol_neg14_24  s1 PASS rc=2      76s  ExecuteController.scala:949 @ n:m sparse mode of a compute differs from the mode its weights were preloaded in
+nm24  nm_sparse_protocol_neg4_24   s1 PASS rc=2      73s  Controller.scala:622 @ n:m index fifo deadlock: more than 4 index tiles sent ahead of their preloads
+nm24  nm_sparse_protocol_neg7_24   s1 PASS rc=2      51s  ExecuteController.scala:949 @ n:m sparse mode of a compute differs from the mode its weights were preloaded in
+nm24  nm_sparse_protocol_neg9_24   s1 PASS rc=2      52s  ExecuteController.scala:677 @ n:m sparse mode (config_ex rs1[10]) needs weight stationary dataflow with a_transpose = 0 
+nm24  nm_sparse_sw_24              s1 PASS rc=0    5472s  nm_sparse_sw passed
+nm24  padded                       s1 PASS rc=0      17s  dense: Verilog $finish
+nm24  raw_hazard                   s1 PASS rc=0      16s  dense: Verilog $finish
+nm24  resadd                       s1 PASS rc=0      36s  dense: Verilog $finish
+nm24  resadd_stride                s1 PASS rc=0     294s  dense: Verilog $finish
+nm24  template                     s1 PASS rc=0     192s  dense: Verilog $finish
+nm24  tiled_matmul_cpu             s1 PASS rc=0    9057s  dense: Verilog $finish
+nm24  tiled_matmul_option          s1 PASS rc=0   46391s  dense: Verilog $finish
+nm24  tiled_matmul_os              s1 PASS rc=0    5386s  dense: Verilog $finish
+nm24  tiled_matmul_ws              s1 PASS rc=0    5981s  dense: Verilog $finish
+nm24  tiled_matmul_ws_At           s1 PASS rc=0    2090s  dense: Verilog $finish
+nm24  tiled_matmul_ws_Bt           s1 PASS rc=0    2117s  dense: Verilog $finish
+nm24  tiled_matmul_ws_full_C       s1 PASS rc=0    1692s  dense: Verilog $finish
+nm24  tiled_matmul_ws_igelu        s1 PASS rc=0       7s  dense: Verilog $finish
+nm24  tiled_matmul_ws_layernorm    s1 PASS rc=0       5s  dense: Verilog $finish
+nm24  tiled_matmul_ws_low_D        s1 PASS rc=0    1783s  dense: Verilog $finish
+nm24  tiled_matmul_ws_perf         s1 PASS rc=0     197s  dense: Verilog $finish
+nm24  tiled_matmul_ws_softmax      s1 PASS rc=0       7s  dense: Verilog $finish
+nm24  transpose                    s1 PASS rc=0     210s  dense: Verilog $finish
+nm48  aligned                      s1 PASS rc=0      15s  dense: Verilog $finish
+nm48  conv                         s1 PASS rc=0   13172s  dense: Verilog $finish
+nm48  conv_dw                      s1 PASS rc=0    2491s  dense: Verilog $finish
+nm48  conv_dw_perf                 s1 PASS rc=0    5152s  dense: Verilog $finish
+nm48  conv_first_layer             s1 PASS rc=0    3670s  dense: Verilog $finish
+nm48  conv_perf                    s1 PASS rc=0    3892s  dense: Verilog $finish
+nm48  conv_rect                    s1 PASS rc=0    3060s  dense: Verilog $finish
+nm48  conv_rect_pool               s1 PASS rc=0    4682s  dense: Verilog $finish
+nm48  conv_stride                  s1 PASS rc=0    2575s  dense: Verilog $finish
+nm48  conv_trans_input_3120        s1 PASS rc=0   13741s  dense: Verilog $finish
+nm48  conv_trans_input_3120_with_kernel_dilation s1 PASS rc=0   45529s  dense: Verilog $finish
+nm48  conv_trans_output_1203       s1 PASS rc=0   12586s  dense: Verilog $finish
+nm48  conv_trans_weight_0132       s1 PASS rc=0   12600s  dense: Verilog $finish
+nm48  conv_trans_weight_1203       s1 PASS rc=0   12627s  dense: Verilog $finish
+nm48  conv_with_input_dilation     s1 FAIL rc=2   121439s  dense: *** FAILED ***                       (timeout) after            150000001 simulation cycles
+nm48  conv_with_input_dilation_and_neg_padding s1 FAIL rc=2   122194s  dense: *** FAILED ***                       (timeout) after            150000001 simulation cycles
+nm48  conv_with_input_dilation_and_rot180 s1 FAIL rc=2   121129s  dense: *** FAILED ***                       (timeout) after            150000001 simulation cycles
+nm48  conv_with_kernel_dilation    s1 PASS rc=0   94083s  dense: Verilog $finish
+nm48  conv_with_pool               s1 PASS rc=0   13788s  dense: Verilog $finish
+nm48  conv_with_rot180             s1 PASS rc=0   72015s  dense: Verilog $finish
+nm48  gemmini_counter              s1 FAIL rc=2     111s  dense: *** FAILED *** (tohost = 1)
+nm48  global_average               s1 FAIL rc=2     809s  dense: *** FAILED *** (tohost = 1)
+nm48  matmul                       s1 PASS rc=0   20798s  dense: Verilog $finish
+nm48  matmul_os                    s1 PASS rc=0    6571s  dense: Verilog $finish
+nm48  matmul_ws                    s1 PASS rc=0    7821s  dense: Verilog $finish
+nm48  matrix_add                   s1 PASS rc=0     576s  dense: Verilog $finish
+nm48  mvin_mvout                   s1 PASS rc=0      59s  dense: Verilog $finish
+nm48  mvin_mvout_acc               s1 PASS rc=0     276s  dense: Verilog $finish
+nm48  mvin_mvout_acc_full          s1 PASS rc=0     128s  dense: Verilog $finish
+nm48  mvin_mvout_acc_full_stride   s1 PASS rc=0     568s  dense: Verilog $finish
+nm48  mvin_mvout_acc_stride        s1 PASS rc=0    7676s  dense: Verilog $finish
+nm48  mvin_mvout_acc_zero_stride   s1 PASS rc=0      64s  dense: Verilog $finish
+nm48  mvin_mvout_block_stride      s1 PASS rc=0      30s  dense: Verilog $finish
+nm48  mvin_mvout_stride            s1 PASS rc=0     592s  dense: Verilog $finish
+nm48  mvin_mvout_zeros             s1 PASS rc=0      10s  dense: Verilog $finish
+nm48  mvin_scale                   s1 PASS rc=0      76s  dense: Verilog $finish
+nm48  nm_sparse_debug_48           s1 PASS rc=0    1382s  nm_sparse_debug passed
+nm48  nm_sparse_loop_48            s1 FAIL rc=2   16303s  [20000001000] %Fatal: TestDriver.v:147: Assertion failed in TOP.TestDriver
+nm48  nm_sparse_loop_neg100_48     s1 PASS rc=2     307s  Controller.scala:653 @ sparse-loop-fix: sparse loop started with index tiles pending in the FIFO: gemmini_nm_rese
+nm48  nm_sparse_loop_neg10_48      s1 PASS rc=2     333s  Controller.scala:298 @ sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+nm48  nm_sparse_loop_neg11_48      s1 PASS rc=2     264s  Controller.scala:298 @ sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+nm48  nm_sparse_loop_neg120_48     s1 PASS rc=2     325s  Controller.scala:608 @ sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+nm48  nm_sparse_loop_neg121_48     s1 PASS rc=2     362s  Controller.scala:608 @ sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+nm48  nm_sparse_loop_neg122_48     s1 PASS rc=2     318s  Controller.scala:608 @ sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+nm48  nm_sparse_loop_neg130_48     s1 PASS rc=2     342s  Controller.scala:611 @ sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm48  nm_sparse_loop_neg131_48     s1 PASS rc=2     298s  Controller.scala:611 @ sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm48  nm_sparse_loop_neg132_48     s1 PASS rc=2     258s  Controller.scala:611 @ sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm48  nm_sparse_loop_neg133_48     s1 PASS rc=2     249s  Controller.scala:611 @ sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm48  nm_sparse_loop_neg20_48      s1 PASS rc=2     226s  Controller.scala:300 @ sparse-loop-fix: LOOP_CONV_WS issued while n:m sparse mode (config_ex rs1[10]) is on
+nm48  nm_sparse_loop_neg30_48      s1 PASS rc=2     282s  Controller.scala:310 @ sparse-loop-fix: LOOP_WS with rs1[3] set needs LOOP_WS_CONFIG_NM (funct 28) first
+nm48  nm_sparse_loop_neg40_48      s1 PASS rc=2     301s  Controller.scala:311 @ sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) without LOOP_WS rs1[3]
+nm48  nm_sparse_loop_neg50_48      s1 PASS rc=2     310s  Controller.scala:305 @ sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+nm48  nm_sparse_loop_neg51_48      s1 PASS rc=2     311s  Controller.scala:305 @ sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+nm48  nm_sparse_loop_neg52_48      s1 PASS rc=2     282s  Controller.scala:305 @ sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+nm48  nm_sparse_loop_neg60_48      s1 PASS rc=2     287s  LoopMatmul.scala:1370 @ sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)
+nm48  nm_sparse_loop_neg61_48      s1 PASS rc=2     294s  LoopMatmul.scala:1370 @ sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)
+nm48  nm_sparse_loop_neg70_48      s1 PASS rc=2     284s  LoopMatmul.scala:1368 @ sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm48  nm_sparse_loop_neg71_48      s1 PASS rc=2     322s  LoopMatmul.scala:1368 @ sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm48  nm_sparse_loop_neg72_48      s1 PASS rc=2     297s  LoopMatmul.scala:1368 @ sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm48  nm_sparse_loop_neg73_48      s1 PASS rc=2     341s  LoopMatmul.scala:1368 @ sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm48  nm_sparse_loop_neg74_48      s1 PASS rc=2     348s  LoopMatmul.scala:1368 @ sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm48  nm_sparse_loop_neg80_48      s1 PASS rc=2     308s  Controller.scala:312 @ sparse-loop-fix: sparse loop needs A_stride == 1
+nm48  nm_sparse_loop_neg90_48      s1 PASS rc=2     290s  LoopMatmul.scala:1372 @ sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index
+nm48  nm_sparse_loop_neg91_48      s1 PASS rc=2     267s  LoopMatmul.scala:1372 @ sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index
+nm48  nm_sparse_matmul_48          s1 PASS rc=0    1624s  nm_sparse_matmul passed
+nm48  nm_sparse_perf_48            s1 PASS rc=0    6781s  nm_sparse_perf passed
+nm48  nm_sparse_protocol_48        s1 PASS rc=0    1381s  nm_sparse_protocol passed
+nm48  nm_sparse_protocol_neg10_48  s1 PASS rc=2      63s  Controller.scala:298 @ sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+nm48  nm_sparse_protocol_neg14_48  s1 PASS rc=2      68s  ExecuteController.scala:949 @ n:m sparse mode of a compute differs from the mode its weights were preloaded in
+nm48  nm_sparse_protocol_neg4_48   s1 PASS rc=2      54s  Controller.scala:622 @ n:m index fifo deadlock: more than 4 index tiles sent ahead of their preloads
+nm48  nm_sparse_protocol_neg7_48   s1 PASS rc=2      41s  ExecuteController.scala:949 @ n:m sparse mode of a compute differs from the mode its weights were preloaded in
+nm48  nm_sparse_protocol_neg9_48   s1 PASS rc=2      46s  ExecuteController.scala:677 @ n:m sparse mode (config_ex rs1[10]) needs weight stationary dataflow with a_transpose = 0 
+nm48  nm_sparse_sw_48              s1 PASS rc=0    5568s  nm_sparse_sw passed
+nm48  padded                       s1 PASS rc=0      13s  dense: Verilog $finish
+nm48  raw_hazard                   s1 PASS rc=0      16s  dense: Verilog $finish
+nm48  resadd                       s1 PASS rc=0      35s  dense: Verilog $finish
+nm48  resadd_stride                s1 PASS rc=0     232s  dense: Verilog $finish
+nm48  template                     s1 PASS rc=0     173s  dense: Verilog $finish
+nm48  tiled_matmul_cpu             s1 PASS rc=0    8878s  dense: Verilog $finish
+nm48  tiled_matmul_option          s1 PASS rc=0   46864s  dense: Verilog $finish
+nm48  tiled_matmul_os              s1 PASS rc=0    5702s  dense: Verilog $finish
+nm48  tiled_matmul_ws              s1 PASS rc=0    5733s  dense: Verilog $finish
+nm48  tiled_matmul_ws_At           s1 PASS rc=0    2128s  dense: Verilog $finish
+nm48  tiled_matmul_ws_Bt           s1 PASS rc=0    2229s  dense: Verilog $finish
+nm48  tiled_matmul_ws_full_C       s1 PASS rc=0    1528s  dense: Verilog $finish
+nm48  tiled_matmul_ws_igelu        s1 PASS rc=0      10s  dense: Verilog $finish
+nm48  tiled_matmul_ws_layernorm    s1 PASS rc=0       3s  dense: Verilog $finish
+nm48  tiled_matmul_ws_low_D        s1 PASS rc=0    1658s  dense: Verilog $finish
+nm48  tiled_matmul_ws_perf         s1 PASS rc=0     158s  dense: Verilog $finish
+nm48  tiled_matmul_ws_softmax      s1 PASS rc=0       7s  dense: Verilog $finish
+nm48  transpose                    s1 PASS rc=0     174s  dense: Verilog $finish
+tests: 170 PASS, 12 FAIL
+
+== fair_perf
+nm24 seed 1 ok pattern=2:4 matches=8 dense=1544 dense_reuse=1500 sparse=2278 sparse_reuse=1350 sparse_batched=2082 sparse_spad=961 dense_loop=3119 sparse_loop=2779 cpu_dense=1100 cpu_dense_reuse=1060 cpu_sparse=1702 cpu_sparse_reuse=964 cpu_sparse_batched=1509 cpu_sparse_spad=685 cpu_meta_only=963
+nm24 seed 2 ok pattern=2:4 matches=8 dense=1544 dense_reuse=1500 sparse=2278 sparse_reuse=1350 sparse_batched=2082 sparse_spad=961 dense_loop=3119 sparse_loop=2779 cpu_dense=1100 cpu_dense_reuse=1060 cpu_sparse=1702 cpu_sparse_reuse=964 cpu_sparse_batched=1509 cpu_sparse_spad=685 cpu_meta_only=963
+nm24 seed 3 ok pattern=2:4 matches=8 dense=1544 dense_reuse=1500 sparse=2278 sparse_reuse=1350 sparse_batched=2082 sparse_spad=961 dense_loop=3119 sparse_loop=2779 cpu_dense=1100 cpu_dense_reuse=1060 cpu_sparse=1702 cpu_sparse_reuse=964 cpu_sparse_batched=1509 cpu_sparse_spad=685 cpu_meta_only=963
+nm48 seed 1 ok pattern=4:8 matches=8 dense=1475 dense_reuse=1483 sparse=3182 sparse_reuse=1589 sparse_batched=2834 sparse_spad=1037 dense_loop=3126 sparse_loop=2805 cpu_dense=1089 cpu_dense_reuse=1049 cpu_sparse=2255 cpu_sparse_reuse=1127 cpu_sparse_batched=2126 cpu_sparse_spad=715 cpu_meta_only=1493
+nm48 seed 2 ok pattern=4:8 matches=8 dense=1475 dense_reuse=1483 sparse=3182 sparse_reuse=1589 sparse_batched=2834 sparse_spad=1037 dense_loop=3126 sparse_loop=2805 cpu_dense=1089 cpu_dense_reuse=1049 cpu_sparse=2255 cpu_sparse_reuse=1127 cpu_sparse_batched=2126 cpu_sparse_spad=715 cpu_meta_only=1493
+nm48 seed 3 ok pattern=4:8 matches=8 dense=1475 dense_reuse=1483 sparse=3182 sparse_reuse=1589 sparse_batched=2834 sparse_spad=1037 dense_loop=3126 sparse_loop=2805 cpu_dense=1089 cpu_dense_reuse=1049 cpu_sparse=2255 cpu_sparse_reuse=1127 cpu_sparse_batched=2126 cpu_sparse_spad=715 cpu_meta_only=1493
+fair ranges (seeds):
+  nm24 cpu_dense            min    1100 max    1100 n=3
+  nm24 cpu_dense_reuse      min    1060 max    1060 n=3
+  nm24 cpu_meta_only        min     963 max     963 n=3
+  nm24 cpu_sparse           min    1702 max    1702 n=3
+  nm24 cpu_sparse_batched   min    1509 max    1509 n=3
+  nm24 cpu_sparse_reuse     min     964 max     964 n=3
+  nm24 cpu_sparse_spad      min     685 max     685 n=3
+  nm24 dense                min    1544 max    1544 n=3
+  nm24 dense_loop           min    3119 max    3119 n=3
+  nm24 dense_reuse          min    1500 max    1500 n=3
+  nm24 sparse               min    2278 max    2278 n=3
+  nm24 sparse_batched       min    2082 max    2082 n=3
+  nm24 sparse_loop          min    2779 max    2779 n=3
+  nm24 sparse_reuse         min    1350 max    1350 n=3
+  nm24 sparse_spad          min     961 max     961 n=3
+  nm48 cpu_dense            min    1089 max    1089 n=3
+  nm48 cpu_dense_reuse      min    1049 max    1049 n=3
+  nm48 cpu_meta_only        min    1493 max    1493 n=3
+  nm48 cpu_sparse           min    2255 max    2255 n=3
+  nm48 cpu_sparse_batched   min    2126 max    2126 n=3
+  nm48 cpu_sparse_reuse     min    1127 max    1127 n=3
+  nm48 cpu_sparse_spad      min     715 max     715 n=3
+  nm48 dense                min    1475 max    1475 n=3
+  nm48 dense_loop           min    3126 max    3126 n=3
+  nm48 dense_reuse          min    1483 max    1483 n=3
+  nm48 sparse               min    3182 max    3182 n=3
+  nm48 sparse_batched       min    2834 max    2834 n=3
+  nm48 sparse_loop          min    2805 max    2805 n=3
+  nm48 sparse_reuse         min    1589 max    1589 n=3
+  nm48 sparse_spad          min    1037 max    1037 n=3
+
+== streaming
+nm24 bert_ffn1_24_full        s1 ok sbench passed (3 of 3 runs verified) | berkeley total=1438096 cpu=1438045 ex=1182376  dense_stream total=1827174 cpu=1825523 ex=1202910  sparse_stream total=2619183 cpu=2617601 ex=1206889
+nm24 bert_ffn1_24_loop        s1 ok sbench passed (1 of 1 runs verified) [sparse_loop tiles I=5 J=6 K=48] | sparse_loop total=1207250 cpu=1207199 ex=1164546
+nm24 bert_ffn2_24_full        s1 ok sbench passed (3 of 3 runs verified) | berkeley total=1763305 cpu=1763303 ex=1417694  dense_stream total=1763103 cpu=1761843 ex=1197048  sparse_stream total=2536562 cpu=2535369 ex=1217271
+nm24 bert_ffn2_24_loop        s1 ok sbench passed (1 of 1 runs verified) [sparse_loop tiles I=5 J=6 K=58] | sparse_loop total=1313347 cpu=1313345 ex=1261545
+nm24 bert_qkv_24_full         s1 ok sbench passed (3 of 3 runs verified) | berkeley total=317206 cpu=317204 ex=292031  dense_stream total=460620 cpu=459308 ex=300177  sparse_stream total=658031 cpu=656764 ex=301615
+nm24 bert_qkv_24_loop         s1 ok sbench passed (1 of 1 runs verified) [sparse_loop tiles I=5 J=6 K=48] | sparse_loop total=305747 cpu=305745 ex=290794
+nm24 edge_24_full             s1 ok sbench passed (3 of 3 runs verified) | berkeley total=4366 cpu=4364 ex=1788  dense_stream total=4851 cpu=4614 ex=1554  sparse_stream total=8308 cpu=8047 ex=1428
+nm24 edge_24_loop             s1 ok sbench passed (1 of 1 runs verified) [sparse_loop tiles I=3 J=4 K=8] | sparse_loop total=3843 cpu=3841 ex=1573
+nm24 rn50_conv_24_full        s1 ok sbench passed (3 of 3 runs verified) | berkeley total=661441 cpu=661439 ex=562896  dense_stream total=742284 cpu=741732 ex=485581  sparse_stream total=1161086 cpu=1160457 ex=473454
+nm24 rn50_conv_24_loop        s1 ok sbench passed (1 of 1 runs verified) [sparse_loop tiles I=5 J=6 K=58] | sparse_loop total=519145 cpu=519143 ex=498642
+nm24 small_24_full            s1 ok sbench passed (3 of 3 runs verified) | berkeley total=14793 cpu=14791 ex=9300  dense_stream total=18523 cpu=17138 ex=8616  sparse_stream total=29775 cpu=28530 ex=8839
+nm24 small_24_loop            s1 ok sbench passed (1 of 1 runs verified) [sparse_loop tiles I=4 J=8 K=16] | sparse_loop total=12899 cpu=12897 ex=8779
+nm48 bert_ffn1_48_full        s1 ok sbench passed (3 of 3 runs verified) | berkeley total=1438269 cpu=1438218 ex=1182867  dense_stream total=1829836 cpu=1828176 ex=1201755  sparse_stream total=2998256 cpu=2996572 ex=1204888
+nm48 bert_ffn1_48_loop        s1 ok sbench passed (1 of 1 runs verified) [sparse_loop tiles I=5 J=6 K=48] | sparse_loop total=1234319 cpu=1234268 ex=1189962
+nm48 bert_ffn2_48_full        s1 ok sbench passed (3 of 3 runs verified) | berkeley total=1761069 cpu=1761067 ex=1417775  dense_stream total=1761240 cpu=1760004 ex=1199121  sparse_stream total=2913160 cpu=2911947 ex=1212914
+nm48 bert_ffn2_48_loop        s1 ok sbench passed (1 of 1 runs verified) [sparse_loop tiles I=5 J=6 K=56] | sparse_loop total=1304067 cpu=1304065 ex=1248364
+nm48 bert_qkv_48_full         s1 ok sbench passed (3 of 3 runs verified) | berkeley total=316584 cpu=316582 ex=291594  dense_stream total=460725 cpu=459261 ex=299907  sparse_stream total=743108 cpu=741840 ex=301076
+nm48 bert_qkv_48_loop         s1 ok sbench passed (1 of 1 runs verified) [sparse_loop tiles I=5 J=6 K=48] | sparse_loop total=307018 cpu=307016 ex=290380
+nm48 edge_48_full             s1 ok sbench passed (3 of 3 runs verified) | berkeley total=4266 cpu=4264 ex=1782  dense_stream total=4881 cpu=4625 ex=1554  sparse_stream total=9517 cpu=9334 ex=1425
+nm48 edge_48_loop             s1 ok sbench passed (1 of 1 runs verified) [sparse_loop tiles I=3 J=4 K=8] | sparse_loop total=3989 cpu=3987 ex=1564
+nm48 rn50_conv_48_full        s1 ok sbench passed (3 of 3 runs verified) | berkeley total=661155 cpu=661153 ex=562880  dense_stream total=739496 cpu=738886 ex=485671  sparse_stream total=1350011 cpu=1349376 ex=473469
+nm48 rn50_conv_48_loop        s1 ok sbench passed (1 of 1 runs verified) [sparse_loop tiles I=5 J=6 K=56] | sparse_loop total=515414 cpu=515412 ex=492738
+nm48 small_48_full            s1 ok sbench passed (3 of 3 runs verified) | berkeley total=14749 cpu=14747 ex=9257  dense_stream total=18479 cpu=17099 ex=8604  sparse_stream total=35501 cpu=34190 ex=8845
+nm48 small_48_loop            s1 ok sbench passed (1 of 1 runs verified) [sparse_loop tiles I=4 J=8 K=16] | sparse_loop total=13548 cpu=13546 ex=8467
+stream ranges (total, seeds):
+  nm24 bert_ffn1_24_full        berkeley       min   1438096 max   1438096 n=1
+  nm24 bert_ffn1_24_full        dense_stream   min   1827174 max   1827174 n=1
+  nm24 bert_ffn1_24_full        sparse_stream  min   2619183 max   2619183 n=1
+  nm24 bert_ffn1_24_loop        sparse_loop    min   1207250 max   1207250 n=1
+  nm24 bert_ffn2_24_full        berkeley       min   1763305 max   1763305 n=1
+  nm24 bert_ffn2_24_full        dense_stream   min   1763103 max   1763103 n=1
+  nm24 bert_ffn2_24_full        sparse_stream  min   2536562 max   2536562 n=1
+  nm24 bert_ffn2_24_loop        sparse_loop    min   1313347 max   1313347 n=1
+  nm24 bert_qkv_24_full         berkeley       min    317206 max    317206 n=1
+  nm24 bert_qkv_24_full         dense_stream   min    460620 max    460620 n=1
+  nm24 bert_qkv_24_full         sparse_stream  min    658031 max    658031 n=1
+  nm24 bert_qkv_24_loop         sparse_loop    min    305747 max    305747 n=1
+  nm24 edge_24_full             berkeley       min      4366 max      4366 n=1
+  nm24 edge_24_full             dense_stream   min      4851 max      4851 n=1
+  nm24 edge_24_full             sparse_stream  min      8308 max      8308 n=1
+  nm24 edge_24_loop             sparse_loop    min      3843 max      3843 n=1
+  nm24 rn50_conv_24_full        berkeley       min    661441 max    661441 n=1
+  nm24 rn50_conv_24_full        dense_stream   min    742284 max    742284 n=1
+  nm24 rn50_conv_24_full        sparse_stream  min   1161086 max   1161086 n=1
+  nm24 rn50_conv_24_loop        sparse_loop    min    519145 max    519145 n=1
+  nm24 small_24_full            berkeley       min     14793 max     14793 n=1
+  nm24 small_24_full            dense_stream   min     18523 max     18523 n=1
+  nm24 small_24_full            sparse_stream  min     29775 max     29775 n=1
+  nm24 small_24_loop            sparse_loop    min     12899 max     12899 n=1
+  nm48 bert_ffn1_48_full        berkeley       min   1438269 max   1438269 n=1
+  nm48 bert_ffn1_48_full        dense_stream   min   1829836 max   1829836 n=1
+  nm48 bert_ffn1_48_full        sparse_stream  min   2998256 max   2998256 n=1
+  nm48 bert_ffn1_48_loop        sparse_loop    min   1234319 max   1234319 n=1
+  nm48 bert_ffn2_48_full        berkeley       min   1761069 max   1761069 n=1
+  nm48 bert_ffn2_48_full        dense_stream   min   1761240 max   1761240 n=1
+  nm48 bert_ffn2_48_full        sparse_stream  min   2913160 max   2913160 n=1
+  nm48 bert_ffn2_48_loop        sparse_loop    min   1304067 max   1304067 n=1
+  nm48 bert_qkv_48_full         berkeley       min    316584 max    316584 n=1
+  nm48 bert_qkv_48_full         dense_stream   min    460725 max    460725 n=1
+  nm48 bert_qkv_48_full         sparse_stream  min    743108 max    743108 n=1
+  nm48 bert_qkv_48_loop         sparse_loop    min    307018 max    307018 n=1
+  nm48 edge_48_full             berkeley       min      4266 max      4266 n=1
+  nm48 edge_48_full             dense_stream   min      4881 max      4881 n=1
+  nm48 edge_48_full             sparse_stream  min      9517 max      9517 n=1
+  nm48 edge_48_loop             sparse_loop    min      3989 max      3989 n=1
+  nm48 rn50_conv_48_full        berkeley       min    661155 max    661155 n=1
+  nm48 rn50_conv_48_full        dense_stream   min    739496 max    739496 n=1
+  nm48 rn50_conv_48_full        sparse_stream  min   1350011 max   1350011 n=1
+  nm48 rn50_conv_48_loop        sparse_loop    min    515414 max    515414 n=1
+  nm48 small_48_full            berkeley       min     14749 max     14749 n=1
+  nm48 small_48_full            dense_stream   min     18479 max     18479 n=1
+  nm48 small_48_full            sparse_stream  min     35501 max     35501 n=1
+  nm48 small_48_loop            sparse_loop    min     13548 max     13548 n=1
+parse_fixa: 12 failed or missing logs, 212 logs judged

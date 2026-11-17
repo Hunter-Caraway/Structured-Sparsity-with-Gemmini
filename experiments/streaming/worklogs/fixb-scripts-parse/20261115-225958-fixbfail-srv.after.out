@@ -1,0 +1,16 @@
+== tests
+nm24  nm_sparse_loop_24            s1 PASS rc=0   53248s  nm_sparse_loop passed
+nm48  nm_sparse_loop_48            s1 PASS rc=0   54256s  nm_sparse_loop passed
+stock gemmini_counter              s1 KNOWN-BERKELEY FAIL rc=2      69s  dense: *** FAILED *** (tohost = 1) (berkeley-issues.md B4, not counted)
+stock global_average               s1 KNOWN-BERKELEY FAIL rc=2     712s  dense: *** FAILED *** (tohost = 1) (berkeley-issues.md B5, not counted)
+tests: 2 PASS, 0 FAIL, 2 KNOWN-BERKELEY FAIL (not counted)
+
+== KNOWN-BERKELEY FAIL (fail on stock RTL too; berkeley-issues.md; not counted in the exit status)
+stock gemmini_counter              s1 rc=2   dense: *** FAILED *** (tohost = 1) (berkeley-issues.md B4, not counted)
+stock global_average               s1 rc=2   dense: *** FAILED *** (tohost = 1) (berkeley-issues.md B5, not counted)
+
+== fair_perf
+fair ranges (seeds):
+
+== streaming
+stream ranges (total, seeds):

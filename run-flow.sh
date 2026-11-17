@@ -148,6 +148,8 @@ lib_nm() {
   esac
 }
 sim_path() { echo "$cy/sims/verilator/simulator-chipyard.harness-$1"; }
+# sha256 list of the sources a simulator was built from, written by `sim` at build time next to the simulator
+src_list_path() { echo "$(sim_path "$1").src.sha256"; }
 
 case "$cy" in *" "*|*:*) die "chipyard path '$cy' has a space or ':' in it; it has to live somewhere plain" ;; esac
 [ -f "$cy/env.sh" ] || die "no env.sh in $cy; did build-setup.sh run? (see README.md, section 1. Install Chipyard)"
@@ -273,11 +275,23 @@ sims_make() {
   (cd "$cy/sims/verilator" && flock "$scratch/sims-make.lock" make "$@")
 }
 
+# cycle limit of one program: TIMEOUT_CYCLES (default 150M), raised for the tests known to need more
+prog_timeout() {
+  local t="${TIMEOUT_CYCLES:-150000000}" need=0
+  case "$(basename "$1")" in
+    # full 22 cases passed at 600M (investigate/runs/20261115-225958-fixbfail-srv); cases 7-17 alone took 28,576,528 / 29,693,573 cycles (20261115-230636-fixbfail2-srv CYC lines)
+    nm_sparse_loop_[0-9][0-9]-baremetal) need=300000000 ;;
+    # never finished within 150M on any chip (investigate/runs/20261113-160015-fixb-srv, fixb-verify.md Verdict); unresolved
+    conv_with_input_dilation*-baremetal) need=300000000 ;;
+  esac
+  [ "$t" -ge "$need" ] && echo "$t" || echo "$need"
+}
+
 # run one binary on one (already built) simulator: sim_run <cfg> <binary> <log> [extra make args...]
 sim_run() {
   local cfg="$1" bin="$2" log="$3"; shift 3
   sims_make CONFIG="$cfg" run-binary-fast LOADMEM=1 BREAK_SIM_PREREQ=1 \
-     TIMEOUT_CYCLES="${TIMEOUT_CYCLES:-150000000}" BINARY="$bin" "$@" > "$log" 2>&1
+     TIMEOUT_CYCLES="$(prog_timeout "$bin")" BINARY="$bin" "$@" > "$log" 2>&1
 }
 
 # simulation queue: queue <name> <cfg> <binary> <log> <seed> <expected lines (grep -E, one per line)>
@@ -333,11 +347,11 @@ run_queue() {
 
 # provenance of a run folder: run.info (key=value) and SHA256SUMS of everything in it
 write_info() {
-  local run="$1" r c s kv; shift
+  local run="$1" r c s l kv; shift
   {
     echo "stamp=$stamp"
     echo "seeds=$seeds"
-    echo "timeout_cycles=${TIMEOUT_CYCLES:-150000000}"
+    echo "timeout_cycles=${TIMEOUT_CYCLES:-150000000} (raised per program by prog_timeout: nm_sparse_loop_NN, conv_with_input_dilation* >= 300000000)"
     for kv in "$@"; do echo "$kv"; done
     for r in "$here" "$gem" "$lib_dir" "$tests_dir"; do
       echo "git.$(basename "$r")=$(git -C "$r" rev-parse HEAD)$(git -C "$r" diff --quiet HEAD && echo '' || echo ' (uncommitted changes)')"
@@ -345,6 +359,12 @@ write_info() {
     for c in "${q_cfg[@]}"; do echo "$c"; done | sort -u | while read -r c; do
       s="$(sim_path "$c")"
       echo "sim.$c=$(date -r "$s" '+%Y-%m-%dT%H:%M:%S') sha256:$(sha256sum "$s" | cut -c1-16)"
+      # the list `sim` took at build time; it names the simulator it belongs to, so a stale list is flagged
+      l="$(src_list_path "$c")"
+      if [ ! -f "$l" ]; then echo "src.$c.sha256list=none (simulator not built by ./run-flow.sh sim)"
+      elif [ "$(sed -n 's/^# sim sha256=//p' "$l")" = "$(sha256sum "$s" | cut -d' ' -f1)" ]; then
+        echo "src.$c.sha256list=$(sha256sum "$l" | cut -d' ' -f1) ($l, taken at build time)"
+      else echo "src.$c.sha256list=STALE ($l does not name this simulator's sha256)"; fi
     done
   } > "$run/run.info"
 }
@@ -511,8 +531,20 @@ backup_sim() {
   mkdir -p "$b"
   if [ -e "$s" ]; then cp -a "$s" "$b/" || die "backup of $s failed"; fi
   if [ -e "$g" ]; then cp -a "$g" "$b/" || die "backup of $g failed"; fi
+  if [ -e "$(src_list_path "$cfg")" ]; then cp -a "$(src_list_path "$cfg")" "$b/" || die "backup of the source list failed"; fi
   (cd "$b" && find . -type f -printf '%P\0' | sort -z | xargs -0 sha256sum > SHA256SUMS) || die "checksums of the backup failed"
   echo "  backed up the old $cfg simulator and generated-src to ${b#"$here"/}"
+}
+
+# sha256 of every tracked and untracked (not ignored) file of the three gemmini repos, plus their HEADs
+src_sha_list() {
+  local r
+  for r in "$gem" "$lib_dir" "$tests_dir"; do
+    echo "# git.$(basename "$r")=$(git -C "$r" rev-parse HEAD)"
+    (cd "$r" && git ls-files -co --exclude-standard -z | sort -z |
+       while IFS= read -r -d '' f; do if [ -f "$f" ] && [ ! -L "$f" ]; then printf '%s\0' "$f"; fi; done |
+       xargs -0 -r sha256sum | sed "s|  |  $(basename "$r")/|")
+  done
 }
 
 step_sim() {
@@ -538,6 +570,8 @@ $base_lib (libgemmini) and $base_tests (gemmini-rocc-tests) with clean trees, bu
   jobs="$(pick_jobs)"
   log="$logs/runs/sim-$cfg-$stamp.log"
   backup_sim "$cfg"
+  # source list taken right before the build, so run.info can cite what this simulator was really built from
+  src_sha_list > "$log.src.sha256" || die "can't list the gemmini sources"
   stay_awake "building $cfg"
   say "building verilator sim $cfg with -j$jobs -> ${log#"$here"/}"
   if ! sims_make -j"$jobs" CONFIG="$cfg" > "$log" 2>&1; then
@@ -550,6 +584,8 @@ $base_lib (libgemmini) and $base_tests (gemmini-rocc-tests) with clean trees, bu
     fi
   fi
   [ -x "$s" ] || die "make succeeded but there is no simulator at $s"
+  { cat "$log.src.sha256"; echo "# sim sha256=$(sha256sum "$s" | cut -d' ' -f1)"; } > "$(src_list_path "$cfg")"
+  echo "  source list (taken at build time): $(src_list_path "$cfg")"
   ls -la "$s"
 }
 
