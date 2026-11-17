@@ -1,0 +1,28 @@
+run: microloop-spike (bank-split-fix-spec.md section 8 micro-test, functional check on Spike), laptop, 2026-11-17T14:28:27-05:00
+spike: /home/hunter/chipyard/.conda-env/riscv-tools/bin/spike (chipyard env), --extlib, never installed into $RISCV
+libs (Fix B builds, copies of scratchpad/fixb-spike/libgemmini-nm{24,48}, same sha as runs/20261113-145855-fixb-final-spike):
+0d30970a1be73a02ea33b44a2ae6a73826945b84fdbd9882bcc4ca96dc58b640  libs/nm24/libgemmini.so
+9c5894d41210c745765c90ca4ae05e00c77a7ddee9263ae1bd2e45660e61440f  libs/nm48/libgemmini.so
+headers: git archive 22158bf include (gemmini-rocc-tests sparse-loop-fix commit); gemmini_nm.h 98ff9ba83a25aaedcabf8e22d076b13ee0d212d3355151c3327fab0fba45eb90
+sources:
+6d788592dd1082fb39e25e8e6509206416351b8bc3c511fddf98cb8d3a1d4b71  src/micro_loop.c
+815830fd818cd97107466957a708fec92332a311adccf3b0ab29dc87e555701f  src/gen_micro_loop.py
+9a3e397015f1158cdb3db109484b2e38f73da3e41932f5d956d56b4f5225d5d2  scripts/build_micro_loop.sh
+build: scripts/build_micro_loop.sh <scratch>/build (gcc flags = build_one.sh's); data seed 20261117
+data sha256 (gen_micro_loop.py output):
+b27b3dd56b9278c536d796ba3fcd4dabd75d602effb3cd326b26be5acbd4bfab  data24/A.bin
+dea979812cbd1a87c2c38b2d3391641c72d6ea8975c3ef38125a64a592ac2717  data24/C.bin
+413ef28b9e302a6a77659ed26b34ae590e5e0287aeec153139a0cd71cc8d750c  data24/IDX.bin
+3324ee20f5d0d0e7425ef20fc7b74e578dcad797a59b437621f57ecc5902df98  data24/IDXSP.bin
+819273bb0eaf1ab4c23025bc4e619009a1106a9cdd0ed369df70763f1607b692  data24/W.bin
+9204ae27742ec5647b89678c3cd931f8c5d93049674410a9c708fee01b29b0c6  data24/WC.bin
+b27b3dd56b9278c536d796ba3fcd4dabd75d602effb3cd326b26be5acbd4bfab  data48/A.bin
+fddf4908644d55a7e066c057534ca9437e856c4d8992ac786807a502c9c90541  data48/C.bin
+9b8153eb689361b1414b125cc3824ac37b0a25c34e290dbcb74ea557a9c889fa  data48/IDX.bin
+0366ed75cc36cde4805a4b028d007c7090d13f105df056fbcfd960125f909fd8  data48/IDXSP.bin
+ad21afeb88c1f6631275f78104c58eebd6bca5d57711cbef6d080b3da576229c  data48/W.bin
+1aa00dc3dbb101c8c8c5ae5f4dc477b57871e7d2fc0931ae86923df50065d5d6  data48/WC.bin
+binaries: micro_loop_<nm> (SHAPE_MASK 3: I=5, I=3), _s1 (SHAPE_MASK 4: I=1), _ref (+CPU_REF); .text identical per pattern (objcopy -j .text, cmp)
+logs: <lib>.<binary>.log = spike --extlib=<lib> --extension=gemmini bin/<binary>-baremetal; all exit 0, ALL VERIFIED
+mutants/: checker negative tests (nm24 lib, SHAPE_MASK 2): m_data = C.bin value 1000 bit 0 flipped; m_ahi = rs2 a_hi replaced by a_lo; m_noacc = no accumulate bit on k'>0 preloads. all exit 1 with FAILED (dense case unaffected in m_ahi / m_noacc, as expected)
+note: Spike has no timing; the counter / cycle fields in these logs are meaningless.

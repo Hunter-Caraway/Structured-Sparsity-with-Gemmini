@@ -1,0 +1,21 @@
+microloop: DIM=16 BANK_ROWS=4096 NM=4:8 R=6 data_seed=20261117 C.sha256=fddf4908644d55a7 cpu_ref=0 shape_mask=4
+microloop case=L0 shape=1x6x48 rep=0 computes=144 total=3028 issue=3026 cyc_per_compute_x100=2102 ex_active=89559 pre_haz=92817 overlap_haz=92524 spA_wait=93608 spB_wait=88914 rs_busy=93874 ex_per_compute_x100=62193 b_spill=0 verified
+microloop case=L0 shape=1x6x48 rep=1 computes=144 total=3028 issue=3026 cyc_per_compute_x100=2102 ex_active=90206 pre_haz=92815 overlap_haz=89391 spA_wait=88994 spB_wait=96154 rs_busy=91118 ex_per_compute_x100=62643 b_spill=0 verified
+microloop case=L0i shape=1x6x48 rep=0 computes=144 total=3028 issue=3026 cyc_per_compute_x100=2102 ex_active=89336 pre_haz=98956 overlap_haz=91925 spA_wait=90425 spB_wait=87350 rs_busy=97118 ex_per_compute_x100=62038 b_spill=0 verified
+microloop case=L0i shape=1x6x48 rep=1 computes=144 total=3028 issue=3026 cyc_per_compute_x100=2102 ex_active=92393 pre_haz=91136 overlap_haz=93057 spA_wait=89017 spB_wait=89397 rs_busy=95415 ex_per_compute_x100=64161 b_spill=0 verified
+microloop case=L1 shape=1x6x48 rep=0 computes=144 total=3028 issue=3026 cyc_per_compute_x100=2102 ex_active=92844 pre_haz=88102 overlap_haz=97727 spA_wait=90689 spB_wait=91416 rs_busy=95863 ex_per_compute_x100=64475 b_spill=0 verified
+microloop case=L1 shape=1x6x48 rep=1 computes=144 total=3028 issue=3026 cyc_per_compute_x100=2102 ex_active=92421 pre_haz=96410 overlap_haz=90083 spA_wait=90229 spB_wait=96084 rs_busy=98045 ex_per_compute_x100=64181 b_spill=0 verified
+microloop case=L2 shape=1x6x48 rep=0 computes=144 total=3028 issue=3026 cyc_per_compute_x100=2102 ex_active=87006 pre_haz=91926 overlap_haz=97607 spA_wait=94958 spB_wait=96561 rs_busy=92765 ex_per_compute_x100=60420 b_spill=0 verified
+microloop case=L2 shape=1x6x48 rep=1 computes=144 total=3028 issue=3026 cyc_per_compute_x100=2102 ex_active=95017 pre_haz=92595 overlap_haz=94596 spA_wait=86715 spB_wait=94369 rs_busy=97462 ex_per_compute_x100=65984 b_spill=0 verified
+microloop case=L3 shape=1x6x48 rep=0 computes=144 total=3028 issue=3026 cyc_per_compute_x100=2102 ex_active=91803 pre_haz=91160 overlap_haz=91349 spA_wait=84324 spB_wait=85685 rs_busy=94220 ex_per_compute_x100=63752 b_spill=0 verified
+microloop case=L3 shape=1x6x48 rep=1 computes=144 total=3028 issue=3026 cyc_per_compute_x100=2102 ex_active=92263 pre_haz=92336 overlap_haz=87969 spA_wait=93145 spB_wait=93387 rs_busy=88480 ex_per_compute_x100=64071 b_spill=0 verified
+microloop case=L3i shape=1x6x48 rep=0 computes=144 total=3028 issue=3026 cyc_per_compute_x100=2102 ex_active=94521 pre_haz=94849 overlap_haz=91870 spA_wait=88507 spB_wait=95478 rs_busy=92345 ex_per_compute_x100=65639 b_spill=0 verified
+microloop case=L3i shape=1x6x48 rep=1 computes=144 total=3028 issue=3026 cyc_per_compute_x100=2102 ex_active=90971 pre_haz=85675 overlap_haz=88920 spA_wait=90277 spB_wait=88915 rs_busy=88612 ex_per_compute_x100=63174 b_spill=0 verified
+microloop case=L4 shape=1x6x48 rep=0 computes=144 total=3028 issue=3026 cyc_per_compute_x100=2102 ex_active=88775 pre_haz=93699 overlap_haz=93901 spA_wait=94759 spB_wait=96073 rs_busy=88489 ex_per_compute_x100=61649 b_spill=0 verified
+microloop case=L4 shape=1x6x48 rep=1 computes=144 total=3028 issue=3026 cyc_per_compute_x100=2102 ex_active=94030 pre_haz=94718 overlap_haz=94432 spA_wait=92854 spB_wait=93134 rs_busy=94780 ex_per_compute_x100=65298 b_spill=0 verified
+microloop case=dense shape=1x6x48 rep=0 computes=288 total=5480 issue=5478 cyc_per_compute_x100=1902 ex_active=146694 pre_haz=144230 overlap_haz=152528 spA_wait=151671 spB_wait=148945 rs_busy=152209 ex_per_compute_x100=50935 b_spill=0 verified
+microloop case=dense shape=1x6x48 rep=1 computes=288 total=5480 issue=5478 cyc_per_compute_x100=1902 ex_active=145676 pre_haz=148422 overlap_haz=148082 spA_wait=150427 spB_wait=151090 rs_busy=146301 ex_per_compute_x100=50581 b_spill=0 verified
+microloop done: 16 of 16 checks verified -> ALL VERIFIED
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
