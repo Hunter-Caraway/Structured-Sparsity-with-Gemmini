@@ -11,6 +11,21 @@ Diagnosis run: server ~/sinv/runs/20261115-225958-fixbfail-srv (stock gemmini_co
 - A: nm_sparse_loop first 6 cases ok then no output within 20M. Hypothesis: CPU make_case (gold matmul, ~24 cyc/MAC) + 8-loop cases need > 20M. Test: scratch copy of the test (this dir: fixb-srv-failures-nm_loop_from7.c.txt) that skips cases 1-6 and prints per-case "CYC <cycles>"; binaries on server ~/fixb/failprogs/nm_loop7_{24,48}-baremetal.
 - Also failing: conv_with_input_dilation_and_neg_padding nm24/nm48 (150M timeout, "CPU conv..." last line); same class as D.
 
+## Conv budget stock control check 2026-11-17 (NOT launched)
+- Stock re-runs in 20261115-225958-fixbfail-srv used bin/gemmini_counter-baremetal sha 39b7db84... (SHA256SUMS), the same sha as in run 20261113-160015-fixb-srv/bin; so the stock control already used run-1-style binaries.
+- Committed gemmini_params.h at rocc-tests HEAD = sha256 3758ae96...da924 (git show HEAD:include/gemmini_params.h | sha256sum, 2026-11-17) = the stock dense params (dense-spad-check.md:7); it has no GEMMINI_HW_NM_* macros. Laptop include/ is clean vs HEAD now.
+- run-flow.sh step_tests (lines 439-447) calls restore_params_h (committed header) then rv_cc with no NM flags for the 54 dense tests, so conv_with_input_dilation* are built with that header by design.
+- NOT proven: no record (run.info, worklogs, logs) of the header sha at the time run-1 binaries (20ee07f3.., 01a9f72a.., 46adb343..) were built; run.info lists only gemmini_nm.h sha. Build-scratch is gone, so sha cannot be compared. Did not launch.
+- Needed: user OK to rebuild the 3 tests in a laptop scratch dir (run-flow.sh tests, header restored first, header sha recorded) and compare binary shas to run-1 bin; if identical -> proven valid for stock, launch. Or user accepts the by-design argument above.
+
+## Stock conv + stock dense runs 2026-11-17
+- Binary proof (laptop scratch, `SCRATCH_DIR=<scratchpad>/rf ./run-flow.sh tests`: restore_params_h + rv_cc, no NM flags): gemmini_params.h sha256 3758ae96...da924, rocc-tests 22158bf, riscv64-unknown-elf-gcc (g6afcc4f6d) 16.1.0. 54 dense tests rebuilt; none byte-identical to run-1 bin.
+- All 3 conv_with_input_dilation* + the other 51: objdump -d identical, objdump -s of all sections identical, same size; only 5-6 bytes differ = gcc temp object name (ccXXXXXX.o) in .strtab. Fresh binaries used; both shas recorded in each run's build.info/fresh*.sha (run-1 shas = 20261113-160015-fixb-srv/SHA256SUMS).
+- Run A: ~/sinv/runs/20261117-111223-convbudget-stock-srv, stock sim (sha 84c2264a.. checked), 3 conv tests, seed 1, 300M, PAR=3; driver PID 702823 (PPID 1), sims 703061 703148 703201.
+- Run B: ~/sinv/runs/20261117-111434-stockdense-srv, stock sim, 51 dense tests (54 minus 3 conv_with_input_dilation*), seed 1, 750M each (nm24 cycles not logged in run-1; all nm24 runs finished <150M so 5x <= 750M), PAR=6, slow tests first; driver PID 704747 (PPID 1). Quota total 12 (nm24 run 3 + A 3 + B 6).
+- gemmini_counter / global_average expected to fail (B4/B5).
+- Status: `cat ~/sinv/runs/<run>/STATUS` on the server (ALL_DONE when finished).
+
 ## RESUME HERE (superseded by the one at the end, 2026-11-17)
 SSH socket DOWN at 2026-11-15 ~23:15 (Permission denied). Stopped.
 Running on server (if they survived): ~/sinv/runs/20261115-225958-fixbfail-srv (stock gemmini_counter done; stock global_average, nm24/nm48 nm_sparse_loop_{24,48} at 600M budget -- ~1200 cyc/s so ~6 days, kill them if the CYC test settles it) and ~/sinv/runs/20261115-230636-fixbfail2-srv (nm_loop7_24/48, 150M, per-case CYC lines; STATUS written when done).
@@ -29,3 +44,18 @@ D: needs ~200M+ cycles budget (input_dilation CPU conv ~164M est), ~50+ h wall; 
 ## RESUME HERE
 Done: both runs copied and verified (above). No sims running by this agent; none needed. Findings: A (nm_sparse_loop) is a cycle budget issue, passes at 600M; B and C are stock/Berkeley failures; D (conv_with_input_dilation*) still unrun, needs ~200M+ budget (~50+ h wall), not launched.
 Next: coordinator decides on D run and whether to raise the nm_sparse_loop timeout in run-flow; update parse_fixa.py to know nm_loop7 / dense logs if wanted.
+
+## Conv budget run 2026-11-17
+- Run: ~/sinv/runs/20261117-110726-convbudget-srv (server), launched 2026-11-17 11:07 EST (epoch 1794931646), user-approved, quota 3.
+- Jobs: nm24 (GemminiNMRocketConfig) only, seed 1, TIMEOUT_CYCLES=300000000: conv_with_input_dilation, ..._and_rot180, ..._and_neg_padding (parallel).
+- Binaries: bin/ from 20261113-160015-fixb-srv, sha256 verified against its SHA256SUMS before use (46adb343.., 01a9f72a.., 20ee07f3..).
+- Sim sha256 checked before launch = 1042fc926288a463c829cdfe654a5515b6243ca56ae19b425fd7d542bf237891 (run.info sim.nm24 agrees). 0 other sims running.
+- Launch: driver.sh (nohup setsid; PPID 1, own session) -> ~/fixb/run_jobs.sh with PAR=3; driver writes SHA256SUMS after run.out/STATUS (ordering fix). STATUS=ALL_DONE at end.
+- Sim PIDs at +2 min: 702325, 702412, 702465 (all ~100% CPU, driver 702084).
+- Note: logs do not grow while running (benchmark prints only at the end, same as earlier runs); liveness = CPU time via ps.
+- Check: `ssh -o ControlPath=/tmp/claude-1000/cm-%C -o BatchMode=yes ai-user@ai-1769.floridapoly.org 'cat ~/sinv/runs/20261117-110726-convbudget-srv/STATUS; ps -o pid,etime,time -p 702325,702412,702465'`
+
+## RESUME HERE
+- Running: ~/sinv/runs/20261117-110726-convbudget-srv (3 sims, ETA ~55 h at ~1200 cycles/s, i.e. ~2026-11-19 evening). Do nothing until STATUS=ALL_DONE.
+- Next: copy back to experiments/streaming/investigate/runs/ with SHA256SUMS verified; check each log for verified output (cycle count counts only if verified, rule 4).
+- Also running: 20261117-111223-convbudget-stock-srv (driver 702823) and 20261117-111434-stockdense-srv (driver 704747); see section "Stock conv + stock dense runs". 12 sims total.
