@@ -1,0 +1,5 @@
+chip	binary	seed	timeout	start	end	wall_s	exit
+stock	gemmini_counter-baremetal	1	150000000	1794801601	1794801670	69	2
+stock	global_average-baremetal	1	150000000	1794801602	1794802314	712	2
+nm24	nm_sparse_loop_24-baremetal	1	600000000	1794801603	1794854851	53248	0
+nm48	nm_sparse_loop_48-baremetal	1	600000000	1794801604	1794855860	54256	0

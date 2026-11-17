@@ -1,0 +1,13 @@
+stamp=20261115-225958-fixbfail-srv
+host=AI-1769.floridapoly.org 6.12.0-211.68.1.el10_2.x86_64 nproc=16
+git.gemmini-sparsity=1e50e1c45b8b607e2899562d6c51d4343c99a3ac (uncommitted changes) diff.sha256=6dae4a342f1fe468102c3fd5b87c32c2ddf6d15cd6e54c5feeb8de2269e94caf
+git.gemmini=639a5068bc7f01c5c8fed5a4bea15a55963c60a3 (uncommitted changes) diff.sha256=06cb324255897da90206cdf4769d51848e7c13672d9678a7cae39753186ccd97
+git.libgemmini=a14aaa15ed5fa34e61ddf73e302be00af9538d51 (uncommitted changes) diff.sha256=845411deff42e5bafcbcd7686cbc5cac5c53e58cce64f9c559be543220af6e08
+git.gemmini-rocc-tests=61086b433e1b7fb57bcd22634d03b4285f9d00cf (uncommitted changes) diff.sha256=d997b9eafda233b61350232033418110411584527342866c3d30cc3614a42599
+sim.stock=GemminiRocketConfig mtime=2026-11-09T14:04:32 sha256=84c2264ab08524b8e6b6f822b53ebb8613e381219e5ccb8144ad9cc9543b75e4
+sim.nm24=GemminiNMRocketConfig mtime=2026-11-13T15:56:35 sha256=1042fc926288a463c829cdfe654a5515b6243ca56ae19b425fd7d542bf237891
+sim.nm48=GemminiNM48RocketConfig mtime=2026-11-13T16:00:15 sha256=f4a3642cf572de929c758c3fd2a1f2320ee286ce45787aca13a7d0ac1018ed34
+src.gemmini.sha256list=641086db9f1f1ea328ea2fa6e8cf05138dfaf41dbabab83feb2ad051efa39b0f (~/fixb/server-after.sha); RTL 0db6cd09 libgemmini d048776 rocc-tests 22158bf
+gemmini_nm.h.sha256=98ff9ba83a25aaedcabf8e22d076b13ee0d212d3355151c3327fab0fba45eb90
+make=run-binary-fast LOADMEM=1 BREAK_SIM_PREREQ=1 (RANDOM_SEED, TIMEOUT_CYCLES per job)
+flags=programs built on the laptop (run-flow.sh tests / build.sh / cc.sh), copied to ~/fixb/progs, sha256 verified

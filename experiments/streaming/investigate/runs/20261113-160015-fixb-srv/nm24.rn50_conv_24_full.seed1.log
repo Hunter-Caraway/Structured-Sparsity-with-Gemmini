@@ -1,0 +1,33 @@
+/home/ai-user/chipyard/common.mk:537: warning: overriding recipe for target 'run-asm-tests-fast'
+/home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/chipyard.harness.TestHarness.GemminiNMRocketConfig.d:780: warning: ignoring old recipe for target 'run-asm-tests-fast'
+/home/ai-user/chipyard/common.mk:540: warning: overriding recipe for target 'run-bmark-tests-fast'
+/home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/chipyard.harness.TestHarness.GemminiNMRocketConfig.d:839: warning: ignoring old recipe for target 'run-bmark-tests-fast'
+if [ "/home/ai-user/sinv/runs/20261113-160015-fixb-srv/bin/rn50_conv_24_full-baremetal" != "none" ] && [ ! -f "/home/ai-user/sinv/runs/20261113-160015-fixb-srv/bin/rn50_conv_24_full-baremetal" ]; then printf "\n\nBinary /home/ai-user/sinv/runs/20261113-160015-fixb-srv/bin/rn50_conv_24_full-baremetal not found\n\n"; exit 1; fi
+(set -o pipefail &&  /home/ai-user/chipyard/sims/verilator/simulator-chipyard.harness-GemminiNMRocketConfig \
+	+permissive \
+	+dramsim +dramsim_ini_dir=/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini +max-cycles=80000000  +verilator+seed+1 +loadmem=/home/ai-user/sinv/runs/20261113-160015-fixb-srv/bin/rn50_conv_24_full-baremetal  \
+	+permissive-off \
+	/home/ai-user/sinv/runs/20261113-160015-fixb-srv/bin/rn50_conv_24_full-baremetal \
+	 \
+	</dev/null | tee /home/ai-user/chipyard/sims/verilator/output/chipyard.harness.TestHarness.GemminiNMRocketConfig/rn50_conv_24_full-baremetal.fixa.nm24.seed1.20261113-160015-fixb-srv.log)
+== Loading device model file '%Warning: System has stack size 8192 kb which may be too small; suggest 'ulimit -c 15364' or larger
+[UART] UART0 is here (stdin/stdout).
+/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/DDR3_micron_64M_8B_x4_sg15.ini' == 
+== Loading system model file '/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/system.ini' == 
+===== MemorySystem 0 =====
+CH. 0 TOTAL_STORAGE : 4096MB | 1 Ranks | 16 Devices per rank
+DRAMSim2 Clock Frequency =666666666Hz, CPU Clock Frequency=500000000Hz
+sbench: layer=rn50_conv M=196 K=2304 N=256 pattern=2:4 build=full run_mask=7 TI=8 TJ=4 data_seed=20261113
+poison reaches all of C (50176 values)
+berkeley      total     661441  cpu_issue_done     661439 | ex_active=562896 rdma_active=533953 wdma_active=30599 load_active=399098 store_active=27674 rs_full=596543 loop_matmul_active=660033 rdma_bytes=11261184
+berkeley check: hash 0x8fbce2c036945328 expected 0x8fbce2c036945328, sampled rows 8/8 -> verified
+berkeley overhead (untimed): poison 16962  evict_l2 353294  check 470777 cycles
+dense_stream  total     742284  cpu_issue_done     741732 | ex_active=485581 rdma_active=294371 wdma_active=13044 load_active=172066 store_active=6960 rs_full=679308 loop_matmul_active=76287 rdma_bytes=11943936
+dense_stream check: hash 0x8fbce2c036945328 expected 0x8fbce2c036945328, sampled rows 8/8 -> verified
+dense_stream overhead (untimed): poison 16926  evict_l2 367436  check 453800 cycles
+sparse_stream total    1161086  cpu_issue_done    1160457 | ex_active=473454 rdma_active=201299 wdma_active=13012 load_active=117619 store_active=6950 rs_full=1128641 loop_matmul_active=44012 rdma_bytes=9584640
+sparse_stream check: hash 0x8fbce2c036945328 expected 0x8fbce2c036945328, sampled rows 8/8 -> verified
+sparse_stream overhead (untimed): poison 17016  evict_l2 367695  check 447663 cycles
+sbench end cycle 5972240
+sbench passed (3 of 3 runs verified)
+- /home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/gen-collateral/TestDriver.v:158: Verilog $finish

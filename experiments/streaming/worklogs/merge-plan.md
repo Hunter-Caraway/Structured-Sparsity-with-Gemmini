@@ -29,3 +29,13 @@ All targets are direct ancestors, so every merge is a fast-forward (no conflicts
 5. Final run: one clean server run from the merged heads (stock + nm24 + nm48), recorded as the paper's run of record.
 
 If a server run fails: fix on sparse-loop-fix (spec changelog first if semantics change), re-run Spike and the failing server step, then resume the gate.
+
+## User instruction 2026-11-13 ~20:20 (pending, run in progress)
+"once the runs are done, verify results with ULTRA THINK and then commit to a test branch with an update of what's on
+the branch compared to main and whether it's production ready". Steps:
+1. Server run `~/sinv/runs/20261113-160015-fixb-srv` reaches STATUS=ALL_DONE (coordinator background watch).
+2. Server agent: copy back to `investigate/runs/20261113-160015-fixb-srv` with checksums; run parse_fixa/collect/verify_all.
+3. Verification agent at max effort: independent check of every job (exit, verified lines, NEG texts, sim shas, ratios).
+4. New test branch from `spad-index-fix` (name `fixb-results-test`), commit run data + `worklogs/branch-status.md`
+   (what the branch has vs `main`, results with log paths, production-ready verdict with blockers). Also commits
+   `berkeley-issues.md` and the `fix-a-sw.md:70` link. Commit only; push when the user asks.

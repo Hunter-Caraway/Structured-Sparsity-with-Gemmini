@@ -92,7 +92,7 @@ neg_msg() {
     4) echo "index fifo deadlock" ;;
     7|14) echo "differs from the mode its weights were preloaded in" ;;
     9) echo "needs weight stationary dataflow" ;;
-    10) echo "issued while n:m sparse mode" ;;
+    10) echo "sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])" ;;  # N1 of fix-b-spec.md 2.5.6, which took over the LOOP_WS half of the older assert
   esac
 }
 # nm_sparse_loop -DNEG=<n> (sparse-loop-fix): n / 10 = the assert N1..N14 of fix-b-spec.md 2.5.6 it must trigger.
@@ -705,9 +705,9 @@ step_rerun() {
     for n in "${neg_rtl[@]}"; do
       cp "$bm/nm_sparse_protocol_neg${n}${sfx}-baremetal" "$run/bin/"
       queue "$c-neg$n" "$(cfg_name $c)" "$run/bin/nm_sparse_protocol_neg${n}${sfx}-baremetal" "$run/neg-$c-$n.seed$s.log" "$s" \
-        "$(printf '%s\n' 'Assertion failed' "$(neg_msg "$n")")" fail
+        "$(printf '%s\n' 'Assertion failed' "$(neg_msg "$n" | sed 's/[][()*.?+{}|^$\\]/\\&/g')")" fail
     done
-    # the expected lines are grep -E patterns: the message goes in with its ERE specials escaped
+    # the expected lines are grep -E patterns: the message goes in with its ERE specials escaped (above too)
     for n in "${loop_neg[@]}"; do
       cp "$bm/nm_sparse_loop_neg${n}${sfx}-baremetal" "$run/bin/"
       queue "$c-loopneg$n" "$(cfg_name $c)" "$run/bin/nm_sparse_loop_neg${n}${sfx}-baremetal" "$run/loopneg-$c-$n.seed$s.log" "$s" \

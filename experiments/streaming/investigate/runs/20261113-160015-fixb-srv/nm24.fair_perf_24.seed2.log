@@ -1,0 +1,50 @@
+/home/ai-user/chipyard/common.mk:537: warning: overriding recipe for target 'run-asm-tests-fast'
+/home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/chipyard.harness.TestHarness.GemminiNMRocketConfig.d:780: warning: ignoring old recipe for target 'run-asm-tests-fast'
+/home/ai-user/chipyard/common.mk:540: warning: overriding recipe for target 'run-bmark-tests-fast'
+/home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/chipyard.harness.TestHarness.GemminiNMRocketConfig.d:839: warning: ignoring old recipe for target 'run-bmark-tests-fast'
+if [ "/home/ai-user/sinv/runs/20261113-160015-fixb-srv/bin/fair_perf_24-baremetal" != "none" ] && [ ! -f "/home/ai-user/sinv/runs/20261113-160015-fixb-srv/bin/fair_perf_24-baremetal" ]; then printf "\n\nBinary /home/ai-user/sinv/runs/20261113-160015-fixb-srv/bin/fair_perf_24-baremetal not found\n\n"; exit 1; fi
+(set -o pipefail &&  /home/ai-user/chipyard/sims/verilator/simulator-chipyard.harness-GemminiNMRocketConfig \
+	+permissive \
+	+dramsim +dramsim_ini_dir=/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini +max-cycles=150000000  +verilator+seed+2 +loadmem=/home/ai-user/sinv/runs/20261113-160015-fixb-srv/bin/fair_perf_24-baremetal  \
+	+permissive-off \
+	/home/ai-user/sinv/runs/20261113-160015-fixb-srv/bin/fair_perf_24-baremetal \
+	 \
+	</dev/null | tee /home/ai-user/chipyard/sims/verilator/output/chipyard.harness.TestHarness.GemminiNMRocketConfig/fair_perf_24-baremetal.fixa.nm24.seed2.20261113-160015-fixb-srv.log)
+== Loading device model file '%Warning: System has stack size 8192 kb which may be too small; suggest 'ulimit -c 15364' or larger
+[UART] UART0 is here (stdin/stdout).
+/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/DDR3_micron_64M_8B_x4_sg15.ini' == 
+== Loading system model file '/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/system.ini' == 
+===== MemorySystem 0 =====
+CH. 0 TOTAL_STORAGE : 4096MB | 1 Ranks | 16 Devices per rank
+DRAMSim2 Clock Frequency =666666666Hz, CPU Clock Frequency=500000000Hz
+fair_perf: 2:4, i=64 k=128 j=32
+fair_perf build: full (dense + sparse runs)
+prep_cold      prep   348580  prune   237487  compress    90507  pack_meta    20586  weights 4096
+prep_warm      prep   343413  prune   236351  compress    87013  pack_meta    20049  weights 4096
+poison reaches the accumulator (2048 values)
+dense          total   1544  cpu_issue_done   1482  pairs  64  cyc/pair   24 | ex_active=1350 rs_full=1516 ctrl_q_block=0 overlap_haz=0 spad_a_wait=154 spad_b_wait=0 spad_d_wait=129 main_ex=1496
+dense matches the cpu reference (2048 values)
+dense_reuse    total   1500  cpu_issue_done   1433  pairs  64  cyc/pair   23 | ex_active=1248 rs_full=1473 ctrl_q_block=0 overlap_haz=0 spad_a_wait=196 spad_b_wait=0 spad_d_wait=182 main_ex=1450
+dense_reuse matches the cpu reference (2048 values)
+sparse         total   2278  cpu_issue_done   2219  pairs  32  cyc/pair   71 | ex_active=960 rs_full=2317 ctrl_q_block=0 overlap_haz=0 spad_a_wait=1280 spad_b_wait=1265 spad_d_wait=1282 main_ex=2182
+sparse matches the cpu reference (2048 values)
+sparse_reuse   total   1350  cpu_issue_done   1289  pairs  32  cyc/pair   42 | ex_active=672 rs_full=1381 ctrl_q_block=0 overlap_haz=0 spad_a_wait=656 spad_b_wait=641 spad_d_wait=352 main_ex=1259
+sparse_reuse matches the cpu reference (2048 values)
+sparse_batched total   2082  cpu_issue_done   2010  pairs  32  cyc/pair   65 | ex_active=840 rs_full=2119 ctrl_q_block=0 overlap_haz=0 spad_a_wait=1234 spad_b_wait=1219 spad_d_wait=1212 main_ex=1200
+sparse_batched matches the cpu reference (2048 values)
+sparse_spad    total    961  cpu_issue_done    895  pairs  32  cyc/pair   30 | ex_active=795 rs_full=989 ctrl_q_block=0 overlap_haz=0 spad_a_wait=164 spad_b_wait=149 spad_d_wait=138 main_ex=910
+sparse_spad matches the cpu reference (2048 values)
+dense_loop     total   3119  cpu_issue_done     18  pairs  64  cyc/pair   48 | ex_active=1577 rs_full=3063 ctrl_q_block=0 overlap_haz=0 spad_a_wait=1526 spad_b_wait=0 spad_d_wait=1497 main_ex=894
+dense_loop matches the cpu reference (2048 values)
+sparse_loop    total   2779  cpu_issue_done     21  pairs  32  cyc/pair   86 | ex_active=1440 rs_full=2786 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=1340 spad_d_wait=1 main_ex=743
+sparse_loop matches the cpu reference (2048 values)
+cpu only (no gemmini instructions issued):
+cpu_dense      total   1100  cpu_issue_done   1098  pairs  64  cyc/pair   17 | ex_active=0 rs_full=1196 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=1136 spad_d_wait=0 main_ex=0
+cpu_dense_reuse total   1060  cpu_issue_done   1058  pairs  64  cyc/pair   16 | ex_active=0 rs_full=1155 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=1095 spad_d_wait=0 main_ex=0
+cpu_sparse     total   1702  cpu_issue_done   1700  pairs  32  cyc/pair   53 | ex_active=0 rs_full=1805 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=1745 spad_d_wait=0 main_ex=0
+cpu_sparse_reuse total    964  cpu_issue_done    962  pairs  32  cyc/pair   30 | ex_active=0 rs_full=1065 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=1005 spad_d_wait=0 main_ex=0
+cpu_sparse_batched total   1509  cpu_issue_done   1507  pairs  32  cyc/pair   47 | ex_active=0 rs_full=1610 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=1550 spad_d_wait=0 main_ex=0
+cpu_sparse_spad total    685  cpu_issue_done    683  pairs  32  cyc/pair   21 | ex_active=0 rs_full=786 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=726 spad_d_wait=0 main_ex=0
+cpu_meta_only  total    963  cpu_issue_done    963  pairs  32  cyc/pair   30 | ex_active=0 rs_full=1059 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=999 spad_d_wait=0 main_ex=0
+fair_perf passed
+- /home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/gen-collateral/TestDriver.v:158: Verilog $finish

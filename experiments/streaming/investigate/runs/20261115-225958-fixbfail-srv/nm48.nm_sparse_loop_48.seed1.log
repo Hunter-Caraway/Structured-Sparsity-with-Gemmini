@@ -1,0 +1,44 @@
+/home/ai-user/chipyard/common.mk:537: warning: overriding recipe for target 'run-asm-tests-fast'
+/home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNM48RocketConfig/chipyard.harness.TestHarness.GemminiNM48RocketConfig.d:780: warning: ignoring old recipe for target 'run-asm-tests-fast'
+/home/ai-user/chipyard/common.mk:540: warning: overriding recipe for target 'run-bmark-tests-fast'
+/home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNM48RocketConfig/chipyard.harness.TestHarness.GemminiNM48RocketConfig.d:839: warning: ignoring old recipe for target 'run-bmark-tests-fast'
+if [ "/home/ai-user/sinv/runs/20261115-225958-fixbfail-srv/bin/nm_sparse_loop_48-baremetal" != "none" ] && [ ! -f "/home/ai-user/sinv/runs/20261115-225958-fixbfail-srv/bin/nm_sparse_loop_48-baremetal" ]; then printf "\n\nBinary /home/ai-user/sinv/runs/20261115-225958-fixbfail-srv/bin/nm_sparse_loop_48-baremetal not found\n\n"; exit 1; fi
+(set -o pipefail &&  /home/ai-user/chipyard/sims/verilator/simulator-chipyard.harness-GemminiNM48RocketConfig \
+	+permissive \
+	+dramsim +dramsim_ini_dir=/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini +max-cycles=600000000  +verilator+seed+1 +loadmem=/home/ai-user/sinv/runs/20261115-225958-fixbfail-srv/bin/nm_sparse_loop_48-baremetal  \
+	+permissive-off \
+	/home/ai-user/sinv/runs/20261115-225958-fixbfail-srv/bin/nm_sparse_loop_48-baremetal \
+	 \
+	</dev/null | tee /home/ai-user/chipyard/sims/verilator/output/chipyard.harness.TestHarness.GemminiNM48RocketConfig/nm_sparse_loop_48-baremetal.fixa.nm48.seed1.20261115-225958-fixbfail-srv.log)
+== Loading device model file '/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/DDR3_micron_64M_8B_x4_sg15.ini' == %Warning: System has stack size 8192 kb which may be too small; suggest 'ulimit -c 15365' or larger
+[UART] UART0 is here (stdin/stdout).
+
+== Loading system model file '/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/system.ini' == 
+===== MemorySystem 0 =====
+CH. 0 TOTAL_STORAGE : 4096MB | 1 Ranks | 16 Devices per rank
+DRAMSim2 Clock Frequency =666666666Hz, CPU Clock Frequency=500000000Hz
+nm_sparse_loop: 4:8, R = 6 rows per index tile, 2 tiles per LOAD_IDX
+T=1 i1 j1                          ok (0/256 wrong)
+T=2 i2 j2 repeating bias           ok (0/1024 wrong)
+T=3 i1 j3 row bias                 ok (0/768 wrong)
+T=4 i2 j2                          ok (0/1024 wrong)
+T=5 i2 j5                          ok (0/2560 wrong)
+T=10 i3 j5 partial i, row bias     ok (0/3200 wrong)
+8 loops, partial i and j, rep. bias ok (0/2016 wrong)
+8 loops, no bias                   ok (0/3072 wrong)
+4 loops, T=3 and T=1, row bias     ok (0/1024 wrong)
+K=40 padded to 64                  ok (0/512 wrong)
+nm_loop_tiles, row bias            ok (0/4608 wrong)
+pad_J: N=5, T=1                    ok (0/80 wrong)
+pad_J: N=DIM+1, T=4, rep. bias     ok (0/544 wrong)
+pad_J: N=4*DIM+13, partial i, row bias ok (0/1463 wrong)
+pad_J: N=5*DIM-1, 4 loops          ok (0/2528 wrong)
+pad_J: N=5*DIM+7, nm_loop_tiles, K=40 ok (0/3567 wrong)
+seq: sparse loop                   ok (0/1024 wrong)
+seq: dense loop (pruned W)         ok (0/1024 wrong)
+seq: per-tile, LOAD_IDX groups     ok (0/1024 wrong)
+seq: sparse loop again             ok (0/1024 wrong)
+seq: per-tile, LOAD_IDX by tile    ok (0/1024 wrong)
+seq: sparse loop, 2 calls          ok (0/1024 wrong)
+nm_sparse_loop passed
+- /home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNM48RocketConfig/gen-collateral/TestDriver.v:158: Verilog $finish

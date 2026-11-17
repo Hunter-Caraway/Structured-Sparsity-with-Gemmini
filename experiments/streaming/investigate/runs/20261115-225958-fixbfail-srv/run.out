@@ -1,0 +1,5 @@
+  done stock gemmini_counter-baremetal seed 1 exit 2 69 s (23:01:10)
+  done stock global_average-baremetal seed 1 exit 2 712 s (23:11:54)
+  done nm24 nm_sparse_loop_24-baremetal seed 1 exit 0 53248 s (13:47:31)
+  done nm48 nm_sparse_loop_48-baremetal seed 1 exit 0 54256 s (14:04:20)
+done: /home/ai-user/sinv/runs/20261115-225958-fixbfail-srv

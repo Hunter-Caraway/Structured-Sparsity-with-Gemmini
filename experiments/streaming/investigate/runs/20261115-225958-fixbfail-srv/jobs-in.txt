@@ -1,0 +1,4 @@
+stock /home/ai-user/fixb/progs/tests/bareMetalC/gemmini_counter-baremetal 1 150000000
+stock /home/ai-user/fixb/progs/tests/bareMetalC/global_average-baremetal 1 150000000
+nm24 /home/ai-user/fixb/progs/tests/bareMetalC/nm_sparse_loop_24-baremetal 1 600000000
+nm48 /home/ai-user/fixb/progs/tests/bareMetalC/nm_sparse_loop_48-baremetal 1 600000000

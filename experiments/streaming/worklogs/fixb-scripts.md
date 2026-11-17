@@ -110,3 +110,50 @@ Gaps came from `worklogs/fixb-final-spike.md` (stale `verification/build/fair_pe
 ## RESUME HERE
 Done: both gaps fixed in `run-flow.sh`, tested, outputs in R with `SHA256SUMS`. Running: nothing. No git writes.
 Next: coordinator review; decide whether to run `fair-build` to refresh `verification/build` before any RTL `fair` run.
+
+## NEG table fix 2026-11-15
+Edited only `run-flow.sh` and `experiments/streaming/tools/parse_fixa.py` (uncommitted, branch `spad-index-fix`). No sims, no
+server, no git writes. Scratch outputs: `<scratchpad>/negfix/{before,after}-<run>.{out,err}`, mutant folder `negfix/mut2/`.
+Runs parsed: A = `investigate/runs/20261111-183018-fixa-srv`, B = `investigate/runs/20261113-160015-fixb-srv`.
+
+### Changes
+1. NEG 10 text. `fix-b-spec.md:232` ("N2 replaces the LOOP_CONV_WS half of the existing Controller.scala:281 message (the LOOP_WS
+   half is replaced by N1)") and RTL `Controller.scala:298-301` (11cc20cd) confirm the old combined assert is gone. B's
+   `nm{24,48}.nm_sparse_protocol_neg10_*.seed1.log` print N1 at `Controller.scala:298`.
+   - `run-flow.sh:95` `neg_msg 10` = the full N1 text. `run-flow.sh:708` escapes the message's ERE specials (it is a
+     `grep -E` pattern; N1 has `()[]`), as the loop NEG line already did. Checked: the escaped pattern matches B's neg10 log
+     (1 line) and not its neg9 log (0).
+   - `parse_fixa.py:35-36,56`: `proto_neg10` accepts the old text (run A's build) or N1 (run B's build).
+2. Source lines. `parse_fixa.py:19-57`: the NEG table holds message texts only (feature prefix + message). A NEG passes when
+   every assert it prints has an accepted text and its own `at <File>.scala:<line>` line (`:137`); the line is printed, not
+   checked. `parse_fixa.py:60,131-133`: `nm_sparse_protocol_neg<n>` (B's names) maps to the `proto_neg<n>` entries (A's names).
+3. Dense tests. `parse_fixa.py:66-78` lists Berkeley's 54 dense tests (Makefile `tests` at gemmini-rocc-tests 22158bf, without
+   nm_* and the two spad tests). `:161-167`: a dense log passes when jobs.tsv exit is 0, its last non-empty line has
+   `Verilog $finish`, and it has no `*** FAILED ***`, `Assertion`, `%Error`, `%Fatal` or `Verilog $stop`. Dense rows print in
+   the `== tests` table. `:15-16`: jobs.tsv program column may be `binary` or `program`.
+
+### Results
+| run | before | after |
+|---|---|---|
+| A | rc 0; tests 56 PASS, 0 FAIL | rc 0; tests 56 PASS, 0 FAIL; stdout byte-identical (`diff` of before/after `.out`) |
+| B | rc 1; "120 failed or missing logs, 212 logs judged"; tests 62 PASS, 12 FAIL; 108 dense logs FAIL in streaming | rc 1; "12 failed or missing logs, 212 logs judged"; tests 170 PASS, 12 FAIL; streaming 30 ok, 0 FAIL |
+
+B's 12 FAILs after: `nm_sparse_loop_24/48` (timeout assert, `TestDriver.v:147`); `gemmini_counter`, `global_average`
+(`*** FAILED *** (tohost = 1)`); `conv_with_input_dilation`, `..._and_rot180`, `..._and_neg_padding` (timeout after 150000001
+cycles); each on nm24 and nm48. All 12 have exit 2 in B's `jobs.tsv`.
+- `bash -n run-flow.sh`: clean.
+- Mutant folder (`negfix/mut2/`, copies of B's logs with a made-up jobs.tsv): exit 0 with FAILED text -> FAIL; clean log with
+  exit 2 -> FAIL; exit 0 without the `$finish` line -> FAIL; neg10 log holding the neg9 assert -> FAIL; neg9 log with its
+  `at ...scala` line removed -> FAIL; unchanged `template` log -> PASS; rc 1. Same result with the column renamed `program`.
+- B's `SHA256SUMS` verifies after the work (run folder untouched).
+
+### Open
+- B has 12 `stock.*` logs (jobs.tsv chip `stock`). The parser only reads `nm24.` / `nm48.` logs, so they are not judged and not
+  reported (212 judged of 224 jobs). Not changed here; behaviour predates this fix.
+- Spike's NEG 10 check in `run-flow.sh` only needs a `GEMMINI:` abort line, not a specific text, so it needed no change.
+- `spad_neg*` entries now also match on text only; no `spad_neg` log exists on the sparse-loop-fix build to test them against
+  (A's 34 pass unchanged).
+
+## RESUME HERE
+Done: all three items, tested on A and B. Running: nothing. No git writes. Next: coordinator review; decide whether the parser
+should judge the `stock.*` logs.

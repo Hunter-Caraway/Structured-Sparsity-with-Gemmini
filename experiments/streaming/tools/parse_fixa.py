@@ -1,34 +1,39 @@
 #!/usr/bin/env python3
-"""parse.py <run_dir>: judge every log of a Fix A server run and print tables (tests, fair_perf, streaming).
-Numbers are copied from the log lines; nothing is computed except min/max over seeds and ratios.
-NEG builds pass only if every RTL assert they print is an expected (message, Controller/ExecuteController.scala line)
-pair for that case (see NEG below); the message alone is not enough, since the "at <file>:<line>" line echoes the
-assert's source text."""
+"""parse.py <run_dir>: judge every log of a Fix A / sparse-loop-fix server run and print tables (tests, fair_perf,
+streaming). Numbers are copied from the log lines; nothing is computed except min/max over seeds and ratios.
+NEG builds pass only if every RTL assert they print carries one of the case's expected message texts (see NEG below)
+and its own "at <File>.scala:<line>" line. The message is read from the "Assertion failed: <msg>" line only, never
+from the "at" line, which echoes the assert's source text. Source line numbers are printed, not checked: they move
+with every RTL edit.
+Berkeley's dense tests (DENSE below) print no pass line of their own; they are judged on the simulator's ending."""
 import re, sys, os, csv, collections
 
 run = sys.argv[1]
 jobs = {}
 with open(os.path.join(run, 'jobs.tsv')) as f:
     for r in csv.DictReader(f, delimiter='\t'):
-        jobs[(r['chip'], r['binary'].replace('-baremetal', ''), r['seed'])] = r
+        # the program column is named 'binary' in the server runs and 'program' in older job tables
+        prog = r['binary'] if 'binary' in r else r['program']
+        jobs[(r['chip'], prog.replace('-baremetal', ''), r['seed'])] = r
 
-# Expected RTL assert(s) per NEG case: (message text, source file:line). A NEG log passes only if it has at least one
-# "Assertion failed: <msg>" line, every such line is followed by an "at <File>.scala:<line>" line, and every
-# (message, source) pair it prints is one of the case's accepted pairs (same pair: message AND source line).
-# Lines = generators/gemmini/src/main/scala/gemmini/{Controller,ExecuteController}.scala of the Fix A build
-# (gemmini 639a5068 + uncommitted diff sha256 27c66ae5..., the diff the 2:4 / 4:8 sims of 20261111-183018 were built
-# from; fix-a-server.md "Results"). Expected cases: fix-a-spec.md section 7, fix-a-sw.md "For the server rebuild",
-# run-flow.sh neg_msg. Two-entry cases are the same-cycle double asserts of fix-a-review.md M6.
-C, E = 'Controller.scala', 'ExecuteController.scala'
-M_RD = ('rd values 3..31 are reserved', C + ':551')
-M_CNT = ('tile count rs2[7:0] must be 1..4', C + ':604')
-M_HI = ('rs1[63:32] and rs2[63:8] must be 0', C + ':605')
-M_ADDR = ('rs1 must be a scratchpad row address', C + ':606')
-M_BANK = ('the index rows must all lie in one scratchpad bank', C + ':608')
-M_HALF = ('while a register-path index tile is half sent', C + ':610')
-M_BUDGET = ('more than 4 index tiles ahead of their preloads', C + ':611')
-M_DEAD = ('n:m index fifo deadlock', C + ':575')
-M_MODE = ('differs from the mode its weights were preloaded in', E + ':949')
+# Expected RTL assert message(s) per NEG case. A NEG log passes only if it has at least one
+# "Assertion failed: <msg>" line, every such line is followed by an "at <File>.scala:<line>" line, and every message
+# it prints contains one of the case's accepted texts. Expected cases: fix-a-spec.md section 7, fix-a-sw.md "For the
+# server rebuild", run-flow.sh neg_msg. Two-entry cases are the same-cycle double asserts of fix-a-review.md M6.
+M_RD = 'NM_META_CMD (funct 26): rd values 3..31 are reserved'
+M_CNT = 'NM_META_CMD rd == 2: tile count rs2[7:0] must be 1..4'
+M_HI = 'NM_META_CMD rd == 2: rs1[63:32] and rs2[63:8] must be 0'
+M_ADDR = 'NM_META_CMD rd == 2: rs1 must be a scratchpad row address'
+M_BANK = 'NM_META_CMD rd == 2: the index rows must all lie in one scratchpad bank'
+M_HALF = 'NM_META_CMD rd == 2 while a register-path index tile is half sent'
+M_BUDGET = 'n:m index fifo: more than 4 index tiles ahead of their preloads'
+M_DEAD = 'n:m index fifo deadlock: more than 4 index tiles sent ahead of their preloads'
+M_MODE = 'n:m sparse mode of a compute differs from the mode its weights were preloaded in'
+# LOOP_WS with no nm flag while sparse mode is on. Before sparse-loop-fix one assert covered LOOP_WS and
+# LOOP_CONV_WS; N1 of fix-b-spec.md 2.5.6 replaces its LOOP_WS half (spec line "N2 replaces the LOOP_CONV_WS half
+# ... the LOOP_WS half is replaced by N1"), so a log shows whichever text its build has.
+M_LOOP_OLD = 'LOOP_WS / LOOP_CONV_WS issued while n:m sparse mode (config_ex rs1[10]) is on'
+M_LOOP_N1 = 'sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])'
 NEG = {
     'spad_neg21': [M_RD], 'spad_neg22': [M_RD],
     'spad_neg23': [M_CNT],
@@ -40,17 +45,37 @@ NEG = {
     'spad_neg30': [M_BANK], 'spad_neg31': [M_BANK],
     'spad_neg32': [M_HALF],
     'spad_neg33': [M_BUDGET], 'spad_neg34': [M_BUDGET],
-    'spad_neg35': [('register rows (rd == 0) after a scratchpad index load', C + ':622')],
-    'spad_neg36': [('clear (rd == 1) between a sparse preload and its compute', C + ':617')],
-    'spad_neg37': [('n:m sparse preload with no index tile sent', C + ':629')],
-    # nm_sparse_protocol (run-flow.sh neg_msg); NEG 4: the deadlock counter (:575) or, if the program-order model
-    # catches the 5th tile at dispatch first, the budget assert (:611)
+    'spad_neg35': ['NM_META_CMD register rows (rd == 0) after a scratchpad index load'],
+    'spad_neg36': ['NM_META_CMD clear (rd == 1) between a sparse preload and its compute'],
+    'spad_neg37': ['n:m sparse preload with no index tile sent'],
+    # nm_sparse_protocol (run-flow.sh neg_msg); NEG 4: the deadlock counter or, if the program-order model catches
+    # the 5th tile at dispatch first, the budget assert
     'proto_neg4': [M_DEAD, M_BUDGET],
     'proto_neg7': [M_MODE],
-    'proto_neg9': [('needs weight stationary dataflow', E + ':677')],
-    'proto_neg10': [('issued while n:m sparse mode', C + ':281')],
+    'proto_neg9': ['n:m sparse mode (config_ex rs1[10]) needs weight stationary dataflow'],
+    'proto_neg10': [M_LOOP_OLD, M_LOOP_N1],
     'proto_neg14': [M_MODE],
 }
+# the same nm_sparse_protocol -DNEG=<n> builds are named proto_neg<n> or nm_sparse_protocol_neg<n>, by run
+PROTO_NEG_RE = re.compile(r'nm_sparse_protocol_neg(\d+)$')
+
+# Berkeley's 54 dense tests: the `tests` list of gemmini-rocc-tests/bareMetalC/Makefile (22158bf) without nm_* and
+# without the two its normal-config filter drops (matmul_spad, mvin_mvout_spad); the list run-flow.sh dense_tests
+# derives. A dense log passes when jobs.tsv has exit 0, its last line is the simulator's "Verilog $finish", and it
+# has none of DENSE_BAD.
+DENSE = frozenset("""
+mvin_mvout mvin_mvout_zeros mvin_mvout_stride mvin_mvout_block_stride mvin_mvout_acc mvin_mvout_acc_zero_stride
+mvin_mvout_acc_stride mvin_mvout_acc_full mvin_mvout_acc_full_stride matmul_os matmul_ws matmul raw_hazard aligned
+padded mvin_scale conv conv_stride conv_rect conv_rect_pool conv_with_pool conv_with_rot180 conv_with_kernel_dilation
+conv_with_input_dilation conv_with_input_dilation_and_rot180 conv_with_input_dilation_and_neg_padding
+conv_trans_output_1203 conv_trans_weight_1203 conv_trans_weight_0132 conv_trans_input_3120
+conv_trans_input_3120_with_kernel_dilation conv_first_layer conv_dw conv_perf conv_dw_perf tiled_matmul_os
+tiled_matmul_ws tiled_matmul_ws_At tiled_matmul_ws_Bt tiled_matmul_ws_full_C tiled_matmul_ws_low_D
+tiled_matmul_ws_igelu tiled_matmul_ws_layernorm tiled_matmul_ws_softmax tiled_matmul_ws_perf tiled_matmul_cpu
+tiled_matmul_option transpose matrix_add resadd resadd_stride global_average gemmini_counter template
+""".split())
+assert len(DENSE) == 54
+DENSE_BAD = ('*** FAILED ***', 'Assertion', '%Error', '%Fatal', 'Verilog $stop')
 
 # sparse-loop-fix NEG builds (nm_sparse_loop -DNEG=<n>, n / 10 = assert N1..N14 of fix-b-spec.md 2.5.6; same texts as
 # run-flow.sh loop_neg_msg). The source lines are not pinned here: a case passes if every assert it prints carries its
@@ -103,17 +128,20 @@ for f in logs:
     rc = j.get('exit', '?'); wall = j.get('wall_s', '?')
     asserts = [l.strip() for l in text.splitlines() if 'Assertion failed' in l]
     base = re.sub(r'_(24|48)$', '', name)
+    pm = PROTO_NEG_RE.match(base)
+    if pm:
+        base = 'proto_neg' + pm.group(1)
     if base.startswith(('spad_neg', 'proto_neg')):
-        exp = NEG[base]
+        exp = NEG.get(base, [])  # a case with no entry has no expected assert and fails
         pairs = assert_pairs(text.splitlines())
-        good = [p for p in pairs if any(e in p[0] and p[1] == s for e, s in exp)]
+        good = [p for p in pairs if p[1] and any(e in p[0] for e in exp)]
         caught = 'NOT caught' not in text
         # rc '?' = no jobs.tsv row: the exit status is unknown, so the expected failure is not shown
         ok = rc not in ('0', '?') and bool(pairs) and len(good) == len(pairs) and caught
         detail = ('; '.join('%s @ %s' % (p[1], p[0][:90]) for p in pairs) if pairs else
                   ([l for l in text.splitlines() if 'NOT caught' in l or 'Error' in l] or ['(no assert)'])[0][:160])
         if not ok and pairs:
-            detail += '  [expected one of: %s]' % ', '.join(s for _, s in exp)
+            detail += '  [expected one of: %s]' % (' | '.join(exp) or 'no RTL assert is listed for this case')
         tests.append((chip, name, seed, 'PASS' if ok else 'FAIL', rc, wall, detail, f))
     elif LOOP_NEG_RE.match(base):
         exp = LOOP_MSG.get(int(LOOP_NEG_RE.match(base).group(1)) // 10)
@@ -130,6 +158,14 @@ for f in logs:
         ok = rc == '0' and re.search(r'^%s passed$' % base, text, re.M) is not None and not asserts
         last = [l for l in text.splitlines() if 'passed' in l or 'FAIL' in l or 'mismatch' in l or 'Assertion' in l]
         tests.append((chip, name, seed, 'PASS' if ok else 'FAIL', rc, wall, (last or ['(none)'])[-1][:160], f))
+    elif name in DENSE:
+        ll = [l for l in text.splitlines() if l.strip()]
+        bad = [l for l in ll if any(b in l for b in DENSE_BAD)]
+        fin = bool(ll) and 'Verilog $finish' in ll[-1]
+        ok = rc == '0' and fin and not bad
+        detail = 'dense: ' + (bad[0].strip() if bad else 'Verilog $finish' if fin else
+                              'no Verilog $finish at the end: ' + (ll[-1].strip() if ll else '(empty log)'))
+        tests.append((chip, name, seed, 'PASS' if ok else 'FAIL', rc, wall, detail[:160], f))
     elif base.startswith('fair_perf'):
         rows = {mm.group(1): int(mm.group(2)) for mm in re.finditer(r'^(\w+)\s+total\s+(\d+)', text, re.M)}
         # hardware-loop variants (dense_loop, sparse_loop): a total line counts only with its own reference match

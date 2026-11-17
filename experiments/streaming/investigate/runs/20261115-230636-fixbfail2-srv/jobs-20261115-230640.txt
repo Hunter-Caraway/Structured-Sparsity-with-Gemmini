@@ -1,0 +1,2 @@
+nm24 /home/ai-user/fixb/failprogs/nm_loop7_24-baremetal 1 150000000
+nm48 /home/ai-user/fixb/failprogs/nm_loop7_48-baremetal 1 150000000

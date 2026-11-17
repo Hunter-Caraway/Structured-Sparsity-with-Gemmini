@@ -43,3 +43,25 @@ Blocked: step 2 rebuild fails on the `%` assert format bug above. Needs an RTL f
 Prepared and ready: ~/fixb/jobs-fixb.txt (224 jobs: stock 12, nm24 106, nm48 106), ~/fixb/run_jobs.sh (stock|nm24|nm48; run with `nohup setsid ~/fixb/run_jobs.sh ~/sinv/runs/<stamp>-fixb-srv ~/fixb/jobs-fixb.txt`).
   NOTE: the tests/NEG binaries may need a rebuild if the fix changes the assert text; programs in ~/fixb/progs (laptop scratch fixb-srv/).
 Not started: steps 4 and 5 (no simulation run).
+
+## Resume (coordinator OK, RTL 11cc20cd)
+- Re-synced LoopMatmul.scala; laptop vs server sha of all 231 repo files identical; progs sha still match (laptop-progs.sha).
+- ~/fixb/build_run.sh (nohup setsid): rebuild nm24, nm48 (no backup block), restore params header, then start run_jobs.sh into ~/sinv/runs/<stamp>-fixb-srv. Logs ~/fixb/logs/chain2.log, build-*.log, BUILD_STATUS, run.out.
+- Rebuild OK (chain2.log): nm24 338 s sim sha256 1042fc926288a463c829cdfe654a5515b6243ca56ae19b425fd7d542bf237891; nm48 220 s sim sha256 f4a3642cf572de929c758c3fd2a1f2320ee286ce45787aca13a7d0ac1018ed34 (old backups c9664cc0... / 4b414e5a...). Stock after 84c2264a... unchanged. Headers saved ~/fixb/hdr/{24,48}; gemmini_params.h restored 3758ae96.
+- Run started 16:00:15 EST: ~/sinv/runs/20261113-160015-fixb-srv, 224 jobs, PAR 12, jobs file ~/fixb/jobs-fixb.txt, done marker <run>/STATUS (ALL_DONE), SHA256SUMS written then. Long layers first (rn50, ffn2, ffn1); expect hours.
+
+## RESUME HERE
+Done: sync, dense check (user: counts as done), backup, rebuild, progs, run launched (nohup setsid via ~/fixb/build_run.sh -> run_jobs.sh).
+Running: ~/sinv/runs/20261113-160015-fixb-srv (nothing else). Output ~/fixb/logs/run.out.
+Next: when <run>/STATUS = ALL_DONE: check jobs.tsv (exit codes: NEG expected exit 2 w/ assert text; all others 0), NEG 6 log (nm_sparse_loop_neg60) message must show single `%`; copy back to experiments/streaming/investigate/runs/20261113-160015-fixb-srv via python tarfile stream, verify SHA256SUMS + full sha list both ends; run parse_fixa.py, collect.py, verify_all.py.
+
+## Copy-back 2026-11-15
+- Copied `~/sinv/runs/20261113-160015-fixb-srv` to `investigate/runs/20261113-160015-fixb-srv/` via ssh + python tarfile stream. 391 files, 59M. STATUS = ALL_DONE (224 jobs).
+- Checksums: `sha256sum -c SHA256SUMS` 389/389 OK. The 2 unlisted files (SHA256SUMS, STATUS) plus all 391 files compared against a full server sha256 list: identical (`diff` clean). Nothing modified after copy; no COPYBACK.txt written (verification recorded here).
+- jobs.tsv: 150 exit 0, 74 exit 2. Logs of exit-0 jobs: no "Assertion failed/FAILED/%Error" text.
+- parse_fixa.py (rc=1; output in session scratchpad `parse.out`): tests 62 PASS / 12 FAIL; fair_perf 6 ok (3 seeds x 2 chips); streaming 24 of 24 bench logs ok (sbench passed, verified). It also judges the 108 dense Berkeley logs as streaming ("no sbench passed"), which is a parser limitation (not applicable to dense tests), not a log fault.
+  - The 12 test FAILs: nm_sparse_loop_24/48 (timeout 20M cycles) and 10 protocol NEG logs (neg4/7/9/10/14 x 2 chips). The 10 are pinned-line / stale-text mismatches in parse_fixa NEG table, not missing asserts (see below).
+- Non-zero exits that are not NEG: nm_sparse_loop_24/48 (timeout 20M), gemmini_counter, global_average (tohost=1), conv_with_input_dilation, conv_with_input_dilation_and_rot180 (timeout 150M), and also conv_with_input_dilation_and_neg_padding on both chips (timeout 150M, `Verilog $stop`) = 12 logs, not 10. 62 NEG logs + 12 = 74.
+- NEG check (own script on the logs; expected texts from run-flow.sh `loop_neg_msg`/`neg_msg`): 60/62 match. All 52 loop NEG logs show exactly the expected `sparse-loop-fix: ...` message, rc 2, one assert each. NEG 6 (neg60, neg61 on both chips): message is `... (K % 2*DIM)` with a single `%`, no `%%`. Protocol neg4/7/9/14 match (messages `n:m index fifo deadlock...`, `...differs from the mode its weights were preloaded in`, `...needs weight stationary dataflow...`).
+- Mismatch: nm_sparse_protocol_neg10_24/48 print the N1 message `sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])` (Controller.scala:298), not the old `issued while n:m sparse mode`. Matches spec (N1 replaces the LOOP_WS half of the old assert), so `run-flow.sh neg_msg 10` and `parse_fixa.py` NEG['proto_neg10'] are stale (also parse_fixa pins old Fix A source lines: Controller 575->622 for neg4, etc.).
+- collect.py: cannot run on this run. Needs jobs.tsv column `program` (this run: `binary`), run `ref/<layer>_<pat>.json` (absent), and only streaming logs (crashes on dense logs). Tried on a scratch copy with patched header and only the 24 streaming logs: fails on missing ref/. rc=1, folder untouched. verify_all.py not run: it takes fair-run folders with `ref`/derived layout (verification/runs); not applicable.

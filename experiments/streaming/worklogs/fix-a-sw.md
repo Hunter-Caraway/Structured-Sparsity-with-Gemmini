@@ -67,7 +67,7 @@ never installed into the toolchain, never written to gemmini-rocc-tests/build).
     bad on both (11 say "NOT caught", 4 crash in std::vector::at without the message). mL8_noinflight: neg34 bad.
     mL11_oldchecks (empty-fifo and clear-in-flight checks off): neg36/37 bad.
 - Dense regression: all 56 Berkeley bareMetalC binaries from gemmini-rocc-tests/build (read only) on pre24 vs fixa24:
-  54 pass both, same 2 pre-existing failures (matmul_spad, mvin_mvout_spad).
+  54 pass both, same 2 pre-existing failures (matmul_spad, mvin_mvout_spad; Berkeley issue B1, see berkeley-issues.md).
 
 ### Step 4: benchmarks - done 14:20
 Spike counts one cycle per retired instruction (riscv-isa-sim execute.cc:375 "Model a hart whose CPI is 1"), so
