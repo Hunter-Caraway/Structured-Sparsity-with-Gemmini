@@ -1,0 +1,5 @@
+q3 check dense_icount: layer=bert_ffn1 cpu_ref mismatches 0 of 393216, hash 0x316709fccb222000 expected 0x316709fccb222000, sampled rows 8/8 -> verified
+q3 dense_icount: layer=bert_ffn1 M=128 K=768 N=3072 DIM=16 instret=7619 cycles=7623 instret_with_fence=7624 verified
+q3 passed
+Gemmini extension configured with:
+    dim = 16

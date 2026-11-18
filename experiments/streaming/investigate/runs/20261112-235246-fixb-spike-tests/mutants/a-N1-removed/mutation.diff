@@ -1,0 +1,4 @@
+915c915
+<     nm_loop_abort("LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])"); // changed: sparse-loop-fix, N1
+---
+>     (void)0; // changed: sparse-loop-fix, N1

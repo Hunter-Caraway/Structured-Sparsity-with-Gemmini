@@ -1,0 +1,12 @@
+
+== building libgemmini (spike extension) for 2:4 in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/scripts/libgemmini-nm24, not installed -> logs/runs/libgemmini-20261113-145031.log
+  built /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/scripts/libgemmini-nm24/libgemmini.so (2:4); spike loads it with --extlib
+
+== building libgemmini (spike extension) for 2:4, dense chip model in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/scripts/libgemmini-dense24, not installed -> logs/runs/libgemmini-20261113-145035.log
+  built /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/scripts/libgemmini-dense24/libgemmini.so (2:4, dense chip model); spike loads it with --extlib
+
+== building libgemmini (spike extension) for 4:8 in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/scripts/libgemmini-nm48, not installed -> logs/runs/libgemmini-20261113-145039.log
+  built /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/scripts/libgemmini-nm48/libgemmini.so (4:8); spike loads it with --extlib
+
+== building libgemmini (spike extension) for 4:8, dense chip model in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/scripts/libgemmini-dense48, not installed -> logs/runs/libgemmini-20261113-145043.log
+  built /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/scripts/libgemmini-dense48/libgemmini.so (4:8, dense chip model); spike loads it with --extlib

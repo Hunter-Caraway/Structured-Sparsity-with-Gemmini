@@ -1,0 +1,4 @@
+GEMMINI: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

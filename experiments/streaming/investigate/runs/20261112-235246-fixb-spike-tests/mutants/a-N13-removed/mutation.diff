@@ -1,0 +1,4 @@
+888c888
+<     nm_loop_abort("LOAD_IDX destination must be a scratchpad row address"); // changed: sparse-loop-fix, N13
+---
+>     (void)0; // changed: sparse-loop-fix, N13

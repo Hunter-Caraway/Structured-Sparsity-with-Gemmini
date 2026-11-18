@@ -1,0 +1,4 @@
+971c971
+<   uint32_t B_sp_addr_start = (BANK_NUM * BANK_ROWS / 2) - KB * J * DIM - nm_idx_rows; // changed: sparse-loop-fix, B below the index region
+---
+>   uint32_t B_sp_addr_start = (BANK_NUM * BANK_ROWS / 2) - KB * J * DIM - nm_idx_rows + nm_R; // changed: sparse-loop-fix, B below the index region

@@ -1,0 +1,10 @@
+AI-1769.floridapoly.org
+6.12.0-211.68.1.el10_2.x86_64
+16
+sim.GemminiRocketConfig sha256=84c2264ab08524b8e6b6f822b53ebb8613e381219e5ccb8144ad9cc9543b75e4
+sim.GemminiNMRocketConfig sha256=97b5d3b291ab37f0e69de2ddbfe077b21a7749bba0b0644450434b21d778cd1e
+sim.GemminiNM48RocketConfig sha256=ddf8b694747d5983edf6f2fd2094d4ae5050a927edc8f92058da838e6497d4fd
+git.gemmini=
+git.libgemmini=
+git.gemmini-rocc-tests=
+git HEADs on the server (git not on PATH there; from worklogs/server.md): gemmini 639a5068, libgemmini a14aaa15, gemmini-rocc-tests 61086b43, working trees checksum-identical to the laptop

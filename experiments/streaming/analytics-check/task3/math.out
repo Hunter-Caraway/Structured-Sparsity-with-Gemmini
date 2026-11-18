@@ -1,0 +1,12 @@
+independent n:m math check (numpy, no shared code with the C tests)
+  2:4  500 random 16x32 by 32x16 tiles: sparse array math == dense a @ w_pruned in every case (largest |output| 118072, fits int32)
+  2:4  injected fault 'index ignored': detected in 200/200 trials
+  2:4  injected fault 'index rows flipped': detected in 200/200 trials
+  2:4  injected fault 'one index wrong': detected in 200/200 trials
+  2:4  injected fault 'high half missing': detected in 200/200 trials
+  4:8  500 random 16x32 by 32x16 tiles: sparse array math == dense a @ w_pruned in every case (largest |output| 116539, fits int32)
+  4:8  injected fault 'index ignored': detected in 200/200 trials
+  4:8  injected fault 'index rows flipped': detected in 200/200 trials
+  4:8  injected fault 'one index wrong': detected in 200/200 trials
+  4:8  injected fault 'high half missing': detected in 200/200 trials
+  64x128x32 matmul: dense needs 64 weight-tile passes, sparse needs 32

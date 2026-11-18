@@ -1,0 +1,32 @@
+== tests
+nm24  nm_sparse_loop_neg110_24     s1 FAIL rc=134     1s  Controller.scala:603 @ sparse-loop-fix: LOAD_IDX (funct 27) on a dense build (nm_sparsity = None)  [expected: no RTL assert exists for this case (Spike-only or unknown NEG)]
+nm24  nm_sparse_loop_neg130_24     s1 FAIL rc=255     1s  (no assert)  [expected: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address]
+nm24  nm_sparse_loop_neg131_24     s1 PASS rc=134     1s  Controller.scala:603 @ sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm24  nm_sparse_loop_neg132_24     s1 FAIL rc=134     1s  Controller.scala:603 @ sparse-loop-fix: sparse loop needs A_stride == 1  [expected: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address]
+tests: 1 PASS, 3 FAIL
+
+== fair_perf
+nm24 seed 1 FAIL pattern=2:4 matches=7 dense=1327 dense_reuse=1391 sparse=1626 sparse_reuse=1071 sparse_batched=1667 sparse_spad=884 dense_loop=20 sparse_loop=23 cpu_dense=1007 cpu_dense_reuse=1023 cpu_sparse=1318 cpu_sparse_reuse=838 cpu_sparse_batched=1307 cpu_sparse_spad=644 cpu_meta_only=704
+fair ranges (seeds):
+  nm24 cpu_dense            min    1007 max    1007 n=1
+  nm24 cpu_dense_reuse      min    1023 max    1023 n=1
+  nm24 cpu_meta_only        min     704 max     704 n=1
+  nm24 cpu_sparse           min    1318 max    1318 n=1
+  nm24 cpu_sparse_batched   min    1307 max    1307 n=1
+  nm24 cpu_sparse_reuse     min     838 max     838 n=1
+  nm24 cpu_sparse_spad      min     644 max     644 n=1
+  nm24 dense                min    1327 max    1327 n=1
+  nm24 dense_loop           min      20 max      20 n=1
+  nm24 dense_reuse          min    1391 max    1391 n=1
+  nm24 sparse               min    1626 max    1626 n=1
+  nm24 sparse_batched       min    1667 max    1667 n=1
+  nm24 sparse_loop          min      23 max      23 n=1
+  nm24 sparse_reuse         min    1071 max    1071 n=1
+  nm24 sparse_spad          min     884 max     884 n=1
+
+== streaming
+nm24 small_24_loop            s1 FAIL sbench passed (2 of 2 runs verified) [sparse_loop: check line verified, 0 tiles lines] | berkeley total=468 cpu=466 ex=3899  sparse_loop total=469 cpu=467 ex=4245
+stream ranges (total, seeds):
+  nm24 small_24_loop            berkeley       min       468 max       468 n=1
+  nm24 small_24_loop            sparse_loop    min       469 max       469 n=1
+parse_fixa: 5 failed or missing logs, 6 logs judged

@@ -1,0 +1,10 @@
+n13-start-only-24 NEG=130: mutant not seen (pass NEG=130 24 rc=255 expected text)
+n13-start-only-24 NEG=131: mutant not seen (pass NEG=131 24 rc=255 expected text)
+n13-start-only-24 NEG=132: mutant not seen (pass NEG=132 24 rc=255 expected text)
+n13-start-only-24 NEG=133: KILLED (WRONGTEXT NEG=133 24 rc=255: )
+pad-j-ignored-24: KILLED; pad_J cases FAIL 5 of 10; nm_sparse_loop_24 rc=1: 16 cases ok, 6 FAIL, pad_J cases ok 0 of 10, 0 passed line
+n13-start-only-48 NEG=130: mutant not seen (pass NEG=130 48 rc=255 expected text)
+n13-start-only-48 NEG=131: mutant not seen (pass NEG=131 48 rc=255 expected text)
+n13-start-only-48 NEG=132: mutant not seen (pass NEG=132 48 rc=255 expected text)
+n13-start-only-48 NEG=133: KILLED (WRONGTEXT NEG=133 48 rc=255: )
+pad-j-ignored-48: KILLED; pad_J cases FAIL 5 of 10; nm_sparse_loop_48 rc=1: 16 cases ok, 6 FAIL, pad_J cases ok 0 of 10, 0 passed line

@@ -1,0 +1,299 @@
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+A_transpose: 0, B_transpose: 0, dataflow: 0
+Output-stationary
+A_transpose: 0, B_transpose: 0, dataflow: 1
+Weight-stationary
+A_transpose: 0, B_transpose: 1, dataflow: 0
+Output-stationary
+A_transpose: 0, B_transpose: 1, dataflow: 1
+Weight-stationary
+A_transpose: 1, B_transpose: 0, dataflow: 0
+Output-stationary
+A_transpose: 1, B_transpose: 0, dataflow: 1
+Weight-stationary
+A_transpose: 1, B_transpose: 1, dataflow: 0
+Output-stationary
+A_transpose: 1, B_transpose: 1, dataflow: 1
+Weight-stationary
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+2:4 ok (k=64 squashed to 32 rows)
+4:8 ok (k=64 squashed to 32 rows)
+1:2 ok (k=64 squashed to 32 rows)
+2:4 ok (k=63 squashed to 32 rows)
+4:8 ok (k=61 squashed to 32 rows)
+edge tile packing ok
+nm_sparse_sw passed
+nm_sparse_matmul: 4:8, i=32 k=64 j=32
+dense  cycles: 340 (16 preload/compute pairs)
+sparse cycles: 658 (8 preload/compute pairs, 8 meta cmds each)
+nm_sparse_matmul passed
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+nm_sparse_debug 4:8
+  correct sparse             256 / 256
+  index ignored (all 0)        0 / 256
+  index rows flipped           0 / 256
+  index transposed             0 / 256
+  dense, no a_hi               0 / 256
+  dense + a_hi as bias         0 / 256
+row 0 got: -11273 -42996 4099 3358 14792 -35000 6108 -13811 22307 3053 -16235 -55997 51605 1289 -20806 -8145 
+row 0 want: -11273 -42996 4099 3358 14792 -35000 6108 -13811 22307 3053 -16235 -55997 51605 1289 -20806 -8145 
+nm_sparse_debug passed
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+nm_sparse_perf: 4:8, i=64 k=128 j=32
+dense          total   1904  cpu_issue_done   1902  pairs  64  cyc/pair   29 | ex_active=34179 rs_full=30878 ctrl_q_block=34035 overlap_haz=30547 spad_a_wait=31896 spad_b_wait=32898 spad_d_wait=31518 main_ex=32961
+dense_bias     total   1840  cpu_issue_done   1838  pairs  64  cyc/pair   28 | ex_active=29236 rs_full=33515 ctrl_q_block=30883 overlap_haz=30535 spad_a_wait=34845 spad_b_wait=32035 spad_d_wait=33106 main_ex=30723
+sparse         total   2761  cpu_issue_done   2759  pairs  32  cyc/pair   86 | ex_active=79310 rs_full=81153 ctrl_q_block=84674 overlap_haz=83076 spad_a_wait=76915 spad_b_wait=82316 spad_d_wait=81448 main_ex=85084
+sparse_nat     total   2632  cpu_issue_done   2630  pairs  32  cyc/pair   82 | ex_active=79823 rs_full=82735 ctrl_q_block=78239 overlap_haz=79150 spad_a_wait=84889 spad_b_wait=78924 spad_d_wait=81283 main_ex=84256
+dense_reuse    total   1861  cpu_issue_done   1859  pairs  64  cyc/pair   29 | ex_active=33654 rs_full=33071 ctrl_q_block=36510 overlap_haz=30174 spad_a_wait=35583 spad_b_wait=32549 spad_d_wait=33496 main_ex=34657
+sparse_reuse   total   1408  cpu_issue_done   1406  pairs  32  cyc/pair   44 | ex_active=32304 rs_full=36562 ctrl_q_block=34883 overlap_haz=31440 spad_a_wait=31436 spad_b_wait=32934 spad_d_wait=30200 main_ex=32837
+cpu only (no gemmini instructions issued):
+cpu_dense      total   1456  cpu_issue_done   1454  pairs  64  cyc/pair   22 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse     total   2283  cpu_issue_done   2281  pairs  32  cyc/pair   71 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse_nat total   2185  cpu_issue_done   2183  pairs  32  cyc/pair   68 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_dense_reuse total   1509  cpu_issue_done   1507  pairs  64  cyc/pair   23 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse_reuse total   1161  cpu_issue_done   1159  pairs  32  cyc/pair   36 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+nm_sparse_perf passed
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+basic                  ok (0/256 wrong)
+a_stride 2             ok (0/256 wrong)
+weights at preload     ok (0/256 wrong)
+clear                  ok (0/256 wrong)
+4 tiles ahead          ok (0/256 wrong)
+garbage keeps weights  ok (0/256 wrong)
+garbage does not pop   ok (0/256 wrong)
+two tiles, stride 2    ok (0/256 wrong)
+dense after sparse     ok (0/256 wrong)
+nm_sparse_protocol passed
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+nm_sparse_loop: 4:8, R = 6 rows per index tile, 2 tiles per LOAD_IDX
+T=1 i1 j1                          ok (0/256 wrong)
+T=2 i2 j2 repeating bias           ok (0/1024 wrong)
+T=3 i1 j3 row bias                 ok (0/768 wrong)
+T=4 i2 j2                          ok (0/1024 wrong)
+T=5 i2 j5                          ok (0/2560 wrong)
+T=10 i3 j5 partial i, row bias     ok (0/3200 wrong)
+8 loops, partial i and j, rep. bias ok (0/2016 wrong)
+8 loops, no bias                   ok (0/3072 wrong)
+4 loops, T=3 and T=1, row bias     ok (0/1024 wrong)
+K=40 padded to 64                  ok (0/512 wrong)
+nm_loop_tiles, row bias            ok (0/4608 wrong)
+pad_J: N=5, T=1                    ok (0/80 wrong)
+pad_J: N=DIM+1, T=4, rep. bias     ok (0/544 wrong)
+pad_J: N=4*DIM+13, partial i, row bias ok (0/1463 wrong)
+pad_J: N=5*DIM-1, 4 loops          ok (0/2528 wrong)
+pad_J: N=5*DIM+7, nm_loop_tiles, K=40 ok (0/3567 wrong)
+seq: sparse loop                   ok (0/1024 wrong)
+seq: dense loop (pruned W)         ok (0/1024 wrong)
+seq: per-tile, LOAD_IDX groups     ok (0/1024 wrong)
+seq: sparse loop again             ok (0/1024 wrong)
+seq: per-tile, LOAD_IDX by tile    ok (0/1024 wrong)
+seq: sparse loop, 2 calls          ok (0/1024 wrong)
+nm_sparse_loop passed
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+fair_perf: 4:8, i=64 k=128 j=32
+fair_perf build: full (dense + sparse runs)
+prep_cold      prep   351721  prune   250459  compress    85810  pack_meta    15452  weights 4096
+prep_warm      prep   350667  prune   249405  compress    85810  pack_meta    15452  weights 4096
+poison reaches the accumulator (2048 values)
+dense          total   1327  cpu_issue_done   1325  pairs  64  cyc/pair   20 | ex_active=31205 rs_full=33114 ctrl_q_block=30270 overlap_haz=31130 spad_a_wait=33150 spad_b_wait=33210 spad_d_wait=32222 main_ex=30650
+dense matches the cpu reference (2048 values)
+dense_reuse    total   1391  cpu_issue_done   1389  pairs  64  cyc/pair   21 | ex_active=29727 rs_full=32370 ctrl_q_block=35014 overlap_haz=30898 spad_a_wait=31568 spad_b_wait=33273 spad_d_wait=34213 main_ex=34771
+dense_reuse matches the cpu reference (2048 values)
+sparse         total   2266  cpu_issue_done   2264  pairs  32  cyc/pair   70 | ex_active=79959 rs_full=86833 ctrl_q_block=87540 overlap_haz=77112 spad_a_wait=83070 spad_b_wait=84641 spad_d_wait=78953 main_ex=83565
+sparse matches the cpu reference (2048 values)
+sparse_reuse   total   1231  cpu_issue_done   1229  pairs  32  cyc/pair   38 | ex_active=31583 rs_full=34775 ctrl_q_block=32003 overlap_haz=32676 spad_a_wait=32206 spad_b_wait=34955 spad_d_wait=30608 main_ex=31736
+sparse_reuse matches the cpu reference (2048 values)
+sparse_batched total   2307  cpu_issue_done   2305  pairs  32  cyc/pair   72 | ex_active=85885 rs_full=81272 ctrl_q_block=87793 overlap_haz=78465 spad_a_wait=80764 spad_b_wait=81155 spad_d_wait=81727 main_ex=84771
+sparse_batched matches the cpu reference (2048 values)
+cpu only (no gemmini instructions issued):
+cpu_dense      total   1007  cpu_issue_done   1005  pairs  64  cyc/pair   15 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_dense_reuse total   1023  cpu_issue_done   1021  pairs  64  cyc/pair   15 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse     total   1830  cpu_issue_done   1828  pairs  32  cyc/pair   57 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse_reuse total    966  cpu_issue_done    964  pairs  32  cyc/pair   30 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_sparse_batched total   1819  cpu_issue_done   1817  pairs  32  cyc/pair   56 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_meta_only  total   1216  cpu_issue_done   1216  pairs  32  cyc/pair   38 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+fair_perf passed
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+fair_perf: 2:4, i=64 k=128 j=32
+fair_perf build: dense-only (no sparse-mode instructions)
+prep_cold      prep   236488  prune   159732  compress    61743  pack_meta    15013  weights 4096
+prep_warm      prep   235960  prune   159204  compress    61743  pack_meta    15013  weights 4096
+poison reaches the accumulator (2048 values)
+dense          total   1327  cpu_issue_done   1325  pairs  64  cyc/pair   20 | ex_active=31205 rs_full=33114 ctrl_q_block=30270 overlap_haz=31130 spad_a_wait=33150 spad_b_wait=33210 spad_d_wait=32222 main_ex=30650
+dense matches the cpu reference (2048 values)
+dense_reuse    total   1391  cpu_issue_done   1389  pairs  64  cyc/pair   21 | ex_active=29727 rs_full=32370 ctrl_q_block=35014 overlap_haz=30898 spad_a_wait=31568 spad_b_wait=33273 spad_d_wait=34213 main_ex=34771
+dense_reuse matches the cpu reference (2048 values)
+cpu only (no gemmini instructions issued):
+cpu_dense      total   1007  cpu_issue_done   1005  pairs  64  cyc/pair   15 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_dense_reuse total   1023  cpu_issue_done   1021  pairs  64  cyc/pair   15 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+fair_perf passed
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+berkeley_dense_perf: unmodified gemmini, 2:4 pruned weights, i=64 k=128 j=32
+poison reaches the accumulator (2048 values)
+dense          total   1904  cpu_issue_done   1902  pairs  64  cyc/pair   29 | ex_active=30455 rs_full=32218 ctrl_q_block=31007 overlap_haz=30283 spad_a_wait=33303 spad_b_wait=33550 spad_d_wait=32511 main_ex=30386
+dense matches the cpu reference (2048 values)
+dense_bias     total   1840  cpu_issue_done   1838  pairs  64  cyc/pair   28 | ex_active=30343 rs_full=32905 ctrl_q_block=35718 overlap_haz=31359 spad_a_wait=30206 spad_b_wait=33342 spad_d_wait=33865 main_ex=34696
+dense_bias matches the cpu reference (2048 values)
+dense_reuse    total   1391  cpu_issue_done   1389  pairs  64  cyc/pair   21 | ex_active=31064 rs_full=34246 ctrl_q_block=31466 overlap_haz=29037 spad_a_wait=34302 spad_b_wait=31835 spad_d_wait=32271 main_ex=33644
+dense_reuse matches the cpu reference (2048 values)
+cpu only (no gemmini instructions issued):
+cpu_dense      total   1392  cpu_issue_done   1390  pairs  64  cyc/pair   21 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_dense_reuse total   1023  cpu_issue_done   1021  pairs  64  cyc/pair   15 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+berkeley_dense_perf passed
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: index FIFO full (4 tiles): send at most 4 tiles ahead of their preloads
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse compute with a GARBAGE A operand
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse compute on weights preloaded in dense mode
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse mode needs WS dataflow and no A/B transpose
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse compute on weights preloaded in dense mode
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOOP_CONV_WS issued while n:m sparse mode (config_ex rs1[10]) is on
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOOP_WS with rs1[3] set needs LOOP_WS_CONFIG_NM (funct 28) first
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) without LOOP_WS rs1[3]
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: sparse loop needs A_stride == 1
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: sparse loop started with index tiles pending in the FIFO: gemmini_nm_reset() first
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOAD_IDX (funct 27) on a dense build (nm_sparsity = None)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8
+GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) on a dense build (nm_sparsity = None)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

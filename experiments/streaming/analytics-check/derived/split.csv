@@ -1,0 +1,31 @@
+chip,label,seed,pattern,variant,runtime_total,index_issue,other_issue,drain,array_active,prep_cold,prep_warm,prune,compress,pack_meta,own_dense_runtime,runs_to_repay_prep
+berkeley,Berkeley,1,dense,fresh weights,1555,0,1493,62,1320,0,0,0,0,0,,
+berkeley,Berkeley,1,dense,weights reused,1541,0,1474,67,1260,0,0,0,0,0,,
+berkeley,Berkeley,2,dense,fresh weights,1555,0,1493,62,1320,0,0,0,0,0,,
+berkeley,Berkeley,2,dense,weights reused,1541,0,1474,67,1260,0,0,0,0,0,,
+berkeley,Berkeley,3,dense,fresh weights,1555,0,1493,62,1320,0,0,0,0,0,,
+berkeley,Berkeley,3,dense,weights reused,1541,0,1474,67,1260,0,0,0,0,0,,
+sameprog,"ours, sparsity off",1,dense,fresh weights,1555,0,1493,62,1320,0,0,0,0,0,,
+sameprog,"ours, sparsity off",1,dense,weights reused,1541,0,1474,67,1260,0,0,0,0,0,,
+sameprog,"ours, sparsity off",2,dense,fresh weights,1555,0,1493,62,1320,0,0,0,0,0,,
+sameprog,"ours, sparsity off",2,dense,weights reused,1541,0,1474,67,1260,0,0,0,0,0,,
+sameprog,"ours, sparsity off",3,dense,fresh weights,1555,0,1493,62,1320,0,0,0,0,0,,
+sameprog,"ours, sparsity off",3,dense,weights reused,1541,0,1474,67,1260,0,0,0,0,0,,
+nm24,ours 2:4,1,2:4,fresh weights,2281,960,1262,59,960,340863,335734,234547,83266,17921,1542,never
+nm24,ours 2:4,1,2:4,"fresh weights, batched",2110,960,1078,72,840,340863,335734,234547,83266,17921,1542,never
+nm24,ours 2:4,1,2:4,weights reused,1395,240,1094,61,672,340863,335734,234547,83266,17921,1515,2797.8
+nm24,ours 2:4,2,2:4,fresh weights,2281,960,1262,59,960,340863,335734,234547,83266,17921,1542,never
+nm24,ours 2:4,2,2:4,"fresh weights, batched",2110,960,1078,72,840,340863,335734,234547,83266,17921,1542,never
+nm24,ours 2:4,2,2:4,weights reused,1395,240,1094,61,672,340863,335734,234547,83266,17921,1515,2797.8
+nm24,ours 2:4,3,2:4,fresh weights,2281,960,1262,59,960,340863,335734,234547,83266,17921,1542,never
+nm24,ours 2:4,3,2:4,"fresh weights, batched",2110,960,1078,72,840,340863,335734,234547,83266,17921,1542,never
+nm24,ours 2:4,3,2:4,weights reused,1395,240,1094,61,672,340863,335734,234547,83266,17921,1515,2797.8
+nm48,ours 4:8,1,4:8,fresh weights,3170,1493,1618,59,960,520777,514867,377300,117272,20295,1468,never
+nm48,ours 4:8,1,4:8,"fresh weights, batched",2964,1493,1406,65,840,520777,514867,377300,117272,20295,1468,never
+nm48,ours 4:8,1,4:8,weights reused,1607,373,1176,58,672,520777,514867,377300,117272,20295,1471,never
+nm48,ours 4:8,2,4:8,fresh weights,3170,1493,1618,59,960,520777,514867,377300,117272,20295,1468,never
+nm48,ours 4:8,2,4:8,"fresh weights, batched",2964,1493,1406,65,840,520777,514867,377300,117272,20295,1468,never
+nm48,ours 4:8,2,4:8,weights reused,1607,373,1176,58,672,520777,514867,377300,117272,20295,1471,never
+nm48,ours 4:8,3,4:8,fresh weights,3170,1493,1618,59,960,520777,514867,377300,117272,20295,1468,never
+nm48,ours 4:8,3,4:8,"fresh weights, batched",2964,1493,1406,65,840,520777,514867,377300,117272,20295,1468,never
+nm48,ours 4:8,3,4:8,weights reused,1607,373,1176,58,672,520777,514867,377300,117272,20295,1471,never

@@ -1,0 +1,2 @@
+nm24 /home/hunter/gemmini-sparsity/experiments/streaming/investigate/build/micro/micro3_24-baremetal 1 10000000
+nm48 /home/hunter/gemmini-sparsity/experiments/streaming/investigate/build/micro/micro3_48-baremetal 1 10000000

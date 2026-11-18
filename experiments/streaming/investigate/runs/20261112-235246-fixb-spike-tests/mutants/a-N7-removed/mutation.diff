@@ -1,0 +1,4 @@
+951c951
+<       nm_loop_abort("sparse loop does not support transposes, resadd, low_D or spad-only"); // changed: sparse-loop-fix, N7
+---
+>       (void)0; // changed: sparse-loop-fix, N7

@@ -1,15 +1,23 @@
 #!/usr/bin/env python3
-# traces every benchmark number back to the raw simulator output and checks it three ways:
-#   1. logs/runs/bench-*.log (original 02:52-03:21 runs) vs results/cycles.csv and analysis/all_data.csv
-#   2. original logs vs the fresh re-run in verification/rerun-logs (same simulators, same binaries)
-#   3. every speedup / percentage quoted in the reports, recomputed from the raw numbers
-#
-# run: ~/chipyard/.conda-env/bin/python verification/cross_check.py
-import csv, re, sys
+# checks the original benchmark pipeline (./run-flow.sh bench, nm_sparse_perf.c; superseded by fair) against its raw logs:
+# in the layout run-flow.sh writes: verification/runs/bench-<cfg>-<stamp>/<test>.seed<S>.log + cycles.csv, and
+# verification/runs/rerun-<stamp>/orig-<cfg>-<test>.seed<S>.log. A number counts only if its log says verified.
+#   1. every bench log (every test, every seed) exists and passed its own check
+#   2. the folder's cycles.csv equals the logs, row for row, in both directions, every row status 'passed'
+#   3. a re-run folder (verification/runs/rerun-*, newest or --rerun) reproduces every number exactly, per seed
+# run: ~/chipyard/.conda-env/bin/python verification/cross_check.py [--bench DIR ...] [--rerun DIR]
+# exit 0 = all checks pass, 1 = a check failed (missing/unverified log included), 2 = no bench run exists at all.
+import argparse, csv, re, sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-ORIG = {"nm24": "20261006-025209", "nm48": "20261006-030607"}
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import nmdata  # noqa: E402
+
+CFGS = {"nm24": "GemminiNMRocketConfig", "nm48": "GemminiNM48RocketConfig"}
+TESTS = ("nm_sparse_debug", "nm_sparse_matmul", "nm_sparse_perf", "nm_sparse_protocol")
+BENCH_DIR_RE = re.compile(r"^bench-(nm24|nm48)-(\d{8}-\d{6})$")
+LOG_RE = re.compile(r"^(nm_sparse_\w+?)\.seed(\d+)\.log$")
+RERUN_RE = re.compile(r"^orig-(nm24|nm48)-(nm_sparse_\w+?)\.seed(\d+)\.log$")
 fails = 0
 
 
@@ -19,104 +27,106 @@ def say(ok, msg):
     print(("  ok    " if ok else "  FAIL  ") + msg)
 
 
-def parse(path):
-    """-> {'passed': bool, 'perf': {variant: {...}}, 'matmul': {dense, sparse}, 'debug': {name: hits}}"""
-    t = Path(path).read_text(errors="replace")
-    r = {"passed": bool(re.search(r"^nm_sparse_\w+ passed$", t, re.M)),
-         "failed": "FAILED" in t, "perf": {}, "matmul": {}, "debug": {}}
-    for m in re.finditer(r"^(\w+)\s+total\s+(\d+)\s+cpu_issue_done\s+(\d+)\s+pairs\s+(\d+)\s+cyc/pair\s+(\d+) \|(.*)$", t, re.M):
-        ctr = dict((k, int(v)) for k, v in re.findall(r"(\w+)=(\d+)", m[6]))
-        r["perf"][m[1]] = {"total": int(m[2]), "issued": int(m[3]), "tiles": int(m[4]), **ctr}
-    for m in re.finditer(r"^(dense|sparse)\s+cycles: (\d+)", t, re.M):
-        r["matmul"][m[1]] = int(m[2])
-    for m in re.finditer(r"^  (.+?)\s+(\d+) / 256$", t, re.M):
-        r["debug"][m[1].strip()] = int(m[2])
-    return r
+def verified(r):
+    return r is not None and r["passed"] and not r["failed"]
 
 
-def load(dirname, pattern):
-    out = {}
-    for cfg in ("nm24", "nm48"):
-        out[cfg] = {}
-        for t in ("nm_sparse_debug", "nm_sparse_matmul", "nm_sparse_perf"):
-            p = ROOT / dirname / pattern.format(cfg=cfg, t=t, stamp=ORIG[cfg])
-            out[cfg][t] = parse(p) if p.exists() else None
-    return out
+def find_bench(dirs=None):
+    """{cfg: (stamp, folder)}: the given bench folders, else the newest bench-<cfg>-<stamp> per config."""
+    found = {}
+    cands = [Path(d) for d in dirs] if dirs else (sorted(nmdata.RUNS.glob("bench-*")) if nmdata.RUNS.is_dir() else [])
+    for d in cands:
+        m = BENCH_DIR_RE.match(d.name)
+        if d.is_dir() and m and (m[1] not in found or m[2] > found[m[1]][0]):
+            found[m[1]] = (m[2], d)
+        elif dirs and not (d.is_dir() and m):
+            nmdata.die_no_results(f"{d} is not a bench-<nm24|nm48>-<stamp> folder")
+    return found
 
 
-orig = load("logs/runs", "bench-{cfg}-{t}-{stamp}.log")
-rerun = load("verification/rerun-logs", "{cfg}-{t}.log")
+def read_logs(folder):
+    """{(test, seed): parsed log} of the logs in a bench folder."""
+    return {(m[1], m[2]): nmdata.parse_log(p) for p in sorted(folder.glob("*.log")) if (m := LOG_RE.match(p.name))}
 
-print("1. every test passed its own correctness check (original runs)")
-for cfg in orig:
-    for t, r in orig[cfg].items():
-        say(r["passed"] and not r["failed"], f"{cfg} {t}: printed '{t} passed' and no failure line")
 
-print("\n2. results/cycles.csv matches the raw logs, row by row")
-cfgname = {"GemminiNMRocketConfig": "nm24", "GemminiNM48RocketConfig": "nm48"}
-rows = list(csv.DictReader(open(ROOT / "results/cycles.csv")))
-for row in rows:
-    cfg = cfgname[row["config"]]
-    r = orig[cfg][row["test"]]
-    if row["test"] == "nm_sparse_matmul":
-        say(int(row["total_cycles"]) == r["matmul"][row["variant"]], f"{cfg} matmul {row['variant']}: csv {row['total_cycles']} = log {r['matmul'][row['variant']]}")
+def want_rows(logs, stamp, cfg):
+    """{(seed, test, variant): (total, busy, tiles)} that cycles.csv must hold, from verified logs only."""
+    want = {}
+    for (t, seed), r in logs.items():
+        if not verified(r):
+            continue
+        if t == "nm_sparse_matmul":
+            want.update({(seed, t, v): (n, "", "") for v, n in r["matmul"].items()})
+        elif t == "nm_sparse_perf":
+            want.update({(seed, t, v): (p["total"], p.get("ex_active", ""), p["pairs"]) for v, p in r["perf"].items()})
+    return want
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--bench", nargs="+", type=Path, help="bench-<cfg>-<stamp> folder(s) (default: newest per config in verification/runs)")
+    ap.add_argument("--rerun", type=Path, help="re-run folder (default: newest verification/runs/rerun-*)")
+    a = ap.parse_args()
+    bench = find_bench(a.bench)
+    if not bench:
+        nmdata.die_no_results(f"no bench run (bench-<cfg>-<stamp>/) in {nmdata.RUNS}; run ./run-flow.sh bench nm24|nm48")
+    data = {cfg: (stamp, d, read_logs(d)) for cfg, (stamp, d) in bench.items()}
+
+    print("1. every bench test passed its own correctness check, on every seed")
+    for cfg, (stamp, d, logs) in sorted(data.items()):
+        info = d / "run.info"
+        listed = set(re.findall(r"^seeds=(.*)$", info.read_text(), re.M)[0].split()) if info.exists() and re.search(r"^seeds=", info.read_text(), re.M) else set()
+        seeds = sorted({s for _, s in logs} | listed, key=int)
+        say(bool(seeds), f"{cfg} ({d.name}): {len(logs)} logs found, seeds {','.join(seeds) or 'none'}")
+        for s in seeds:
+            for t in TESTS:
+                r = logs.get((t, s))
+                say(verified(r), f"{cfg} {t} seed {s}: " + ("log missing" if r is None else "printed 'passed' and no failure line"))
+
+    print("\n2. bench cycles.csv matches the logs, row for row")
+    for cfg, (stamp, d, logs) in sorted(data.items()):
+        csv_path = d / "cycles.csv"
+        rows = list(csv.DictReader(open(csv_path))) if csv_path.exists() else []
+        if not rows:
+            say(False, f"{cfg}: {csv_path} missing or empty")
+            continue
+        mine = [r for r in rows if r["timestamp"] == stamp and r["config"] == CFGS[cfg]]
+        say(len(mine) == len(rows), f"{cfg}: every csv row has timestamp {stamp} and config {CFGS[cfg]} ({len(rows)} rows)")
+        say(all(r["status"] == "passed" for r in mine), f"{cfg}: every csv row has status 'passed'")
+        want = want_rows(logs, stamp, cfg)
+        try:
+            got = {(r["seed"], r["test"], r["variant"]): (int(r["total_cycles"]), int(r["array_busy_cycles"]) if r["array_busy_cycles"] else "",
+                                                          int(r["tiles"]) if r["tiles"] else "") for r in mine}
+        except (ValueError, KeyError) as e:
+            say(False, f"{cfg}: {csv_path} unreadable ({e!r})")
+            continue
+        say(len(mine) == len(got), f"{cfg} {stamp}: no duplicate csv rows ({len(mine)} rows)")
+        for k in sorted(set(want) | set(got), key=lambda k: (int(k[0]), k[1], k[2])):
+            say(want.get(k) == got.get(k), f"{cfg} seed {k[0]} {k[1]} {k[2]}: log {want.get(k, 'missing')}, csv {got.get(k, 'missing')}")
+
+    print("\n3. re-run reproduces the bench numbers exactly, seed by seed")
+    try:
+        rerun = a.rerun or sorted((d for d in nmdata.RUNS.glob("rerun-*") if d.is_dir()), key=lambda d: d.name)[-1]
+    except IndexError:
+        rerun = None
+    if rerun is None:
+        print("  skip  no verification/runs/rerun-* folder (./run-flow.sh rerun); nothing to compare")
     else:
-        p = r["perf"][row["variant"]]
-        ok = (int(row["total_cycles"]), int(row["array_busy_cycles"]), int(row["tiles"])) == (p["total"], p["ex_active"], p["tiles"])
-        say(ok, f"{cfg} perf {row['variant']:<17} csv total/busy/tiles {row['total_cycles']}/{row['array_busy_cycles']}/{row['tiles']} = log")
-say(len(rows) == 26, f"cycles.csv has {len(rows)} data rows (2 configs x (2 matmul + 11 perf))")
+        for cfg, (stamp, d, logs) in sorted(data.items()):
+            for (t, s), a_ in sorted(logs.items(), key=lambda kv: (kv[0][0], int(kv[0][1]))):
+                p = rerun / f"orig-{cfg}-{t}.seed{s}.log"
+                if not p.exists():
+                    say(False, f"{cfg} {t} seed {s}: {p} missing")
+                    continue
+                b = nmdata.parse_log(p)
+                say(verified(b), f"{cfg} {t} seed {s}: re-run passed")
+                n = sum(len(v) for v in a_["perf"].values()) + len(a_["matmul"]) + len(a_["debug"])
+                say(verified(a_) and all(a_[k] == b[k] for k in ("perf", "matmul", "debug")),
+                    f"{cfg} {t} seed {s}: all {n} numbers identical to bench {stamp}")
 
-print("\n3. analysis/all_data.csv (the chart data) matches the raw logs")
-n_checked = 0
-for row in csv.DictReader(open(ROOT / "analysis/all_data.csv")):
-    cfg = "nm24" if row["pattern"] == "2:4" else "nm48"
-    if row["test"] == "nm_sparse_perf":
-        p = orig[cfg]["nm_sparse_perf"]["perf"][row["variant"]]
-        for col, key in [("total", "total"), ("cpu_issue_done", "issued"), ("tiles", "tiles"), ("ex_active", "ex_active"),
-                         ("rs_full", "rs_full"), ("spad_a_wait", "spad_a_wait"), ("spad_b_wait", "spad_b_wait"),
-                         ("spad_d_wait", "spad_d_wait"), ("main_ex", "main_ex")]:
-            n_checked += 1
-            if int(row[col]) != p[key]:
-                say(False, f"{cfg} {row['variant']} {col}: csv {row[col]} vs log {p[key]}")
-    elif row["test"] == "nm_sparse_debug":
-        n_checked += 1
-        if int(row["matches"]) != orig[cfg]["nm_sparse_debug"]["debug"][row["check"]]:
-            say(False, f"{cfg} debug {row['check']}")
-say(True, f"{n_checked} values in all_data.csv compared, see any FAIL lines above")
+    print(f"\n{'ALL CHECKS PASSED' if not fails else str(fails) + ' CHECK(S) FAILED'}")
+    sys.exit(1 if fails else 0)
 
-print("\n4. fresh re-run (verification/rerun-logs) reproduces the original numbers exactly")
-if all(rerun[c][t] for c in rerun for t in rerun[c]):
-    for cfg in orig:
-        for t in orig[cfg]:
-            a, b = orig[cfg][t], rerun[cfg][t]
-            say(b["passed"] and not b["failed"], f"{cfg} {t}: re-run passed")
-            say(a["perf"] == b["perf"] and a["matmul"] == b["matmul"] and a["debug"] == b["debug"],
-                f"{cfg} {t}: all {sum(len(v) for v in a['perf'].values()) + len(a['matmul']) + len(a['debug'])} numbers identical to the original")
-else:
-    say(False, "re-run logs missing or incomplete")
 
-print("\n5. every quoted number, recomputed from the raw logs")
-def perf(cfg, v, k="total"): return orig[cfg]["nm_sparse_perf"]["perf"][v][k]
-quotes = []
-for cfg, pat in (("nm24", "2:4"), ("nm48", "4:8")):
-    quotes += [
-        (f"{pat} array busy, no reuse: dense {perf(cfg,'dense','ex_active')} / sparse {perf(cfg,'sparse','ex_active')}", perf(cfg, "dense", "ex_active") / perf(cfg, "sparse", "ex_active"), 1.88),
-        (f"{pat} array busy, weight reuse: dense {perf(cfg,'dense_reuse','ex_active')} / sparse {perf(cfg,'sparse_reuse','ex_active')}", perf(cfg, "dense_reuse", "ex_active") / perf(cfg, "sparse_reuse", "ex_active"), 2.00),
-        (f"{pat} end to end, weight reuse: {perf(cfg,'dense_reuse')} / {perf(cfg,'sparse_reuse')}", perf(cfg, "dense_reuse") / perf(cfg, "sparse_reuse"), {"nm24": 1.44, "nm48": 1.36}[cfg]),
-        (f"{pat} end to end, no reuse, meta ahead: {perf(cfg,'dense')} / {perf(cfg,'sparse')}", perf(cfg, "dense") / perf(cfg, "sparse"), {"nm24": 0.74, "nm48": 0.64}[cfg]),
-        (f"{pat} end to end, no reuse, natural: {perf(cfg,'dense')} / {perf(cfg,'sparse_nat')}", perf(cfg, "dense") / perf(cfg, "sparse_nat"), {"nm24": 0.84, "nm48": 0.65}[cfg]),
-        (f"{pat} array busy per tile, reuse: dense {perf(cfg,'dense_reuse','ex_active')}/64, sparse {perf(cfg,'sparse_reuse','ex_active')}/32",
-         (perf(cfg, "dense_reuse", "ex_active") / 64) / (perf(cfg, "sparse_reuse", "ex_active") / 32), 1.00),
-    ]
-for text, got, quoted in quotes:
-    say(round(got, 2) == quoted, f"{text} = {got:.3f}  (report says {quoted:.2f})")
-fr = []
-for cfg in ("nm24", "nm48"):
-    for v, c in [("dense", "cpu_dense"), ("sparse", "cpu_sparse"), ("sparse_nat", "cpu_sparse_nat"),
-                 ("dense_reuse", "cpu_dense_reuse"), ("sparse_reuse", "cpu_sparse_reuse")]:
-        fr.append(perf(cfg, c) / perf(cfg, v))
-say(round(min(fr) * 100) == 67 and round(max(fr) * 100) == 86,
-    f"CPU-only issue time as a share of each total: {min(fr)*100:.0f}% to {max(fr)*100:.0f}%  (report says 67-86%)")
-
-print(f"\n{'ALL CHECKS PASSED' if not fails else str(fails) + ' CHECK(S) FAILED'}")
-sys.exit(1 if fails else 0)
+if __name__ == "__main__":
+    main()

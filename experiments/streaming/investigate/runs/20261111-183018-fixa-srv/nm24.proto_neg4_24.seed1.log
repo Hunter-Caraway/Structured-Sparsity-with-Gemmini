@@ -1,0 +1,25 @@
+/home/ai-user/chipyard/common.mk:537: warning: overriding recipe for target 'run-asm-tests-fast'
+/home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/chipyard.harness.TestHarness.GemminiNMRocketConfig.d:780: warning: ignoring old recipe for target 'run-asm-tests-fast'
+/home/ai-user/chipyard/common.mk:540: warning: overriding recipe for target 'run-bmark-tests-fast'
+/home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/chipyard.harness.TestHarness.GemminiNMRocketConfig.d:839: warning: ignoring old recipe for target 'run-bmark-tests-fast'
+if [ "/home/ai-user/sinv/runs/20261111-183018-fixa-srv/bin/proto_neg4_24-baremetal" != "none" ] && [ ! -f "/home/ai-user/sinv/runs/20261111-183018-fixa-srv/bin/proto_neg4_24-baremetal" ]; then printf "\n\nBinary /home/ai-user/sinv/runs/20261111-183018-fixa-srv/bin/proto_neg4_24-baremetal not found\n\n"; exit 1; fi
+(set -o pipefail &&  /home/ai-user/chipyard/sims/verilator/simulator-chipyard.harness-GemminiNMRocketConfig \
+	+permissive \
+	+dramsim +dramsim_ini_dir=/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini +max-cycles=20000000  +verilator+seed+1 +loadmem=/home/ai-user/sinv/runs/20261111-183018-fixa-srv/bin/proto_neg4_24-baremetal  \
+	+permissive-off \
+	/home/ai-user/sinv/runs/20261111-183018-fixa-srv/bin/proto_neg4_24-baremetal \
+	 \
+	</dev/null | tee /home/ai-user/chipyard/sims/verilator/output/chipyard.harness.TestHarness.GemminiNMRocketConfig/proto_neg4_24-baremetal.fixa.nm24.seed1.20261111-183018-fixa-srv.log)
+== Loading device model file '%Warning: System has stack size 8192 kb which may be too small; suggest 'ulimit -c 15364' or larger
+[UART] UART0 is here (stdin/stdout).
+/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/DDR3_micron_64M_8B_x4_sg15.ini' == 
+== Loading system model file '/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/system.ini' == 
+===== MemorySystem 0 =====
+CH. 0 TOTAL_STORAGE : 4096MB | 1 Ranks | 16 Devices per rank
+DRAMSim2 Clock Frequency =666666666Hz, CPU Clock Frequency=500000000Hz
+[111249000] %Error: Gemmini.sv:1148: Assertion failed in TOP.TestDriver.testHarness.chiptop0.system.tile_prci_domain.element_reset_domain_rockettile.gemmini: Assertion failed: n:m index fifo deadlock: more than 4 index tiles sent ahead of their preloads
+    at Controller.scala:575 assert(nm_dead_cnt =/= 255.U, "n:m index fifo deadlock: more than 4 index tiles sent ahead of their preloads")
+
+%Error: /home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/gen-collateral/Gemmini.sv:1148: Verilog $stop
+Aborting...
+make: *** [/home/ai-user/chipyard/common.mk:395: /home/ai-user/sinv/runs/20261111-183018-fixa-srv/bin/proto_neg4_24-baremetal.run.fast] Error 255

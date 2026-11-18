@@ -1,0 +1,22 @@
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4
+A_transpose: 0, B_transpose: 0, dataflow: 0
+Output-stationary
+A_transpose: 0, B_transpose: 0, dataflow: 1
+Weight-stationary
+A_transpose: 0, B_transpose: 1, dataflow: 0
+Output-stationary
+A_transpose: 0, B_transpose: 1, dataflow: 1
+Weight-stationary
+A_transpose: 1, B_transpose: 0, dataflow: 0
+Output-stationary
+A_transpose: 1, B_transpose: 0, dataflow: 1
+Weight-stationary
+A_transpose: 1, B_transpose: 1, dataflow: 0
+Output-stationary
+A_transpose: 1, B_transpose: 1, dataflow: 1
+Weight-stationary
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

@@ -1,0 +1,6 @@
+edge: built 8 programs; _24_full/_24_dense/_24_sparse/_24_ds/_24_loop .text identical (sha256 a926ad41a41ab962); _48_full/_48_loop .text 7759396af997b95b (_48_sparse 7759396af997b95b)
+small: built 8 programs; _24_full/_24_dense/_24_sparse/_24_ds/_24_loop .text identical (sha256 ad011716ece6ded6); _48_full/_48_loop .text 20a58f408c377a91 (_48_sparse 20a58f408c377a91)
+bert_qkv: built 8 programs; _24_full/_24_dense/_24_sparse/_24_ds/_24_loop .text identical (sha256 41f70a7f11cc3835); _48_full/_48_loop .text 211e6cb2d1d07820 (_48_sparse 211e6cb2d1d07820)
+rn50_conv: built 8 programs; _24_full/_24_dense/_24_sparse/_24_ds/_24_loop .text identical (sha256 19afd011c8c8bd4f); _48_full/_48_loop .text cc7083a1fc9fc5e5 (_48_sparse cc7083a1fc9fc5e5)
+bert_ffn1: built 8 programs; _24_full/_24_dense/_24_sparse/_24_ds/_24_loop .text identical (sha256 49ff0d980441c6ae); _48_full/_48_loop .text a5b441d9966a5a03 (_48_sparse a5b441d9966a5a03)
+bert_ffn2: built 8 programs; _24_full/_24_dense/_24_sparse/_24_ds/_24_loop .text identical (sha256 e14b40275626d965); _48_full/_48_loop .text e3340c6fbf909546 (_48_sparse e3340c6fbf909546)

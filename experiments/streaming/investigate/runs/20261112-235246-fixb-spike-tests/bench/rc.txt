@@ -1,0 +1,15 @@
+bert_ffn1_24_loop rc=0
+bert_ffn1_48_loop rc=0
+bert_ffn2_24_loop rc=0
+bert_ffn2_48_loop rc=0
+bert_qkv_24_loop rc=0
+bert_qkv_48_loop rc=0
+edge_24_loop rc=0
+edge_48_loop rc=0
+fair_perf_24 rc=0
+fair_perf_48 rc=0
+fair_perf_dense_only rc=0
+rn50_conv_24_loop rc=0
+rn50_conv_48_loop rc=0
+small_24_loop rc=0
+small_48_loop rc=0

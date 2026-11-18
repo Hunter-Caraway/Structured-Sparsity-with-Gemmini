@@ -17,7 +17,7 @@ from reportlab.platypus import (BaseDocTemplate, PageTemplate, Frame, Paragraph,
                                 Table, TableStyle, PageBreak, KeepTogether, CondPageBreak)
 from reportlab.graphics.shapes import Drawing, Rect, String, Line, Polygon
 
-PROJ = Path("/home/hunter/Structured 4:8 Sparsity with Gemmini")
+PROJ = Path(__file__).resolve().parents[2]
 VER = PROJ / "verification"
 CHARTS = PROJ / "analysis" / "charts"
 SCR = Path(__file__).parent

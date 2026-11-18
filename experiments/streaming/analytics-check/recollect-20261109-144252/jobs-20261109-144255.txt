@@ -1,0 +1,27 @@
+# phase 2 (program v2: DMA poison, 4-lane hash, 2 MiB eviction, overhead print). edge first = early RTL check of v2.
+stock edge_24_dense 1 15000000
+nm24 edge_24_full 1 15000000
+nm48 edge_48_full 1 15000000
+# big layers, biggest first, 1 seed. nm24 runs dense_stream + sparse_stream (_24_ds); stock runs berkeley + dense_stream
+nm24 bert_ffn1_24_ds 1 60000000
+stock bert_ffn1_24_dense 1 60000000
+nm24 bert_ffn2_24_ds 1 60000000
+stock bert_ffn2_24_dense 1 60000000
+nm48 bert_ffn1_48_sparse 1 60000000
+nm48 bert_ffn2_48_sparse 1 60000000
+nm24 rn50_conv_24_ds 1 30000000
+stock rn50_conv_24_dense 1 30000000
+nm48 rn50_conv_48_sparse 1 30000000
+nm24 bert_qkv_24_ds 1 30000000
+stock bert_qkv_24_dense 1 30000000
+nm48 bert_qkv_48_sparse 1 30000000
+# small layer, 3 seeds, every variant on every chip that can run it
+stock small_24_dense 1 15000000
+nm24 small_24_full 1 15000000
+nm48 small_48_full 1 15000000
+stock small_24_dense 2 15000000
+nm24 small_24_full 2 15000000
+nm48 small_48_full 2 15000000
+stock small_24_dense 3 15000000
+nm24 small_24_full 3 15000000
+nm48 small_48_full 3 15000000

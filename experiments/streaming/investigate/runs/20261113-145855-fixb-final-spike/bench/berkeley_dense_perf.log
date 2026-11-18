@@ -1,0 +1,15 @@
+berkeley_dense_perf: unmodified gemmini, 2:4 pruned weights, i=64 k=128 j=32
+poison reaches the accumulator (2048 values)
+dense          total   1904  cpu_issue_done   1902  pairs  64  cyc/pair   29 | ex_active=30455 rs_full=32218 ctrl_q_block=31007 overlap_haz=30283 spad_a_wait=33303 spad_b_wait=33550 spad_d_wait=32511 main_ex=30386
+dense matches the cpu reference (2048 values)
+dense_bias     total   1840  cpu_issue_done   1838  pairs  64  cyc/pair   28 | ex_active=30343 rs_full=32905 ctrl_q_block=35718 overlap_haz=31359 spad_a_wait=30206 spad_b_wait=33342 spad_d_wait=33865 main_ex=34696
+dense_bias matches the cpu reference (2048 values)
+dense_reuse    total   1391  cpu_issue_done   1389  pairs  64  cyc/pair   21 | ex_active=31064 rs_full=34246 ctrl_q_block=31466 overlap_haz=29037 spad_a_wait=34302 spad_b_wait=31835 spad_d_wait=32271 main_ex=33644
+dense_reuse matches the cpu reference (2048 values)
+cpu only (no gemmini instructions issued):
+cpu_dense      total   1392  cpu_issue_done   1390  pairs  64  cyc/pair   21 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+cpu_dense_reuse total   1023  cpu_issue_done   1021  pairs  64  cyc/pair   15 | ex_active=0 rs_full=0 ctrl_q_block=0 overlap_haz=0 spad_a_wait=0 spad_b_wait=0 spad_d_wait=0 main_ex=0
+berkeley_dense_perf passed
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

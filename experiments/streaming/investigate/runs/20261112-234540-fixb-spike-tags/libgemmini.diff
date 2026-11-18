@@ -1,0 +1,220 @@
+diff --git a/gemmini.cc b/gemmini.cc
+index f203d95..986621a 100644
+--- a/gemmini.cc
++++ b/gemmini.cc
+@@ -862,13 +862,62 @@ void gemmini_t::nm_meta_load_spad(reg_t rs1, reg_t rs2) {
+ // changed: added, the loop unrollers send no index tiles
+ static void nm_forbid_loop(const gemmini_state_t & st, const char * what) {
+   if (st.nm_sparse) {
+-    fprintf(stderr, "GEMMINI: %s is not supported in sparse mode\n", what);
++    fprintf(stderr, "GEMMINI: sparse-loop-fix: %s issued while n:m sparse mode (config_ex rs1[10]) is on\n", what); // changed: sparse-loop-fix, RTL assert N2 text (only LOOP_CONV_WS calls this)
+     abort();
+   }
+ }
+ 
++// changed: sparse-loop-fix, one abort per RTL assert of fix-b-spec.md 2.5.6, same message text
++static void nm_loop_abort(const char * msg) { // changed: sparse-loop-fix, abort helper, RTL assert text
++  fprintf(stderr, "GEMMINI: sparse-loop-fix: %s\n", msg); // changed: sparse-loop-fix, abort helper, RTL assert text
++  abort(); // changed: sparse-loop-fix, abort helper, RTL assert text
++} // changed: sparse-loop-fix, abort helper, RTL assert text
++
++// changed: sparse-loop-fix. LOAD_IDX_CMD (funct 27): an mvin of index rows whose config is fixed by the funct and
++// changed: sparse-loop-fix, not read from config_ld: DRAM row stride 16 bytes, identity scale, no shrink, 1 pixel per row (fix-b-spec.md 2.5.2).
++void gemmini_t::load_idx(reg_t dram_addr, reg_t sp_addr) { // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
++#ifdef NM_DENSE_BUILD // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
++  nm_loop_abort("LOAD_IDX (funct 27) on a dense build (nm_sparsity = None)"); // changed: sparse-loop-fix, N11
++#endif // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
++  const reg_t base_row_addr = sp_addr & 0xFFFFFFFF; // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
++  const reg_t cols = (sp_addr >> addr_len) & 0xFFFF; // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
++  const reg_t rows = (sp_addr >> (addr_len + 16)) & 0xFFFF; // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
++  if (cols != 16 || rows == 0 || rows > 16) // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
++    nm_loop_abort("LOAD_IDX needs cols == 16 and 1..16 rows"); // changed: sparse-loop-fix, N12
++  if (base_row_addr + rows > (reg_t)BANK_NUM * BANK_ROWS) // changed: sparse-loop-fix, also catches accumulator addresses and GARBAGE
++    nm_loop_abort("LOAD_IDX destination must be a scratchpad row address"); // changed: sparse-loop-fix, N13
++
++  dprintf("GEMMINI: load_idx - 0x%02lx rows from 0x%08lx to addr 0x%08lx\n", rows, dram_addr, base_row_addr); // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
++
++  for (size_t row = 0; row < rows; ++row) { // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
++    for (size_t col = 0; col < cols; ++col) { // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
++      // changed: sparse-loop-fix, a NULL DRAM address loads zeros, like every mvin
++      gemmini_state.spad.at(base_row_addr + row).at(col) = // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
++        dram_addr == 0 ? 0 : read_from_dram<elem_t>(dram_addr + row*16 + col*sizeof(elem_t)); // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
++    } // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
++  } // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
++} // changed: sparse-loop-fix, LOAD_IDX (funct 27) handler
++
++// changed: sparse-loop-fix. LOOP_WS_CONFIG_NM (funct 28): rs1 = DRAM address of index tile 0 of the next sparse loop.
++void gemmini_t::loop_ws_config_nm(reg_t rs1, reg_t rs2) { // changed: sparse-loop-fix, LOOP_WS_CONFIG_NM (funct 28) handler
++#ifdef NM_DENSE_BUILD // changed: sparse-loop-fix, LOOP_WS_CONFIG_NM (funct 28) handler
++  nm_loop_abort("LOOP_WS_CONFIG_NM (funct 28) on a dense build (nm_sparsity = None)"); // changed: sparse-loop-fix, N14
++#endif // changed: sparse-loop-fix, LOOP_WS_CONFIG_NM (funct 28) handler
++  if (rs1 == 0 || (rs1 & 0xF) != 0 || rs2 != 0) // changed: sparse-loop-fix, LOOP_WS_CONFIG_NM (funct 28) handler
++    nm_loop_abort("LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0"); // changed: sparse-loop-fix, N5
++  gemmini_state.loop_ws_idx_dram = rs1; // changed: sparse-loop-fix, LOOP_WS_CONFIG_NM (funct 28) handler
++  gemmini_state.loop_ws_nm_cfg_seen = true; // changed: sparse-loop-fix, LOOP_WS_CONFIG_NM (funct 28) handler
++} // changed: sparse-loop-fix, LOOP_WS_CONFIG_NM (funct 28) handler
++
+ void gemmini_t::loop_ws(reg_t rs1, reg_t rs2) {
+-  nm_forbid_loop(gemmini_state, "LOOP_WS"); // changed: added
++  const bool nm = (rs1 >> 3) & 1; // changed: sparse-loop-fix, rs1[3] = sparse loop (replaces the blanket ban on LOOP_WS in sparse mode)
++  if (nm != gemmini_state.nm_sparse) // changed: sparse-loop-fix, N1
++    nm_loop_abort("LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])"); // changed: sparse-loop-fix, N1
++  if (nm && !gemmini_state.loop_ws_nm_cfg_seen) // changed: sparse-loop-fix, N3
++    nm_loop_abort("LOOP_WS with rs1[3] set needs LOOP_WS_CONFIG_NM (funct 28) first"); // changed: sparse-loop-fix, N3
++  if (!nm && gemmini_state.loop_ws_nm_cfg_seen) // changed: sparse-loop-fix, N4
++    nm_loop_abort("LOOP_WS_CONFIG_NM (funct 28) without LOOP_WS rs1[3]"); // changed: sparse-loop-fix, N4
++  gemmini_state.loop_ws_nm_cfg_seen = false; // changed: sparse-loop-fix, a funct 28 configures one LOOP_WS only
+   const bool ex_accumulate = rs1 & 1;
+   const bool full_C = (rs1 >> 1) & 1;
+   const bool low_D = (rs1 >> 2) & 1;
+@@ -889,7 +938,28 @@ void gemmini_t::loop_ws(reg_t rs1, reg_t rs2) {
+ 
+   const uint32_t GARBAGE_ADDR = ~0;
+ 
+-  const int total_spad_rows = (I * K + K * J) * DIM;
++  // changed: sparse-loop-fix. A sparse loop keeps the original K for A, has K/2 squashed B tiles per column and one
++  // changed: sparse-loop-fix, index tile of R rows per B tile; the index region is the top of B's half, B sits right below it (fix-b-spec.md 2.5.4).
++  const uint16_t KB = nm ? K / 2 : K; // changed: sparse-loop-fix, sparse loop sizes and legality checks
++  const size_t nm_R = nm_spad_rows_per_tile; // changed: sparse-loop-fix, sparse loop sizes and legality checks
++  const size_t nm_tiles = nm ? (size_t)KB * J : 0; // changed: sparse-loop-fix, sparse loop sizes and legality checks
++  const size_t nm_idx_rows = nm_tiles * nm_R; // changed: sparse-loop-fix, sparse loop sizes and legality checks
++  const size_t nm_g = 16 / nm_R; // changed: sparse-loop-fix, index tiles per LOAD_IDX (16-row mvin limit)
++  size_t nm_loaded = 0, nm_idx_issued = 0; // changed: sparse-loop-fix, tiles named by LOADs so far, tiles covered by LOAD_IDX mvins so far
++  if (nm) { // changed: sparse-loop-fix, sparse loop sizes and legality checks
++    if (a_transpose || b_transpose || is_resadd || low_D || ((rs2 >> 9) & 1)) // changed: sparse-loop-fix, rs2[9] = spad-only variant
++      nm_loop_abort("sparse loop does not support transposes, resadd, low_D or spad-only"); // changed: sparse-loop-fix, N7
++    if ((K & 1) || pad_K != 0) // changed: sparse-loop-fix, sparse loop sizes and legality checks
++      nm_loop_abort("sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)"); // changed: sparse-loop-fix, N6
++    if (gemmini_state.a_stride != 1) // changed: sparse-loop-fix, sparse loop sizes and legality checks
++      nm_loop_abort("sparse loop needs A_stride == 1"); // changed: sparse-loop-fix, N8
++    if (((size_t)I * K + (size_t)KB * J) * DIM + nm_idx_rows > (size_t)BANK_NUM * BANK_ROWS / 2 || nm_idx_rows > (size_t)BANK_ROWS) // changed: sparse-loop-fix, sparse loop sizes and legality checks
++      nm_loop_abort("A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank)"); // changed: sparse-loop-fix, N9
++    if (!gemmini_state.nm_meta_q.empty() || gemmini_state.nm_tile_in_flight) // changed: sparse-loop-fix, sparse loop sizes and legality checks
++      nm_loop_abort("sparse loop started with index tiles pending in the FIFO: gemmini_nm_reset() first"); // changed: sparse-loop-fix, N10
++  } // changed: sparse-loop-fix, sparse loop sizes and legality checks
++
++  const int total_spad_rows = (I * K + KB * J) * DIM; // changed: sparse-loop-fix, B has K/2 K tiles in a sparse loop (index rows are checked by N9)
+   const int total_acc_rows = (I * J) * DIM;
+ 
+   if (total_spad_rows > BANK_NUM * BANK_ROWS / 2 || total_acc_rows > ACC_ROWS / 2) {
+@@ -898,11 +968,11 @@ void gemmini_t::loop_ws(reg_t rs1, reg_t rs2) {
+   }
+ 
+   uint32_t A_sp_addr_start = 0;
+-  uint32_t B_sp_addr_start = (BANK_NUM * BANK_ROWS / 2) - K * J * DIM;
++  uint32_t B_sp_addr_start = (BANK_NUM * BANK_ROWS / 2) - KB * J * DIM - nm_idx_rows; // changed: sparse-loop-fix, B below the index region
+   const uint32_t D_sp_addr_start = 1 << (ADDR_LEN-1);
+   const uint32_t C_sp_addr_start = (3 << (ADDR_LEN-2)) | (full_C << (ADDR_LEN-3));
+   if(a_spad_id == 2) A_sp_addr_start = (BANK_NUM * BANK_ROWS) / 2;
+-  if(b_spad_id == 2) B_sp_addr_start = (BANK_NUM * BANK_ROWS) - K * J * DIM;
++  if(b_spad_id == 2) B_sp_addr_start = (BANK_NUM * BANK_ROWS) - KB * J * DIM - nm_idx_rows; // changed: sparse-loop-fix, B below the index region
+   if(is_resadd) {
+     A_sp_addr_start = 1 << (ADDR_LEN - 1);
+     B_sp_addr_start = 3 << (ADDR_LEN - 2);
+@@ -953,11 +1023,28 @@ void gemmini_t::loop_ws(reg_t rs1, reg_t rs2) {
+     }
+   }
+ 
+-  for (uint16_t k = 0; k < K; k++) {
++  // changed: sparse-loop-fix. Index rows and LOADs follow the RTL policy (fix-b-spec.md 1.5): LOAD_IDX mvins of nm_g
++  // changed: sparse-loop-fix, tiles cover a LOAD before it is issued; the LOAD is the Fix A command, so its budget and bank aborts stay live.
++  const uint32_t nm_idx_sp_addr_start = B_sp_addr_start + KB * J * DIM; // changed: sparse-loop-fix, index mvins and LOADs of the sparse loop
++  auto nm_loop_load = [&](size_t n) { // changed: sparse-loop-fix, index mvins and LOADs of the sparse loop
++    while (nm_idx_issued < nm_loaded + n) { // changed: sparse-loop-fix, index mvins and LOADs of the sparse loop
++      const uint64_t rows = (nm_tiles - nm_idx_issued < nm_g ? nm_tiles - nm_idx_issued : nm_g) * nm_R; // changed: sparse-loop-fix, index mvins and LOADs of the sparse loop
++      load_idx(gemmini_state.loop_ws_idx_dram + nm_idx_issued * nm_R * 16, // changed: sparse-loop-fix, index mvins and LOADs of the sparse loop
++          (rows << 48) | ((uint64_t)16 << 32) | (nm_idx_sp_addr_start + nm_idx_issued * nm_R)); // changed: sparse-loop-fix, index mvins and LOADs of the sparse loop
++      nm_idx_issued += rows / nm_R; // changed: sparse-loop-fix, index mvins and LOADs of the sparse loop
++    } // changed: sparse-loop-fix, index mvins and LOADs of the sparse loop
++    nm_meta_load_spad(nm_idx_sp_addr_start + nm_loaded * nm_R, n); // changed: sparse-loop-fix, index mvins and LOADs of the sparse loop
++    nm_loaded += n; // changed: sparse-loop-fix, index mvins and LOADs of the sparse loop
++  }; // changed: sparse-loop-fix, index mvins and LOADs of the sparse loop
++  if (nm && nm_tiles != 0) // changed: sparse-loop-fix, index mvins and LOADs of the sparse loop
++    nm_loop_load(nm_tiles < NM_META_FIFO_DEPTH ? nm_tiles : NM_META_FIFO_DEPTH); // changed: sparse-loop-fix, the FIFO is empty here (N10)
++
++  for (uint16_t k = 0; k < KB; k++) { // changed: sparse-loop-fix, k is the B (squashed) K tile; A tiles 2k and 2k+1 in a sparse loop
++    const uint16_t ka = nm ? 2 * k : k; // changed: sparse-loop-fix, K tile of A for the low half of the activations
+     for (uint16_t j = 0; j < J; j++) {
+       for (uint16_t i = 0; i < I; i++) {
+         const uint32_t A_sp_addr = a_transpose ? (A_sp_addr_start + (k*I + i)*DIM) :
+-          (A_sp_addr_start + (i*K + k)*DIM);
++          (A_sp_addr_start + (i*K + ka)*DIM); // changed: sparse-loop-fix, A keeps the original K layout
+         const uint32_t B_sp_addr = b_transpose ? (B_sp_addr_start + (j*K + k)*DIM) :
+           (B_sp_addr_start + (k*J + j)*DIM);
+         const uint32_t C_sp_addr = C_sp_addr_start + (i*J + j)*DIM;
+@@ -973,12 +1060,14 @@ void gemmini_t::loop_ws(reg_t rs1, reg_t rs2) {
+             rows = DIM - (k == K-1 ? pad_K : 0);
+           } else {
+             dram_addr = gemmini_state.loop_ws_A +
+-                (i*gemmini_state.loop_ws_A_stride + k) * DIM * sizeof(elem_t);
++                (i*gemmini_state.loop_ws_A_stride + ka) * DIM * sizeof(elem_t); // changed: sparse-loop-fix, A K tile, not the B one
+             cols = DIM - (k == K-1 ? pad_K : 0);
+             rows = DIM - (i == I-1 ? pad_I : 0);
+           }
+ 
+           mvin(dram_addr, (rows << 48) | (cols << 32) | A_sp_addr, 0);
++          if (nm) // changed: sparse-loop-fix, the high half of the activations: A K tile 2k+1, the next tile in DRAM and scratchpad
++            mvin(dram_addr + DIM * sizeof(elem_t), (rows << 48) | (cols << 32) | (A_sp_addr + DIM), 0); // changed: sparse-loop-fix, second A tile of the sparse loop
+         }
+ 
+         // Mvin B
+@@ -1020,11 +1109,16 @@ void gemmini_t::loop_ws(reg_t rs1, reg_t rs2) {
+               (C_rows << 48) | (C_cols << 32) | out_sp_addr);
+ 
+           compute((A_rows << 48) | (A_cols << 32) | A_sp_addr,
++              nm ? (A_rows << 48) | ((uint64_t)DIM << 32) | (A_sp_addr + DIM) : // changed: sparse-loop-fix, rs2 = a_hi (A K tile 2k+1), a_rows rows
+               ((uint64_t)DIM << 48) | ((uint64_t)DIM << 32) | GARBAGE_ADDR, i == 0);
++
++          // changed: sparse-loop-fix. Rolling batch of 2 after the last compute of tile u = k*J + j (pre = u + 1 preloads done)
++          if (nm && i == I-1 && nm_loaded < nm_tiles && nm_loaded - ((size_t)k*J + j + 1) <= 2) // changed: sparse-loop-fix, rolling index LOAD
++            nm_loop_load(nm_tiles - nm_loaded < 2 ? nm_tiles - nm_loaded : 2); // changed: sparse-loop-fix, rolling index LOAD
+         }
+ 
+         // Move-out C
+-        if (gemmini_state.loop_ws_C != 0 && k == K-1) {
++        if (gemmini_state.loop_ws_C != 0 && k == KB-1) { // changed: sparse-loop-fix, last K tile of a sparse loop is K/2 - 1
+           const size_t sizeof_C = full_C ? sizeof(acc_t) : sizeof(elem_t);
+ 
+           if ((act != gemmini_state_t::LAYERNORM) && (act != gemmini_state_t::SOFTMAX)) {
+@@ -1805,6 +1899,10 @@ reg_t gemmini_t::CUSTOMFN(XCUSTOM_ACC)(rocc_insn_t insn, reg_t xs1, reg_t xs2) {
+       fprintf(stderr, "GEMMINI: NM_META_CMD (funct 26): rd values 3..31 are reserved (rd = %u)\n", (unsigned)insn.rd);
+       abort();
+     }
++  } else if (insn.funct == load_idx_funct) { // changed: sparse-loop-fix
++    load_idx(xs1, xs2); // changed: sparse-loop-fix
++  } else if (insn.funct == loop_ws_config_nm_funct) { // changed: sparse-loop-fix
++    loop_ws_config_nm(xs1, xs2); // changed: sparse-loop-fix
+   } else if (insn.funct == counter_op_funct) {
+     return counter_operation(xs1);
+   }
+diff --git a/gemmini.h b/gemmini.h
+index 313254e..6e84071 100644
+--- a/gemmini.h
++++ b/gemmini.h
+@@ -151,6 +151,8 @@ struct gemmini_state_t
+   unsigned nm_buf;
+   bool nm_tile_in_flight; // a real sparse preload popped a tile; like the RTL it counts against the FIFO until its compute
+   bool nm_ld_since_clear; // changed: Fix A, a scratchpad index load (rd == 2) since the last clear: register rows illegal
++  uint64_t loop_ws_idx_dram; // changed: sparse-loop-fix, DRAM address of index tile 0 of the next sparse loop (funct 28)
++  bool loop_ws_nm_cfg_seen; // changed: sparse-loop-fix, a funct 28 since the last LOOP_WS (asserts N3, N4)
+ 
+   // cisc state
+   reg_t a_addr, b_addr, c_addr, d_addr;
+@@ -177,6 +179,8 @@ public:
+   void nm_meta_load(reg_t rs1, reg_t rs2); // changed: added
+   void nm_meta_clear(); // changed: added
+   void nm_meta_load_spad(reg_t rs1, reg_t rs2); // changed: Fix A
++  void load_idx(reg_t dram_addr, reg_t sp_addr); // changed: sparse-loop-fix, funct 27, mvin of index rows with fixed config
++  void loop_ws_config_nm(reg_t rs1, reg_t rs2); // changed: sparse-loop-fix, funct 28
+   reg_t counter_operation(reg_t rs1);
+ 
+   void loop_ws(reg_t rs1, reg_t rs2);
+@@ -216,6 +220,8 @@ private:
+   const unsigned nm_meta_clear_rd = 1; // changed: added
+   const unsigned nm_meta_push_rd = 0; // changed: Fix A, register rows (the original form)
+   const unsigned nm_meta_load_spad_rd = 2; // changed: Fix A, index tiles from the scratchpad; rd 3..31 reserved
++  const unsigned load_idx_funct = 27; // changed: sparse-loop-fix, LOAD_IDX_CMD (fix-b-spec.md 2.5.2)
++  const unsigned loop_ws_config_nm_funct = 28; // changed: sparse-loop-fix, LOOP_WS_CONFIG_NM (fix-b-spec.md 2.5.2)
+   const unsigned loop_ws_funct = 8;
+   const unsigned loop_ws_config_bounds_funct = 9;
+   const unsigned loop_ws_config_addrs_AB_funct = 10;

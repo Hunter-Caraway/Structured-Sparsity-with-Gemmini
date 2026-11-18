@@ -1,0 +1,3 @@
+
+== building the flow's test programs into /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-final/tests/bareMetalC (gemmini-rocc-tests/build is left alone)
+134 bare-metal tests built (54 dense, without matmul_spad mvin_mvout_spad; nm_sparse_*_24 / _48, N:M checked)

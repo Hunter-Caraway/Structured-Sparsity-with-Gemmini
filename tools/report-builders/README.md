@@ -13,8 +13,9 @@ The scripts that generated the PDF reports removed on 2026-10-06, kept so the re
 
 - They need `reportlab` and `Pillow`, which aren't in the Chipyard conda env. Make a small virtual env:
   `python3 -m venv .venv && .venv/bin/pip install reportlab pillow`
-- They were written as one-off scripts. Paths are absolute (`/home/hunter/...`) and they save temporary images
-  next to themselves. `build_report.py` and `build_explained.py` also expect terminal captures (`cap/check.txt`,
+- They were written as one-off scripts. They find the repo from their own location and Chipyard from
+  `CHIPYARD_DIR` (default `~/chipyard`), write the PDF to the repo root, and save temporary images next to
+  themselves. `build_report.py` and `build_explained.py` also expect terminal captures (`cap/check.txt`,
   `cap/spike.txt`) that no longer exist. Treat those two as templates.
 - `build_paper.py` writes its numbers from data, not from text, so after new experiments it mostly needs the data
   sources pointed at the new results.

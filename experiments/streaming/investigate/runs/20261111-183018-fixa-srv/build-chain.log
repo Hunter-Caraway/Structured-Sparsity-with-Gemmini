@@ -1,0 +1,10 @@
+stock before chain: 84c2264ab08524b8e6b6f822b53ebb8613e381219e5ccb8144ad9cc9543b75e4  /home/ai-user/chipyard/sims/verilator/simulator-chipyard.harness-GemminiRocketConfig
+== GemminiNMRocketConfig start Wed Nov 11 06:19:32 PM EST 2026
+BUILD_EXIT=0 cfg=GemminiNMRocketConfig secs=314 min_MemAvailable_kB=23228656 end Wed Nov 11 06:24:46 PM EST 2026
+GemminiNMRocketConfig sim c9664cc017251e2927131ba5602681d57286acdff81d5a6f7e4da824a200a36f  /home/ai-user/chipyard/sims/verilator/simulator-chipyard.harness-GemminiNMRocketConfig mtime 2026-11-11T18:24:46
+GemminiNMRocketConfig header 434f86be1b997a4ad2a71e5c09a211a3643780fbe155e8e1b971427f9e13bf5c  /home/ai-user/chipyard/generators/gemmini/software/gemmini-rocc-tests/include/gemmini_params.h 3 HW_NM defines
+== GemminiNM48RocketConfig start Wed Nov 11 06:24:46 PM EST 2026
+BUILD_EXIT=0 cfg=GemminiNM48RocketConfig secs=202 min_MemAvailable_kB=29244132 end Wed Nov 11 06:28:08 PM EST 2026
+GemminiNM48RocketConfig sim 4b414e5a3679dc232ee84a62fc9de3c23f794c1432621753ded5e1eb6b22d637  /home/ai-user/chipyard/sims/verilator/simulator-chipyard.harness-GemminiNM48RocketConfig mtime 2026-11-11T18:28:08
+GemminiNM48RocketConfig header 2731193eceb87b9951e5579cf3c71173fd64c42e1115cf5c402d7451e60a2b37  /home/ai-user/chipyard/generators/gemmini/software/gemmini-rocc-tests/include/gemmini_params.h 3 HW_NM defines
+stock after chain: 84c2264ab08524b8e6b6f822b53ebb8613e381219e5ccb8144ad9cc9543b75e4  /home/ai-user/chipyard/sims/verilator/simulator-chipyard.harness-GemminiRocketConfig

@@ -1,0 +1,4 @@
+959c959
+<       nm_loop_abort("sparse loop started with index tiles pending in the FIFO: gemmini_nm_reset() first"); // changed: sparse-loop-fix, N10
+---
+>       (void)0; // changed: sparse-loop-fix, N10

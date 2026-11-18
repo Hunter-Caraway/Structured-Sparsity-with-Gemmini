@@ -1,0 +1,7 @@
+nm_sparse_matmul: 2:4, i=32 k=64 j=32
+dense  cycles: 341 (16 preload/compute pairs)
+sparse cycles: 498 (8 preload/compute pairs, 4 meta cmds each)
+nm_sparse_matmul passed
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

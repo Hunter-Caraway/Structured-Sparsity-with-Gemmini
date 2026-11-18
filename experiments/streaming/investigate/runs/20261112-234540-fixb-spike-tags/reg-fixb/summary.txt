@@ -1,0 +1,114 @@
+FAIL matmul_spad rc=57 
+FAIL mvin_mvout_spad rc=57 
+pass aligned rc=0
+pass conv_dw_perf rc=0
+pass conv_dw rc=0
+pass conv_first_layer rc=0
+pass conv_perf rc=0
+pass conv rc=0
+pass conv_rect_pool rc=0
+pass conv_rect rc=0
+pass conv_stride rc=0
+pass conv_trans_input_3120 rc=0
+pass conv_trans_input_3120_with_kernel_dilation rc=0
+pass conv_trans_output_1203 rc=0
+pass conv_trans_weight_0132 rc=0
+pass conv_trans_weight_1203 rc=0
+pass conv_with_input_dilation_and_neg_padding rc=0
+pass conv_with_input_dilation_and_rot180 rc=0
+pass conv_with_input_dilation rc=0
+pass conv_with_kernel_dilation rc=0
+pass conv_with_pool rc=0
+pass conv_with_rot180 rc=0
+pass gemmini_counter rc=0
+pass global_average rc=0
+pass matmul_os rc=0
+pass matmul rc=0
+pass matmul_ws rc=0
+pass matrix_add rc=0
+pass mvin_mvout_acc_full rc=0
+pass mvin_mvout_acc_full_stride rc=0
+pass mvin_mvout_acc rc=0
+pass mvin_mvout_acc_stride rc=0
+pass mvin_mvout_acc_zero_stride rc=0
+pass mvin_mvout_block_stride rc=0
+pass mvin_mvout rc=0
+pass mvin_mvout_stride rc=0
+pass mvin_mvout_zeros rc=0
+pass mvin_scale rc=0
+pass nm_sparse_debug_24 rc=0
+pass nm_sparse_debug_48 rc=0
+pass nm_sparse_matmul_24 rc=0
+pass nm_sparse_matmul_48 rc=0
+pass nm_sparse_perf_24 rc=0
+pass nm_sparse_perf_48 rc=0
+pass nm_sparse_protocol_24 rc=0
+pass nm_sparse_protocol_48 rc=0
+pass nm_sparse_protocol_neg10_24 rc=255 GEMMINI: sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+pass nm_sparse_protocol_neg10_48 rc=255 GEMMINI: sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+pass nm_sparse_protocol_neg14_24 rc=255 GEMMINI: sparse compute on weights preloaded in dense mode
+pass nm_sparse_protocol_neg14_48 rc=255 GEMMINI: sparse compute on weights preloaded in dense mode
+pass nm_sparse_protocol_neg4_24 rc=255 GEMMINI: index FIFO full (4 tiles): send at most 4 tiles ahead of their preloads
+pass nm_sparse_protocol_neg4_48 rc=255 GEMMINI: index FIFO full (4 tiles): send at most 4 tiles ahead of their preloads
+pass nm_sparse_protocol_neg6_24 rc=255 GEMMINI: sparse compute with a GARBAGE A operand
+pass nm_sparse_protocol_neg6_48 rc=255 GEMMINI: sparse compute with a GARBAGE A operand
+pass nm_sparse_protocol_neg7_24 rc=255 GEMMINI: sparse compute on weights preloaded in dense mode
+pass nm_sparse_protocol_neg7_48 rc=255 GEMMINI: sparse compute on weights preloaded in dense mode
+pass nm_sparse_protocol_neg9_24 rc=255 GEMMINI: sparse mode needs WS dataflow and no A/B transpose
+pass nm_sparse_protocol_neg9_48 rc=255 GEMMINI: sparse mode needs WS dataflow and no A/B transpose
+pass nm_sparse_spad_24 rc=0
+pass nm_sparse_spad_48 rc=0
+pass nm_sparse_spad_neg21_24 rc=255 GEMMINI: NM_META_CMD (funct 26): rd values 3..31 are reserved (rd = 3)
+pass nm_sparse_spad_neg21_48 rc=255 GEMMINI: NM_META_CMD (funct 26): rd values 3..31 are reserved (rd = 3)
+pass nm_sparse_spad_neg22_24 rc=255 GEMMINI: NM_META_CMD (funct 26): rd values 3..31 are reserved (rd = 31)
+pass nm_sparse_spad_neg22_48 rc=255 GEMMINI: NM_META_CMD (funct 26): rd values 3..31 are reserved (rd = 31)
+pass nm_sparse_spad_neg23_24 rc=255 GEMMINI: NM_META_CMD rd == 2: tile count rs2[7:0] must be 1..4 (got 0)
+pass nm_sparse_spad_neg23_48 rc=255 GEMMINI: NM_META_CMD rd == 2: tile count rs2[7:0] must be 1..4 (got 0)
+pass nm_sparse_spad_neg24_24 rc=255 GEMMINI: NM_META_CMD rd == 2: tile count rs2[7:0] must be 1..4 (got 5)
+pass nm_sparse_spad_neg24_48 rc=255 GEMMINI: NM_META_CMD rd == 2: tile count rs2[7:0] must be 1..4 (got 5)
+pass nm_sparse_spad_neg25_24 rc=255 GEMMINI: NM_META_CMD rd == 2: rs1[63:32] and rs2[63:8] must be 0 (rs1 0x100003000, rs2 0x1)
+pass nm_sparse_spad_neg25_48 rc=255 GEMMINI: NM_META_CMD rd == 2: rs1[63:32] and rs2[63:8] must be 0 (rs1 0x100003000, rs2 0x1)
+pass nm_sparse_spad_neg26_24 rc=255 GEMMINI: NM_META_CMD rd == 2: rs1[63:32] and rs2[63:8] must be 0 (rs1 0x3000, rs2 0x101)
+pass nm_sparse_spad_neg26_48 rc=255 GEMMINI: NM_META_CMD rd == 2: rs1[63:32] and rs2[63:8] must be 0 (rs1 0x3000, rs2 0x101)
+pass nm_sparse_spad_neg27_24 rc=255 GEMMINI: NM_META_CMD rd == 2: rs1 must be a scratchpad row address (not accumulator, not GARBAGE) (rs1 0x80000000)
+pass nm_sparse_spad_neg27_48 rc=255 GEMMINI: NM_META_CMD rd == 2: rs1 must be a scratchpad row address (not accumulator, not GARBAGE) (rs1 0x80000000)
+pass nm_sparse_spad_neg28_24 rc=255 GEMMINI: NM_META_CMD rd == 2: rs1 must be a scratchpad row address (not accumulator, not GARBAGE) (rs1 0xffffffff)
+pass nm_sparse_spad_neg28_48 rc=255 GEMMINI: NM_META_CMD rd == 2: rs1 must be a scratchpad row address (not accumulator, not GARBAGE) (rs1 0xffffffff)
+pass nm_sparse_spad_neg29_24 rc=255 GEMMINI: NM_META_CMD rd == 2: rs1 must be a scratchpad row address (not accumulator, not GARBAGE) (rs1 0x4000)
+pass nm_sparse_spad_neg29_48 rc=255 GEMMINI: NM_META_CMD rd == 2: rs1 must be a scratchpad row address (not accumulator, not GARBAGE) (rs1 0x4000)
+pass nm_sparse_spad_neg30_24 rc=255 GEMMINI: NM_META_CMD rd == 2: the index rows must all lie in one scratchpad bank (rows 12273..12288)
+pass nm_sparse_spad_neg30_48 rc=255 GEMMINI: NM_META_CMD rd == 2: the index rows must all lie in one scratchpad bank (rows 12265..12288)
+pass nm_sparse_spad_neg31_24 rc=255 GEMMINI: NM_META_CMD rd == 2: the index rows must all lie in one scratchpad bank (rows 16381..16384)
+pass nm_sparse_spad_neg31_48 rc=255 GEMMINI: NM_META_CMD rd == 2: the index rows must all lie in one scratchpad bank (rows 16379..16384)
+pass nm_sparse_spad_neg32_24 rc=255 GEMMINI: NM_META_CMD rd == 2 while a register-path index tile is half sent
+pass nm_sparse_spad_neg32_48 rc=255 GEMMINI: NM_META_CMD rd == 2 while a register-path index tile is half sent
+pass nm_sparse_spad_neg33_24 rc=255 GEMMINI: n:m index fifo: more than 4 index tiles ahead of their preloads (4 queued, 0 in flight, load of 1)
+pass nm_sparse_spad_neg33_48 rc=255 GEMMINI: n:m index fifo: more than 4 index tiles ahead of their preloads (4 queued, 0 in flight, load of 1)
+pass nm_sparse_spad_neg34_24 rc=255 GEMMINI: n:m index fifo: more than 4 index tiles ahead of their preloads (3 queued, 1 in flight, load of 1)
+pass nm_sparse_spad_neg34_48 rc=255 GEMMINI: n:m index fifo: more than 4 index tiles ahead of their preloads (3 queued, 1 in flight, load of 1)
+pass nm_sparse_spad_neg35_24 rc=255 GEMMINI: NM_META_CMD register rows (rd == 0) after a scratchpad index load (rd == 2): gemmini_nm_reset() first
+pass nm_sparse_spad_neg35_48 rc=255 GEMMINI: NM_META_CMD register rows (rd == 0) after a scratchpad index load (rd == 2): gemmini_nm_reset() first
+pass nm_sparse_spad_neg36_24 rc=255 GEMMINI: index clear between a sparse preload and its compute: fence first
+pass nm_sparse_spad_neg36_48 rc=255 GEMMINI: index clear between a sparse preload and its compute: fence first
+pass nm_sparse_spad_neg37_24 rc=255 GEMMINI: sparse preload with no index tile queued: index tile must be sent before its preload
+pass nm_sparse_spad_neg37_48 rc=255 GEMMINI: sparse preload with no index tile queued: index tile must be sent before its preload
+pass nm_sparse_sw_24 rc=0
+pass nm_sparse_sw_48 rc=0
+pass padded rc=0
+pass raw_hazard rc=0
+pass resadd rc=0
+pass resadd_stride rc=0
+pass template rc=0
+pass tiled_matmul_cpu rc=0
+pass tiled_matmul_option rc=0
+pass tiled_matmul_os rc=0
+pass tiled_matmul_ws_At rc=0
+pass tiled_matmul_ws_Bt rc=0
+pass tiled_matmul_ws_full_C rc=0
+pass tiled_matmul_ws_igelu rc=0
+pass tiled_matmul_ws_layernorm rc=0
+pass tiled_matmul_ws_low_D rc=0
+pass tiled_matmul_ws_perf rc=0
+pass tiled_matmul_ws rc=0
+pass tiled_matmul_ws_softmax rc=0
+pass transpose rc=0

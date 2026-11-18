@@ -1,0 +1,60 @@
+{
+  "date": "2026-11-09T22:18:09+00:00",
+  "yosys": "Yosys 0.69+ (git sha1 9f09efcdb-dirty, Release, GNU /home/conda/feedstock_root/build_artifacts/bld/rattler-build_yosys_1788957668/build_env/bin/x86_64-conda-linux-gnu-c++ 15.3.0) [github.com/conda-forge/yosys-feedstock at main]",
+  "liberty": "sky130_fd_sc_hd__tt_025C_1v80.lib",
+  "liberty_sha256": "ec0e1067a35c8bf20b11e58d1e8ac53326067e4dac84a125cc1b917a3518d0d9",
+  "top": "Gemmini",
+  "sram_macros": "black boxes, identical in all chips",
+  "synthesis": {
+    "script": [
+      "synth -top Gemmini -noabc",
+      "dfflibmap -liberty <liberty>",
+      "abc -liberty <liberty> -script +strash;scorr;dc2;dretime;strash;&get,-n;&dch,-f;&nf;&put",
+      "opt_clean"
+    ],
+    "abc_script": "strash;scorr;dc2;dretime;strash;&get -n;&dch -f;&nf;&put",
+    "why": "yosys 0.69's default liberty abc script minus `&get -n; &fraig -x; &put`: &fraig -x did not finish in 85+ min on LoopConvLdWeight (same RTL in all chips); without it the module maps in 19 s. Same script for all chips."
+  },
+  "area_method": "leaf cells x liberty cell area, summed through the hierarchy; seq_area = same over flip-flops/latches. Cross-checked against yosys stat -json (must agree for every module).",
+  "chips": {
+    "berkeley": {
+      "config": "GemminiRocketConfig",
+      "generated_verilog_sha256": "b87736b4903fc339f7d738f26e9e31dc241cd28164da3aa3c2800495eb2a3984",
+      "generated_verilog_dir": "/home/hunter/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiRocketConfig/gen-collateral",
+      "black_boxes": [
+        "$check",
+        "mem_0_ext",
+        "mem_ext"
+      ],
+      "yosys_stat_area_is": "hierarchical",
+      "yosys_wall_s": 187,
+      "max_child_rss_mib": 1618
+    },
+    "nm24": {
+      "config": "GemminiNMRocketConfig",
+      "generated_verilog_sha256": "7d0da5653b932d9f7964d910c8e44042ac1d62db075654b4b0a1eafeba2acac7",
+      "generated_verilog_dir": "/home/hunter/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/gen-collateral",
+      "black_boxes": [
+        "$check",
+        "mem_0_ext",
+        "mem_ext"
+      ],
+      "yosys_stat_area_is": "hierarchical",
+      "yosys_wall_s": 193,
+      "max_child_rss_mib": 1666
+    },
+    "nm48": {
+      "config": "GemminiNM48RocketConfig",
+      "generated_verilog_sha256": "bcf3996ef26573959f2ca510766c27a32b43e063ab11836fa8b33552bfd162d4",
+      "generated_verilog_dir": "/home/hunter/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNM48RocketConfig/gen-collateral",
+      "black_boxes": [
+        "$check",
+        "mem_0_ext",
+        "mem_ext"
+      ],
+      "yosys_stat_area_is": "hierarchical",
+      "yosys_wall_s": 199,
+      "max_child_rss_mib": 1724
+    }
+  }
+}

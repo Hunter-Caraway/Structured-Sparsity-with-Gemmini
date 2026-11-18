@@ -1,0 +1,6 @@
+I: 35, J: 27
+Starting gemmini resadd
+Cycles taken: 45
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

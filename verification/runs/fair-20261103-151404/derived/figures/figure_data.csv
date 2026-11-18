@@ -1,0 +1,49 @@
+figure,measure,series,value,note
+fig1,"Array time (compute state), weights reused",Berkeley original,"1,260",
+fig1,"Array time (compute state), weights reused","Ours, 2:4",672,Berkeley / ours 1.88x
+fig1,"Array time (compute state), weights reused","Ours, 4:8",672,Berkeley / ours 1.88x
+fig1,"Whole job, weights reused",Berkeley original,"1,541",
+fig1,"Whole job, weights reused","Ours, 2:4","1,395",Berkeley / ours 1.10x
+fig1,"Whole job, weights reused","Ours, 4:8","1,607",Berkeley / ours 0.96x
+fig1,"Whole job, fresh weights",Berkeley original,"1,555",
+fig1,"Whole job, fresh weights","Ours, 2:4","2,281",Berkeley / ours 0.68x
+fig1,"Whole job, fresh weights","Ours, 4:8","3,170",Berkeley / ours 0.49x
+fig1,"Whole job, fresh weights, indexes batched",Berkeley original,"1,555",
+fig1,"Whole job, fresh weights, indexes batched","Ours, 2:4","2,110",Berkeley / ours 0.74x
+fig1,"Whole job, fresh weights, indexes batched","Ours, 4:8","2,964",Berkeley / ours 0.52x
+fig2,Weights reused,Berkeley original,"1,541","means: array time 1260, rest 281, processor-only 1071"
+fig2,Weights reused,"Ours, 2:4","1,395","means: array time 672, rest 723, processor-only 1013"
+fig2,Weights reused,"Ours, 4:8","1,607","means: array time 672, rest 935, processor-only 1131"
+fig2,Fresh weights,Berkeley original,"1,555","means: array time 1320, rest 235, processor-only 1101"
+fig2,Fresh weights,"Ours, 2:4","2,281","means: array time 960, rest 1321, processor-only 1725"
+fig2,Fresh weights,"Ours, 4:8","3,170","means: array time 960, rest 2210, processor-only 2061"
+fig3,"Array time, weights reused","Ours, 2:4",1.88x,"Berkeley / ours, envelope over seeds"
+fig3,"Array time, weights reused","Ours, 4:8",1.88x,"Berkeley / ours, envelope over seeds"
+fig3,"Whole job, weights reused","Ours, 2:4",1.10x,"Berkeley / ours, envelope over seeds"
+fig3,"Whole job, weights reused","Ours, 4:8",0.96x,"Berkeley / ours, envelope over seeds"
+fig3,"Whole job, fresh weights","Ours, 2:4",0.68x,"Berkeley / ours, envelope over seeds"
+fig3,"Whole job, fresh weights","Ours, 4:8",0.49x,"Berkeley / ours, envelope over seeds"
+fig3,"Whole job, fresh, batched","Ours, 2:4",0.74x,"Berkeley / ours, envelope over seeds"
+fig3,"Whole job, fresh, batched","Ours, 4:8",0.52x,"Berkeley / ours, envelope over seeds"
+fig4,Weights reused · Processor issuing instructions,Berkeley original,16.73,cycles per unit of work
+fig4,Weights reused · Processor issuing instructions,"Ours, 2:4",15.83,cycles per unit of work
+fig4,Weights reused · Processor issuing instructions,"Ours, 4:8",17.67,cycles per unit of work
+fig4,Weights reused · Array time (compute state),Berkeley original,19.69,cycles per unit of work
+fig4,Weights reused · Array time (compute state),"Ours, 2:4",10.50,cycles per unit of work
+fig4,Weights reused · Array time (compute state),"Ours, 4:8",10.50,cycles per unit of work
+fig4,Fresh weights · Processor issuing instructions,Berkeley original,17.20,cycles per unit of work
+fig4,Fresh weights · Processor issuing instructions,"Ours, 2:4",26.95,cycles per unit of work
+fig4,Fresh weights · Processor issuing instructions,"Ours, 4:8",32.20,cycles per unit of work
+fig4,Fresh weights · Array time (compute state),Berkeley original,20.62,cycles per unit of work
+fig4,Fresh weights · Array time (compute state),"Ours, 2:4",15.00,cycles per unit of work
+fig4,Fresh weights · Array time (compute state),"Ours, 4:8",15.00,cycles per unit of work
+fig5,bell curve,Paired 4:8 (NVIDIA),79.2,answer error 45.7%
+fig5,bell curve,2:4,86.8,answer error 36.2%
+fig5,bell curve,4:8 (ours),89.7,answer error 32.1%
+fig5,heavy tail,Paired 4:8 (NVIDIA),86.1,answer error 37.2%
+fig5,heavy tail,2:4,92.1,answer error 28.5%
+fig5,heavy tail,4:8 (ours),94.4,answer error 24.0%
+fig6,32x12 synthetic Laplace block,Paired 4:8 (NVIDIA),86.8,share of energy (sum of squares) kept
+fig6,32x12 synthetic Laplace block,2:4,91.4,share of energy (sum of squares) kept
+fig6,32x12 synthetic Laplace block,4:8 (ours),94.2,share of energy (sum of squares) kept
+fig6,32x12 synthetic Laplace block,No pattern (best possible),95.9,share of energy (sum of squares) kept

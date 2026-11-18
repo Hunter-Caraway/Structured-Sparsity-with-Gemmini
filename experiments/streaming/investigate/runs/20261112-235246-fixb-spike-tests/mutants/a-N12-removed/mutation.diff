@@ -1,0 +1,4 @@
+886c886
+<     nm_loop_abort("LOAD_IDX needs cols == 16 and 1..16 rows"); // changed: sparse-loop-fix, N12
+---
+>     (void)0; // changed: sparse-loop-fix, N12

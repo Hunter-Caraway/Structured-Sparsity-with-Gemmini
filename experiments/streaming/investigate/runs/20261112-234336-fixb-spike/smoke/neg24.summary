@@ -1,0 +1,27 @@
+smoke_neg0_24 rc=0 smoke_neg NEG=0: not caught 
+smoke_neg1_24 rc=255 GEMMINI: sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10]) 
+smoke_neg2_24 rc=255 GEMMINI: sparse-loop-fix: LOOP_CONV_WS issued while n:m sparse mode (config_ex rs1[10]) is on 
+smoke_neg3_24 rc=255 GEMMINI: sparse-loop-fix: LOOP_WS with rs1[3] set needs LOOP_WS_CONFIG_NM (funct 28) first 
+smoke_neg4_24 rc=255 GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) without LOOP_WS rs1[3] 
+smoke_neg5_24 rc=255 GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0 
+smoke_neg6_24 rc=255 GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0 
+smoke_neg7_24 rc=255 GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0 
+smoke_neg8_24 rc=255 GEMMINI: sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM) 
+smoke_neg9_24 rc=255 GEMMINI: sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM) 
+smoke_neg10_24 rc=255 GEMMINI: sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only 
+smoke_neg11_24 rc=255 GEMMINI: sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only 
+smoke_neg12_24 rc=255 GEMMINI: sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only 
+smoke_neg13_24 rc=255 GEMMINI: sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only 
+smoke_neg14_24 rc=255 GEMMINI: sparse-loop-fix: sparse loop needs A_stride == 1 
+smoke_neg15_24 rc=255 GEMMINI: sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank) 
+smoke_neg16_24 rc=255 GEMMINI: sparse-loop-fix: sparse loop started with index tiles pending in the FIFO: gemmini_nm_reset() first 
+smoke_neg17_24 rc=255 GEMMINI: sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows 
+smoke_neg18_24 rc=255 GEMMINI: sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows 
+smoke_neg19_24 rc=255 GEMMINI: sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows 
+smoke_neg20_24 rc=255 GEMMINI: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address 
+smoke_neg21_24 rc=255 GEMMINI: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address 
+smoke_neg22_24 rc=255 GEMMINI: sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address 
+smoke_neg23_24 rc=255 GEMMINI: sparse-loop-fix: LOAD_IDX (funct 27) on a dense build (nm_sparsity = None) 
+smoke_neg24_24 rc=255 GEMMINI: sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) on a dense build (nm_sparsity = None) 
+smoke_neg25_24 rc=0 smoke_neg NEG=25: not caught 
+smoke_neg26_24 rc=255 GEMMINI: sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only 

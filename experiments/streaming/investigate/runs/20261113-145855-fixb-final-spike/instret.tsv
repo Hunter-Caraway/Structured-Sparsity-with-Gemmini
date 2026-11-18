@@ -1,0 +1,13 @@
+layer_pat berkeley_now berkeley_RUN3 loop_now loop_RUN3 match
+edge_24 402 402 363 363 yes
+edge_48 402 402 378 378 yes
+small_24 468 468 469 469 yes
+small_48 468 468 487 487 yes
+bert_qkv_24 3214 3214 1451 1451 yes
+bert_qkv_48 3214 3214 1516 1516 yes
+rn50_conv_24 4833 4833 1871 1871 yes
+rn50_conv_48 4833 4833 1893 1893 yes
+bert_ffn1_24 12000 12000 4404 4404 yes
+bert_ffn1_48 12000 12000 4613 4613 yes
+bert_ffn2_24 10057 10057 3327 3327 yes
+bert_ffn2_48 10057 10057 3460 3460 yes

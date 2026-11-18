@@ -1,0 +1,13 @@
+Starting gemmini matmul
+I: 128, J: 256, K: 256
+NO_BIAS: 0, REPEATING_BIAS: 1
+A_TRANSPOSE: 0, B_TRANSPOSE: 0
+Cycles taken: 825
+Total macs: 8388608
+Ideal cycles: 32768
+Utilization: 3971%
+RDMA_BYTES_REC: 6
+WDMA_BYTES_SENT: 12
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

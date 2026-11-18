@@ -1,0 +1,9 @@
+run: fixb-spike-tags, re-run after tagging every added line (comment-only edit), laptop, 2026-11-12T23:45:40-05:00
+libgemmini: branch sparse-loop-fix HEAD 2a6ff44 + uncommitted diff (libgemmini.diff)
+8224264c50347886a019df69b2e9e4937c661b506662ef325ca48a513dd511a4  /home/hunter/chipyard/generators/gemmini/software/libgemmini/gemmini.cc
+402441cef1b5b65ecd9e7fe14fabcd4998ebd7365186d5e49afa02cbeabd1068  /home/hunter/chipyard/generators/gemmini/software/libgemmini/gemmini.h
+0d30970a1be73a02ea33b44a2ae6a73826945b84fdbd9882bcc4ca96dc58b640  /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-spike/libgemmini-nm24/libgemmini.so
+9c5894d41210c745765c90ca4ae05e00c77a7ddee9263ae1bd2e45660e61440f  /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-spike/libgemmini-nm48/libgemmini.so
+7617dce538fd6690483cd3d4810e9810d45bee8f17183bc79b62aaf2ae0a3745  /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-spike/libgemmini-dense24/libgemmini.so
+34578eb7dd40188639345b6d1986fd639672c8b216ecc3140f1abf71179a592a  /home/hunter/chipyard/.conda-env/riscv-tools/lib/libgemmini.so
+test binaries, scripts and sources: same as ../20261112-234336-fixb-spike

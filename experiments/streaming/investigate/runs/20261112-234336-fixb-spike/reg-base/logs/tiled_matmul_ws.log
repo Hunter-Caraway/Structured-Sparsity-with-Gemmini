@@ -1,0 +1,10 @@
+MAT_DIM_I: 64
+MAT_DIM_J: 64
+MAT_DIM_K: 64
+Starting gemmini matmul
+Cycles taken: 123
+Starting slow CPU matmul
+Cycles taken: 2130521
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

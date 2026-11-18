@@ -1,0 +1,3 @@
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

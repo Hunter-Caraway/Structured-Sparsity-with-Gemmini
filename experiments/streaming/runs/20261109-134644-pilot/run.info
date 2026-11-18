@@ -1,0 +1,19 @@
+stamp=20261109-134644-pilot
+host=fortnite 7.1.8-200.fc44.x86_64 nproc=16
+git.gemmini-sparsity=1e50e1c45b8b607e2899562d6c51d4343c99a3ac branch=main (uncommitted changes)
+git.gemmini-sparsity.diffstat= 22 files changed, 1398 insertions(+), 1315 deletions(-)
+git.gemmini=639a5068bc7f01c5c8fed5a4bea15a55963c60a3 branch=sparse-nm (uncommitted changes)
+git.gemmini.diffstat= 7 files changed, 84 insertions(+), 25 deletions(-)
+git.libgemmini=a14aaa15ed5fa34e61ddf73e302be00af9538d51 branch=sparse-nm (uncommitted changes)
+git.libgemmini.diffstat= 3 files changed, 139 insertions(+), 88 deletions(-)
+git.gemmini-rocc-tests=61086b433e1b7fb57bcd22634d03b4285f9d00cf branch=sparse-nm (uncommitted changes)
+git.gemmini-rocc-tests.diffstat= 6 files changed, 409 insertions(+), 120 deletions(-)
+chipyard=1.14.0-36-gbfa5699f
+sim.stock=GemminiRocketConfig mtime=2026-10-06T00:56:57 sha256=062e7da1f9214b7ec28148e4e0abb5edf216b9428c84ecea900158e461a12244
+sim.nm24=GemminiNMRocketConfig mtime=2026-11-03T15:10:27 sha256=98e328ee5fa2e0286aadb392be3a213844459350d9c82fcfe096ccbac1a3807a
+sim.nm48=GemminiNM48RocketConfig mtime=2026-11-03T15:12:07 sha256=41050999335dd6d932a6d362c5946dda1f96281944bb2c823f0c6c4a70bcce20
+gemmini_nm.h.sha256=82305e436dfabf64874c232a16d8015d674cca8475c18ddfa212264eed289fa5
+stream_bench.c.sha256=1e8dd561d50d16a4969f0ce4c4393c9495cbf081f1bb3fac5f16e39c6b005480
+gen_data.py.sha256=c441f69a515ede92a55dbfcc47692b4d7da7b744453f1a11bcabb6dd67f21758
+make=run-binary-fast LOADMEM=1 BREAK_SIM_PREREQ=1 (RANDOM_SEED, TIMEOUT_CYCLES per job: see jobs.tsv)
+flags=rv_pre=(-DPREALLOCATE=1 -DMULTITHREAD=1 -mcmodel=medany -std=gnu99 -O2 -ffast-math -fno-common -fno-builtin-printf + -DNM_N/-DNM_M, -DRUN_MASK, [-DDENSE_ONLY]

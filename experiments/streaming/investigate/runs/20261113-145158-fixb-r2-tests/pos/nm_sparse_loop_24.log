@@ -1,0 +1,27 @@
+nm_sparse_loop: 2:4, R = 4 rows per index tile, 4 tiles per LOAD_IDX
+T=1 i1 j1                          ok (0/256 wrong)
+T=2 i2 j2 repeating bias           ok (0/1024 wrong)
+T=3 i1 j3 row bias                 ok (0/768 wrong)
+T=4 i2 j2                          ok (0/1024 wrong)
+T=5 i2 j5                          ok (0/2560 wrong)
+T=10 i3 j5 partial i, row bias     ok (0/3200 wrong)
+8 loops, partial i and j, rep. bias ok (0/2016 wrong)
+8 loops, no bias                   ok (0/3072 wrong)
+4 loops, T=3 and T=1, row bias     ok (0/1024 wrong)
+K=40 padded to 64                  ok (0/512 wrong)
+nm_loop_tiles, row bias            ok (0/4608 wrong)
+pad_J: N=5, T=1                    ok (0/80 wrong)
+pad_J: N=DIM+1, T=4, rep. bias     ok (0/544 wrong)
+pad_J: N=4*DIM+13, partial i, row bias ok (0/1463 wrong)
+pad_J: N=5*DIM-1, 4 loops          ok (0/2528 wrong)
+pad_J: N=5*DIM+7, nm_loop_tiles, K=40 ok (0/3567 wrong)
+seq: sparse loop                   ok (0/1024 wrong)
+seq: dense loop (pruned W)         ok (0/1024 wrong)
+seq: per-tile, LOAD_IDX groups     ok (0/1024 wrong)
+seq: sparse loop again             ok (0/1024 wrong)
+seq: per-tile, LOAD_IDX by tile    ok (0/1024 wrong)
+seq: sparse loop, 2 calls          ok (0/1024 wrong)
+nm_sparse_loop passed
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

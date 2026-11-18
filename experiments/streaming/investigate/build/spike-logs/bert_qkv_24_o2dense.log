@@ -1,0 +1,2 @@
+terminate called after throwing an instance of 'std::runtime_error'
+  what():  could not open /home/hunter/gemmini-sparsity/experiments/streaming/investigate/build/bin-bound/* (did you misspell it? If VCS, did you forget +permissive/+permissive-off?)

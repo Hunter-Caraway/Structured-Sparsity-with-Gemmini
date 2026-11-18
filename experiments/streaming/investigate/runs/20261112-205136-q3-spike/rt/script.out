@@ -1,0 +1,43 @@
+edge.log:2:q3 dense_icount: layer=edge M=36 K=128 N=64 DIM=16 instret=400 cycles=402 instret_with_fence=403 verified
+edge.log:4:q3 dense_icount_rt: layer=edge M=36 K=128 N=64 DIM=16 instret=397 cycles=399 instret_with_fence=400 verified
+small.log:2:q3 dense_icount: layer=small M=64 K=256 N=128 DIM=16 instret=466 cycles=468 instret_with_fence=469 verified
+small.log:4:q3 dense_icount_rt: layer=small M=64 K=256 N=128 DIM=16 instret=463 cycles=465 instret_with_fence=466 verified
+bert_qkv.log:2:q3 dense_icount: layer=bert_qkv M=128 K=768 N=768 DIM=16 instret=3212 cycles=3214 instret_with_fence=3215 verified
+bert_qkv.log:4:q3 dense_icount_rt: layer=bert_qkv M=128 K=768 N=768 DIM=16 instret=3209 cycles=3211 instret_with_fence=3212 verified
+rn50_conv.log:2:q3 dense_icount: layer=rn50_conv M=196 K=2304 N=256 DIM=16 instret=4831 cycles=4833 instret_with_fence=4834 verified
+rn50_conv.log:4:q3 dense_icount_rt: layer=rn50_conv M=196 K=2304 N=256 DIM=16 instret=4827 cycles=4829 instret_with_fence=4830 verified
+bert_ffn1.log:2:q3 dense_icount: layer=bert_ffn1 M=128 K=768 N=3072 DIM=16 instret=11998 cycles=12000 instret_with_fence=12001 verified
+bert_ffn1.log:4:q3 dense_icount_rt: layer=bert_ffn1 M=128 K=768 N=3072 DIM=16 instret=11994 cycles=11996 instret_with_fence=11997 verified
+bert_ffn2.log:2:q3 dense_icount: layer=bert_ffn2 M=128 K=3072 N=768 DIM=16 instret=10055 cycles=10057 instret_with_fence=10058 verified
+bert_ffn2.log:4:q3 dense_icount_rt: layer=bert_ffn2 M=128 K=3072 N=768 DIM=16 instret=10051 cycles=10053 instret_with_fence=10054 verified
+edge.trace.txt: trace lines before region end: 7880
+edge.trace.txt: trace instructions in region: 400
+edge.trace.txt: rdinstret delta in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final/logs/edge.log:2: 400
+edge.trace.txt: rocc commands in region: 11, by funct7: 0:5 8:1 9:1 10:1 11:1 12:1 13:1
+edge.trace.txt: match
+small.trace.txt: trace lines before region end: 25694
+small.trace.txt: trace instructions in region: 466
+small.trace.txt: rdinstret delta in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final/logs/small.log:2: 466
+small.trace.txt: rocc commands in region: 11, by funct7: 0:5 8:1 9:1 10:1 11:1 12:1 13:1
+small.trace.txt: match
+bert_qkv.trace.txt: trace lines before region end: 299224
+bert_qkv.trace.txt: trace instructions in region: 3212
+bert_qkv.trace.txt: rdinstret delta in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final/logs/bert_qkv.log:2: 3212
+bert_qkv.trace.txt: rocc commands in region: 125, by funct7: 0:5 8:20 9:20 10:20 11:20 12:20 13:20
+bert_qkv.trace.txt: match
+rn50_conv.trace.txt: trace lines before region end: 156407
+rn50_conv.trace.txt: trace instructions in region: 4831
+rn50_conv.trace.txt: rdinstret delta in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final/logs/rn50_conv.log:2: 4831
+rn50_conv.trace.txt: rocc commands in region: 221, by funct7: 0:5 8:36 9:36 10:36 11:36 12:36 13:36
+rn50_conv.trace.txt: match
+bert_ffn1.trace.txt: trace lines before region end: 1192492
+bert_ffn1.trace.txt: trace instructions in region: 11998
+bert_ffn1.trace.txt: rdinstret delta in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final/logs/bert_ffn1.log:2: 11998
+bert_ffn1.trace.txt: rocc commands in region: 473, by funct7: 0:5 8:78 9:78 10:78 11:78 12:78 13:78
+bert_ffn1.trace.txt: match
+bert_ffn2.trace.txt: trace lines before region end: 306067
+bert_ffn2.trace.txt: trace instructions in region: 10055
+bert_ffn2.trace.txt: rdinstret delta in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final/logs/bert_ffn2.log:2: 10055
+bert_ffn2.trace.txt: rocc commands in region: 485, by funct7: 0:5 8:80 9:80 10:80 11:80 12:80 13:80
+bert_ffn2.trace.txt: match
+done: /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final

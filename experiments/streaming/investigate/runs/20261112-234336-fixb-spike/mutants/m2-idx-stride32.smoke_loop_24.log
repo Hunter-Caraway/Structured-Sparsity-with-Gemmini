@@ -1,0 +1,14 @@
+case M=16 N=16 K=32 tiles 1x1x2 bias=0: FAIL (256 wrong)
+case M=20 N=16 K=64 tiles 2x1x4 bias=0: FAIL (320 wrong)
+case M=16 N=48 K=32 tiles 1x3x2 bias=1: FAIL (768 wrong)
+case M=16 N=64 K=32 tiles 1x4x2 bias=2: FAIL (1024 wrong)
+case M=16 N=80 K=32 tiles 1x5x2 bias=0: FAIL (1280 wrong)
+case M=40 N=50 K=96 tiles 3x4x6 bias=1: FAIL (2000 wrong)
+case M=40 N=50 K=128 tiles 2x3x4 bias=2: FAIL (2000 wrong)
+case M=48 N=80 K=128 tiles 3x5x8 bias=0: FAIL (3840 wrong)
+case M=48 N=80 K=128 tiles 3x5x8 bias=1: FAIL (3840 wrong)
+smoke_loop: 9 case(s) FAILED
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4
+*** FAILED *** (tohost = 1)

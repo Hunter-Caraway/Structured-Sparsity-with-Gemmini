@@ -1,0 +1,4 @@
+smoke_neg NEG=25: not caught
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

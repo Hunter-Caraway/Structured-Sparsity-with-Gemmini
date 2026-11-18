@@ -1,0 +1,37 @@
+edge.log:2:q3 dense_icount: layer=edge M=36 K=128 N=64 DIM=16 instret=125 cycles=129 instret_with_fence=130 verified
+small.log:2:q3 dense_icount: layer=small M=64 K=256 N=128 DIM=16 instret=124 cycles=128 instret_with_fence=129 verified
+bert_qkv.log:2:q3 dense_icount: layer=bert_qkv M=128 K=768 N=768 DIM=16 instret=1991 cycles=1995 instret_with_fence=1996 verified
+rn50_conv.log:2:q3 dense_icount: layer=rn50_conv M=196 K=2304 N=256 DIM=16 instret=4151 cycles=4153 instret_with_fence=4154 verified
+bert_ffn1.log:2:q3 dense_icount: layer=bert_ffn1 M=128 K=768 N=3072 DIM=16 instret=7619 cycles=7623 instret_with_fence=7624 verified
+bert_ffn2.log:2:q3 dense_icount: layer=bert_ffn2 M=128 K=3072 N=768 DIM=16 instret=8889 cycles=8891 instret_with_fence=8892 verified
+edge.trace.txt: trace lines before region end: 7610
+edge.trace.txt: trace instructions in region: 125
+edge.trace.txt: rdinstret delta in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final-fold/logs/edge.log:2: 125
+edge.trace.txt: rocc commands in region: 11, by funct7: 0:5 8:1 9:1 10:1 11:1 12:1 13:1
+edge.trace.txt: match
+small.trace.txt: trace lines before region end: 25357
+small.trace.txt: trace instructions in region: 124
+small.trace.txt: rdinstret delta in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final-fold/logs/small.log:2: 124
+small.trace.txt: rocc commands in region: 11, by funct7: 0:5 8:1 9:1 10:1 11:1 12:1 13:1
+small.trace.txt: match
+bert_qkv.trace.txt: trace lines before region end: 298010
+bert_qkv.trace.txt: trace instructions in region: 1991
+bert_qkv.trace.txt: rdinstret delta in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final-fold/logs/bert_qkv.log:2: 1991
+bert_qkv.trace.txt: rocc commands in region: 125, by funct7: 0:5 8:20 9:20 10:20 11:20 12:20 13:20
+bert_qkv.trace.txt: match
+rn50_conv.trace.txt: trace lines before region end: 155732
+rn50_conv.trace.txt: trace instructions in region: 4151
+rn50_conv.trace.txt: rdinstret delta in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final-fold/logs/rn50_conv.log:2: 4151
+rn50_conv.trace.txt: rocc commands in region: 221, by funct7: 0:5 8:36 9:36 10:36 11:36 12:36 13:36
+rn50_conv.trace.txt: match
+bert_ffn1.trace.txt: trace lines before region end: 1188120
+bert_ffn1.trace.txt: trace instructions in region: 7619
+bert_ffn1.trace.txt: rdinstret delta in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final-fold/logs/bert_ffn1.log:2: 7619
+bert_ffn1.trace.txt: rocc commands in region: 473, by funct7: 0:5 8:78 9:78 10:78 11:78 12:78 13:78
+bert_ffn1.trace.txt: match
+bert_ffn2.trace.txt: trace lines before region end: 304906
+bert_ffn2.trace.txt: trace instructions in region: 8889
+bert_ffn2.trace.txt: rdinstret delta in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final-fold/logs/bert_ffn2.log:2: 8889
+bert_ffn2.trace.txt: rocc commands in region: 485, by funct7: 0:5 8:80 9:80 10:80 11:80 12:80 13:80
+bert_ffn2.trace.txt: match
+done: /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final-fold

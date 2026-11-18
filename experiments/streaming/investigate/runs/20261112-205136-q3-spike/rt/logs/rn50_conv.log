@@ -1,0 +1,7 @@
+q3 check dense_icount: layer=rn50_conv cpu_ref mismatches 0 of 50176, hash 0x8fbce2c036945328 expected 0x8fbce2c036945328, sampled rows 8/8 -> verified
+q3 dense_icount: layer=rn50_conv M=196 K=2304 N=256 DIM=16 instret=4831 cycles=4833 instret_with_fence=4834 verified
+q3 check dense_icount_rt: layer=rn50_conv cpu_ref mismatches 0 of 50176, hash 0x8fbce2c036945328 expected 0x8fbce2c036945328, sampled rows 8/8 -> verified
+q3 dense_icount_rt: layer=rn50_conv M=196 K=2304 N=256 DIM=16 instret=4827 cycles=4829 instret_with_fence=4830 verified
+q3 passed
+Gemmini extension configured with:
+    dim = 16

@@ -1,0 +1,4 @@
+  done stock micro_24_dense-baremetal seed 1 exit 0 209 s
+  done nm24 micro_24-baremetal seed 1 exit 0 1842 s
+  done nm48 micro_48-baremetal seed 1 exit 0 2623 s
+done: /home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261109-190319-micro

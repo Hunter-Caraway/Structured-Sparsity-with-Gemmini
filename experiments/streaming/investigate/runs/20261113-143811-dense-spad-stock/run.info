@@ -1,0 +1,15 @@
+date: 2026-11-13T14:40:25-05:00
+task: dense matmul_spad / mvin_mvout_spad on Berkeley stock libgemmini (laptop Spike only)
+spike: /home/hunter/chipyard/.conda-env/riscv-tools/bin/spike sha256 4a201fa115154db2daf8b72635b5ce951318d1491d52ce029b7d89e00d498824
+stock lib: libgemmini ea8f7ed (git archive) built with its own Makefile (no NM flags); sha256 0962be7140b688c95783f75ef5d0297df8ec50f24e849b61c332ef1aa2c53181
+our lib: sparse-nm @2a6ff44 working tree, run-flow.sh spike-lib nm24; sha256 0d30970a1be73a02ea33b44a2ae6a73826945b84fdbd9882bcc4ca96dc58b640
+stock tests: gemmini-rocc-tests 7c540b3 + riscv-tests c84daca, env 0666378, rocc-software fddb795 (git archive), run-flow rv_cc flags
+stock params include/gemmini_params.h sha256 3758ae967af3a179497660970201093a7fb624be00173990ce33d3f5c38da924 (equals HEAD:include/gemmini_params.h of our tests repo)
+our bins: run-flow.sh tests (SCRATCH_DIR=scratch), tests repo @25a6611 working tree
+bin: /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/stock-spad/stock-bin/matmul_spad-baremetal sha256 8e56943590a241a68b58035b1435784e2bba118cb034ffad9f102619db11db1c
+bin: /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/stock-spad/stock-bin/mvin_mvout-baremetal sha256 d4564486e1d81b011671825a1a92173ad58102618f26f8d727e4aff561039416
+bin: /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/stock-spad/stock-bin/mvin_mvout_spad-baremetal sha256 502065de49eef5950785a67b259445ba169244e6bba281ea559558afa2662129
+bin: /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/stock-spad/ours/tests/bareMetalC/matmul_spad-baremetal sha256 471043f286c00292699518a35463f8822cf8ab7dfad0cccfdd4ebeb34d3c3af0
+bin: /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/stock-spad/ours/tests/bareMetalC/mvin_mvout_spad-baremetal sha256 99fbccd692c8b6b73c61010d36300fbcf47eefc47a732a77486b504270010847
+cmd: timeout 300 spike --extlib=<lib> --extension=gemmini <bin>  (LD_DEBUG=libs: only the scratch lib loads)
+scratch: /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/stock-spad

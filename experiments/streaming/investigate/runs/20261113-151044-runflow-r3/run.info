@@ -1,0 +1,25 @@
+run: runflow-r3 (run-flow.sh spike step: fresh fair build in scratch + all 54 dense tests), laptop Spike only, 2026-11-13T15:10:45-05:00
+scratch (session, not kept): /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/runflow-r3
+commands (cwd ~/gemmini-sparsity, SCRATCH_DIR=$S): bash -n run-flow.sh; ./run-flow.sh spike-lib nm24|dense24|nm48|dense48; tests; spike nm24; spike nm48
+outputs: spike-lib-*.out, tests.out, spike-nm24.out / spike-nm48.out (final runs; full Spike output spike-nm24.log / spike-nm48.log)
+negative checks (all must be rc 1): neg-dense-fail.out (conv-baremetal swapped for an aborting program), neg-dense-missing.out (matmul-baremetal moved away), neg-loop-line.out (mutant-run-flow.sh: expects sparse_loop from fair_perf_dense_only)
+PAR checks: spike-nm48-par1.out (PAR=1), spike-nm24-par40.out (PAR=40, clamped to 12)
+run-flow.sh: uncommitted edit on branch spad-index-fix HEAD 7fd60dc; diff in run-flow.diff; sha256 50fd9de4f6901f0e0320873b3ba67feb68e7fb6f03e2d6b8c90c183ba81a2f8d
+spike: /home/hunter/chipyard/.conda-env/riscv-tools/bin/spike sha256 4a201fa115154db2daf8b72635b5ce951318d1491d52ce029b7d89e00d498824
+RISCV libgemmini.so sha256 before/after: 34578eb7dd40188639345b6d1986fd639672c8b216ecc3140f1abf71179a592a / 34578eb7dd40188639345b6d1986fd639672c8b216ecc3140f1abf71179a592a
+
+libs:
+7617dce538fd6690483cd3d4810e9810d45bee8f17183bc79b62aaf2ae0a3745  libgemmini-dense24/libgemmini.so
+8eb89b8a7f9e1c83a8966677d5b82efdfcfd45e22ae210f1bb89cbdb8f2afef7  libgemmini-dense48/libgemmini.so
+0d30970a1be73a02ea33b44a2ae6a73826945b84fdbd9882bcc4ca96dc58b640  libgemmini-nm24/libgemmini.so
+9c5894d41210c745765c90ca4ae05e00c77a7ddee9263ae1bd2e45660e61440f  libgemmini-nm48/libgemmini.so
+
+fair programs (scratch build):
+4a430f6843ed18ec9fd59c2d0118826e27fcf361813d2fed0335d58fece68c6d  fair/berkeley_dense_perf-baremetal
+b66c265ab2c04dd086d95ccce1ceb35c254982284b3822c1cc6f3d603beaa9eb  fair/fair_perf_24-baremetal
+cb9f0ec060cb86b351ba43e39dbd5e5081fe0603020c8e3fdf6962d16313e6ae  fair/fair_perf_48-baremetal
+1e86b1248955ab4d08d96a68051e6ad33faabc48f5b6fbe84d41c7a480b97a94  fair/fair_perf_dense_only-baremetal
+
+sources:
+8ebb8efb79ac8305a218237fa6ccf179361ceea3b5fb43557d08dbbcc08dad96  verification/fair_perf.c
+8b72895106772c7abf0ead60d0cae40754333a5c9a8126a9b830459bc624d9f5  verification/berkeley_dense_perf.c

@@ -1,0 +1,58 @@
+pass NEG=10 24 rc=255 expected text
+pass NEG=11 24 rc=255 expected text
+pass NEG=20 24 rc=255 expected text
+pass NEG=30 24 rc=255 expected text
+pass NEG=40 24 rc=255 expected text
+pass NEG=50 24 rc=255 expected text
+pass NEG=51 24 rc=255 expected text
+pass NEG=52 24 rc=255 expected text
+pass NEG=60 24 rc=255 expected text
+pass NEG=61 24 rc=255 expected text
+pass NEG=70 24 rc=255 expected text
+pass NEG=71 24 rc=255 expected text
+pass NEG=72 24 rc=255 expected text
+pass NEG=73 24 rc=255 expected text
+pass NEG=74 24 rc=255 expected text
+pass NEG=80 24 rc=255 expected text
+pass NEG=90 24 rc=255 expected text
+pass NEG=91 24 rc=255 expected text
+pass NEG=100 24 rc=255 expected text
+pass NEG=120 24 rc=255 expected text
+pass NEG=121 24 rc=255 expected text
+pass NEG=122 24 rc=255 expected text
+pass NEG=130 24 rc=255 expected text
+pass NEG=131 24 rc=255 expected text
+pass NEG=132 24 rc=255 expected text
+dense-lib: pass NEG=110 24 rc=255 expected text
+nm-lib:    NOTCAUGHT NEG=110 24 rc=0
+dense-lib: pass NEG=140 24 rc=255 expected text
+nm-lib:    NOTCAUGHT NEG=140 24 rc=0
+pass NEG=10 48 rc=255 expected text
+pass NEG=11 48 rc=255 expected text
+pass NEG=20 48 rc=255 expected text
+pass NEG=30 48 rc=255 expected text
+pass NEG=40 48 rc=255 expected text
+pass NEG=50 48 rc=255 expected text
+pass NEG=51 48 rc=255 expected text
+pass NEG=52 48 rc=255 expected text
+pass NEG=60 48 rc=255 expected text
+pass NEG=61 48 rc=255 expected text
+pass NEG=70 48 rc=255 expected text
+pass NEG=71 48 rc=255 expected text
+pass NEG=72 48 rc=255 expected text
+pass NEG=73 48 rc=255 expected text
+pass NEG=74 48 rc=255 expected text
+pass NEG=80 48 rc=255 expected text
+pass NEG=90 48 rc=255 expected text
+pass NEG=91 48 rc=255 expected text
+pass NEG=100 48 rc=255 expected text
+pass NEG=120 48 rc=255 expected text
+pass NEG=121 48 rc=255 expected text
+pass NEG=122 48 rc=255 expected text
+pass NEG=130 48 rc=255 expected text
+pass NEG=131 48 rc=255 expected text
+pass NEG=132 48 rc=255 expected text
+dense-lib: pass NEG=110 48 rc=255 expected text
+nm-lib:    NOTCAUGHT NEG=110 48 rc=0
+dense-lib: pass NEG=140 48 rc=255 expected text
+nm-lib:    NOTCAUGHT NEG=140 48 rc=0

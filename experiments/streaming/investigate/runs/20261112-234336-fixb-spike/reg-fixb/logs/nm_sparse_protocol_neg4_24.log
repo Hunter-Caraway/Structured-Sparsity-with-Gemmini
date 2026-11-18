@@ -1,0 +1,4 @@
+GEMMINI: index FIFO full (4 tiles): send at most 4 tiles ahead of their preloads
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

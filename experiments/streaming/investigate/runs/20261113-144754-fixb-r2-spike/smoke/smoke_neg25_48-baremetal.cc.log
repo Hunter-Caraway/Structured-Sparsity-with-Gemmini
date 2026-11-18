@@ -1,0 +1,1 @@
+/home/hunter/chipyard/.conda-env/riscv-tools/riscv64-unknown-elf/bin/ld: warning: /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/fixb-r2/smoke/smoke_neg25_48-baremetal has a LOAD segment with RWX permissions

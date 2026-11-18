@@ -1,0 +1,4 @@
+1112c1112
+<               nm ? (A_rows << 48) | ((uint64_t)DIM << 32) | (A_sp_addr + DIM) : // changed: sparse-loop-fix, rs2 = a_hi (A K tile 2k+1), a_rows rows
+---
+>               nm ? (A_rows << 48) | ((uint64_t)DIM << 32) | (A_sp_addr) : // changed: sparse-loop-fix, rs2 = a_hi (A K tile 2k+1), a_rows rows

@@ -1,0 +1,3 @@
+chip	binary	seed	timeout	start	end	wall_s	exit
+nm48	small_48_v3o1_pt-baremetal	1	15000000	1794272515	1794272778	263	0
+nm24	small_24_v3o1_pt-baremetal	1	15000000	1794272514	1794272845	331	0

@@ -1,0 +1,5 @@
+nm_sparse_loop: 4:8, R = 6 rows per index tile, 2 tiles per LOAD_IDX
+GEMMINI: sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

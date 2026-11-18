@@ -1,0 +1,4 @@
+GEMMINI: LOOP_WS is not supported in sparse mode
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

@@ -1,0 +1,5 @@
+trace lines before region end: 306067
+trace instructions in region: 10055
+rdinstret delta in /tmp/claude-1000/-home-hunter-gemmini-sparsity/c2ce7f25-ac80-46aa-8371-9d0155d847ad/scratchpad/q3/final/logs/bert_ffn2.log:2: 10055
+rocc commands in region: 485, by funct7: 0:5 8:80 9:80 10:80 11:80 12:80 13:80
+match

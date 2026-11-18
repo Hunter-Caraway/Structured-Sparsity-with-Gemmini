@@ -1,0 +1,4 @@
+GEMMINI: sparse-loop-fix: sparse loop needs A_stride == 1
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 2:4

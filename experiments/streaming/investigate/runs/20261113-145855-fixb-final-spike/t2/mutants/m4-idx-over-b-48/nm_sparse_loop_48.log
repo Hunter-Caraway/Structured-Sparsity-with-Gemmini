@@ -1,0 +1,6 @@
+nm_sparse_loop: 4:8, R = 6 rows per index tile, 2 tiles per LOAD_IDX
+T=1 i1 j1                          ok (0/256 wrong)
+GEMMINI: NM_META_CMD rd == 2: the index rows must all lie in one scratchpad bank (rows 8186..8197)
+Gemmini extension configured with:
+    dim = 16
+    n:m sparsity = 4:8

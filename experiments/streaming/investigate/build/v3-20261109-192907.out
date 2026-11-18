@@ -1,0 +1,4 @@
+  done nm24 small_24_v3o9-baremetal seed 1 exit 2 16 s
+  done nm24 small_24_v3o1-baremetal seed 1 exit 0 302 s
+  done nm24 small_24_v3o0-baremetal seed 1 exit 0 528 s
+done: /home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261109-192907-v3small
