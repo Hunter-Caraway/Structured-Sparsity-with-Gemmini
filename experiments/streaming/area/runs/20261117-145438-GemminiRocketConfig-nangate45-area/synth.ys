@@ -1,0 +1,18 @@
+# Yosys area script; @VARS@ are filled in by area_remote.sh. Same script and
+# settings for every config and library, so area ratios compare like with like.
+# SRAM macros (*_ext) are read with -lib: blackboxes with exact ports, no area.
+verilog_defines -DSYNTHESIS
+read_verilog -lib /home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiRocketConfig/gen-collateral/chipyard.harness.TestHarness.GemminiRocketConfig.top.mems.v
+script /home/ai-user/area/runs/20261117-145438-GemminiRocketConfig-nangate45-area/read_files.ys
+hierarchy -check -top Gemmini
+# Keep the hierarchy so per-module area is reported; stat weights by instance count.
+synth -top Gemmini
+# Latches would mean an RTL or parse problem; firtool output has none.
+select -assert-none t:$_DLATCH*
+dfflibmap -liberty /home/ai-user/area/pdk/nangate45/NangateOpenCellLibrary_typical.lib
+# One fixed abc setting for all runs: default liberty mapping, no delay target.
+abc -liberty /home/ai-user/area/pdk/nangate45/NangateOpenCellLibrary_typical.lib
+opt_clean
+hierarchy -top Gemmini
+tee -o /home/ai-user/area/runs/20261117-145438-GemminiRocketConfig-nangate45-area/stat.txt stat -liberty /home/ai-user/area/pdk/nangate45/NangateOpenCellLibrary_typical.lib -top Gemmini
+tee -q -o /home/ai-user/area/runs/20261117-145438-GemminiRocketConfig-nangate45-area/stat.json stat -json -liberty /home/ai-user/area/pdk/nangate45/NangateOpenCellLibrary_typical.lib -top Gemmini

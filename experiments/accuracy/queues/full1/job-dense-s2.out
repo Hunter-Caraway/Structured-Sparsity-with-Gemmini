@@ -1,0 +1,86 @@
+[15:22:43] run dir /home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261117-152243-mrpc-dense-s2
+[15:22:43] run.info {"model": "bert-base-uncased", "task": "mrpc", "pattern": "dense", "seed": 2, "parent": null, "max_steps": null, "threads": 8, "hparams": {"lr": 2e-05, "batch_size": 32, "epochs": 3, "weight_decay": 0.01, "warmup_ratio": 0.1, "max_grad_norm": 1.0, "max_len": 128, "calib_examples": 512}, "git_head": "10ce6f775d8ee0b6fa1bf97bc9fcf8b2e8e14322", "git_dirty_accuracy_dir": ["?? experiments/accuracy/"], "script_sha256": {"nm_acc.py": "4c54798967e07a02c02c2992ac07c366c5b333b58aa230231346177b230b00f3", "run_config.py": "381cfacf693be840fdc023a8429b2be576ca275a8b7670ba1941a340425c8e53"}, "python": "3.14.7", "platform": "Linux-7.1.8-200.fc44.x86_64-x86_64-with-glibc2.43", "torch": "2.15.0+cpu", "transformers": "5.23.0", "datasets": "5.2.0", "argv": ["/home/hunter/gemmini-sparsity/experiments/accuracy/run_config.py", "--pattern", "dense", "--seed", "2", "--save"]}
+Could not reach the Hub ([Errno -3] Temporary failure in name resolution). Using cached commit hash for 'bert-base-uncased'.
+'[Errno -3] Temporary failure in name resolution' thrown while requesting GET https://huggingface.co/api/models/bert-base-uncased/tree/main/additional_chat_templates
+Retrying in 1s [Retry 1/5].
+'[Errno -3] Temporary failure in name resolution' thrown while requesting GET https://huggingface.co/api/models/bert-base-uncased/tree/main/additional_chat_templates
+Retrying in 2s [Retry 2/5].
+'[Errno -3] Temporary failure in name resolution' thrown while requesting GET https://huggingface.co/api/models/bert-base-uncased/tree/main/additional_chat_templates
+Retrying in 4s [Retry 3/5].
+'[Errno -3] Temporary failure in name resolution' thrown while requesting GET https://huggingface.co/api/models/bert-base-uncased/tree/main/additional_chat_templates
+Retrying in 8s [Retry 4/5].
+'[Errno -3] Temporary failure in name resolution' thrown while requesting GET https://huggingface.co/api/models/bert-base-uncased/tree/main/additional_chat_templates
+Retrying in 8s [Retry 5/5].
+'[Errno -3] Temporary failure in name resolution' thrown while requesting GET https://huggingface.co/api/models/bert-base-uncased/tree/main/additional_chat_templates
+'[Errno -3] Temporary failure in name resolution' thrown while requesting GET https://huggingface.co/api/models/bert-base-uncased/tree/main
+Retrying in 1s [Retry 1/5].
+'[Errno -3] Temporary failure in name resolution' thrown while requesting GET https://huggingface.co/api/models/bert-base-uncased/tree/main
+Retrying in 2s [Retry 2/5].
+'[Errno -3] Temporary failure in name resolution' thrown while requesting GET https://huggingface.co/api/models/bert-base-uncased/tree/main
+Retrying in 4s [Retry 3/5].
+'[Errno -3] Temporary failure in name resolution' thrown while requesting GET https://huggingface.co/api/models/bert-base-uncased/tree/main
+Retrying in 8s [Retry 4/5].
+'[Errno -3] Temporary failure in name resolution' thrown while requesting GET https://huggingface.co/api/models/bert-base-uncased/tree/main
+Retrying in 8s [Retry 5/5].
+'[Errno -3] Temporary failure in name resolution' thrown while requesting GET https://huggingface.co/api/models/bert-base-uncased/tree/main
+'[Errno -3] Temporary failure in name resolution' thrown while requesting HEAD https://huggingface.co/datasets/nyu-mll/glue/resolve/bcdcba79d07bc864c1c254ccfcedcce55bcc9a8c/glue.py
+Retrying in 1s [Retry 1/5].
+'[Errno -3] Temporary failure in name resolution' thrown while requesting HEAD https://huggingface.co/datasets/nyu-mll/glue/resolve/bcdcba79d07bc864c1c254ccfcedcce55bcc9a8c/glue.py
+Retrying in 2s [Retry 2/5].
+'[Errno -3] Temporary failure in name resolution' thrown while requesting HEAD https://huggingface.co/datasets/nyu-mll/glue/resolve/bcdcba79d07bc864c1c254ccfcedcce55bcc9a8c/glue.py
+Retrying in 4s [Retry 3/5].
+'[Errno -3] Temporary failure in name resolution' thrown while requesting HEAD https://huggingface.co/datasets/nyu-mll/glue/resolve/bcdcba79d07bc864c1c254ccfcedcce55bcc9a8c/glue.py
+Retrying in 8s [Retry 4/5].
+'[Errno -3] Temporary failure in name resolution' thrown while requesting HEAD https://huggingface.co/datasets/nyu-mll/glue/resolve/bcdcba79d07bc864c1c254ccfcedcce55bcc9a8c/glue.py
+Retrying in 8s [Retry 5/5].
+'[Errno -3] Temporary failure in name resolution' thrown while requesting HEAD https://huggingface.co/datasets/nyu-mll/glue/resolve/bcdcba79d07bc864c1c254ccfcedcce55bcc9a8c/glue.py
+Using the latest cached version of the dataset since nyu-mll/glue couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'mrpc' at /home/hunter/.cache/huggingface/datasets/nyu-mll___glue/mrpc/0.0.0/bcdcba79d07bc864c1c254ccfcedcce55bcc9a8c (last modified on Tue Nov 17 14:46:29 2026).
+[15:23:53] data train=3668 val=408
+Could not reach the Hub ([Errno -3] Temporary failure in name resolution). Using cached commit hash for 'bert-base-uncased'.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights:  35%|███▌      | 70/199 [00:00<00:00, 543.49it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 1021.60it/s]
+[transformers] [1mBertForSequenceClassification LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     | 
+-------------------------------------------+------------+-
+cls.predictions.bias                       | UNEXPECTED | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED | 
+cls.seq_relationship.weight                | UNEXPECTED | 
+cls.predictions.transform.dense.weight     | UNEXPECTED | 
+cls.seq_relationship.bias                  | UNEXPECTED | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED | 
+cls.predictions.transform.dense.bias       | UNEXPECTED | 
+classifier.bias                            | MISSING    | 
+classifier.weight                          | MISSING    | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your downstream task.
+[15:23:56] loaded model from bert-base-uncased
+[15:25:54] train epoch=0 step=20/345 loss=0.6362 elapsed=117.9s
+[15:27:56] train epoch=0 step=40/345 loss=0.6223 elapsed=240.2s
+[15:29:53] train epoch=0 step=60/345 loss=0.5938 elapsed=357.6s
+[15:31:52] train epoch=0 step=80/345 loss=0.5816 elapsed=476.5s
+[15:33:49] train epoch=0 step=100/345 loss=0.5655 elapsed=593.5s
+[15:35:18] train epoch=0 done loss=0.5588 secs=682.5
+[15:35:49] train epoch=1 step=120/345 loss=0.3949 elapsed=30.9s
+[15:37:49] train epoch=1 step=140/345 loss=0.3967 elapsed=150.6s
+[15:39:49] train epoch=1 step=160/345 loss=0.3773 elapsed=270.9s
+[15:41:47] train epoch=1 step=180/345 loss=0.3634 elapsed=389.2s
+[15:43:48] train epoch=1 step=200/345 loss=0.3581 elapsed=509.6s
+[15:45:48] train epoch=1 step=220/345 loss=0.3580 elapsed=629.8s
+[15:46:45] train epoch=1 done loss=0.3533 secs=687.2
+[15:47:44] train epoch=2 step=240/345 loss=0.2288 elapsed=58.2s
+[15:49:43] train epoch=2 step=260/345 loss=0.2066 elapsed=177.7s
+[15:51:46] train epoch=2 step=280/345 loss=0.2152 elapsed=300.6s
+[15:53:50] train epoch=2 step=300/345 loss=0.2108 elapsed=424.9s
+[15:55:46] train epoch=2 step=320/345 loss=0.2054 elapsed=540.4s
+[15:57:41] train epoch=2 step=340/345 loss=0.2108 elapsed=655.8s
+[15:58:07] train epoch=2 done loss=0.2095 secs=681.8
+[15:58:07] train total secs=2051.5 steps=345
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  2.74it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  2.74it/s]
+[15:58:08] checkpoint /home/hunter/gemmini-sparsity/experiments/accuracy/checkpoints/20261117-152243-mrpc-dense-s2
+[15:58:30] RESULT precision=fp32 pattern=dense seed=2 accuracy=0.867647 f1=0.906250 n=408
+[15:59:03] int8 quantized layers=72 calib_examples=512
+[15:59:57] RESULT precision=int8 pattern=dense seed=2 accuracy=0.700980 f1=0.734783 n=408
+[15:59:57] DONE
+/home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261117-152243-mrpc-dense-s2

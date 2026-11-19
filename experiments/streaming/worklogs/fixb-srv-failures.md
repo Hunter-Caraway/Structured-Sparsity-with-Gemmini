@@ -59,3 +59,13 @@ Next: coordinator decides on D run and whether to raise the nm_sparse_loop timeo
 - Running: ~/sinv/runs/20261117-110726-convbudget-srv (3 sims, ETA ~55 h at ~1200 cycles/s, i.e. ~2026-11-19 evening). Do nothing until STATUS=ALL_DONE.
 - Next: copy back to experiments/streaming/investigate/runs/ with SHA256SUMS verified; check each log for verified output (cycle count counts only if verified, rule 4).
 - Also running: 20261117-111223-convbudget-stock-srv (driver 702823) and 20261117-111434-stockdense-srv (driver 704747); see section "Stock conv + stock dense runs". 12 sims total.
+
+## Stock dense copy-back 2026-11-18
+- Run: ~/sinv/runs/20261117-111434-stockdense-srv (STATUS `ALL_DONE Wed Nov 18 06:48:34 AM EST 2026`), 63 files, copied via ssh cat per file into `investigate/runs/20261117-111434-stockdense-srv/`. `sha256sum -c SHA256SUMS`: all 162 OK (rc 0).
+- `python3 verification/verify_all.py --mode run <run>`: ALL CHECKS PASSED (7 checks, 2 skipped): 51 jobs.tsv rows = 51 logs, one stock sim (sha 84c2264a..), 49 jobs exit 0, 2 known Berkeley failures (stock gemmini_counter, stock global_average; berkeley-issues.md) not counted, parse_fixa.py rc 0. Streaming/fair checks skipped (no such logs).
+- Own check (grep every `*.log`): 49 logs contain `Verilog $finish` and none of FAILED / %Error / assert; gemmini_counter and global_average end `*** FAILED *** (tohost = 1)` + `Verilog $stop` (jobs.tsv exit 2). Dense tests self-check (tohost=0 = pass); no cycle claims made.
+- Coverage: 51 of Berkeley's 54: 49 pass, 2 known Berkeley fails; the 3 conv_with_input_dilation* are in the convbudget-stock run (still running). So stock dense is 49/51 pass here.
+
+## RESUME HERE (stockdense only; convbudget entries above unchanged)
+- stockdense: DONE, copied and verified (above). Nothing running from this run.
+- Next: coordinator decides if 2 Berkeley failures stay excluded; 3 conv_with_input_dilation* pending from convbudget-stock run.

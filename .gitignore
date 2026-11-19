@@ -11,3 +11,7 @@ experiments/streaming/build/
 build-scratch/
 experiments/area-nofraig/work/
 *.trace
+
+# model checkpoints (GBs), regenerable from run_config.py
+experiments/accuracy/checkpoints/
+experiments/accuracy/*.nohup

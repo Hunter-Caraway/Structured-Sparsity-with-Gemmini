@@ -1,0 +1,8 @@
+RUNNING started 2026-11-17T14:56:18-05:00
+START dense 1 2026-11-17T14:56:18-05:00 avail=8022MB
+END dense 1 2026-11-17T15:22:41-05:00 /home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261117-145622-mrpc-dense-s1
+START dense 2 2026-11-17T15:22:41-05:00 avail=7858MB
+END dense 2 2026-11-17T15:59:59-05:00 /home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261117-152243-mrpc-dense-s2
+START dense 3 2026-11-17T15:59:59-05:00 avail=7762MB
+END dense 3 2026-11-17T16:37:53-05:00 /home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261117-160001-mrpc-dense-s3
+START 2:4 1 2026-11-17T16:37:53-05:00 avail=7876MB

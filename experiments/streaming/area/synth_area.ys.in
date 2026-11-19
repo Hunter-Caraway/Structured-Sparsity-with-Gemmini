@@ -1,0 +1,18 @@
+# Yosys area script; @VARS@ are filled in by area_remote.sh. Same script and
+# settings for every config and library, so area ratios compare like with like.
+# SRAM macros (*_ext) are read with -lib: blackboxes with exact ports, no area.
+verilog_defines -DSYNTHESIS
+read_verilog -lib @MACROS@
+script @READ_SCRIPT@
+hierarchy -check -top @TOP@
+# Keep the hierarchy so per-module area is reported; stat weights by instance count.
+synth -top @TOP@
+# Latches would mean an RTL or parse problem; firtool output has none.
+select -assert-none t:$_DLATCH*
+dfflibmap -liberty @LIB@
+# One fixed abc setting for all runs: default liberty mapping, no delay target.
+abc -liberty @LIB@
+opt_clean
+hierarchy -top @TOP@
+tee -o @OUT@/stat.txt stat -liberty @LIB@ -top @TOP@
+tee -q -o @OUT@/stat.json stat -json -liberty @LIB@ -top @TOP@

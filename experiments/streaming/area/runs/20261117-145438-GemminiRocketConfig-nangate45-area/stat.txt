@@ -1,0 +1,4257 @@
+
+9. Printing statistics.
+
+=== XactTracker ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     6574        - wires
+    10765        - wire bits
+      276        - public wires
+     4467        - public wire bits
+       36        - ports
+      303        - port bits
+     6432 1.62E+04 cells
+       18   19.152   AND2_X1
+        5     6.65   AND3_X1
+        7   11.172   AND4_X1
+      149   198.17   AOI211_X1
+      179  190.456   AOI21_X1
+      306  488.376   AOI221_X1
+      214  455.392   AOI222_X1
+     2096 9.48E+03   DFF_X1
+      345   183.54   INV_X1
+     2262 4.21E+03   MUX2_X1
+       38   30.324   NAND2_X1
+        4    4.256   NAND3_X1
+        5     6.65   NAND4_X1
+      192  153.216   NOR2_X1
+        8    8.512   NOR3_X1
+        5     6.65   NOR4_X1
+        1     1.33   OAI211_X1
+      193  205.352   OAI21_X1
+       16   25.536   OAI221_X1
+      242   321.86   OAI22_X1
+      119  126.616   OR2_X1
+        2     2.66   OR3_X1
+       17   27.132   XNOR2_X1
+        9   14.364   XOR2_X1
+
+   Chip area for module '\XactTracker': 16177.322000
+     of which used for sequential elements: 9478.112000 (58.59%)
+
+=== BeatMerger ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+    11648        - wires
+    22213        - wire bits
+      114        - public wires
+    10648        - public wire bits
+       88        - ports
+      788        - port bits
+    12154 1.72E+04 cells
+      512  544.768   AND2_X1
+       81   107.73   AND3_X1
+        7   11.172   AND4_X1
+      192   255.36   AOI211_X1
+      928  987.392   AOI21_X1
+      143  228.228   AOI221_X1
+      103  219.184   AOI222_X1
+      407   541.31   AOI22_X1
+      583 2.64E+03   DFF_X1
+      517  275.044   INV_X1
+     3085  5744.27   MUX2_X1
+     1539 1.23E+03   NAND2_X1
+      142  151.088   NAND3_X1
+       22    29.26   NAND4_X1
+     1213  967.974   NOR2_X1
+      170   180.88   NOR3_X1
+       29    38.57   NOR4_X1
+      150    199.5   OAI211_X1
+     1130  1202.32   OAI21_X1
+      104  165.984   OAI221_X1
+       40    85.12   OAI222_X1
+      544   723.52   OAI22_X1
+       58  107.996   OAI33_X1
+      236  251.104   OR2_X1
+       36    47.88   OR3_X1
+       10    15.96   OR4_X1
+       98  156.408   XNOR2_X1
+       75    119.7   XOR2_X1
+
+   Chip area for module '\BeatMerger': 17222.170000
+     of which used for sequential elements: 2636.326000 (15.31%)
+
+=== StreamReader ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      369        - wires
+     2088        - wire bits
+      202        - public wires
+     1918        - public wire bits
+      159        - ports
+     1433        - port bits
+      170  538.384 cells
+        1     1.33   AND3_X1
+       84  379.848   DFF_X1
+       84  156.408   MUX2_X1
+        1    0.798   NAND2_X1
+        3        - submodules
+        1        -   BeatMerger
+        1        -   StreamReaderCore
+        1        -   XactTracker
+
+   Chip area for module '\StreamReader': 538.384000
+     of which used for sequential elements: 379.848000 (70.55%)
+
+=== Queue1_TLBundleAWithInfo_2 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      778        - wires
+     1691        - wire bits
+      101        - public wires
+     1014        - public wire bits
+       99        - ports
+      677        - port bits
+      677 2.15E+03 cells
+        1    1.064   AND2_X1
+        1    1.064   AOI21_X1
+      337 1.52E+03   DFF_X1
+        1    0.532   INV_X1
+      336  625.632   MUX2_X1
+        1    0.798   NOR2_X1
+
+   Chip area for module '\Queue1_TLBundleAWithInfo_2': 2153.004000
+     of which used for sequential elements: 1523.914000 (70.78%)
+
+=== Arbiter3_TLBundleAWithInfo ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1030        - wires
+     2153        - wire bits
+      193        - public wires
+     1316        - public wire bits
+      193        - ports
+     1316        - port bits
+     1176 1.06E+03 cells
+      140    186.2   AOI22_X1
+      338  179.816   INV_X1
+      357  284.886   NAND2_X1
+        3    2.394   NOR2_X1
+      160    212.8   OAI211_X1
+      176  187.264   OAI21_X1
+        2    2.128   OR2_X1
+
+   Chip area for module '\Arbiter3_TLBundleAWithInfo': 1055.488000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== Queue1_TLBundleAWithInfo_3 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      780        - wires
+     1693        - wire bits
+      103        - public wires
+     1016        - public wire bits
+      100        - ports
+      678        - port bits
+      678 2.15E+03 cells
+        1    1.064   AOI21_X1
+      337 1.52E+03   DFF_X1
+        1    0.532   INV_X1
+      336  625.632   MUX2_X1
+        2    1.596   NAND2_X1
+        1    1.064   OR2_X1
+
+   Chip area for module '\Queue1_TLBundleAWithInfo_3': 2153.802000
+     of which used for sequential elements: 1523.914000 (70.75%)
+
+=== StreamWriter ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+    10345        - wires
+    14091        - wire bits
+      417        - public wires
+     3946        - public wire bits
+       76        - ports
+     1028        - port bits
+    10191 1.77E+04 cells
+      188  200.032   AND2_X1
+       37    49.21   AND3_X1
+        7   11.172   AND4_X1
+      254   337.82   AOI211_X1
+     1013 1.08E+03   AOI21_X1
+       79  126.084   AOI221_X1
+        3    6.384   AOI222_X1
+      137   182.21   AOI22_X1
+     1454 6.57E+03   DFF_X1
+      739  393.148   INV_X1
+     2525  4701.55   MUX2_X1
+      650    518.7   NAND2_X1
+      156  165.984   NAND3_X1
+       24    31.92   NAND4_X1
+      581  463.638   NOR2_X1
+       60    63.84   NOR3_X1
+       26    34.58   NOR4_X1
+      205   272.65   OAI211_X1
+     1306 1.39E+03   OAI21_X1
+      174  277.704   OAI221_X1
+       18   38.304   OAI222_X1
+      129   171.57   OAI22_X1
+       10    18.62   OAI33_X1
+      182  193.648   OR2_X1
+       42    55.86   OR3_X1
+        3    4.788   OR4_X1
+      119  189.924   XNOR2_X1
+       70   111.72   XOR2_X1
+        4        - submodules
+        1        -   Arbiter3_TLBundleAWithInfo
+        1        -   Queue1_TLBundleAWithInfo_2
+        2        -   Queue1_TLBundleAWithInfo_3
+
+   Chip area for module '\StreamWriter': 17663.464000
+     of which used for sequential elements: 6574.988000 (37.22%)
+
+=== TLXbar_i2_o1_a32d128s5k4z4u ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      359        - wires
+     1336        - wire bits
+       73        - public wires
+     1050        - public wire bits
+       62        - ports
+     1030        - port bits
+      484  502.474 cells
+        3    3.192   AND2_X1
+        3     3.99   AND3_X1
+       16   17.024   AOI21_X1
+      193   256.69   AOI22_X1
+       12   54.264   DFF_X1
+      204  108.528   INV_X1
+        4    7.448   MUX2_X1
+        9    7.182   NAND2_X1
+        5     5.32   NAND3_X1
+        2     2.66   NAND4_X1
+        9    7.182   NOR2_X1
+        3    3.192   NOR3_X1
+        1     1.33   NOR4_X1
+        2     2.66   OAI211_X1
+        9    9.576   OAI21_X1
+        1    1.596   OAI221_X1
+        1     1.33   OAI22_X1
+        3    3.192   OR2_X1
+        1     1.33   OR3_X1
+        3    4.788   XNOR2_X1
+
+   Chip area for module '\TLXbar_i2_o1_a32d128s5k4z4u': 502.474000
+     of which used for sequential elements: 54.264000 (10.80%)
+
+=== TLBuffer_a32d128s4k4z4u ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       47        - wires
+      699        - wire bits
+       47        - public wires
+      699        - public wire bits
+       38        - ports
+      678        - port bits
+        2        - submodules
+        1        -   Queue2_TLBundleA_a32d128s4k4z4u
+        1        -   Queue2_TLBundleD_a32d128s4k4z4u
+
+   Chip area for module '\TLBuffer_a32d128s4k4z4u': 0.000000
+     of which used for sequential elements: 0.000000 (-nan%)
+
+=== Arbiter2_TLBundleAWithInfo ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      137        - wires
+      842        - wire bits
+      137        - public wires
+      842        - public wire bits
+      137        - ports
+      842        - port bits
+      337    492.1 cells
+      166  176.624   AND2_X1
+        1    0.532   INV_X1
+      168  312.816   MUX2_X1
+        2    2.128   OR2_X1
+
+   Chip area for module '\Arbiter2_TLBundleAWithInfo': 492.100000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== ram_2x191 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      777        - wires
+     1537        - wire bits
+       10        - public wires
+      770        - public wire bits
+        8        - ports
+      388        - port bits
+      958  2.8E+03 cells
+        1    1.064   AND2_X1
+      382 1.73E+03   DFF_X1
+        1    0.532   INV_X1
+      573 1.07E+03   MUX2_X1
+        1    0.798   NAND2_X1
+
+   Chip area for module '\ram_2x191': 2796.724000
+     of which used for sequential elements: 1727.404000 (61.77%)
+
+=== Queue2_TLBundleA_a32d128s4k4z4u ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       44        - wires
+      600        - wire bits
+       27        - public wires
+      583        - public wire bits
+       22        - ports
+      388        - port bits
+       20   28.994 cells
+        2     2.66   AOI211_X1
+        2    2.128   AOI21_X1
+        1    1.596   AOI221_X1
+        3   13.566   DFF_X1
+        6    3.192   INV_X1
+        2    1.596   NAND2_X1
+        2    1.596   NOR2_X1
+        1    1.064   OR2_X1
+        1    1.596   XNOR2_X1
+        1        - submodules
+        1        -   ram_2x191
+
+   Chip area for module '\Queue2_TLBundleA_a32d128s4k4z4u': 28.994000
+     of which used for sequential elements: 13.566000 (46.79%)
+
+=== ram_2x147 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      601        - wires
+     1185        - wire bits
+       10        - public wires
+      594        - public wire bits
+        8        - ports
+      300        - port bits
+      738 2.15E+03 cells
+        1    1.064   AND2_X1
+      294 1.33E+03   DFF_X1
+        1    0.532   INV_X1
+      441  821.142   MUX2_X1
+        1    0.798   NAND2_X1
+
+   Chip area for module '\ram_2x147': 2153.004000
+     of which used for sequential elements: 1329.468000 (61.75%)
+
+=== Queue2_TLBundleD_a32d128s4k4z4u ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       44        - wires
+      468        - wire bits
+       27        - public wires
+      451        - public wire bits
+       22        - ports
+      300        - port bits
+       20   28.994 cells
+        2     2.66   AOI211_X1
+        2    2.128   AOI21_X1
+        1    1.596   AOI221_X1
+        3   13.566   DFF_X1
+        6    3.192   INV_X1
+        2    1.596   NAND2_X1
+        2    1.596   NOR2_X1
+        1    1.064   OR2_X1
+        1    1.596   XNOR2_X1
+        1        - submodules
+        1        -   ram_2x147
+
+   Chip area for module '\Queue2_TLBundleD_a32d128s4k4z4u': 28.994000
+     of which used for sequential elements: 13.566000 (46.79%)
+
+=== TLBuffer_a32d128s4k4z4u_1 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       45        - wires
+      568        - wire bits
+       45        - public wires
+      568        - public wire bits
+       36        - ports
+      547        - port bits
+        2        - submodules
+        1        -   Queue2_TLBundleA_a32d128s4k4z4u
+        1        -   Queue2_TLBundleD_a32d128s4k4z4u
+
+   Chip area for module '\TLBuffer_a32d128s4k4z4u_1': 0.000000
+     of which used for sequential elements: 0.000000 (-nan%)
+
+=== Queue1_TLBundleAWithInfo ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      771        - wires
+     1683        - wire bits
+       98        - public wires
+     1010        - public wire bits
+       96        - ports
+      674        - port bits
+      673 2.14E+03 cells
+      336 1.52E+03   DFF_X1
+        1    0.532   INV_X1
+      335   623.77   MUX2_X1
+        1    0.798   NOR2_X1
+
+   Chip area for module '\Queue1_TLBundleAWithInfo': 2144.492000
+     of which used for sequential elements: 1519.392000 (70.85%)
+
+=== ram_2x192 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      781        - wires
+     1545        - wire bits
+       10        - public wires
+      774        - public wire bits
+        8        - ports
+      390        - port bits
+      963 2.81E+03 cells
+        1    1.064   AND2_X1
+      384 1.74E+03   DFF_X1
+        1    0.532   INV_X1
+      576 1.07E+03   MUX2_X1
+        1    0.798   NAND2_X1
+
+   Chip area for module '\ram_2x192': 2811.354000
+     of which used for sequential elements: 1736.448000 (61.77%)
+
+=== Queue2_TLBundleA_a32d128s5k4z4u ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       44        - wires
+      603        - wire bits
+       27        - public wires
+      586        - public wire bits
+       22        - ports
+      390        - port bits
+       20   28.994 cells
+        2     2.66   AOI211_X1
+        2    2.128   AOI21_X1
+        1    1.596   AOI221_X1
+        3   13.566   DFF_X1
+        6    3.192   INV_X1
+        2    1.596   NAND2_X1
+        2    1.596   NOR2_X1
+        1    1.064   OR2_X1
+        1    1.596   XNOR2_X1
+        1        - submodules
+        1        -   ram_2x192
+
+   Chip area for module '\Queue2_TLBundleA_a32d128s5k4z4u': 28.994000
+     of which used for sequential elements: 13.566000 (46.79%)
+
+=== ram_2x148 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      605        - wires
+     1193        - wire bits
+       10        - public wires
+      598        - public wire bits
+        8        - ports
+      302        - port bits
+      743 2.17E+03 cells
+        1    1.064   AND2_X1
+      296 1.34E+03   DFF_X1
+        1    0.532   INV_X1
+      444  826.728   MUX2_X1
+        1    0.798   NAND2_X1
+
+   Chip area for module '\ram_2x148': 2167.634000
+     of which used for sequential elements: 1338.512000 (61.75%)
+
+=== Queue2_TLBundleD_a32d128s5k4z4u ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       44        - wires
+      471        - wire bits
+       27        - public wires
+      454        - public wire bits
+       22        - ports
+      302        - port bits
+       20   28.994 cells
+        2     2.66   AOI211_X1
+        2    2.128   AOI21_X1
+        1    1.596   AOI221_X1
+        3   13.566   DFF_X1
+        6    3.192   INV_X1
+        2    1.596   NAND2_X1
+        2    1.596   NOR2_X1
+        1    1.064   OR2_X1
+        1    1.596   XNOR2_X1
+        1        - submodules
+        1        -   ram_2x148
+
+   Chip area for module '\Queue2_TLBundleD_a32d128s5k4z4u': 28.994000
+     of which used for sequential elements: 13.566000 (46.79%)
+
+=== TLBuffer_a32d128s5k4z4u ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       51        - wires
+      712        - wire bits
+       51        - public wires
+      712        - public wire bits
+       42        - ports
+      690        - port bits
+        2        - submodules
+        1        -   Queue2_TLBundleA_a32d128s5k4z4u
+        1        -   Queue2_TLBundleD_a32d128s5k4z4u
+
+   Chip area for module '\TLBuffer_a32d128s5k4z4u': 0.000000
+     of which used for sequential elements: 0.000000 (-nan%)
+
+=== ram_2x383 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1545        - wires
+     3073        - wire bits
+       10        - public wires
+     1538        - public wire bits
+        8        - ports
+      772        - port bits
+     1918 5.61E+03 cells
+        1    1.064   AND2_X1
+      766 3.46E+03   DFF_X1
+        1    0.532   INV_X1
+     1149 2.14E+03   MUX2_X1
+        1    0.798   NAND2_X1
+
+   Chip area for module '\ram_2x383': 5605.684000
+     of which used for sequential elements: 3463.852000 (61.79%)
+
+=== Queue2_ScratchpadMemWriteRequest ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      138        - wires
+     1037        - wire bits
+      121        - public wires
+     1020        - public wire bits
+      116        - ports
+      633        - port bits
+       20   28.994 cells
+        2     2.66   AOI211_X1
+        2    2.128   AOI21_X1
+        1    1.596   AOI221_X1
+        3   13.566   DFF_X1
+        6    3.192   INV_X1
+        2    1.596   NAND2_X1
+        2    1.596   NOR2_X1
+        1    1.064   OR2_X1
+        1    1.596   XNOR2_X1
+        1        - submodules
+        1        -   ram_2x383
+
+   Chip area for module '\Queue2_ScratchpadMemWriteRequest': 28.994000
+     of which used for sequential elements: 13.566000 (46.79%)
+
+=== ram_6x383 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     6152        - wires
+     9212        - wire bits
+       14        - public wires
+     3074        - public wire bits
+        8        - ports
+      776        - port bits
+     6521 1.82E+04 cells
+     2298 1.04E+04   DFF_X1
+        3    1.596   INV_X1
+     4213 7.84E+03   MUX2_X1
+        3     3.99   NAND4_X1
+        3     3.99   NOR4_X1
+        1    1.596   OR4_X1
+
+   Chip area for module '\ram_6x383': 18247.334000
+     of which used for sequential elements: 10391.556000 (56.95%)
+
+=== Queue6_ScratchpadMemWriteRequest ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      165        - wires
+     1205        - wire bits
+      127        - public wires
+     1163        - public wire bits
+      122        - ports
+      772        - port bits
+       41   68.362 cells
+        1     1.33   AND3_X1
+        1    1.596   AND4_X1
+        3     3.99   AOI211_X1
+        1    1.596   AOI221_X1
+        7   31.654   DFF_X1
+       11    5.852   INV_X1
+        2    1.596   NAND2_X1
+        2     2.66   NAND4_X1
+        2    1.596   NOR2_X1
+        1    1.064   NOR3_X1
+        1     1.33   NOR4_X1
+        1    1.064   OAI21_X1
+        3    5.586   OAI33_X1
+        2     2.66   OR3_X1
+        3    4.788   XNOR2_X1
+        1        - submodules
+        1        -   ram_6x383
+
+   Chip area for module '\Queue6_ScratchpadMemWriteRequest': 68.362000
+     of which used for sequential elements: 31.654000 (46.30%)
+
+=== ram_5x190 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     2491        - wires
+     3818        - wire bits
+       13        - public wires
+     1340        - public wire bits
+        8        - ports
+      390        - port bits
+     2668 7.49E+03 cells
+      950   4295.9   DFF_X1
+        3    1.596   INV_X1
+     1710  3184.02   MUX2_X1
+        2     2.66   NAND4_X1
+        2     2.66   NOR4_X1
+        1    1.596   OR4_X1
+
+   Chip area for module '\ram_5x190': 7488.432000
+     of which used for sequential elements: 4295.900000 (57.37%)
+
+=== Queue5_ScratchpadMemWriteRequest ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      162        - wires
+      822        - wire bits
+      118        - public wires
+      778        - public wire bits
+      112        - ports
+      579        - port bits
+       47   73.948 cells
+        2    2.128   AND2_X1
+        1    1.596   AND4_X1
+        4     5.32   AOI211_X1
+        7    7.448   AOI21_X1
+        7   31.654   DFF_X1
+        6    3.192   INV_X1
+        5     3.99   NAND2_X1
+        2     2.66   NAND4_X1
+        2    1.596   NOR2_X1
+        3    3.192   NOR3_X1
+        3     3.99   OAI211_X1
+        1     1.33   OAI22_X1
+        1    1.064   OR2_X1
+        3    4.788   XNOR2_X1
+        1        - submodules
+        1        -   ram_5x190
+
+   Chip area for module '\Queue5_ScratchpadMemWriteRequest': 73.948000
+     of which used for sequential elements: 31.654000 (42.81%)
+
+=== ram_5x258 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     3375        - wires
+     5178        - wire bits
+       13        - public wires
+     1816        - public wire bits
+        8        - ports
+      526        - port bits
+     3620 1.02E+04 cells
+     1290  5833.38   DFF_X1
+        3    1.596   INV_X1
+     2322 4.32E+03   MUX2_X1
+        2     2.66   NAND4_X1
+        2     2.66   NOR4_X1
+        1    1.596   OR4_X1
+
+   Chip area for module '\ram_5x258': 10165.456000
+     of which used for sequential elements: 5833.380000 (57.38%)
+
+=== Queue5_ScratchpadMemReadRequest ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      157        - wires
+      850        - wire bits
+      113        - public wires
+      806        - public wire bits
+      107        - ports
+      539        - port bits
+       47   73.948 cells
+        2    2.128   AND2_X1
+        1    1.596   AND4_X1
+        4     5.32   AOI211_X1
+        7    7.448   AOI21_X1
+        7   31.654   DFF_X1
+        6    3.192   INV_X1
+        5     3.99   NAND2_X1
+        2     2.66   NAND4_X1
+        2    1.596   NOR2_X1
+        3    3.192   NOR3_X1
+        3     3.99   OAI211_X1
+        1     1.33   OAI22_X1
+        1    1.064   OR2_X1
+        3    4.788   XNOR2_X1
+        1        - submodules
+        1        -   ram_5x258
+
+   Chip area for module '\Queue5_ScratchpadMemReadRequest': 73.948000
+     of which used for sequential elements: 31.654000 (42.81%)
+
+=== ZeroWriter ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      405        - wires
+      600        - wire bits
+       50        - public wires
+      233        - public wire bits
+       37        - ports
+      142        - port bits
+      392  718.732 cells
+       11   11.704   AND2_X1
+       21    27.93   AND3_X1
+        1     1.33   AOI211_X1
+       32   34.048   AOI21_X1
+        1     1.33   AOI22_X1
+       72  325.584   DFF_X1
+       19   10.108   INV_X1
+       69  128.478   MUX2_X1
+       30    23.94   NAND2_X1
+        5     5.32   NAND3_X1
+        3     3.99   NAND4_X1
+       37   29.526   NOR2_X1
+       14   14.896   NOR3_X1
+        2     2.66   OAI211_X1
+       29   30.856   OAI21_X1
+        1    1.596   OAI221_X1
+        1    1.862   OAI33_X1
+        7    7.448   OR2_X1
+       11    14.63   OR3_X1
+       20    31.92   XNOR2_X1
+        6    9.576   XOR2_X1
+
+   Chip area for module '\ZeroWriter': 718.732000
+     of which used for sequential elements: 325.584000 (45.30%)
+
+=== PixelRepeater ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      392        - wires
+      588        - wire bits
+       83        - public wires
+      265        - public wire bits
+       52        - ports
+      133        - port bits
+      348  705.166 cells
+       17   18.088   AND2_X1
+        2     2.66   AND3_X1
+        1     1.33   AOI211_X1
+       11   11.704   AOI21_X1
+        4     5.32   AOI22_X1
+       70   316.54   DFF_X1
+       13    6.916   INV_X1
+      117  217.854   MUX2_X1
+       26   20.748   NAND2_X1
+        3    3.192   NAND3_X1
+       24   19.152   NOR2_X1
+        3    3.192   NOR3_X1
+        4     5.32   NOR4_X1
+        1     1.33   OAI211_X1
+       16   17.024   OAI21_X1
+        1     1.33   OAI22_X1
+        4    4.256   OR2_X1
+        1     1.33   OR3_X1
+       20    31.92   XNOR2_X1
+       10    15.96   XOR2_X1
+
+   Chip area for module '\PixelRepeater': 705.166000
+     of which used for sequential elements: 316.540000 (44.89%)
+
+=== RRArbiter ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      793        - wires
+     2080        - wire bits
+       74        - public wires
+     1361        - public wire bits
+       66        - ports
+      600        - port bits
+      778   932.33 cells
+       55    58.52   AND2_X1
+       53    70.49   AOI211_X1
+       76   80.864   AOI21_X1
+       44   70.224   AOI221_X1
+        2     2.66   AOI22_X1
+        4   18.088   DFF_X1
+       22   11.704   INV_X1
+       44   81.928   MUX2_X1
+       22   17.556   NAND2_X1
+        5     5.32   NAND3_X1
+       10     7.98   NOR2_X1
+       28   29.792   NOR3_X1
+        2     2.66   NOR4_X1
+      126   167.58   OAI211_X1
+      145   154.28   OAI21_X1
+        6     7.98   OAI22_X1
+        2    3.724   OAI33_X1
+      130   138.32   OR2_X1
+        2     2.66   OR3_X1
+
+   Chip area for module '\RRArbiter': 932.330000
+     of which used for sequential elements: 18.088000 (1.94%)
+
+=== RoundAnyRawFNToRecFN_ie4_is8_oe8_os24 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       13        - wires
+       58        - wire bits
+        5        - public wires
+       50        - public wire bits
+        5        - ports
+       50        - port bits
+       19   14.098 cells
+        1    1.064   AOI21_X1
+        9    4.788   INV_X1
+        7    5.586   NOR2_X1
+        1    1.064   NOR3_X1
+        1    1.596   XNOR2_X1
+
+   Chip area for module '\RoundAnyRawFNToRecFN_ie4_is8_oe8_os24': 14.098000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== INToRecFN_i8_e8_s24 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       52        - wires
+      107        - wire bits
+        4        - public wires
+       57        - public wire bits
+        2        - ports
+       41        - port bits
+       57   64.372 cells
+        6    6.384   AND2_X1
+        2     2.66   AND3_X1
+        1     1.33   AOI211_X1
+        5     5.32   AOI21_X1
+        1     1.33   AOI22_X1
+       10     5.32   INV_X1
+        7   13.034   MUX2_X1
+        3    2.394   NAND2_X1
+        1    1.064   NAND3_X1
+        6    4.788   NOR2_X1
+        1    1.064   NOR3_X1
+        3    3.192   OAI21_X1
+        1    2.128   OAI222_X1
+        1     1.33   OAI22_X1
+        2    2.128   OR2_X1
+        1     1.33   OR3_X1
+        1    1.596   OR4_X1
+        2    3.192   XNOR2_X1
+        3    4.788   XOR2_X1
+        1        - submodules
+        1        -   RoundAnyRawFNToRecFN_ie4_is8_oe8_os24
+
+   Chip area for module '\INToRecFN_i8_e8_s24': 64.372000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== RecFNToIN_e8_s24_i8 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      117        - wires
+      158        - wire bits
+        4        - public wires
+       45        - public wire bits
+        3        - ports
+       44        - port bits
+      124  143.906 cells
+        4    4.256   AND2_X1
+        2     2.66   AND3_X1
+        6     7.98   AOI211_X1
+       10    10.64   AOI21_X1
+        2     2.66   AOI22_X1
+        9    4.788   INV_X1
+       13   24.206   MUX2_X1
+       13   10.374   NAND2_X1
+        4    4.256   NAND3_X1
+        2     2.66   NAND4_X1
+       14   11.172   NOR2_X1
+        4    4.256   NOR3_X1
+        8    10.64   NOR4_X1
+       12   12.768   OAI21_X1
+        3     3.99   OAI22_X1
+        1    1.862   OAI33_X1
+        4    4.256   OR2_X1
+        1     1.33   OR3_X1
+        2    3.192   OR4_X1
+        9   14.364   XNOR2_X1
+        1    1.596   XOR2_X1
+
+   Chip area for module '\RecFNToIN_e8_s24_i8': 143.906000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== ScalePipe ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      381        - wires
+      583        - wire bits
+       33        - public wires
+      213        - public wire bits
+       11        - ports
+       64        - port bits
+      378  665.532 cells
+        7    7.448   AND2_X1
+        2     2.66   AND3_X1
+        5     6.65   AOI211_X1
+       19   20.216   AOI21_X1
+        2    3.192   AOI221_X1
+        1    2.128   AOI222_X1
+        9    11.97   AOI22_X1
+       60   271.32   DFF_X1
+       50     26.6   INV_X1
+       96  178.752   MUX2_X1
+       21   16.758   NAND2_X1
+        8    8.512   NAND3_X1
+        1     1.33   NAND4_X1
+       25    19.95   NOR2_X1
+        6    6.384   NOR3_X1
+        3     3.99   NOR4_X1
+        6     7.98   OAI211_X1
+       33   35.112   OAI21_X1
+        2    3.192   OAI221_X1
+        2    4.256   OAI222_X1
+        9    11.97   OAI22_X1
+        4    4.256   OR2_X1
+        1     1.33   OR3_X1
+        1    1.596   OR4_X1
+        2    3.192   XNOR2_X1
+        3    4.788   XOR2_X1
+        3        - submodules
+        1        -   INToRecFN_i8_e8_s24
+        1        -   MulAddRecFN_e8_s24
+        1        -   RecFNToIN_e8_s24_i8
+
+   Chip area for module '\ScalePipe': 665.532000
+     of which used for sequential elements: 271.320000 (40.77%)
+
+=== VectorScalarMultiplier ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     5672        - wires
+     7651        - wire bits
+      561        - public wires
+     2540        - public wire bits
+       89        - ports
+      488        - port bits
+     5386  1.2E+04 cells
+       87   92.568   AND2_X1
+        5     6.65   AND3_X1
+        4    6.384   AND4_X1
+        1     1.33   AOI211_X1
+       60    63.84   AOI21_X1
+        3    4.788   AOI221_X1
+      226  480.928   AOI222_X1
+      280    372.4   AOI22_X1
+     1706 7.71E+03   DFF_X1
+      633  336.756   INV_X1
+      649 1.21E+03   MUX2_X1
+      766  611.268   NAND2_X1
+       60    63.84   NAND3_X1
+       18    23.94   NAND4_X1
+       77   61.446   NOR2_X1
+       21   22.344   NOR3_X1
+       16    21.28   NOR4_X1
+      106   140.98   OAI211_X1
+      656  697.984   OAI21_X1
+        2     2.66   OR3_X1
+        4    6.384   XNOR2_X1
+        6    9.576   XOR2_X1
+        8        - submodules
+        4        -   RRArbiter
+        4        -   ScalePipe
+
+   Chip area for module '\VectorScalarMultiplier': 11950.316000
+     of which used for sequential elements: 7714.532000 (64.56%)
+
+=== ram_2x257 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1041        - wires
+     2065        - wire bits
+       10        - public wires
+     1034        - public wire bits
+        8        - ports
+      520        - port bits
+     1288 3.76E+03 cells
+        1    1.064   AND2_X1
+      514 2.32E+03   DFF_X1
+        1    0.532   INV_X1
+      771 1.44E+03   MUX2_X1
+        1    0.798   NAND2_X1
+
+   Chip area for module '\ram_2x257': 3762.304000
+     of which used for sequential elements: 2324.308000 (61.78%)
+
+=== Queue2_VectorScalarMultiplierReq ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      166        - wires
+     1416        - wire bits
+      149        - public wires
+     1399        - public wire bits
+      144        - ports
+     1138        - port bits
+       20   28.994 cells
+        2     2.66   AOI211_X1
+        2    2.128   AOI21_X1
+        1    1.596   AOI221_X1
+        3   13.566   DFF_X1
+        6    3.192   INV_X1
+        2    1.596   NAND2_X1
+        2    1.596   NOR2_X1
+        1    1.064   OR2_X1
+        1    1.596   XNOR2_X1
+        1        - submodules
+        1        -   ram_2x257
+
+   Chip area for module '\Queue2_VectorScalarMultiplierReq': 28.994000
+     of which used for sequential elements: 13.566000 (46.79%)
+
+=== Pipeline ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      178        - wires
+     1254        - wire bits
+      178        - public wires
+     1254        - public wire bits
+      178        - ports
+     1254        - port bits
+
+=== VectorScalarMultiplier_1 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1587        - wires
+     3201        - wire bits
+      270        - public wires
+     1884        - public wire bits
+      180        - ports
+     1256        - port bits
+     1318 4.06E+03 cells
+        1    1.064   AND2_X1
+        3    3.192   AOI21_X1
+        1    1.596   AOI221_X1
+        2     2.66   AOI22_X1
+      626 2.83E+03   DFF_X1
+        8    4.256   INV_X1
+      616 1.15E+03   MUX2_X1
+       19   15.162   NAND2_X1
+        1    1.064   NAND3_X1
+        2     2.66   NAND4_X1
+        5     3.99   NOR2_X1
+        7    7.448   NOR3_X1
+        2     2.66   NOR4_X1
+        6     7.98   OAI211_X1
+        4    4.256   OAI21_X1
+        1    1.064   OR2_X1
+        1     1.33   OR3_X1
+        8   12.768   XNOR2_X1
+        5     7.98   XOR2_X1
+        1        - submodules
+        1        -   Pipeline
+
+   Chip area for module '\VectorScalarMultiplier_1': 4058.894000
+     of which used for sequential elements: 2830.772000 (69.74%)
+
+=== ram_2x625 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     2513        - wires
+     5009        - wire bits
+       10        - public wires
+     2506        - public wire bits
+        8        - ports
+     1256        - port bits
+     3128 9.15E+03 cells
+        1    1.064   AND2_X1
+     1250   5652.5   DFF_X1
+        1    0.532   INV_X1
+     1875  3491.25   MUX2_X1
+        1    0.798   NAND2_X1
+
+   Chip area for module '\ram_2x625': 9146.144000
+     of which used for sequential elements: 5652.500000 (61.80%)
+
+=== Queue2_VectorScalarMultiplierReq_1 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      210        - wires
+     2497        - wire bits
+      193        - public wires
+     2480        - public wire bits
+      188        - ports
+     1851        - port bits
+       20   28.994 cells
+        2     2.66   AOI211_X1
+        2    2.128   AOI21_X1
+        1    1.596   AOI221_X1
+        3   13.566   DFF_X1
+        6    3.192   INV_X1
+        2    1.596   NAND2_X1
+        2    1.596   NOR2_X1
+        1    1.064   OR2_X1
+        1    1.596   XNOR2_X1
+        1        - submodules
+        1        -   ram_2x625
+
+   Chip area for module '\Queue2_VectorScalarMultiplierReq_1': 28.994000
+     of which used for sequential elements: 13.566000 (46.79%)
+
+=== PixelRepeater_1 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1099        - wires
+     1734        - wire bits
+      134        - public wires
+      755        - public wire bits
+       85        - ports
+      374        - port bits
+     1132 2.32E+03 cells
+       90    95.76   AND2_X1
+       10     13.3   AND3_X1
+        2     2.66   AOI211_X1
+       15    15.96   AOI21_X1
+       11    14.63   AOI22_X1
+      191  863.702   DFF_X1
+        6    3.192   INV_X1
+      582 1.08E+03   MUX2_X1
+       76   60.648   NAND2_X1
+       10    10.64   NAND3_X1
+        1     1.33   NAND4_X1
+       40    31.92   NOR2_X1
+        3    3.192   NOR3_X1
+        4     5.32   NOR4_X1
+        1     1.33   OAI211_X1
+       52   55.328   OAI21_X1
+        1     1.33   OAI22_X1
+        4    4.256   OR2_X1
+        1     1.33   OR3_X1
+       19   30.324   XNOR2_X1
+       13   20.748   XOR2_X1
+
+   Chip area for module '\PixelRepeater_1': 2320.584000
+     of which used for sequential elements: 863.702000 (37.22%)
+
+=== Queue1_ScratchpadReadResp ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      280        - wires
+      662        - wire bits
+       15        - public wires
+      397        - public wire bits
+       11        - ports
+      265        - port bits
+      396 1.08E+03 cells
+        1     1.33   AOI211_X1
+        1    1.064   AOI21_X1
+      130   587.86   DFF_X1
+        2    1.064   INV_X1
+      258  480.396   MUX2_X1
+        2    1.596   NAND2_X1
+        1    1.064   NAND3_X1
+        1    1.064   OR2_X1
+
+   Chip area for module '\Queue1_ScratchpadReadResp': 1075.438000
+     of which used for sequential elements: 587.860000 (54.66%)
+
+=== mem ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+        7        - wires
+      287        - wire bits
+        7        - public wires
+      287        - public wire bits
+        7        - ports
+      287        - port bits
+        1        - cells
+        1        -   mem_ext
+
+   Area for cell type \mem_ext is unknown!
+
+=== ScratchpadBank ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       49        - wires
+      463        - wire bits
+       37        - public wires
+      440        - public wire bits
+       29        - ports
+      305        - port bits
+       25    41.23 cells
+        2    9.044   DFF_X1
+        4    2.128   INV_X1
+       12   22.344   MUX2_X1
+        2    1.596   NAND2_X1
+        1    0.798   NOR2_X1
+        2     2.66   OAI211_X1
+        1    1.064   OAI21_X1
+        1    1.596   XOR2_X1
+        2        - submodules
+        1        -   Queue1_ScratchpadReadResp
+        1        -   mem
+
+   Area for cell type \mem_ext is unknown!
+
+   Chip area for module '\ScratchpadBank': 41.230000
+     of which used for sequential elements: 9.044000 (21.94%)
+
+=== ram_4x129 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1308        - wires
+     2078        - wire bits
+       12        - public wires
+      782        - public wire bits
+        8        - ports
+      266        - port bits
+     1425 4.02E+03 cells
+      516 2.33E+03   DFF_X1
+        2    1.064   INV_X1
+      903 1.68E+03   MUX2_X1
+        2    2.128   NAND3_X1
+        1    1.064   NOR3_X1
+        1     1.33   OR3_X1
+
+   Chip area for module '\ram_4x129': 4020.324000
+     of which used for sequential elements: 2333.352000 (58.04%)
+
+=== Queue4_ScratchpadReadResp ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       41        - wires
+      427        - wire bits
+       16        - public wires
+      400        - public wire bits
+       10        - ports
+      264        - port bits
+       28   46.816 cells
+        2    2.128   AND2_X1
+        2     2.66   AND3_X1
+        3     3.99   AOI211_X1
+        3    3.192   AOI21_X1
+        5    22.61   DFF_X1
+        3    1.596   INV_X1
+        2    1.596   NAND2_X1
+        1     1.33   NAND4_X1
+        3    2.394   NOR2_X1
+        2    2.128   NOR3_X1
+        2    3.192   XNOR2_X1
+        1        - submodules
+        1        -   ram_4x129
+
+   Chip area for module '\Queue4_ScratchpadReadResp': 46.816000
+     of which used for sequential elements: 22.610000 (48.30%)
+
+=== ram_2x550 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     2213        - wires
+     4409        - wire bits
+       10        - public wires
+     2206        - public wire bits
+        8        - ports
+     1106        - port bits
+     2753 8.05E+03 cells
+        1    1.064   AND2_X1
+     1100   4974.2   DFF_X1
+        1    0.532   INV_X1
+     1650   3072.3   MUX2_X1
+        1    0.798   NAND2_X1
+
+   Chip area for module '\ram_2x550': 8048.894000
+     of which used for sequential elements: 4974.200000 (61.80%)
+
+=== Queue2_NormalizedInput ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       75        - wires
+     1814        - wire bits
+       58        - public wires
+     1797        - public wire bits
+       53        - ports
+     1243        - port bits
+       20   28.994 cells
+        2     2.66   AOI211_X1
+        2    2.128   AOI21_X1
+        1    1.596   AOI221_X1
+        3   13.566   DFF_X1
+        6    3.192   INV_X1
+        2    1.596   NAND2_X1
+        2    1.596   NOR2_X1
+        1    1.064   OR2_X1
+        1    1.596   XNOR2_X1
+        1        - submodules
+        1        -   ram_2x550
+
+   Chip area for module '\Queue2_NormalizedInput': 28.994000
+     of which used for sequential elements: 13.566000 (46.79%)
+
+=== RoundAnyRawFNToRecFN_ie6_is32_oe8_os24 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       84        - wires
+      155        - wire bits
+        5        - public wires
+       76        - public wire bits
+        5        - ports
+       76        - port bits
+      111  114.912 cells
+        8    8.512   AND2_X1
+        3     3.99   AND3_X1
+        4    6.384   AND4_X1
+        4     5.32   AOI211_X1
+       12   12.768   AOI21_X1
+       13    6.916   INV_X1
+        7    5.586   NAND2_X1
+        4    4.256   NAND3_X1
+        4     5.32   NAND4_X1
+       16   12.768   NOR2_X1
+       10    10.64   NOR3_X1
+        5     6.65   NOR4_X1
+       14   14.896   OAI21_X1
+        1     1.33   OR3_X1
+        5     7.98   XNOR2_X1
+        1    1.596   XOR2_X1
+
+   Chip area for module '\RoundAnyRawFNToRecFN_ie6_is32_oe8_os24': 114.912000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== INToRecFN_i32_e8_s24 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      315        - wires
+      444        - wire bits
+        4        - public wires
+      129        - public wire bits
+        2        - ports
+       65        - port bits
+      346   448.21 cells
+       13   13.832   AND2_X1
+        3     3.99   AND3_X1
+        5     6.65   AOI211_X1
+       17   18.088   AOI21_X1
+        1    1.596   AOI221_X1
+        7     9.31   AOI22_X1
+       24   12.768   INV_X1
+       98  182.476   MUX2_X1
+       42   33.516   NAND2_X1
+        3    3.192   NAND3_X1
+       34   27.132   NOR2_X1
+        5     5.32   NOR3_X1
+        1     1.33   NOR4_X1
+        6     7.98   OAI211_X1
+       19   20.216   OAI21_X1
+        5     7.98   OAI221_X1
+        1     1.33   OAI22_X1
+       13   13.832   OR2_X1
+        2     2.66   OR3_X1
+        5     7.98   OR4_X1
+       20    31.92   XNOR2_X1
+       22   35.112   XOR2_X1
+        1        - submodules
+        1        -   RoundAnyRawFNToRecFN_ie6_is32_oe8_os24
+
+   Chip area for module '\INToRecFN_i32_e8_s24': 448.210000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== MulAddRecFNToRaw_preMul_e8_s24 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      530        - wires
+      859        - wire bits
+       30        - public wires
+      359        - public wire bits
+       23        - ports
+      251        - port bits
+      604  725.116 cells
+       10    10.64   AND2_X1
+        4     5.32   AND3_X1
+        1    1.596   AND4_X1
+        8    10.64   AOI211_X1
+       57   60.648   AOI21_X1
+        1    1.596   AOI221_X1
+       26    34.58   AOI22_X1
+       39   20.748   INV_X1
+      101  188.062   MUX2_X1
+       99   79.002   NAND2_X1
+       12   12.768   NAND3_X1
+        2     2.66   NAND4_X1
+       40    31.92   NOR2_X1
+        5     5.32   NOR3_X1
+        7     9.31   NOR4_X1
+        2     2.66   OAI211_X1
+       80    85.12   OAI21_X1
+        2    3.192   OAI221_X1
+        4     5.32   OAI22_X1
+       18   19.152   OR2_X1
+        9    11.97   OR3_X1
+        1    1.596   OR4_X1
+       53   84.588   XNOR2_X1
+       23   36.708   XOR2_X1
+
+   Chip area for module '\MulAddRecFNToRaw_preMul_e8_s24': 725.116000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== MulAddRecFNToRaw_postMul_e8_s24 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1148        - wires
+     1283        - wire bits
+       28        - public wires
+      163        - public wire bits
+       25        - ports
+      148        - port bits
+     1162 1.37E+03 cells
+       25     26.6   AND2_X1
+        7     9.31   AND3_X1
+        7   11.172   AND4_X1
+       25    33.25   AOI211_X1
+      137  145.768   AOI21_X1
+       20    31.92   AOI221_X1
+        2    4.256   AOI222_X1
+       12    15.96   AOI22_X1
+       59   31.388   INV_X1
+      165   307.23   MUX2_X1
+      134  106.932   NAND2_X1
+       34   36.176   NAND3_X1
+       22    29.26   NAND4_X1
+      133  106.134   NOR2_X1
+       39   41.496   NOR3_X1
+       20     26.6   NOR4_X1
+       13    17.29   OAI211_X1
+      151  160.664   OAI21_X1
+       10    15.96   OAI221_X1
+        7     9.31   OAI22_X1
+        1    1.862   OAI33_X1
+       27   28.728   OR2_X1
+        9    11.97   OR3_X1
+        3    4.788   OR4_X1
+       73  116.508   XNOR2_X1
+       27   43.092   XOR2_X1
+
+   Chip area for module '\MulAddRecFNToRaw_postMul_e8_s24': 1373.624000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== RoundAnyRawFNToRecFN_ie8_is26_oe8_os24 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      469        - wires
+      818        - wire bits
+       20        - public wires
+      369        - public wire bits
+       11        - ports
+       84        - port bits
+      485  515.774 cells
+       20    21.28   AND2_X1
+        4     5.32   AND3_X1
+        3    4.788   AND4_X1
+       15    19.95   AOI211_X1
+       52   55.328   AOI21_X1
+        5     7.98   AOI221_X1
+       19    25.27   AOI22_X1
+       39   20.748   INV_X1
+       15    27.93   MUX2_X1
+       48   38.304   NAND2_X1
+       22   23.408   NAND3_X1
+       14    18.62   NAND4_X1
+       70    55.86   NOR2_X1
+       21   22.344   NOR3_X1
+        6     7.98   NOR4_X1
+       10     13.3   OAI211_X1
+       65    69.16   OAI21_X1
+        1    1.596   OAI221_X1
+        3     3.99   OAI22_X1
+        7   13.034   OAI33_X1
+       22   23.408   OR2_X1
+        8    10.64   OR3_X1
+        2    3.192   OR4_X1
+        8   12.768   XNOR2_X1
+        6    9.576   XOR2_X1
+
+   Chip area for module '\RoundAnyRawFNToRecFN_ie8_is26_oe8_os24': 515.774000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== RoundRawFNToRecFN_e8_s24 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       11        - wires
+       84        - wire bits
+       11        - public wires
+       84        - public wire bits
+       11        - ports
+       84        - port bits
+        1        - submodules
+        1        -   RoundAnyRawFNToRecFN_ie8_is26_oe8_os24
+
+   Chip area for module '\RoundRawFNToRecFN_e8_s24': 0.000000
+     of which used for sequential elements: 0.000000 (-nan%)
+
+=== MulAddRecFN_e8_s24 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     3596        - wires
+     4290        - wire bits
+       29        - public wires
+      291        - public wire bits
+        3        - ports
+       99        - port bits
+     3607 4.02E+03 cells
+      220   234.08   AND2_X1
+      122   162.26   AND3_X1
+        5     7.98   AND4_X1
+        2     2.66   AOI211_X1
+      342  363.888   AOI21_X1
+        1    1.596   AOI221_X1
+       26    34.58   AOI22_X1
+      238  126.616   INV_X1
+      631  503.538   NAND2_X1
+      106  112.784   NAND3_X1
+        7     9.31   NAND4_X1
+      438  349.524   NOR2_X1
+       29   30.856   NOR3_X1
+        1     1.33   NOR4_X1
+        5     6.65   OAI211_X1
+      235   250.04   OAI21_X1
+        7     9.31   OAI22_X1
+        4    7.448   OAI33_X1
+      124  131.936   OR2_X1
+       98   130.34   OR3_X1
+      473  754.908   XNOR2_X1
+      493  786.828   XOR2_X1
+        3        - submodules
+        1        -   MulAddRecFNToRaw_postMul_e8_s24
+        1        -   MulAddRecFNToRaw_preMul_e8_s24
+        1        -   RoundRawFNToRecFN_e8_s24
+
+   Chip area for module '\MulAddRecFN_e8_s24': 4018.462000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== RecFNToIN_e8_s24_i32 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      417        - wires
+      482        - wire bits
+        4        - public wires
+       69        - public wire bits
+        3        - ports
+       68        - port bits
+      448  514.976 cells
+       15    15.96   AND2_X1
+       21    27.93   AND3_X1
+        4    6.384   AND4_X1
+       44    58.52   AOI211_X1
+       34   36.176   AOI21_X1
+        1     1.33   AOI22_X1
+       25     13.3   INV_X1
+       14   26.068   MUX2_X1
+       39   31.122   NAND2_X1
+       25     26.6   NAND3_X1
+        6     7.98   NAND4_X1
+       35    27.93   NOR2_X1
+       13   13.832   NOR3_X1
+        6     7.98   NOR4_X1
+        4     5.32   OAI211_X1
+       70    74.48   OAI21_X1
+        2    3.192   OAI221_X1
+        8    10.64   OAI22_X1
+        1    1.862   OAI33_X1
+       16   17.024   OR2_X1
+        9    11.97   OR3_X1
+        4    6.384   OR4_X1
+       37   59.052   XNOR2_X1
+       15    23.94   XOR2_X1
+
+   Chip area for module '\RecFNToIN_e8_s24_i32': 514.976000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== Pipeline_1 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+    16821        - wires
+    26751        - wire bits
+      354        - public wires
+    10284        - public wire bits
+       74        - ports
+     2060        - port bits
+    16468 5.25E+04 cells
+        3    3.192   AND2_X1
+        1    1.596   AND4_X1
+        3    3.192   AOI21_X1
+     8224 3.72E+04   DFF_X1
+        4    2.128   INV_X1
+     8216 1.53E+04   MUX2_X1
+        2    1.596   NAND2_X1
+       13   10.374   NOR2_X1
+        1    1.064   NOR3_X1
+        1     1.33   NOR4_X1
+
+   Chip area for module '\Pipeline_1': 52511.592000
+     of which used for sequential elements: 37188.928000 (70.82%)
+
+=== AccumulatorScale ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      901        - wires
+     4878        - wire bits
+      188        - public wires
+     3647        - public wire bits
+       60        - ports
+     1199        - port bits
+     1367  1.5E+03 cells
+      521  554.344   AND2_X1
+        4     5.32   AND3_X1
+       12   19.152   AND4_X1
+        6     7.98   AOI211_X1
+       97  103.208   AOI21_X1
+        5     7.98   AOI221_X1
+        1    2.128   AOI222_X1
+        8    10.64   AOI22_X1
+       54   28.728   INV_X1
+       42   78.204   MUX2_X1
+       99   79.002   NAND2_X1
+       30    31.92   NAND3_X1
+      101   134.33   NAND4_X1
+       52   41.496   NOR2_X1
+       28   29.792   NOR3_X1
+      113   150.29   NOR4_X1
+        1     1.33   OAI211_X1
+      160   170.24   OAI21_X1
+        2    3.192   OAI221_X1
+        2    4.256   OAI222_X1
+        5     6.65   OAI22_X1
+       13   13.832   OR2_X1
+        4     5.32   OR3_X1
+        4    6.384   OR4_X1
+        3    4.788   XOR2_X1
+       49        - submodules
+       16        -   INToRecFN_i32_e8_s24
+       16        -   MulAddRecFN_e8_s24
+        1        -   Pipeline_1
+       16        -   RecFNToIN_e8_s24_i32
+
+   Chip area for module '\AccumulatorScale': 1500.506000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== AccPipe ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      157        - wires
+      343        - wire bits
+        5        - public wires
+      129        - public wire bits
+        4        - ports
+       97        - port bits
+      182   327.18 cells
+       10    10.64   AND2_X1
+        3     3.99   AND3_X1
+       14   14.896   AOI21_X1
+       32  144.704   DFF_X1
+        4    2.128   INV_X1
+       20    15.96   NAND2_X1
+        1    1.064   NAND3_X1
+       12    9.576   NOR2_X1
+        5     6.65   OAI211_X1
+       16   17.024   OAI21_X1
+        6    6.384   OR2_X1
+       34   54.264   XNOR2_X1
+       25     39.9   XOR2_X1
+
+   Chip area for module '\AccPipe': 327.180000
+     of which used for sequential elements: 144.704000 (44.23%)
+
+=== AccPipeShared ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1139        - wires
+     4611        - wire bits
+       83        - public wires
+     2563        - public wire bits
+       83        - ports
+     2563        - port bits
+     2048 1.91E+03 cells
+     1024  1361.92   AOI22_X1
+     1024  544.768   INV_X1
+       16        - submodules
+       16        -   AccPipe
+
+   Chip area for module '\AccPipeShared': 1906.688000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== mem_0 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+        9        - wires
+     1110        - wire bits
+        9        - public wires
+     1110        - public wire bits
+        9        - ports
+     1110        - port bits
+        1        - cells
+        1        -   mem_0_ext
+
+   Area for cell type \mem_0_ext is unknown!
+
+=== TwoPortSyncMem ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      103        - wires
+     1622        - wire bits
+      103        - public wires
+     1622        - public wire bits
+      102        - ports
+     1110        - port bits
+        1        - submodules
+        1        -   mem_0
+
+   Area for cell type \mem_0_ext is unknown!
+
+=== Queue1_AccumulatorReadResp ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1416        - wires
+     3397        - wire bits
+       57        - public wires
+     2038        - public wire bits
+       53        - ports
+     1359        - port bits
+     2037     5586 cells
+        1     1.33   AOI211_X1
+        1    1.064   AOI21_X1
+      677 3.06E+03   DFF_X1
+        2    1.064   INV_X1
+     1352 2.52E+03   MUX2_X1
+        1    0.798   NAND2_X1
+        1    0.798   NOR2_X1
+        1    1.064   OAI21_X1
+        1    1.064   OR2_X1
+
+   Chip area for module '\Queue1_AccumulatorReadResp': 5586.000000
+     of which used for sequential elements: 3061.394000 (54.80%)
+
+=== AccumulatorMem ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1808        - wires
+     6783        - wire bits
+      365        - public wires
+     4836        - public wire bits
+      170        - ports
+     2980        - port bits
+     1951 7.12E+03 cells
+        1    1.064   AND2_X1
+        6     7.98   AOI211_X1
+        1    1.064   AOI21_X1
+        2    3.192   AOI221_X1
+        8    10.64   AOI22_X1
+     1339 6.05E+03   DFF_X1
+       28   14.896   INV_X1
+      521  970.102   MUX2_X1
+        4    3.192   NAND2_X1
+        5     5.32   NAND3_X1
+        2     2.66   NAND4_X1
+        2    1.596   NOR2_X1
+        4     5.32   OAI211_X1
+        4    4.256   OAI21_X1
+        2    3.192   OAI221_X1
+        1    2.128   OAI222_X1
+        2     2.66   OAI22_X1
+        1    1.862   OAI33_X1
+        1    1.064   OR2_X1
+        2     2.66   OR3_X1
+        7   11.172   XNOR2_X1
+        8   12.768   XOR2_X1
+        2        - submodules
+        1        -   Queue1_AccumulatorReadResp
+        1        -   TwoPortSyncMem
+
+   Area for cell type \mem_0_ext is unknown!
+
+   Chip area for module '\AccumulatorMem': 7123.746000
+     of which used for sequential elements: 6054.958000 (85.00%)
+
+=== Scratchpad ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     5728        - wires
+    25143        - wire bits
+     1545        - public wires
+    17817        - public wire bits
+      479        - ports
+     4696        - port bits
+     7353 8.02E+03 cells
+      548  583.072   AND2_X1
+       18    23.94   AND3_X1
+        6    9.576   AND4_X1
+      135   179.55   AOI211_X1
+      784  834.176   AOI21_X1
+        3    4.788   AOI221_X1
+      112  238.336   AOI222_X1
+      683   908.39   AOI22_X1
+      906  481.992   INV_X1
+      871 1.62E+03   MUX2_X1
+     1250    997.5   NAND2_X1
+       31   32.984   NAND3_X1
+       14    18.62   NAND4_X1
+      442  352.716   NOR2_X1
+       19   20.216   NOR3_X1
+        6     7.98   NOR4_X1
+      219   291.27   OAI211_X1
+     1117 1.19E+03   OAI21_X1
+        1     1.33   OAI22_X1
+        2    3.724   OAI33_X1
+      141  150.024   OR2_X1
+       11    14.63   OR3_X1
+       20    31.92   XNOR2_X1
+       14   22.344   XOR2_X1
+       35        - submodules
+        1        -   AccPipeShared
+        2        -   AccumulatorMem
+        1        -   AccumulatorScale
+        1        -   PixelRepeater
+        1        -   PixelRepeater_1
+        1        -   Queue2_NormalizedInput
+        1        -   Queue2_ScratchpadMemWriteRequest
+        1        -   Queue2_VectorScalarMultiplierReq
+        1        -   Queue2_VectorScalarMultiplierReq_1
+        8        -   Queue4_ScratchpadReadResp
+        1        -   Queue5_ScratchpadMemReadRequest
+        1        -   Queue5_ScratchpadMemWriteRequest
+        2        -   Queue6_ScratchpadMemWriteRequest
+        4        -   ScratchpadBank
+        1        -   StreamReader
+        1        -   StreamWriter
+        1        -   TLBuffer_a32d128s4k4z4u
+        1        -   TLBuffer_a32d128s4k4z4u_1
+        1        -   TLBuffer_a32d128s5k4z4u
+        1        -   TLXbar_i2_o1_a32d128s5k4z4u
+        1        -   VectorScalarMultiplier
+        1        -   VectorScalarMultiplier_1
+        1        -   ZeroWriter
+
+   Area for cell type \mem_0_ext is unknown!
+   Area for cell type \mem_ext is unknown!
+
+   Chip area for module '\Scratchpad': 8019.368000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== CounterFile ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     8523        - wires
+    11263        - wire bits
+      102        - public wires
+     2842        - public wire bits
+       61        - ports
+      348        - port bits
+     8485 1.33E+04 cells
+      305   324.52   AND2_X1
+       92   122.36   AND3_X1
+       82  130.872   AND4_X1
+      325   432.25   AOI211_X1
+     1397 1.49E+03   AOI21_X1
+      263  419.748   AOI221_X1
+       37   78.736   AOI222_X1
+      561   746.13   AOI22_X1
+     1081 4.89E+03   DFF_X1
+      290   154.28   INV_X1
+      534  994.308   MUX2_X1
+      485   387.03   NAND2_X1
+       91   96.824   NAND3_X1
+       53    70.49   NAND4_X1
+      824  657.552   NOR2_X1
+      222  236.208   NOR3_X1
+       34    45.22   NOR4_X1
+      304   404.32   OAI211_X1
+     1288 1.37E+03   OAI21_X1
+       11   17.556   OAI221_X1
+        1    2.128   OAI222_X1
+       13    17.29   OAI22_X1
+        1    1.862   OAI33_X1
+      102  108.528   OR2_X1
+        9    11.97   OR3_X1
+        3    4.788   OR4_X1
+       28   44.688   XNOR2_X1
+       49   78.204   XOR2_X1
+
+   Chip area for module '\CounterFile': 13332.984000
+     of which used for sequential elements: 4888.282000 (36.66%)
+
+=== CounterController ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      212        - wires
+      693        - wire bits
+       65        - public wires
+      546        - public wire bits
+       61        - ports
+      412        - port bits
+      148  453.796 cells
+        5     5.32   AND2_X1
+        1    1.064   AOI21_X1
+       70   316.54   DFF_X1
+        1    0.532   INV_X1
+       69  128.478   MUX2_X1
+        1    0.798   NAND2_X1
+        1    1.064   OR2_X1
+        1        - submodules
+        1        -   CounterFile
+
+   Chip area for module '\CounterController': 453.796000
+     of which used for sequential elements: 316.540000 (69.75%)
+
+=== PMPChecker_s6 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1182        - wires
+     1702        - wire bits
+       61        - public wires
+      581        - public wire bits
+       61        - ports
+      581        - port bits
+     1124  1363.25 cells
+       22   23.408   AND2_X1
+        3     3.99   AND3_X1
+        5     7.98   AND4_X1
+       56    74.48   AOI211_X1
+       74   78.736   AOI21_X1
+        6    9.576   AOI221_X1
+        2    4.256   AOI222_X1
+       65    86.45   AOI22_X1
+      125     66.5   INV_X1
+       57   45.486   NAND2_X1
+       16   17.024   NAND3_X1
+       37    49.21   NAND4_X1
+       80    63.84   NOR2_X1
+       16   17.024   NOR3_X1
+       24    31.92   NOR4_X1
+       31    41.23   OAI211_X1
+       52   55.328   OAI21_X1
+       28   44.688   OAI221_X1
+       20    42.56   OAI222_X1
+      134   178.22   OAI22_X1
+        3    5.586   OAI33_X1
+       19   20.216   OR2_X1
+        7     9.31   OR3_X1
+        4    6.384   OR4_X1
+      237  378.252   XNOR2_X1
+        1    1.596   XOR2_X1
+
+   Chip area for module '\PMPChecker_s6': 1363.250000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== PMAChecker ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       82        - wires
+      197        - wire bits
+       23        - public wires
+      138        - public wire bits
+        9        - ports
+       48        - port bits
+       64    69.16 cells
+        3    3.192   AND2_X1
+        2     2.66   AND3_X1
+        1    1.596   AND4_X1
+        1     1.33   AOI211_X1
+        4    4.256   AOI21_X1
+        3    4.788   AOI221_X1
+        2     2.66   AOI22_X1
+        8    4.256   INV_X1
+        1    0.798   NAND2_X1
+        2    2.128   NAND3_X1
+        6    4.788   NOR2_X1
+        8    8.512   NOR3_X1
+        4     5.32   NOR4_X1
+        1     1.33   OAI211_X1
+        3    3.192   OAI21_X1
+        2     2.66   OAI22_X1
+        1    1.862   OAI33_X1
+        8    8.512   OR2_X1
+        4     5.32   OR3_X1
+
+   Chip area for module '\PMAChecker': 69.160000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== OptimizationBarrier_TLBEntryData ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       34        - wires
+       72        - wire bits
+       34        - public wires
+       72        - public wire bits
+       34        - ports
+       72        - port bits
+
+=== DTLB_2 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     2122        - wires
+     3749        - wire bits
+      253        - public wires
+     1880        - public wire bits
+       95        - ports
+      730        - port bits
+     1964 4.29E+03 cells
+        9    9.576   AND2_X1
+        6     7.98   AND3_X1
+        9   14.364   AND4_X1
+       18    23.94   AOI211_X1
+      133  141.512   AOI21_X1
+       29   46.284   AOI221_X1
+        8   17.024   AOI222_X1
+       21    27.93   AOI22_X1
+      499 2.26E+03   DFF_X1
+      124   65.968   INV_X1
+      557 1.04E+03   MUX2_X1
+       63   50.274   NAND2_X1
+       22   23.408   NAND3_X1
+       12    15.96   NAND4_X1
+      102   81.396   NOR2_X1
+       18   19.152   NOR3_X1
+       19    25.27   NOR4_X1
+       34    45.22   OAI211_X1
+       91   96.824   OAI21_X1
+       32   51.072   OAI221_X1
+       12   25.536   OAI222_X1
+       22    29.26   OAI22_X1
+        1    1.862   OAI33_X1
+       30    31.92   OR2_X1
+        6     7.98   OR3_X1
+        5     7.98   OR4_X1
+       42   67.032   XNOR2_X1
+       40    63.84   XOR2_X1
+        9        - submodules
+        7        -   OptimizationBarrier_TLBEntryData
+        1        -   PMAChecker
+        1        -   PMPChecker_s6
+
+   Chip area for module '\DTLB_2': 4292.176000
+     of which used for sequential elements: 2256.478000 (52.57%)
+
+=== DecoupledTLB ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      113        - wires
+      748        - wire bits
+      103        - public wires
+      738        - public wire bits
+       96        - ports
+      731        - port bits
+       12    15.96 cells
+        1     1.33   AND3_X1
+        1     1.33   AOI211_X1
+        1    1.064   AOI21_X1
+        1    4.522   DFF_X1
+        1    0.532   INV_X1
+        3    2.394   NOR2_X1
+        1    1.064   NOR3_X1
+        2    2.128   OR2_X1
+        1    1.596   OR4_X1
+        1        - submodules
+        1        -   DTLB_2
+
+   Chip area for module '\DecoupledTLB': 15.960000
+     of which used for sequential elements: 4.522000 (28.33%)
+
+=== RRArbiter_4 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       26        - wires
+      147        - wire bits
+       20        - public wires
+      141        - public wire bits
+       18        - ports
+      139        - port bits
+       53    90.44 cells
+        1    1.064   AND2_X1
+        1    4.522   DFF_X1
+        4    2.128   INV_X1
+       42   78.204   MUX2_X1
+        3    2.394   NAND2_X1
+        2    2.128   OAI21_X1
+
+   Chip area for module '\RRArbiter_4': 90.440000
+     of which used for sequential elements: 4.522000 (5.00%)
+
+=== FrontendTLB ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      814        - wires
+     1867        - wire bits
+      132        - public wires
+     1185        - public wire bits
+      101        - ports
+      802        - port bits
+      750  1.6E+03 cells
+        2    3.192   AND4_X1
+       36    47.88   AOI211_X1
+       63   67.032   AOI21_X1
+        9   14.364   AOI221_X1
+       17    22.61   AOI22_X1
+      225  1017.45   DFF_X1
+       64   34.048   INV_X1
+       64  119.168   MUX2_X1
+      135   107.73   NAND2_X1
+        3    3.192   NAND3_X1
+        9    11.97   NAND4_X1
+       42   33.516   NOR2_X1
+        4    4.256   NOR3_X1
+       11    14.63   NOR4_X1
+        7     9.31   OAI211_X1
+       13   20.748   OAI221_X1
+        1    2.128   OAI222_X1
+        7     9.31   OAI22_X1
+        6    6.384   OR2_X1
+        2     2.66   OR3_X1
+        1    1.596   OR4_X1
+       16   25.536   XNOR2_X1
+       13   20.748   XOR2_X1
+        2        - submodules
+        1        -   DecoupledTLB
+        1        -   RRArbiter_4
+
+   Chip area for module '\FrontendTLB': 1599.458000
+     of which used for sequential elements: 1017.450000 (63.61%)
+
+=== StreamReaderCore ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1562        - wires
+     3648        - wire bits
+      307        - public wires
+     2337        - public wire bits
+      101        - ports
+      980        - port bits
+     1292  2609.46 cells
+       41   43.624   AND2_X1
+       23    30.59   AND3_X1
+        1    1.596   AND4_X1
+        9    11.97   AOI211_X1
+       83   88.312   AOI21_X1
+        2    3.192   AOI221_X1
+       40     53.2   AOI22_X1
+      297 1.34E+03   DFF_X1
+       61   32.452   INV_X1
+      228  424.536   MUX2_X1
+       86   68.628   NAND2_X1
+       34   36.176   NAND3_X1
+        9    11.97   NAND4_X1
+       61   48.678   NOR2_X1
+       19   20.216   NOR3_X1
+        8    10.64   NOR4_X1
+        7     9.31   OAI211_X1
+      116  123.424   OAI21_X1
+        2    3.192   OAI221_X1
+        2    4.256   OAI222_X1
+        3     3.99   OAI22_X1
+        1    1.862   OAI33_X1
+       31   32.984   OR2_X1
+       10     13.3   OR3_X1
+        1    1.596   OR4_X1
+       72  114.912   XNOR2_X1
+       45    71.82   XOR2_X1
+        3        - submodules
+        1        -   Arbiter2_TLBundleAWithInfo
+        2        -   Queue1_TLBundleAWithInfo
+
+   Chip area for module '\StreamReaderCore': 2609.460000
+     of which used for sequential elements: 1343.034000 (51.47%)
+
+=== ReservationStation ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+    35406        - wires
+    43448        - wire bits
+     2302        - public wires
+    10344        - public wire bits
+      177        - ports
+     1082        - port bits
+    33812  6.9E+04 cells
+      462  491.568   AND2_X1
+      170    226.1   AND3_X1
+       85   135.66   AND4_X1
+      868  1154.44   AOI211_X1
+     1731 1.84E+03   AOI21_X1
+      736 1.17E+03   AOI221_X1
+      823 1.75E+03   AOI222_X1
+     1032  1372.56   AOI22_X1
+     7912 3.58E+04   DFF_X1
+     1977 1.05E+03   INV_X1
+     6062 1.13E+04   MUX2_X1
+     2586 2.06E+03   NAND2_X1
+      379  403.256   NAND3_X1
+      583   775.39   NAND4_X1
+     2069 1.65E+03   NOR2_X1
+      618  657.552   NOR3_X1
+      378   502.74   NOR4_X1
+      224   297.92   OAI211_X1
+     2711 2.88E+03   OAI21_X1
+      631 1.01E+03   OAI221_X1
+        5    10.64   OAI222_X1
+      707   940.31   OAI22_X1
+       88  163.856   OAI33_X1
+      242  257.488   OR2_X1
+       69    91.77   OR3_X1
+       61   97.356   OR4_X1
+      379  604.884   XNOR2_X1
+      224  357.504   XOR2_X1
+
+   Chip area for module '\ReservationStation': 69032.320000
+     of which used for sequential elements: 35778.064000 (51.83%)
+
+=== Pipeline_2 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      886        - wires
+     1706        - wire bits
+       33        - public wires
+      853        - public wire bits
+       19        - ports
+      429        - port bits
+      855 2.71E+03 cells
+        2    2.128   AOI21_X1
+      424 1.92E+03   DFF_X1
+        2    1.064   INV_X1
+      422  785.764   MUX2_X1
+        1    0.798   NAND2_X1
+        3    2.394   NOR2_X1
+        1     1.33   OR3_X1
+
+   Chip area for module '\Pipeline_2': 2710.806000
+     of which used for sequential elements: 1917.328000 (70.73%)
+
+=== LoopConvLdBias ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+    15193        - wires
+    16521        - wire bits
+       53        - public wires
+      758        - public wire bits
+       22        - ports
+      277        - port bits
+    15435 1.81E+04 cells
+      768  817.152   AND2_X1
+      320    425.6   AND3_X1
+       17   27.132   AND4_X1
+       52    69.16   AOI211_X1
+     1025   1090.6   AOI21_X1
+       16   25.536   AOI221_X1
+      154   204.82   AOI22_X1
+      196  886.312   DFF_X1
+      883  469.756   INV_X1
+      181  337.022   MUX2_X1
+     3105  2477.79   NAND2_X1
+      477  507.528   NAND3_X1
+       26    34.58   NAND4_X1
+     1562 1.25E+03   NOR2_X1
+      182  193.648   NOR3_X1
+       34    45.22   NOR4_X1
+       40     53.2   OAI211_X1
+     1303 1.39E+03   OAI21_X1
+       10    15.96   OAI221_X1
+      106   140.98   OAI22_X1
+        8   14.896   OAI33_X1
+      436  463.904   OR2_X1
+      295   392.35   OR3_X1
+        6    9.576   OR4_X1
+     2299 3.67E+03   XNOR2_X1
+     1934 3.09E+03   XOR2_X1
+        1        - submodules
+        1        -   Pipeline_2
+
+   Chip area for module '\LoopConvLdBias': 18091.458000
+     of which used for sequential elements: 886.312000 (4.90%)
+
+=== Pipeline_3 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1214        - wires
+     2354        - wire bits
+       37        - public wires
+     1177        - public wire bits
+       21        - ports
+      591        - port bits
+     1179 3.75E+03 cells
+        2    2.128   AOI21_X1
+      586 2.65E+03   DFF_X1
+        2    1.064   INV_X1
+      584 1.09E+03   MUX2_X1
+        1    0.798   NAND2_X1
+        3    2.394   NOR2_X1
+        1     1.33   OR3_X1
+
+   Chip area for module '\Pipeline_3': 3745.014000
+     of which used for sequential elements: 2649.892000 (70.76%)
+
+=== LoopConvLdInput ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+    32066        - wires
+    34639        - wire bits
+      127        - public wires
+     2360        - public wire bits
+       35        - ports
+      459        - port bits
+    32323 3.79E+04 cells
+     1250     1330   AND2_X1
+      708   941.64   AND3_X1
+       74  118.104   AND4_X1
+      136   180.88   AOI211_X1
+     2580  2745.12   AOI21_X1
+       22   35.112   AOI221_X1
+      385   512.05   AOI22_X1
+      369 1.67E+03   DFF_X1
+     1794  954.408   INV_X1
+      556 1.04E+03   MUX2_X1
+     5247 4.19E+03   NAND2_X1
+     1079 1.15E+03   NAND3_X1
+       68    90.44   NAND4_X1
+     3980  3176.04   NOR2_X1
+      792  842.688   NOR3_X1
+       34    45.22   NOR4_X1
+      181   240.73   OAI211_X1
+     2774 2.95E+03   OAI21_X1
+       26   41.496   OAI221_X1
+        1    2.128   OAI222_X1
+      214   284.62   OAI22_X1
+       71  132.202   OAI33_X1
+      868  923.552   OR2_X1
+      716   952.28   OR3_X1
+       26   41.496   OR4_X1
+     4694 7.49E+03   XNOR2_X1
+     3678 5.87E+03   XOR2_X1
+        1        - submodules
+        1        -   Pipeline_3
+
+   Chip area for module '\LoopConvLdInput': 37942.506000
+     of which used for sequential elements: 1668.618000 (4.40%)
+
+=== Pipeline_4 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1242        - wires
+     2410        - wire bits
+       37        - public wires
+     1205        - public wire bits
+       21        - ports
+      605        - port bits
+     1207  3834.39 cells
+        2    2.128   AOI21_X1
+      600   2713.2   DFF_X1
+        2    1.064   INV_X1
+      598 1.11E+03   MUX2_X1
+        1    0.798   NAND2_X1
+        3    2.394   NOR2_X1
+        1     1.33   OR3_X1
+
+   Chip area for module '\Pipeline_4': 3834.390000
+     of which used for sequential elements: 2713.200000 (70.76%)
+
+=== LoopConvLdWeight ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+    68946        - wires
+    70843        - wire bits
+       80        - public wires
+     1530        - public wire bits
+       30        - ports
+      380        - port bits
+    69249  7.9E+04 cells
+     3126 3.33E+03   AND2_X1
+     1418  1885.94   AND3_X1
+       37   59.052   AND4_X1
+      114   151.62   AOI211_X1
+     4433 4.72E+03   AOI21_X1
+       19   30.324   AOI221_X1
+      593   788.69   AOI22_X1
+      299 1.35E+03   DFF_X1
+     3878 2.06E+03   INV_X1
+      399  742.938   MUX2_X1
+    14646 1.17E+04   NAND2_X1
+     2108 2.24E+03   NAND3_X1
+       88   117.04   NAND4_X1
+     7434 5.93E+03   NOR2_X1
+      863  918.232   NOR3_X1
+       42    55.86   NOR4_X1
+      160    212.8   OAI211_X1
+     5777 6.15E+03   OAI21_X1
+       28   44.688   OAI221_X1
+      550    731.5   OAI22_X1
+       68  126.616   OAI33_X1
+     1902 2.02E+03   OR2_X1
+     1305  1735.65   OR3_X1
+        8   12.768   OR4_X1
+    10465 1.67E+04   XNOR2_X1
+     9489 1.51E+04   XOR2_X1
+        1        - submodules
+        1        -   Pipeline_4
+
+   Chip area for module '\LoopConvLdWeight': 78951.460000
+     of which used for sequential elements: 1352.078000 (1.71%)
+
+=== Pipeline_5 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1614        - wires
+     3130        - wire bits
+       49        - public wires
+     1565        - public wire bits
+       27        - ports
+      785        - port bits
+     1567  4983.51 cells
+        2    2.128   AOI21_X1
+      780  3527.16   DFF_X1
+        2    1.064   INV_X1
+      778 1.45E+03   MUX2_X1
+        1    0.798   NAND2_X1
+        3    2.394   NOR2_X1
+        1     1.33   OR3_X1
+
+   Chip area for module '\Pipeline_5': 4983.510000
+     of which used for sequential elements: 3527.160000 (70.78%)
+
+=== LoopConvExecute ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+    84349        - wires
+    87402        - wire bits
+      119        - public wires
+     2071        - public wire bits
+       41        - ports
+      464        - port bits
+    84762 9.66E+04 cells
+     3588 3.82E+03   AND2_X1
+     1988  2644.04   AND3_X1
+      119  189.924   AND4_X1
+      244   324.52   AOI211_X1
+     5683 6.05E+03   AOI21_X1
+       35    55.86   AOI221_X1
+      789  1049.37   AOI22_X1
+        1    0.798   BUF_X1
+      402 1.82E+03   DFF_X1
+     4786 2.55E+03   INV_X1
+      531  988.722   MUX2_X1
+    17149 1.37E+04   NAND2_X1
+     2635  2803.64   NAND3_X1
+      123   163.59   NAND4_X1
+     9286 7.41E+03   NOR2_X1
+     1299 1.38E+03   NOR3_X1
+       50     66.5   NOR4_X1
+      238   316.54   OAI211_X1
+     7276 7.74E+03   OAI21_X1
+       43   68.628   OAI221_X1
+      690    917.7   OAI22_X1
+      165   307.23   OAI33_X1
+     2461 2.62E+03   OR2_X1
+     1919  2552.27   OR3_X1
+       26   41.496   OR4_X1
+    12425  19830.3   XNOR2_X1
+    10811 1.73E+04   XOR2_X1
+        1        - submodules
+        1        -   Pipeline_5
+
+   Chip area for module '\LoopConvExecute': 96641.258000
+     of which used for sequential elements: 1817.844000 (1.88%)
+
+=== Pipeline_6 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1866        - wires
+     3626        - wire bits
+       53        - public wires
+     1813        - public wire bits
+       29        - ports
+      909        - port bits
+     1815 5.78E+03 cells
+        2    2.128   AOI21_X1
+      904 4.09E+03   DFF_X1
+        2    1.064   INV_X1
+      902 1.68E+03   MUX2_X1
+        1    0.798   NAND2_X1
+        3    2.394   NOR2_X1
+        1     1.33   OR3_X1
+
+   Chip area for module '\Pipeline_6': 5775.126000
+     of which used for sequential elements: 4087.888000 (70.78%)
+
+=== LoopConvSt ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+    37974        - wires
+    40886        - wire bits
+      101        - public wires
+     1863        - public wire bits
+       36        - ports
+      472        - port bits
+    38372 4.46E+04 cells
+     1779 1.89E+03   AND2_X1
+      960   1276.8   AND3_X1
+       68  108.528   AND4_X1
+       83   110.39   AOI211_X1
+     2540  2702.56   AOI21_X1
+       17   27.132   AOI221_X1
+      365   485.45   AOI22_X1
+      322 1.46E+03   DFF_X1
+     2026 1.08E+03   INV_X1
+      449  836.038   MUX2_X1
+     7773  6.2E+03   NAND2_X1
+     1308 1.39E+03   NAND3_X1
+       86   114.38   NAND4_X1
+     3766 3.01E+03   NOR2_X1
+      552  587.328   NOR3_X1
+       34    45.22   NOR4_X1
+       94   125.02   OAI211_X1
+     3284 3.49E+03   OAI21_X1
+       29   46.284   OAI221_X1
+      303   402.99   OAI22_X1
+       40    74.48   OAI33_X1
+     1104 1.17E+03   OR2_X1
+      820   1090.6   OR3_X1
+        8   12.768   OR4_X1
+     5652 9.02E+03   XNOR2_X1
+     4910  7836.36   XOR2_X1
+        1        - submodules
+        1        -   Pipeline_6
+
+   Chip area for module '\LoopConvSt': 44598.358000
+     of which used for sequential elements: 1456.084000 (3.26%)
+
+=== LoopConv ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+    20056        - wires
+    24340        - wire bits
+      371        - public wires
+     3775        - public wire bits
+      110        - ports
+      566        - port bits
+    20959 3.02E+04 cells
+      795   845.88   AND2_X1
+      375   498.75   AND3_X1
+       10    15.96   AND4_X1
+       33    43.89   AOI211_X1
+     1251 1.33E+03   AOI21_X1
+        2    3.192   AOI221_X1
+      119   158.27   AOI22_X1
+     1346 6.09E+03   DFF_X1
+      864  459.648   INV_X1
+     2514 4.68E+03   MUX2_X1
+     2928 2.34E+03   NAND2_X1
+      455   484.12   NAND3_X1
+       27    35.91   NAND4_X1
+     2312 1.84E+03   NOR2_X1
+      281  298.984   NOR3_X1
+       51    67.83   NOR4_X1
+       57    75.81   OAI211_X1
+     1297 1.38E+03   OAI21_X1
+       13   20.748   OAI221_X1
+       90    119.7   OAI22_X1
+       83  154.546   OAI33_X1
+      644  685.216   OR2_X1
+      352   468.16   OR3_X1
+       12   19.152   OR4_X1
+     2891 4.61E+03   XNOR2_X1
+     2157 3.44E+03   XOR2_X1
+        7        - submodules
+        1        -   Arbiter5_RoCCCommand
+        1        -   LoopConvExecute
+        1        -   LoopConvLdBias
+        1        -   LoopConvLdInput
+        1        -   LoopConvLdWeight
+        1        -   LoopConvSt
+        1        -   Queue2_GemminiCmd
+
+   Chip area for module '\LoopConv': 30172.646000
+     of which used for sequential elements: 6086.612000 (20.17%)
+
+=== LoopMatmulLdA ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     4312        - wires
+     4813        - wire bits
+       41        - public wires
+      512        - public wire bits
+       23        - ports
+      306        - port bits
+     4362 5.54E+03 cells
+      244  259.616   AND2_X1
+       98   130.34   AND3_X1
+       15    23.94   AND4_X1
+        7     9.31   AOI211_X1
+      373  396.872   AOI21_X1
+        5     7.98   AOI221_X1
+       58    77.14   AOI22_X1
+      158  714.476   DFF_X1
+      282  150.024   INV_X1
+      199  370.538   MUX2_X1
+      641  511.518   NAND2_X1
+      131  139.384   NAND3_X1
+       16    21.28   NAND4_X1
+      485   387.03   NOR2_X1
+       50     53.2   NOR3_X1
+       25    33.25   NOR4_X1
+       20     26.6   OAI211_X1
+      277  294.728   OAI21_X1
+        3    4.788   OAI221_X1
+        1    2.128   OAI222_X1
+       20     26.6   OAI22_X1
+      136  144.704   OR2_X1
+      103   136.99   OR3_X1
+        1    1.596   OR4_X1
+      523  834.708   XNOR2_X1
+      491  783.636   XOR2_X1
+
+   Chip area for module '\LoopMatmulLdA': 5542.376000
+     of which used for sequential elements: 714.476000 (12.89%)
+
+=== LoopMatmulLdB ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     5661        - wires
+     6192        - wire bits
+       42        - public wires
+      543        - public wire bits
+       23        - ports
+      307        - port bits
+     5705 7.01E+03 cells
+      316  336.224   AND2_X1
+      166   220.78   AND3_X1
+       12   19.152   AND4_X1
+       12    15.96   AOI211_X1
+      487  518.168   AOI21_X1
+        6    9.576   AOI221_X1
+        1    2.128   AOI222_X1
+       74    98.42   AOI22_X1
+      159  718.998   DFF_X1
+      344  183.008   INV_X1
+      185   344.47   MUX2_X1
+      910   726.18   NAND2_X1
+      159  169.176   NAND3_X1
+       11    14.63   NAND4_X1
+      674  537.852   NOR2_X1
+       68   72.352   NOR3_X1
+       17    22.61   NOR4_X1
+       12    15.96   OAI211_X1
+      394  419.216   OAI21_X1
+        4    6.384   OAI221_X1
+        1    2.128   OAI222_X1
+       25    33.25   OAI22_X1
+        2    3.724   OAI33_X1
+      177  188.328   OR2_X1
+      151   200.83   OR3_X1
+        2    3.192   OR4_X1
+      670  1069.32   XNOR2_X1
+      666 1.06E+03   XOR2_X1
+
+   Chip area for module '\LoopMatmulLdB': 7014.952000
+     of which used for sequential elements: 718.998000 (10.25%)
+
+=== LoopMatmulLdD ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     4403        - wires
+     4941        - wire bits
+       37        - public wires
+      501        - public wire bits
+       20        - ports
+      269        - port bits
+     4474  5607.28 cells
+      230   244.72   AND2_X1
+      135   179.55   AND3_X1
+       21   33.516   AND4_X1
+       37    49.21   AOI211_X1
+      372  395.808   AOI21_X1
+        5     7.98   AOI221_X1
+       71    94.43   AOI22_X1
+      153  691.866   DFF_X1
+      250      133   INV_X1
+      133  247.646   MUX2_X1
+      678  541.044   NAND2_X1
+      128  136.192   NAND3_X1
+       18    23.94   NAND4_X1
+      528  421.344   NOR2_X1
+       76   80.864   NOR3_X1
+       21    27.93   NOR4_X1
+       28    37.24   OAI211_X1
+      319  339.416   OAI21_X1
+        7   11.172   OAI221_X1
+       24    31.92   OAI22_X1
+        2    3.724   OAI33_X1
+      126  134.064   OR2_X1
+      128   170.24   OR3_X1
+        3    4.788   OR4_X1
+      550    877.8   XNOR2_X1
+      431  687.876   XOR2_X1
+
+   Chip area for module '\LoopMatmulLdD': 5607.280000
+     of which used for sequential elements: 691.866000 (12.34%)
+
+=== LoopMatmulExecute ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     6775        - wires
+     7529        - wire bits
+       67        - public wires
+      731        - public wire bits
+       36        - ports
+      363        - port bits
+     6858 8.39E+03 cells
+      367  390.488   AND2_X1
+      183   243.39   AND3_X1
+       28   44.688   AND4_X1
+       31    41.23   AOI211_X1
+      553  588.392   AOI21_X1
+        9   14.364   AOI221_X1
+      132   175.56   AOI22_X1
+      154  696.388   DFF_X1
+      350    186.2   INV_X1
+      217  404.054   MUX2_X1
+     1060   845.88   NAND2_X1
+      208  221.312   NAND3_X1
+       25    33.25   NAND4_X1
+      838  668.724   NOR2_X1
+      103  109.592   NOR3_X1
+       26    34.58   NOR4_X1
+       30     39.9   OAI211_X1
+      467  496.888   OAI21_X1
+        5     7.98   OAI221_X1
+       51    67.83   OAI22_X1
+        2    3.724   OAI33_X1
+      202  214.928   OR2_X1
+      166   220.78   OR3_X1
+        6    9.576   OR4_X1
+      844 1.35E+03   XNOR2_X1
+      801 1.28E+03   XOR2_X1
+
+   Chip area for module '\LoopMatmulExecute': 8385.118000
+     of which used for sequential elements: 696.388000 (8.31%)
+
+=== LoopMatmulStC ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     7840        - wires
+     8798        - wire bits
+       67        - public wires
+      919        - public wire bits
+       28        - ports
+      345        - port bits
+     7907  9583.98 cells
+      336  357.504   AND2_X1
+      198   263.34   AND3_X1
+       25     39.9   AND4_X1
+       57    75.81   AOI211_X1
+      635   675.64   AOI21_X1
+       11   17.556   AOI221_X1
+       13   27.664   AOI222_X1
+      100      133   AOI22_X1
+      199  899.878   DFF_X1
+      426  226.632   INV_X1
+      183  340.746   MUX2_X1
+     1394 1.11E+03   NAND2_X1
+      430   457.52   NAND3_X1
+       31    41.23   NAND4_X1
+      715   570.57   NOR2_X1
+      220   234.08   NOR3_X1
+       36    47.88   NOR4_X1
+       59    78.47   OAI211_X1
+      716  761.824   OAI21_X1
+       11   17.556   OAI221_X1
+        1    2.128   OAI222_X1
+       49    65.17   OAI22_X1
+        8   14.896   OAI33_X1
+      197  209.608   OR2_X1
+      191   254.03   OR3_X1
+        8   12.768   OR4_X1
+      970  1548.12   XNOR2_X1
+      688  1.1E+03   XOR2_X1
+
+   Chip area for module '\LoopMatmulStC': 9583.980000
+     of which used for sequential elements: 899.878000 (9.39%)
+
+=== LoopMatmulStCSpad ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     2425        - wires
+     2962        - wire bits
+       47        - public wires
+      524        - public wire bits
+       26        - ports
+      272        - port bits
+     2479 3.25E+03 cells
+      115   122.36   AND2_X1
+       65    86.45   AND3_X1
+        2    3.192   AND4_X1
+       23    30.59   AOI211_X1
+      178  189.392   AOI21_X1
+        7   11.172   AOI221_X1
+        1    2.128   AOI222_X1
+       63    83.79   AOI22_X1
+      119  538.118   DFF_X1
+      158   84.056   INV_X1
+       97  180.614   MUX2_X1
+      359  286.482   NAND2_X1
+       46   48.944   NAND3_X1
+       11    14.63   NAND4_X1
+      298  237.804   NOR2_X1
+       51   54.264   NOR3_X1
+       11    14.63   NOR4_X1
+       21    27.93   OAI211_X1
+      137  145.768   OAI21_X1
+       11   17.556   OAI221_X1
+        1    2.128   OAI222_X1
+       27    35.91   OAI22_X1
+       70    74.48   OR2_X1
+       45    59.85   OR3_X1
+        5     7.98   OR4_X1
+      329  525.084   XNOR2_X1
+      229  365.484   XOR2_X1
+
+   Chip area for module '\LoopMatmulStCSpad': 3250.786000
+     of which used for sequential elements: 538.118000 (16.55%)
+
+=== WeightedArbiter ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      105        - wires
+      534        - wire bits
+       23        - public wires
+      452        - public wire bits
+       22        - ports
+      451        - port bits
+      215  323.988 cells
+        2    2.128   AND2_X1
+        1     1.33   AOI211_X1
+        3    3.192   AOI21_X1
+        1    1.596   AOI221_X1
+        4     5.32   AOI22_X1
+       27   14.364   INV_X1
+      129  240.198   MUX2_X1
+        3    2.394   NAND2_X1
+        1    1.064   NAND3_X1
+        2     2.66   NAND4_X1
+        6    4.788   NOR2_X1
+        3    3.192   NOR3_X1
+       10     13.3   NOR4_X1
+        3     3.99   OAI211_X1
+        8    8.512   OAI21_X1
+        5     6.65   OAI22_X1
+        3    3.192   OR2_X1
+        1     1.33   OR3_X1
+        1    1.596   XNOR2_X1
+        2    3.192   XOR2_X1
+
+   Chip area for module '\WeightedArbiter': 323.988000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== Arbiter5_RoCCCommand ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      712        - wires
+     1504        - wire bits
+       30        - public wires
+      822        - public wire bits
+       30        - ports
+      822        - port bits
+      822  947.492 cells
+       36   38.304   AND2_X1
+       58    77.14   AOI211_X1
+       26   13.832   INV_X1
+      135   251.37   MUX2_X1
+       14   11.172   NAND2_X1
+      224  178.752   NOR2_X1
+      199  211.736   NOR3_X1
+       99   131.67   NOR4_X1
+       28   29.792   OAI21_X1
+        1    1.064   OR2_X1
+        2     2.66   OR3_X1
+
+   Chip area for module '\Arbiter5_RoCCCommand': 947.492000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== LoopMatmul ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     2904        - wires
+     6234        - wire bits
+      290        - public wires
+     3037        - public wire bits
+      108        - ports
+      559        - port bits
+     3436 8.02E+03 cells
+       79   84.056   AND2_X1
+       14    18.62   AND3_X1
+        6    9.576   AND4_X1
+       21    27.93   AOI211_X1
+      209  222.376   AOI21_X1
+        3    4.788   AOI221_X1
+        1    2.128   AOI222_X1
+       50     66.5   AOI22_X1
+      915  4137.63   DFF_X1
+      117   62.244   INV_X1
+     1576 2.93E+03   MUX2_X1
+       89   71.022   NAND2_X1
+       17   18.088   NAND3_X1
+       14    18.62   NAND4_X1
+      102   81.396   NOR2_X1
+       45    47.88   NOR3_X1
+       33    43.89   NOR4_X1
+       10     13.3   OAI211_X1
+       91   96.824   OAI21_X1
+        2     2.66   OAI22_X1
+        1    1.862   OAI33_X1
+       14   14.896   OR2_X1
+        6     7.98   OR3_X1
+        1    1.596   OR4_X1
+       13   20.748   XNOR2_X1
+        7   11.172   XOR2_X1
+        9        - submodules
+        1        -   Arbiter5_RoCCCommand
+        1        -   LoopMatmulExecute
+        1        -   LoopMatmulLdA
+        1        -   LoopMatmulLdB
+        1        -   LoopMatmulLdD
+        1        -   LoopMatmulStC
+        1        -   LoopMatmulStCSpad
+        1        -   Queue2_GemminiCmd
+        1        -   WeightedArbiter
+
+   Chip area for module '\LoopMatmul': 8022.294000
+     of which used for sequential elements: 4137.630000 (51.58%)
+
+=== ram_8x246 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     5439        - wires
+     7893        - wire bits
+       16        - public wires
+     2470        - public wire bits
+        8        - ports
+      502        - port bits
+     5669 1.58E+04 cells
+        1    1.596   AND4_X1
+     1968  8.9E+03   DFF_X1
+        3    1.596   INV_X1
+     3690  6870.78   MUX2_X1
+        7     9.31   NAND4_X1
+
+   Chip area for module '\ram_8x246': 15782.578000
+     of which used for sequential elements: 8899.296000 (56.39%)
+
+=== Queue8_GemminiCmd ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      136        - wires
+      817        - wire bits
+      102        - public wires
+      779        - public wire bits
+       97        - ports
+      525        - port bits
+       37   63.308 cells
+        1    1.064   AND2_X1
+        1     1.33   AOI211_X1
+        5     5.32   AOI21_X1
+        7   31.654   DFF_X1
+        4    2.128   INV_X1
+        4    3.192   NAND2_X1
+        4     5.32   NAND4_X1
+        4    3.192   NOR2_X1
+        2    2.128   OAI21_X1
+        3    4.788   XNOR2_X1
+        2    3.192   XOR2_X1
+        1        - submodules
+        1        -   ram_8x246
+
+   Chip area for module '\Queue8_GemminiCmd': 63.308000
+     of which used for sequential elements: 31.654000 (50.00%)
+
+=== DMACommandTracker ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      232        - wires
+      292        - wire bits
+       22        - public wires
+       82        - public wire bits
+       14        - ports
+       44        - port bits
+      220  385.434 cells
+        7    7.448   AND2_X1
+        2     2.66   AND3_X1
+        2     2.66   AOI211_X1
+        9    9.576   AOI21_X1
+        5     7.98   AOI221_X1
+        1     1.33   AOI22_X1
+       36  162.792   DFF_X1
+       28   14.896   INV_X1
+       36   67.032   MUX2_X1
+       17   13.566   NAND2_X1
+        4    4.256   NAND3_X1
+        4     5.32   NAND4_X1
+       20    15.96   NOR2_X1
+        2    2.128   NOR3_X1
+        5     6.65   NOR4_X1
+        3     3.99   OAI211_X1
+        7    7.448   OAI21_X1
+        4    6.384   OAI221_X1
+        4     5.32   OAI22_X1
+        1    1.862   OAI33_X1
+        2     2.66   OR3_X1
+        1    1.596   OR4_X1
+       15    23.94   XNOR2_X1
+        5     7.98   XOR2_X1
+
+   Chip area for module '\DMACommandTracker': 385.434000
+     of which used for sequential elements: 162.792000 (42.24%)
+
+=== LoadController ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     2231        - wires
+     3487        - wire bits
+      159        - public wires
+     1415        - public wire bits
+      119        - ports
+      591        - port bits
+     2200 3.63E+03 cells
+       47   50.008   AND2_X1
+       37    49.21   AND3_X1
+        2    3.192   AND4_X1
+        5     6.65   AOI211_X1
+      237  252.168   AOI21_X1
+       95   126.35   AOI22_X1
+      284 1.28E+03   DFF_X1
+       48   25.536   INV_X1
+      296  551.152   MUX2_X1
+      435   347.13   NAND2_X1
+       65    69.16   NAND3_X1
+       12    15.96   NAND4_X1
+       88   70.224   NOR2_X1
+       13   13.832   NOR3_X1
+       26    34.58   NOR4_X1
+        5     6.65   OAI211_X1
+      122  129.808   OAI21_X1
+        3    4.788   OAI221_X1
+        1    1.862   OAI33_X1
+       31   32.984   OR2_X1
+       19    25.27   OR3_X1
+      176  280.896   XNOR2_X1
+      153  244.188   XOR2_X1
+        2        - submodules
+        1        -   DMACommandTracker
+        1        -   Queue8_GemminiCmd
+
+   Chip area for module '\LoadController': 3625.846000
+     of which used for sequential elements: 1284.248000 (35.42%)
+
+=== ram_2x274 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1109        - wires
+     2201        - wire bits
+       10        - public wires
+     1102        - public wire bits
+        8        - ports
+      554        - port bits
+     1373 4.01E+03 cells
+        1    1.064   AND2_X1
+      548 2.48E+03   DFF_X1
+        1    0.532   INV_X1
+      822 1.53E+03   MUX2_X1
+        1    0.798   NAND2_X1
+
+   Chip area for module '\ram_2x274': 4011.014000
+     of which used for sequential elements: 2478.056000 (61.78%)
+
+=== Queue2_GemminiCmd ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      130        - wires
+      849        - wire bits
+      113        - public wires
+      832        - public wire bits
+      108        - ports
+      554        - port bits
+       20   28.994 cells
+        2     2.66   AOI211_X1
+        2    2.128   AOI21_X1
+        1    1.596   AOI221_X1
+        3   13.566   DFF_X1
+        6    3.192   INV_X1
+        2    1.596   NAND2_X1
+        2    1.596   NOR2_X1
+        1    1.064   OR2_X1
+        1    1.596   XNOR2_X1
+        1        - submodules
+        1        -   ram_2x274
+
+   Chip area for module '\Queue2_GemminiCmd': 28.994000
+     of which used for sequential elements: 13.566000 (46.79%)
+
+=== DMACommandTracker_1 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      246        - wires
+      308        - wire bits
+       21        - public wires
+       83        - public wire bits
+       13        - ports
+       37        - port bits
+      235  435.442 cells
+        2    2.128   AND2_X1
+        4     5.32   AND3_X1
+        1    1.596   AND4_X1
+        1    1.064   AOI21_X1
+       11   17.556   AOI221_X1
+        3     3.99   AOI22_X1
+       44  198.968   DFF_X1
+       21   11.172   INV_X1
+       37   68.894   MUX2_X1
+       24   19.152   NAND2_X1
+       18   19.152   NAND3_X1
+        1     1.33   NAND4_X1
+       12    9.576   NOR2_X1
+        9    9.576   NOR3_X1
+       11    14.63   NOR4_X1
+       11    14.63   OAI211_X1
+        4    4.256   OAI21_X1
+        3    4.788   OAI221_X1
+        1     1.33   OAI22_X1
+        1    1.064   OR2_X1
+        1     1.33   OR3_X1
+        2    3.192   OR4_X1
+        8   12.768   XNOR2_X1
+        5     7.98   XOR2_X1
+
+   Chip area for module '\DMACommandTracker_1': 435.442000
+     of which used for sequential elements: 198.968000 (45.69%)
+
+=== StoreController ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+    11012        - wires
+    11974        - wire bits
+      170        - public wires
+     1051        - public wire bits
+      118        - ports
+      545        - port bits
+    10956 1.27E+04 cells
+      467  496.888   AND2_X1
+      344   457.52   AND3_X1
+       20    31.92   AND4_X1
+      178   236.74   AOI211_X1
+      866  921.424   AOI21_X1
+       27   43.092   AOI221_X1
+       98   130.34   AOI22_X1
+        1    0.798   BUF_X1
+      157  709.954   DFF_X1
+      724  385.168   INV_X1
+       34   63.308   MUX2_X1
+     1960  1564.08   NAND2_X1
+      386  410.704   NAND3_X1
+       31    41.23   NAND4_X1
+     1353 1.08E+03   NOR2_X1
+      155   164.92   NOR3_X1
+       29    38.57   NOR4_X1
+       64    85.12   OAI211_X1
+      848  902.272   OAI21_X1
+       13   20.748   OAI221_X1
+       71    94.43   OAI22_X1
+       12   22.344   OAI33_X1
+      304  323.456   OR2_X1
+      238   316.54   OR3_X1
+       37   59.052   OR4_X1
+     1421 2.27E+03   XNOR2_X1
+     1118 1.78E+03   XOR2_X1
+        2        - submodules
+        1        -   DMACommandTracker_1
+        1        -   Queue2_GemminiCmd
+
+   Chip area for module '\StoreController': 12652.556000
+     of which used for sequential elements: 709.954000 (5.61%)
+
+=== MultiHeadedQueue ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      616        - wires
+     1303        - wire bits
+       31        - public wires
+      718        - public wire bits
+       19        - ports
+      430        - port bits
+      869 2.36E+03 cells
+        2     2.66   AND3_X1
+        1     1.33   AOI211_X1
+        4    4.256   AOI21_X1
+        1    1.596   AOI221_X1
+      286 1.29E+03   DFF_X1
+        2    1.064   INV_X1
+      564 1.05E+03   MUX2_X1
+        2    1.596   NAND2_X1
+        1    1.064   NAND3_X1
+        1    0.798   NOR2_X1
+        3    3.192   OAI21_X1
+        2    2.128   OR2_X1
+
+   Chip area for module '\MultiHeadedQueue': 2363.144000
+     of which used for sequential elements: 1293.292000 (54.73%)
+
+=== TransposePreloadUnroller ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      131        - wires
+      680        - wire bits
+       28        - public wires
+      577        - public wire bits
+       15        - ports
+      289        - port bits
+      246  308.294 cells
+        5     5.32   AND2_X1
+        1     1.33   AND3_X1
+        2    3.192   AND4_X1
+        2     2.66   AOI211_X1
+        2    2.128   AOI21_X1
+        3   13.566   DFF_X1
+       66   35.112   INV_X1
+       70   130.34   MUX2_X1
+       10     7.98   NAND2_X1
+        6    6.384   NAND3_X1
+        1     1.33   NAND4_X1
+        6    4.788   NOR2_X1
+        2    2.128   NOR3_X1
+        3     3.99   NOR4_X1
+        1    1.064   OAI21_X1
+        1    1.596   OAI221_X1
+       61    81.13   OAI22_X1
+        4    4.256   OR2_X1
+        1        - submodules
+        1        -   MultiHeadedQueue
+
+   Chip area for module '\TransposePreloadUnroller': 308.294000
+     of which used for sequential elements: 13.566000 (4.40%)
+
+=== MultiHeadedQueue_1 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     4210        - wires
+     6998        - wire bits
+       78        - public wires
+     2864        - public wire bits
+       26        - ports
+      569        - port bits
+     4554 1.05E+04 cells
+        6    6.384   AND2_X1
+        1     1.33   AND3_X1
+        3     3.99   AOI211_X1
+       16   17.024   AOI21_X1
+      249  397.404   AOI221_X1
+       47  100.016   AOI222_X1
+      937  1246.21   AOI22_X1
+     1146 5.18E+03   DFF_X1
+      100     53.2   INV_X1
+     1674 3.12E+03   MUX2_X1
+      275   219.45   NAND2_X1
+        1    1.064   NAND3_X1
+       14   11.172   NOR2_X1
+        6    6.384   NOR3_X1
+        4     5.32   NOR4_X1
+        1     1.33   OAI211_X1
+       59   62.776   OAI21_X1
+        5     5.32   OR2_X1
+        2     2.66   OR3_X1
+        4    6.384   XNOR2_X1
+        4    6.384   XOR2_X1
+
+   Chip area for module '\MultiHeadedQueue_1': 10453.002000
+     of which used for sequential elements: 5182.212000 (49.58%)
+
+=== ram_5x88 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1166        - wires
+     1779        - wire bits
+       13        - public wires
+      626        - public wire bits
+        8        - ports
+      186        - port bits
+     1241 3.47E+03 cells
+      440  1989.68   DFF_X1
+        3    1.596   INV_X1
+      792 1.47E+03   MUX2_X1
+        2    2.128   NAND3_X1
+        1     1.33   NAND4_X1
+        1    0.798   NOR2_X1
+        2     2.66   NOR4_X1
+
+   Chip area for module '\ram_5x88': 3472.896000
+     of which used for sequential elements: 1989.680000 (57.29%)
+
+=== Queue5_ComputeCntlSignals ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      135        - wires
+      336        - wire bits
+       92        - public wires
+      293        - public wire bits
+       86        - ports
+      196        - port bits
+       46   74.214 cells
+        1    1.064   AND2_X1
+        2    3.192   AND4_X1
+        5     6.65   AOI211_X1
+        5     5.32   AOI21_X1
+        7   31.654   DFF_X1
+        5     2.66   INV_X1
+        4    3.192   NAND2_X1
+        1    1.064   NAND3_X1
+        3     3.99   NAND4_X1
+        3    2.394   NOR2_X1
+        3    3.192   NOR3_X1
+        2     2.66   OAI211_X1
+        1    1.064   OAI21_X1
+        1     1.33   OAI22_X1
+        3    4.788   XNOR2_X1
+        1        - submodules
+        1        -   ram_5x88
+
+   Chip area for module '\Queue5_ComputeCntlSignals': 74.214000
+     of which used for sequential elements: 31.654000 (42.65%)
+
+=== PE ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       32        - wires
+       67        - wire bits
+        8        - public wires
+       43        - public wire bits
+        7        - ports
+       35        - port bits
+       24   65.968 cells
+        8   36.176   DFF_X1
+       16   29.792   MUX2_X1
+
+   Chip area for module '\PE': 65.968000
+     of which used for sequential elements: 36.176000 (54.84%)
+
+=== AlwaysOutTransposer ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      570        - wires
+     4384        - wire bits
+      549        - public wires
+     4360        - public wire bits
+       35        - ports
+      259        - port bits
+      149  277.172 cells
+        1     1.33   AND3_X1
+        1     1.33   AOI211_X1
+        4    4.256   AOI21_X1
+        5    22.61   DFF_X1
+        3    1.596   INV_X1
+      128  238.336   MUX2_X1
+        1     1.33   NAND4_X1
+        1    0.798   NOR2_X1
+        1    1.064   NOR3_X1
+        3    3.192   OAI21_X1
+        1     1.33   OR3_X1
+      256        - submodules
+      256        -   PE
+
+   Chip area for module '\AlwaysOutTransposer': 277.172000
+     of which used for sequential elements: 22.610000 (8.16%)
+
+=== MacUnit ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      466        - wires
+      530        - wire bits
+        4        - public wires
+       68        - public wire bits
+        4        - ports
+       68        - port bits
+      482  556.472 cells
+       24   25.536   AND2_X1
+       22    29.26   AND3_X1
+        9   14.364   AND4_X1
+        2     2.66   AOI211_X1
+       51   54.264   AOI21_X1
+       12    15.96   AOI22_X1
+       26   13.832   INV_X1
+       50     39.9   NAND2_X1
+       19   20.216   NAND3_X1
+        7     9.31   NAND4_X1
+       43   34.314   NOR2_X1
+        9    9.576   NOR3_X1
+        4     5.32   OAI211_X1
+       54   57.456   OAI21_X1
+        4     5.32   OAI22_X1
+        1    1.862   OAI33_X1
+       15    15.96   OR2_X1
+       23    30.59   OR3_X1
+        2    3.192   OR4_X1
+       47   75.012   XNOR2_X1
+       58   92.568   XOR2_X1
+
+   Chip area for module '\MacUnit': 556.472000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== PE_256 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      638        - wires
+     1080        - wire bits
+       32        - public wires
+      436        - public wire bits
+       20        - ports
+      122        - port bits
+      672   953.61 cells
+        8    8.512   AND2_X1
+        2     2.66   AND3_X1
+        2    3.192   AND4_X1
+        8    10.64   AOI211_X1
+       70    74.48   AOI21_X1
+       28   44.688   AOI221_X1
+       14   29.792   AOI222_X1
+       35    46.55   AOI22_X1
+       41  185.402   DFF_X1
+       51   27.132   INV_X1
+      117  217.854   MUX2_X1
+       72   57.456   NAND2_X1
+       28   29.792   NAND3_X1
+       12    15.96   NAND4_X1
+       49   39.102   NOR2_X1
+       17   18.088   NOR3_X1
+        4     5.32   NOR4_X1
+        7     9.31   OAI211_X1
+       64   68.096   OAI21_X1
+        4    6.384   OAI221_X1
+        7     9.31   OAI22_X1
+        1    1.862   OAI33_X1
+       13   13.832   OR2_X1
+        2     2.66   OR3_X1
+        8   12.768   XNOR2_X1
+        8   12.768   XOR2_X1
+        1        - submodules
+        1        -   MacUnit
+
+   Chip area for module '\PE_256': 953.610000
+     of which used for sequential elements: 185.402000 (19.44%)
+
+=== Tile ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       20        - wires
+      122        - wire bits
+       20        - public wires
+      122        - public wire bits
+       20        - ports
+      122        - port bits
+        1        - submodules
+        1        -   PE_256
+
+   Chip area for module '\Tile': 0.000000
+     of which used for sequential elements: 0.000000 (-nan%)
+
+=== Mesh ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+    32244        - wires
+    59418        - wire bits
+     4974        - public wires
+    32148        - public wire bits
+      182        - ports
+     1224        - port bits
+    27270 9.23E+04 cells
+    15622 7.06E+04   DFF_X1
+    11648 2.17E+04   MUX2_X1
+      256        - submodules
+      256        -   Tile
+
+   Chip area for module '\Mesh': 92331.260000
+     of which used for sequential elements: 70642.684000 (76.51%)
+
+=== TagQueue ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      967        - wires
+     1575        - wire bits
+      136        - public wires
+      738        - public wire bits
+       62        - ports
+      196        - port bits
+      871 1.89E+03 cells
+        9    9.576   AND2_X1
+        5     6.65   AND3_X1
+        8    10.64   AOI211_X1
+      110   117.04   AOI21_X1
+       44   70.224   AOI221_X1
+       12   25.536   AOI222_X1
+       84   111.72   AOI22_X1
+      237 1.07E+03   DFF_X1
+       34   18.088   INV_X1
+      115   214.13   MUX2_X1
+       18   14.364   NAND2_X1
+        2    2.128   NAND3_X1
+        7     9.31   NAND4_X1
+       15    11.97   NOR2_X1
+        7    7.448   NOR3_X1
+       36    47.88   OAI211_X1
+      116  123.424   OAI21_X1
+        4    4.256   OR2_X1
+        5     6.65   OR3_X1
+        1    1.596   OR4_X1
+        1    1.596   XNOR2_X1
+        1    1.596   XOR2_X1
+
+   Chip area for module '\TagQueue': 1887.536000
+     of which used for sequential elements: 1071.714000 (56.78%)
+
+=== ram_6x8 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      154        - wires
+      214        - wire bits
+       14        - public wires
+       74        - public wire bits
+        8        - ports
+       26        - port bits
+      148  392.616 cells
+        1    1.596   AND4_X1
+       48  217.056   DFF_X1
+        3    1.596   INV_X1
+       88  163.856   MUX2_X1
+        1    0.798   NAND2_X1
+        2    2.128   NAND3_X1
+        2     2.66   NAND4_X1
+        1    0.798   NOR2_X1
+        2    2.128   NOR3_X1
+
+   Chip area for module '\ram_6x8': 392.616000
+     of which used for sequential elements: 217.056000 (55.28%)
+
+=== Queue6_TagWithIdAndTotalRows ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       48        - wires
+       75        - wire bits
+       15        - public wires
+       38        - public wire bits
+       10        - ports
+       22        - port bits
+       36   62.776 cells
+        1    1.064   AND2_X1
+        5     6.65   AOI211_X1
+        5     5.32   AOI21_X1
+        7   31.654   DFF_X1
+        3    1.596   INV_X1
+        2    1.596   NAND2_X1
+        2    2.128   NAND3_X1
+        2     2.66   NAND4_X1
+        4    3.192   NOR2_X1
+        2    2.128   OAI21_X1
+        3    4.788   XNOR2_X1
+        1        - submodules
+        1        -   ram_6x8
+
+   Chip area for module '\Queue6_TagWithIdAndTotalRows': 62.776000
+     of which used for sequential elements: 31.654000 (50.42%)
+
+=== MeshWithDelays ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     8349        - wires
+    16554        - wire bits
+     1521        - public wires
+     8974        - public wire bits
+      138        - ports
+      921        - port bits
+     7632 2.96E+04 cells
+       30    31.92   AND2_X1
+        7     9.31   AND3_X1
+        2     2.66   AOI211_X1
+       17   18.088   AOI21_X1
+      131   174.23   AOI22_X1
+     5951 2.69E+04   DFF_X1
+      146   77.672   INV_X1
+     1108 2.06E+03   MUX2_X1
+       10     7.98   NAND2_X1
+        3    3.192   NAND3_X1
+        1     1.33   NAND4_X1
+       25    19.95   NOR2_X1
+       11   11.704   NOR3_X1
+        6     7.98   OAI211_X1
+      133  141.512   OAI21_X1
+        1     1.33   OAI22_X1
+        1    1.862   OAI33_X1
+       22   23.408   OR2_X1
+        2     2.66   OR3_X1
+        2    3.192   OR4_X1
+        9   14.364   XNOR2_X1
+       14   22.344   XOR2_X1
+        4        - submodules
+        1        -   AlwaysOutTransposer
+        1        -   Mesh
+        1        -   Queue6_TagWithIdAndTotalRows
+        1        -   TagQueue
+
+   Chip area for module '\MeshWithDelays': 29550.206000
+     of which used for sequential elements: 26910.422000 (91.07%)
+
+=== ExecuteController ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     5888        - wires
+    15370        - wire bits
+      669        - public wires
+     7443        - public wire bits
+      368        - ports
+     3861        - port bits
+     5947 7.76E+03 cells
+      192  204.288   AND2_X1
+       53    70.49   AND3_X1
+       28   44.688   AND4_X1
+      340    452.2   AOI211_X1
+      740   787.36   AOI21_X1
+      247  394.212   AOI221_X1
+      142  302.176   AOI222_X1
+      391   520.03   AOI22_X1
+        1    0.798   BUF_X1
+      161  728.042   DFF_X1
+      500      266   INV_X1
+      458  852.796   MUX2_X1
+      430   343.14   NAND2_X1
+      144  153.216   NAND3_X1
+      129   171.57   NAND4_X1
+      367  292.866   NOR2_X1
+      159  169.176   NOR3_X1
+      139   184.87   NOR4_X1
+       53    70.49   OAI211_X1
+      397  422.408   OAI21_X1
+       58   92.568   OAI221_X1
+        5    10.64   OAI222_X1
+       92   122.36   OAI22_X1
+        5     9.31   OAI33_X1
+       77   81.928   OR2_X1
+       30     39.9   OR3_X1
+        6    9.576   OR4_X1
+      312  497.952   XNOR2_X1
+      291  464.436   XOR2_X1
+        4        - submodules
+        1        -   MeshWithDelays
+        1        -   MultiHeadedQueue_1
+        1        -   Queue5_ComputeCntlSignals
+        1        -   TransposePreloadUnroller
+
+   Chip area for module '\ExecuteController': 7759.486000
+     of which used for sequential elements: 728.042000 (9.38%)
+
+=== Queue5_im2colRowSignals ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       14        - wires
+       16        - wire bits
+        5        - public wires
+        7        - public wire bits
+        4        - ports
+        4        - port bits
+       10    21.28 cells
+        1     1.33   AOI211_X1
+        1    1.064   AOI21_X1
+        3   13.566   DFF_X1
+        1    0.532   INV_X1
+        1    0.798   NOR2_X1
+        1    1.064   NOR3_X1
+        1     1.33   OR3_X1
+        1    1.596   XNOR2_X1
+
+   Chip area for module '\Queue5_im2colRowSignals': 21.280000
+     of which used for sequential elements: 13.566000 (63.75%)
+
+=== Im2Col ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1820        - wires
+     2466        - wire bits
+       94        - public wires
+      672        - public wire bits
+       38        - ports
+      247        - port bits
+     1779 2.57E+03 cells
+       51   54.264   AND2_X1
+       35    46.55   AND3_X1
+        8   12.768   AND4_X1
+       43    57.19   AOI211_X1
+      145   154.28   AOI21_X1
+       19   30.324   AOI221_X1
+        6   12.768   AOI222_X1
+       25    33.25   AOI22_X1
+      154  696.388   DFF_X1
+      100     53.2   INV_X1
+       69  128.478   MUX2_X1
+      257  205.086   NAND2_X1
+       33   35.112   NAND3_X1
+       10     13.3   NAND4_X1
+      179  142.842   NOR2_X1
+       28   29.792   NOR3_X1
+       18    23.94   NOR4_X1
+       41    54.53   OAI211_X1
+      130   138.32   OAI21_X1
+        6    9.576   OAI221_X1
+        1    2.128   OAI222_X1
+        7     9.31   OAI22_X1
+        1    1.862   OAI33_X1
+       53   56.392   OR2_X1
+       38    50.54   OR3_X1
+        7   11.172   OR4_X1
+      209  333.564   XNOR2_X1
+      106  169.176   XOR2_X1
+        1        - submodules
+        1        -   Queue5_im2colRowSignals
+
+   Chip area for module '\Im2Col': 2566.102000
+     of which used for sequential elements: 696.388000 (27.14%)
+
+=== Arbiter2_ScratchpadReadReq ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+        7        - wires
+       40        - wire bits
+        7        - public wires
+       40        - public wire bits
+        7        - ports
+       40        - port bits
+       12   22.344 cells
+       12   22.344   MUX2_X1
+
+   Chip area for module '\Arbiter2_ScratchpadReadReq': 22.344000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== Arbiter3_UInt6 ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+       16        - wires
+       36        - wire bits
+       10        - public wires
+       30        - public wire bits
+       10        - ports
+       30        - port bits
+       15   25.004 cells
+        1    0.532   INV_X1
+       12   22.344   MUX2_X1
+        1    0.798   NOR2_X1
+        1     1.33   OR3_X1
+
+   Chip area for module '\Arbiter3_UInt6': 25.004000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== Gemmini ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+     1059        - wires
+     7954        - wire bits
+     1029        - public wires
+     7924        - public wire bits
+      157        - ports
+     1327        - port bits
+       32    31.92 cells
+        5     6.65   AND3_X1
+        6    3.192   INV_X1
+        3    2.394   NAND2_X1
+        2    2.128   NAND3_X1
+        1     1.33   NAND4_X1
+        5     3.99   NOR2_X1
+        3    3.192   NOR3_X1
+        3     3.99   NOR4_X1
+        1     1.33   OAI211_X1
+        1    1.064   OAI21_X1
+        2     2.66   OR3_X1
+       17        - submodules
+        4        -   Arbiter2_ScratchpadReadReq
+        1        -   Arbiter3_UInt6
+        1        -   CounterController
+        1        -   ExecuteController
+        1        -   FrontendTLB
+        1        -   Im2Col
+        1        -   LoadController
+        1        -   LoopConv
+        1        -   LoopMatmul
+        2        -   Queue2_GemminiCmd
+        1        -   ReservationStation
+        1        -   Scratchpad
+        1        -   StoreController
+
+   Area for cell type \mem_0_ext is unknown!
+   Area for cell type \mem_ext is unknown!
+
+   Chip area for module '\Gemmini': 31.920000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+=== design hierarchy ===
+
+        +----------Count including submodules.
+        |        +-Area including submodules.
+        |        | 
+   996542 1.55E+06 Gemmini
+       12   22.344 Arbiter2_ScratchpadReadReq
+       15   25.004 Arbiter3_UInt6
+      148  453.796 CounterController
+     8485 1.33E+04   CounterFile
+     5947 7.76E+03 ExecuteController
+     7632 2.96E+04   MeshWithDelays
+      149  277.172     AlwaysOutTransposer
+       24   65.968       PE
+    27270 9.23E+04     Mesh
+      672   953.61         PE_256
+      482  556.472           MacUnit
+       36   62.776     Queue6_TagWithIdAndTotalRows
+      148  392.616       ram_6x8
+      871 1.89E+03     TagQueue
+     4554 1.05E+04   MultiHeadedQueue_1
+       46   74.214   Queue5_ComputeCntlSignals
+     1241 3.47E+03     ram_5x88
+      246  308.294   TransposePreloadUnroller
+      869 2.36E+03     MultiHeadedQueue
+      750  1.6E+03 FrontendTLB
+       12    15.96   DecoupledTLB
+     1964 4.29E+03     DTLB_2
+       64    69.16       PMAChecker
+     1124  1363.25       PMPChecker_s6
+       53    90.44   RRArbiter_4
+     1779 2.57E+03 Im2Col
+       10    21.28   Queue5_im2colRowSignals
+     2200 3.63E+03 LoadController
+      220  385.434   DMACommandTracker
+       37   63.308   Queue8_GemminiCmd
+     5669 1.58E+04     ram_8x246
+    20959 3.02E+04 LoopConv
+      822  947.492   Arbiter5_RoCCCommand
+    84762 9.66E+04   LoopConvExecute
+     1567  4983.51     Pipeline_5
+    15435 1.81E+04   LoopConvLdBias
+      855 2.71E+03     Pipeline_2
+    32323 3.79E+04   LoopConvLdInput
+     1179 3.75E+03     Pipeline_3
+    69249  7.9E+04   LoopConvLdWeight
+     1207  3834.39     Pipeline_4
+    38372 4.46E+04   LoopConvSt
+     1815 5.78E+03     Pipeline_6
+       20   28.994   Queue2_GemminiCmd
+     1373 4.01E+03     ram_2x274
+     3436 8.02E+03 LoopMatmul
+      822  947.492   Arbiter5_RoCCCommand
+     6858 8.39E+03   LoopMatmulExecute
+     4362 5.54E+03   LoopMatmulLdA
+     5705 7.01E+03   LoopMatmulLdB
+     4474  5607.28   LoopMatmulLdD
+     7907  9583.98   LoopMatmulStC
+     2479 3.25E+03   LoopMatmulStCSpad
+       20   28.994   Queue2_GemminiCmd
+     1373 4.01E+03     ram_2x274
+      215  323.988   WeightedArbiter
+       20   28.994 Queue2_GemminiCmd
+     1373 4.01E+03   ram_2x274
+    33812  6.9E+04 ReservationStation
+     7353 8.02E+03 Scratchpad
+     2048 1.91E+03   AccPipeShared
+      182   327.18     AccPipe
+     1951 7.12E+03   AccumulatorMem
+     2037     5586     Queue1_AccumulatorReadResp
+        1        -       mem_0
+     1367  1.5E+03   AccumulatorScale
+      346   448.21     INToRecFN_i32_e8_s24
+      111  114.912       RoundAnyRawFNToRecFN_ie6_is32_oe8_os24
+     3607 4.02E+03     MulAddRecFN_e8_s24
+     1162 1.37E+03       MulAddRecFNToRaw_postMul_e8_s24
+      604  725.116       MulAddRecFNToRaw_preMul_e8_s24
+      485  515.774         RoundAnyRawFNToRecFN_ie8_is26_oe8_os24
+    16468 5.25E+04     Pipeline_1
+      448  514.976     RecFNToIN_e8_s24_i32
+      348  705.166   PixelRepeater
+     1132 2.32E+03   PixelRepeater_1
+       20   28.994   Queue2_NormalizedInput
+     2753 8.05E+03     ram_2x550
+       20   28.994   Queue2_ScratchpadMemWriteRequest
+     1918 5.61E+03     ram_2x383
+       20   28.994   Queue2_VectorScalarMultiplierReq
+     1288 3.76E+03     ram_2x257
+       20   28.994   Queue2_VectorScalarMultiplierReq_1
+     3128 9.15E+03     ram_2x625
+       28   46.816   Queue4_ScratchpadReadResp
+     1425 4.02E+03     ram_4x129
+       47   73.948   Queue5_ScratchpadMemReadRequest
+     3620 1.02E+04     ram_5x258
+       47   73.948   Queue5_ScratchpadMemWriteRequest
+     2668 7.49E+03     ram_5x190
+       41   68.362   Queue6_ScratchpadMemWriteRequest
+     6521 1.82E+04     ram_6x383
+       25    41.23   ScratchpadBank
+      396 1.08E+03     Queue1_ScratchpadReadResp
+        1        -     mem
+      170  538.384   StreamReader
+    12154 1.72E+04     BeatMerger
+     1292  2609.46     StreamReaderCore
+      337    492.1       Arbiter2_TLBundleAWithInfo
+      673 2.14E+03       Queue1_TLBundleAWithInfo
+     6432 1.62E+04     XactTracker
+    10191 1.77E+04   StreamWriter
+     1176 1.06E+03     Arbiter3_TLBundleAWithInfo
+      677 2.15E+03     Queue1_TLBundleAWithInfo_2
+      678 2.15E+03     Queue1_TLBundleAWithInfo_3
+       20   28.994     Queue2_TLBundleA_a32d128s4k4z4u
+      958  2.8E+03       ram_2x191
+       20   28.994     Queue2_TLBundleD_a32d128s4k4z4u
+      738 2.15E+03       ram_2x147
+       20   28.994     Queue2_TLBundleA_a32d128s4k4z4u
+      958  2.8E+03       ram_2x191
+       20   28.994     Queue2_TLBundleD_a32d128s4k4z4u
+      738 2.15E+03       ram_2x147
+       20   28.994     Queue2_TLBundleA_a32d128s5k4z4u
+      963 2.81E+03       ram_2x192
+       20   28.994     Queue2_TLBundleD_a32d128s5k4z4u
+      743 2.17E+03       ram_2x148
+      484  502.474   TLXbar_i2_o1_a32d128s5k4z4u
+     5386  1.2E+04   VectorScalarMultiplier
+      778   932.33     RRArbiter
+      378  665.532     ScalePipe
+       57   64.372       INToRecFN_i8_e8_s24
+       19   14.098         RoundAnyRawFNToRecFN_ie4_is8_oe8_os24
+     3607 4.02E+03       MulAddRecFN_e8_s24
+     1162 1.37E+03         MulAddRecFNToRaw_postMul_e8_s24
+      604  725.116         MulAddRecFNToRaw_preMul_e8_s24
+      485  515.774           RoundAnyRawFNToRecFN_ie8_is26_oe8_os24
+      124  143.906       RecFNToIN_e8_s24_i8
+     1318 4.06E+03   VectorScalarMultiplier_1
+      392  718.732   ZeroWriter
+    10956 1.27E+04 StoreController
+      235  435.442   DMACommandTracker_1
+       20   28.994   Queue2_GemminiCmd
+     1373 4.01E+03     ram_2x274
+
+        +----------Count including submodules.
+        |        +-Area including submodules.
+        |        | 
+   984790        - wires
+  1458172        - wire bits
+    43597        - public wires
+   482241        - public wire bits
+    23869        - ports
+   209557        - port bits
+        -        - memories
+        -        - memory bits
+        -        - processes
+   996542 1.55E+06 cells
+    31653 3.37E+04   AND2_X1
+    17015 2.26E+04   AND3_X1
+     3996 6.38E+03   AND4_X1
+     8373 1.11E+04   AOI211_X1
+    73618 7.83E+04   AOI21_X1
+    10278 1.64E+04   AOI221_X1
+     5380 1.14E+04   AOI222_X1
+    23242 3.09E+04   AOI22_X1
+        3    2.394   BUF_X1
+    98889 4.47E+05   DFF_X1
+    54462  2.9E+04   INV_X1
+   139505  2.6E+05   MUX2_X1
+   119287 9.52E+04   NAND2_X1
+    26990 2.87E+04   NAND3_X1
+     7624 1.01E+04   NAND4_X1
+    79472 6.34E+04   NOR2_X1
+    15804 1.68E+04   NOR3_X1
+     3507  4664.31   NOR4_X1
+     6844  9102.52   OAI211_X1
+    78636 8.37E+04   OAI21_X1
+     2701 4.31E+03   OAI221_X1
+      126  268.128   OAI222_X1
+     7668 1.02E+04   OAI22_X1
+     1425  2653.35   OAI33_X1
+    22135 2.36E+04   OR2_X1
+    15876 2.11E+04   OR3_X1
+     1057 1.69E+03   OR4_X1
+    73462 1.17E+05   XNOR2_X1
+    67508 1.08E+05   XOR2_X1
+        2        -   mem_0_ext
+        4        -   mem_ext
+       17 1.55E+06 submodules
+        4   89.376   Arbiter2_ScratchpadReadReq
+        1   25.004   Arbiter3_UInt6
+        1 1.38E+04   CounterController
+        1 5.52E+05   ExecuteController
+        1 7.43E+03   FrontendTLB
+        1 2.59E+03   Im2Col
+        1 1.99E+04   LoadController
+        1 3.32E+05   LoopConv
+        1 5.27E+04   LoopMatmul
+        2 2.02E+04   Queue2_GemminiCmd
+        1  6.9E+04   ReservationStation
+        1 4.72E+05   Scratchpad
+        1 1.71E+04   StoreController
+
+   Area for cell type \mem_0_ext is unknown!
+   Area for cell type \mem_ext is unknown!
+
+   Chip area for top module '\Gemmini': 1547317.212000
+     of which used for sequential elements: 447176.058000 (28.90%)
+

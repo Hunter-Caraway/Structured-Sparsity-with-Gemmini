@@ -71,3 +71,12 @@ run folders `investigate/runs/<stamp>-microloop-spike`, `<stamp>-microloop-srv`.
   4. Each log must end `microloop done: 32 of 32 checks verified -> ALL VERIFIED` (s1: 16 of 16); use rep=1 lines.
      Table: layout x shape x chip: ex_active, cyc_per_compute, total, verified. Gain L0 vs L3 / L3i and vs L4.
      Check `issue` vs `total` on the dense lines (dense I=5 stream may exceed L1: if issue ~ total, dense is CPU-bound).
+
+## Step 4. Server launch (2026-11-18)
+- 23:21 server time: 5 sims running (convbudget only), 3 new -> 8 <= 12, quota 6 OK. Ran
+  `launch_micro_loop_srv.sh runs/20261117-142827-microloop-spike s3` (S1 nm24 micro_loop_24, S2 nm48 micro_loop_48,
+  S3 nm24 micro_loop_24_s1). The script's last ssh call hit its 60 s timeout (exit 124, backgrounded ssh held the
+  channel) but the job started anyway.
+- Server run folder: `~/sinv/runs/20261118-232156-microloop-srv` (run.info, jobs.tsv, 3 logs present). Launched ~23:22.
+  Simulator PIDs: 756522 (nm24 micro_loop_24), 756773 (nm48), 757011 (nm24 s1). Driver pid 756153.
+- Waiting on `<run>/STATUS`.

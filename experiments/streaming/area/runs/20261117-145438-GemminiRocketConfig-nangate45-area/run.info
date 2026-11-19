@@ -1,0 +1,18 @@
+config=GemminiRocketConfig
+lib=nangate45 /home/ai-user/area/pdk/nangate45/NangateOpenCellLibrary_typical.lib
+lib_sha256=8d540a4d4cf6d09d27c87ad067857a9c0c2eeb023ab7a56e058cd3113db4e9b1
+top=Gemmini
+host=AI-1769.floridapoly.org core=13 nice=10
+ulimit_v_kb=8388608
+yosys=Yosys 0.71+ (git sha1 10084e2a1-dirty, Release, GNU /home/conda/feedstock_root/build_artifacts/bld/rattler-build_yosys_h2af6b36_1794507923/build_env/bin/x86_64-conda-linux-gnu-c++ 15.3.0) [github.com/conda-forge/yosys-feedstock at main]
+yosys_abc=/home/ai-user/miniforge3/envs/yosys/bin/yosys-abc
+sv2v=sv2v 0.0.11-33-gdf01650 /home/ai-user/miniforge3/envs/yosys/bin/zachjs-sv2v
+sv2v_out_sha256=89771dff18cbf4c291982657972f05d362869bd2427aab58896c05033075fb3d /home/ai-user/area/work/20261117-145438-GemminiRocketConfig-nangate45-area/top_sv2v.v
+flow_sha256=28e2d585cd29e9d972fb02d6984253f28badc6bbb791a328c3e936fde17b82a4  area_remote.sh 5e9498f64232102adffee8b6fcb1578ad29a09a96775fdd4f9aa11b401287fa1  synth_area.ys.in 77d42ee8533b0f2d698261571bdb71b4d7e2d66781b6783c9db532fc75aceba6  verilog_closure.py 
+verilog_files=134 list_sha256=cd043ad8d0250854498a8eedfc5321409f459f1c033e0ee00627e9dddbc2185e
+sims_expected=12 sims_at_start=12
+memavail_kb_at_start=30795748
+start=2026-11-17T14:58:47-05:00
+end=2026-11-17T21:39:33-05:00
+yosys_wall_s=24046
+sims_at_end=12

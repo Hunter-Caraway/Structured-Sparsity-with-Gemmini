@@ -1,0 +1,5 @@
+fresh binaries (src/) built 2026-11-17 on laptop: run-flow.sh tests (restore_params_h + rv_cc, no NM flags); 51 of Berkeley's 54 dense tests (excl. 3 conv_with_input_dilation*, see convbudget-stock run)
+gemmini_params.h sha256=3758ae967af3a179497660970201093a7fb624be00173990ce33d3f5c38da924
+gemmini-rocc-tests commit=22158bf  toolchain=riscv64-unknown-elf-gcc (g6afcc4f6d) 16.1.0
+vs run-1 (20261113-160015-fixb-srv/bin): all 51 differ in only 5-6 bytes (gcc temp object name ccXXXXXX.o in .strtab); objdump -d and -s of all sections identical. Fresh sha list: fresh51.sha
+timeout: 750000000 for every test (nm24 cycle counts are not in the run-1 logs; every nm24 run finished under 150M, so 5x <= 750M)

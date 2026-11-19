@@ -1,0 +1,30 @@
+[16:00:01] run dir /home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261117-160001-mrpc-dense-s3
+[16:00:01] run.info {"model": "bert-base-uncased", "task": "mrpc", "pattern": "dense", "seed": 3, "parent": null, "max_steps": null, "threads": 8, "hparams": {"lr": 2e-05, "batch_size": 32, "epochs": 3, "weight_decay": 0.01, "warmup_ratio": 0.1, "max_grad_norm": 1.0, "max_len": 128, "calib_examples": 512}, "git_head": "10ce6f775d8ee0b6fa1bf97bc9fcf8b2e8e14322", "git_dirty_accuracy_dir": ["?? experiments/accuracy/"], "script_sha256": {"nm_acc.py": "4c54798967e07a02c02c2992ac07c366c5b333b58aa230231346177b230b00f3", "run_config.py": "381cfacf693be840fdc023a8429b2be576ca275a8b7670ba1941a340425c8e53"}, "python": "3.14.7", "platform": "Linux-7.1.8-200.fc44.x86_64-x86_64-with-glibc2.43", "torch": "2.15.0+cpu", "transformers": "5.23.0", "datasets": "5.2.0", "argv": ["/home/hunter/gemmini-sparsity/experiments/accuracy/run_config.py", "--pattern", "dense", "--seed", "3", "--save"]}
+[16:01:11] data train=3668 val=408
+[16:01:13] loaded model from bert-base-uncased
+[16:03:12] train epoch=0 step=20/345 loss=0.6439 elapsed=118.3s
+[16:05:14] train epoch=0 step=40/345 loss=0.6288 elapsed=240.8s
+[16:07:10] train epoch=0 step=60/345 loss=0.6060 elapsed=356.5s
+[16:09:08] train epoch=0 step=80/345 loss=0.5803 elapsed=475.0s
+[16:11:14] train epoch=0 step=100/345 loss=0.5688 elapsed=601.0s
+[16:12:42] train epoch=0 done loss=0.5612 secs=688.3
+[16:13:09] train epoch=1 step=120/345 loss=0.4041 elapsed=27.8s
+[16:15:12] train epoch=1 step=140/345 loss=0.3405 elapsed=150.2s
+[16:17:11] train epoch=1 step=160/345 loss=0.3703 elapsed=269.3s
+[16:19:15] train epoch=1 step=180/345 loss=0.3806 elapsed=393.5s
+[16:21:19] train epoch=1 step=200/345 loss=0.3700 elapsed=517.6s
+[16:23:17] train epoch=1 step=220/345 loss=0.3686 elapsed=635.6s
+[16:24:16] train epoch=1 done loss=0.3637 secs=694.2
+[16:25:15] train epoch=2 step=240/345 loss=0.2254 elapsed=58.7s
+[16:27:19] train epoch=2 step=260/345 loss=0.2440 elapsed=183.1s
+[16:29:19] train epoch=2 step=280/345 loss=0.2372 elapsed=303.0s
+[16:31:22] train epoch=2 step=300/345 loss=0.2332 elapsed=425.7s
+[16:33:26] train epoch=2 step=320/345 loss=0.2302 elapsed=550.2s
+[16:35:32] train epoch=2 step=340/345 loss=0.2258 elapsed=676.2s
+[16:36:03] train epoch=2 done loss=0.2252 secs=706.9
+[16:36:03] train total secs=2089.4 steps=345
+[16:36:03] checkpoint /home/hunter/gemmini-sparsity/experiments/accuracy/checkpoints/20261117-160001-mrpc-dense-s3
+[16:36:26] RESULT precision=fp32 pattern=dense seed=3 accuracy=0.850490 f1=0.895369 n=408
+[16:36:57] int8 quantized layers=72 calib_examples=512
+[16:37:52] RESULT precision=int8 pattern=dense seed=3 accuracy=0.779412 f1=0.825581 n=408
+[16:37:52] DONE

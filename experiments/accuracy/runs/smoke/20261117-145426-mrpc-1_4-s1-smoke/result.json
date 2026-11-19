@@ -1,0 +1,27 @@
+{
+  "model": "bert-base-uncased",
+  "task": "mrpc",
+  "pattern": "1:4",
+  "seed": 1,
+  "pct_kept": 0.25,
+  "epochs": 3,
+  "max_steps": 5,
+  "train_secs": 21.664470911026,
+  "epoch_secs": [
+    21.645577430725098
+  ],
+  "steps": 5,
+  "checkpoint": null,
+  "eval": {
+    "fp32": {
+      "accuracy": 0.3161764705882353,
+      "f1": 0.0,
+      "n": 408
+    },
+    "int8": {
+      "accuracy": 0.3284313725490196,
+      "f1": 0.04861111111111111,
+      "n": 408
+    }
+  }
+}
