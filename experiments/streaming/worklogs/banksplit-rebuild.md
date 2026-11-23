@@ -58,3 +58,6 @@ Never touch GemminiRocketConfig, its generated-src, or the stock rot180 rerun (`
 - Running (server `~/sinv/runs/`): 20261123-145434-nm24-srv, 20261123-150442-nm48-srv, 20261123-151155-nm816-srv (STATUS files; ALL_DONE when finished). Do not touch GemminiRocketConfig or 20261123-143334-rot180-stock-srv.
 - Next: wait for STATUS ALL_DONE on all three (nm_sparse_loop ~38 h predicted; Berkeley dilation tests several days); then `./run-flow.sh pattern-finish <pat> <flow folder>` (flows listed in each flow.state) copies back, checksums,
   verify_all --mode run; commit the copied run folders. Check intermediate logs for asserts/FAILED meanwhile. Restore server `include/gemmini_params.h` is not needed (no elaboration changed it? check `git status` in server rocc-tests).
+- 2026-11-23 ~15:40: all three runs RUNNING, 0 failures yet. Agent handed back here because polling for days is not possible inside one agent turn; coordinator (or a resumed agent) waits on the three STATUS files
+  and then runs `SCRATCH_DIR=build-scratch/pattern-flow ./run-flow.sh pattern-finish <pat> <flow folder>` (flow folders: investigate/runs/20261117-145939-nm24-flow, 20261123-143835-nm48-flow, 20261123-144244-nm816-flow).
+  Still to do after copy-back: verify_all --mode run per run, key cycle table (same-build only, verified only), commit. Not done: RTL mutants (optional).
