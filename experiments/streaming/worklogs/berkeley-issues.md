@@ -85,3 +85,21 @@ Found 2026-11-17. These three are in Berkeley's 54-test list but exit 0 before t
 (`fixb-verify.md` F), so they pass in 3-10 s without running any matmul. Same on Berkeley's config.
 
 **What we do.** Their "pass" is not evidence. Paper: do not count them as tested (51 of 54 meaningful on the dense list).
+
+## B7. `conv_with_input_dilation_and_rot180` is long on RTL (note, not a bug)
+
+Found 2026-11-23. Worklog `worklogs/rot180-diag.md`; logs in `experiments/streaming/build-scratch/rot180-diag/logs/`
+(gitignored).
+
+**Observed.** Non-FAST build timed out at 300M sim cycles (= 150M core cycles; 2 sim cycles per core cycle) inside the CPU
+reference on stock and nm24 (`20261117-111223-convbudget-stock-srv`, `20261117-110726-convbudget-srv`). On Spike the same
+binary finishes and verifies: CPU conv 124,071,345 instr, 1.87x `conv_with_input_dilation` (66,378,922). gcc keeps the
+bounds check and the `wrot180` ternary in the inner loop (18 vs 9 instr/iteration). Estimated ~390M sim cycles [E].
+
+**Why Berkeley never sees it.** Their RTL CI (`.github/scripts/run-tests-rtl.sh`) builds with `CFLAGS=-DFAST`, which
+compiles out the CPU `conv()` (`#ifndef FAST`). Only their Spike CI runs the full reference. Not a bug.
+
+**Quirk.** `conv_with_input_dilation.c` has a nested `#ifdef FAST` (17x23 dims) inside the outer `#else` of `#ifdef FAST`,
+so it is unreachable. Cosmetic.
+
+**What we do.** Rerun with a 2B sim-cycle cap (`rot180-rerun.md`). Set sim caps >= 2 x expected core cycles.

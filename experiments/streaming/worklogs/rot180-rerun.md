@@ -27,6 +27,15 @@ Previous: timed out at 300M on both chips inside "CPU conv..." (no "CPU conv too
 - Box was idle at launch (load 0.01), PAR=1, so speed may be at the high end.
 - If it needs 300-600M cycles: ~2.4-8 days. Absolute worst (hit 2B cap): ~16-30 days. Do not kill for time.
 
+## Correction (2026-11-23)
+Source: `worklogs/rot180-diag.md` (Step 6, Estimate). The ETA above assumed 1 sim cycle = 1 core cycle. Wrong: `+max-cycles`
+counts the 1 GHz TestDriver clock; the core runs at 500 MHz, so 1 core cycle = 2 sim cycles. The 300M cap was 150M core cycles.
+- Sim speed: ~1,450 sim cyc/s holds for all three convbudget jobs at 2:1 (1,514 / 1,576 / 1,448).
+- rot180 CPU conv: 124,071,345 instr on Spike (verified finish) x sibling CPI ~1.565 = ~194M core = ~390M sim cycles [E],
+  range 300-620M [E]. ETA: central ~3.1 days (~Nov 26 evening), upper ~5.0 days (~Nov 28).
+- The 2B cap = 1B core cycles (>4x headroom). Worst case if it never ends: 16.0 days at 1,450/s. Keep the run.
+- Checkpoint: no `$finish` by ~800M sim cycles (~Nov 30) means the estimate is wrong; investigate, do not kill.
+
 ## RESUME HERE
 Running: `~/sinv/runs/20261123-143334-rot180-stock-srv`, sim PID 886498. Done when `STATUS` contains `ALL_DONE` and `SHA256SUMS` exists.
 Next:
