@@ -1,0 +1,31 @@
+[05:37:04] run dir /home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261119-053704-mrpc-4_16-s3
+[05:37:04] run.info {"model": "bert-base-uncased", "task": "mrpc", "pattern": "4:16", "seed": 3, "parent": "/home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261119-021807-mrpc-8_16-s3", "max_steps": null, "threads": 8, "hparams": {"lr": 2e-05, "batch_size": 32, "epochs": 3, "weight_decay": 0.01, "warmup_ratio": 0.1, "max_grad_norm": 1.0, "max_len": 128, "calib_examples": 512}, "git_head": "da5ddd86d30c2c0017dd7842469c5616927b24e0", "git_dirty_accuracy_dir": ["?? experiments/accuracy/.gitignore", "?? experiments/accuracy/queues/full2/", "?? experiments/accuracy/runs/20261118-232021-mrpc-2_4-s1/", "?? experiments/accuracy/runs/20261118-234223-mrpc-2_4-s2/", "?? experiments/accuracy/runs/20261119-000436-mrpc-2_4-s3/", "?? experiments/accuracy/runs/20261119-002645-mrpc-4_8-s1/", "?? experiments/accuracy/runs/20261119-004854-mrpc-4_8-s2/", "?? experiments/accuracy/runs/20261119-011104-mrpc-4_8-s3/", "?? experiments/accuracy/runs/20261119-013323-mrpc-8_16-s1/", "?? experiments/accuracy/runs/20261119-015545-mrpc-8_16-s2/", "?? experiments/accuracy/runs/20261119-021807-mrpc-8_16-s3/", "?? experiments/accuracy/runs/20261119-024022-mrpc-1_4-s1/", "?? experiments/accuracy/runs/20261119-030230-mrpc-1_4-s2/", "?? experiments/accuracy/runs/20261119-032434-mrpc-1_4-s3/", "?? experiments/accuracy/runs/20261119-034639-mrpc-2_8-s1/", "?? experiments/accuracy/runs/20261119-040838-mrpc-2_8-s2/", "?? experiments/accuracy/runs/20261119-043050-mrpc-2_8-s3/", "?? experiments/accuracy/runs/20261119-045252-mrpc-4_16-s1/", "?? experiments/accuracy/runs/20261119-051452-mrpc-4_16-s2/", "?? experiments/accuracy/runs/20261119-053704-mrpc-4_16-s3/"], "script_sha256": {"nm_acc.py": "4c54798967e07a02c02c2992ac07c366c5b333b58aa230231346177b230b00f3", "run_config.py": "381cfacf693be840fdc023a8429b2be576ca275a8b7670ba1941a340425c8e53"}, "python": "3.14.7", "platform": "Linux-7.1.8-200.fc44.x86_64-x86_64-with-glibc2.43", "torch": "2.15.0+cpu", "transformers": "5.23.0", "datasets": "5.2.0", "argv": ["/home/hunter/gemmini-sparsity/experiments/accuracy/run_config.py", "--pattern", "4:16", "--seed", "3", "--parent", "/home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261119-021807-mrpc-8_16-s3"]}
+[05:37:06] data train=3668 val=408
+[05:37:07] loaded model from /home/hunter/gemmini-sparsity/experiments/accuracy/checkpoints/20261119-021807-mrpc-8_16-s3
+[05:37:08] nm pruned 4:16: layers=72 kept_frac=0.250000 (before retrain)
+[05:38:20] train epoch=0 step=20/345 loss=1.1833 elapsed=72.4s
+[05:39:34] train epoch=0 step=40/345 loss=0.9082 elapsed=146.6s
+[05:40:44] train epoch=0 step=60/345 loss=0.8020 elapsed=216.7s
+[05:41:56] train epoch=0 step=80/345 loss=0.7359 elapsed=288.6s
+[05:43:12] train epoch=0 step=100/345 loss=0.7105 elapsed=364.5s
+[05:44:05] train epoch=0 done loss=0.6963 secs=417.3
+[05:44:22] train epoch=1 step=120/345 loss=0.5866 elapsed=16.8s
+[05:45:36] train epoch=1 step=140/345 loss=0.5052 elapsed=91.2s
+[05:46:48] train epoch=1 step=160/345 loss=0.5188 elapsed=162.6s
+[05:48:03] train epoch=1 step=180/345 loss=0.5383 elapsed=237.5s
+[05:49:17] train epoch=1 step=200/345 loss=0.5353 elapsed=312.1s
+[05:50:28] train epoch=1 step=220/345 loss=0.5326 elapsed=383.0s
+[05:51:03] train epoch=1 done loss=0.5329 secs=418.2
+[05:51:38] train epoch=2 step=240/345 loss=0.4844 elapsed=35.3s
+[05:52:53] train epoch=2 step=260/345 loss=0.4763 elapsed=110.2s
+[05:54:05] train epoch=2 step=280/345 loss=0.4804 elapsed=181.8s
+[05:55:18] train epoch=2 step=300/345 loss=0.4816 elapsed=254.8s
+[05:56:32] train epoch=2 step=320/345 loss=0.4822 elapsed=328.8s
+[05:57:45] train epoch=2 step=340/345 loss=0.4788 elapsed=402.2s
+[05:58:04] train epoch=2 done loss=0.4779 secs=420.6
+[05:58:04] train total secs=1256.1 steps=345
+[05:58:04] nm verify after retrain 4:16: layers=72 kept_frac=0.250000 OK
+[05:58:16] RESULT precision=fp32 pattern=4:16 seed=3 accuracy=0.730392 f1=0.828660 n=408
+[05:58:34] int8 quantized layers=72 calib_examples=512
+[05:59:10] RESULT precision=int8 pattern=4:16 seed=3 accuracy=0.732843 f1=0.815567 n=408
+[05:59:10] DONE

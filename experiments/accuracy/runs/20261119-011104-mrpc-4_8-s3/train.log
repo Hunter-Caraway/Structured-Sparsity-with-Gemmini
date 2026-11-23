@@ -1,0 +1,32 @@
+[01:11:04] run dir /home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261119-011104-mrpc-4_8-s3
+[01:11:04] run.info {"model": "bert-base-uncased", "task": "mrpc", "pattern": "4:8", "seed": 3, "parent": "/home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261117-160001-mrpc-dense-s3", "max_steps": null, "threads": 8, "hparams": {"lr": 2e-05, "batch_size": 32, "epochs": 3, "weight_decay": 0.01, "warmup_ratio": 0.1, "max_grad_norm": 1.0, "max_len": 128, "calib_examples": 512}, "git_head": "da5ddd86d30c2c0017dd7842469c5616927b24e0", "git_dirty_accuracy_dir": ["?? experiments/accuracy/.gitignore", "?? experiments/accuracy/queues/full2/", "?? experiments/accuracy/runs/20261118-232021-mrpc-2_4-s1/", "?? experiments/accuracy/runs/20261118-234223-mrpc-2_4-s2/", "?? experiments/accuracy/runs/20261119-000436-mrpc-2_4-s3/", "?? experiments/accuracy/runs/20261119-002645-mrpc-4_8-s1/", "?? experiments/accuracy/runs/20261119-004854-mrpc-4_8-s2/", "?? experiments/accuracy/runs/20261119-011104-mrpc-4_8-s3/"], "script_sha256": {"nm_acc.py": "4c54798967e07a02c02c2992ac07c366c5b333b58aa230231346177b230b00f3", "run_config.py": "381cfacf693be840fdc023a8429b2be576ca275a8b7670ba1941a340425c8e53"}, "python": "3.14.7", "platform": "Linux-7.1.8-200.fc44.x86_64-x86_64-with-glibc2.43", "torch": "2.15.0+cpu", "transformers": "5.23.0", "datasets": "5.2.0", "argv": ["/home/hunter/gemmini-sparsity/experiments/accuracy/run_config.py", "--pattern", "4:8", "--seed", "3", "--save", "--parent", "/home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261117-160001-mrpc-dense-s3"]}
+[01:11:06] data train=3668 val=408
+[01:11:07] loaded model from /home/hunter/gemmini-sparsity/experiments/accuracy/checkpoints/20261117-160001-mrpc-dense-s3
+[01:11:08] nm pruned 4:8: layers=72 kept_frac=0.500000 (before retrain)
+[01:12:20] train epoch=0 step=20/345 loss=0.5101 elapsed=72.8s
+[01:13:36] train epoch=0 step=40/345 loss=0.4683 elapsed=147.9s
+[01:14:46] train epoch=0 step=60/345 loss=0.4317 elapsed=218.7s
+[01:15:59] train epoch=0 step=80/345 loss=0.3952 elapsed=291.1s
+[01:17:15] train epoch=0 step=100/345 loss=0.3851 elapsed=367.7s
+[01:18:09] train epoch=0 done loss=0.3786 secs=421.0
+[01:18:26] train epoch=1 step=120/345 loss=0.2378 elapsed=16.9s
+[01:19:40] train epoch=1 step=140/345 loss=0.2088 elapsed=91.8s
+[01:20:53] train epoch=1 step=160/345 loss=0.2356 elapsed=163.9s
+[01:22:08] train epoch=1 step=180/345 loss=0.2491 elapsed=239.4s
+[01:23:23] train epoch=1 step=200/345 loss=0.2358 elapsed=314.7s
+[01:24:35] train epoch=1 step=220/345 loss=0.2336 elapsed=385.9s
+[01:25:10] train epoch=1 done loss=0.2303 secs=421.3
+[01:25:45] train epoch=2 step=240/345 loss=0.1239 elapsed=35.4s
+[01:27:01] train epoch=2 step=260/345 loss=0.1481 elapsed=110.9s
+[01:28:13] train epoch=2 step=280/345 loss=0.1492 elapsed=183.2s
+[01:29:27] train epoch=2 step=300/345 loss=0.1492 elapsed=256.7s
+[01:30:42] train epoch=2 step=320/345 loss=0.1495 elapsed=331.7s
+[01:31:56] train epoch=2 step=340/345 loss=0.1490 elapsed=405.8s
+[01:32:14] train epoch=2 done loss=0.1475 secs=424.3
+[01:32:14] train total secs=1266.6 steps=345
+[01:32:14] nm verify after retrain 4:8: layers=72 kept_frac=0.500000 OK
+[01:32:15] checkpoint /home/hunter/gemmini-sparsity/experiments/accuracy/checkpoints/20261119-011104-mrpc-4_8-s3
+[01:32:27] RESULT precision=fp32 pattern=4:8 seed=3 accuracy=0.860294 f1=0.900175 n=408
+[01:32:45] int8 quantized layers=72 calib_examples=512
+[01:33:21] RESULT precision=int8 pattern=4:8 seed=3 accuracy=0.762255 f1=0.823956 n=408
+[01:33:21] DONE

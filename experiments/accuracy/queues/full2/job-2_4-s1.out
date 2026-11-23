@@ -1,0 +1,36 @@
+[23:20:21] run dir /home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261118-232021-mrpc-2_4-s1
+[23:20:21] run.info {"model": "bert-base-uncased", "task": "mrpc", "pattern": "2:4", "seed": 1, "parent": "/home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261117-145622-mrpc-dense-s1", "max_steps": null, "threads": 8, "hparams": {"lr": 2e-05, "batch_size": 32, "epochs": 3, "weight_decay": 0.01, "warmup_ratio": 0.1, "max_grad_norm": 1.0, "max_len": 128, "calib_examples": 512}, "git_head": "75accddba5c8aada5054a14e41211d18e5ba474d", "git_dirty_accuracy_dir": ["?? experiments/accuracy/"], "script_sha256": {"nm_acc.py": "4c54798967e07a02c02c2992ac07c366c5b333b58aa230231346177b230b00f3", "run_config.py": "381cfacf693be840fdc023a8429b2be576ca275a8b7670ba1941a340425c8e53"}, "python": "3.14.7", "platform": "Linux-7.1.8-200.fc44.x86_64-x86_64-with-glibc2.43", "torch": "2.15.0+cpu", "transformers": "5.23.0", "datasets": "5.2.0", "argv": ["/home/hunter/gemmini-sparsity/experiments/accuracy/run_config.py", "--pattern", "2:4", "--seed", "1", "--save", "--parent", "/home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261117-145622-mrpc-dense-s1"]}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[23:20:24] data train=3668 val=408
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights:  49%|████▉     | 98/201 [00:00<00:00, 975.16it/s]Loading weights:  98%|█████████▊| 196/201 [00:00<00:00, 947.73it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 974.75it/s]
+[23:20:25] loaded model from /home/hunter/gemmini-sparsity/experiments/accuracy/checkpoints/20261117-145622-mrpc-dense-s1
+[23:20:26] nm pruned 2:4: layers=72 kept_frac=0.500000 (before retrain)
+[23:21:36] train epoch=0 step=20/345 loss=0.7514 elapsed=70.5s
+[23:22:48] train epoch=0 step=40/345 loss=0.6443 elapsed=142.0s
+[23:23:58] train epoch=0 step=60/345 loss=0.5758 elapsed=212.6s
+[23:25:09] train epoch=0 step=80/345 loss=0.5453 elapsed=283.0s
+[23:26:17] train epoch=0 step=100/345 loss=0.5134 elapsed=351.3s
+[23:27:07] train epoch=0 done loss=0.4974 secs=401.7
+[23:27:24] train epoch=1 step=120/345 loss=0.3618 elapsed=16.6s
+[23:28:35] train epoch=1 step=140/345 loss=0.3302 elapsed=87.4s
+[23:29:49] train epoch=1 step=160/345 loss=0.3284 elapsed=161.9s
+[23:31:02] train epoch=1 step=180/345 loss=0.3173 elapsed=234.7s
+[23:32:16] train epoch=1 step=200/345 loss=0.2991 elapsed=309.1s
+[23:33:33] train epoch=1 step=220/345 loss=0.3116 elapsed=385.5s
+[23:34:11] train epoch=1 done loss=0.3107 secs=423.7
+[23:34:48] train epoch=2 step=240/345 loss=0.2650 elapsed=37.1s
+[23:36:00] train epoch=2 step=260/345 loss=0.2512 elapsed=108.7s
+[23:37:14] train epoch=2 step=280/345 loss=0.2388 elapsed=183.4s
+[23:38:29] train epoch=2 step=300/345 loss=0.2373 elapsed=257.6s
+[23:39:45] train epoch=2 step=320/345 loss=0.2361 elapsed=333.9s
+[23:40:57] train epoch=2 step=340/345 loss=0.2329 elapsed=405.7s
+[23:41:13] train epoch=2 done loss=0.2319 secs=422.3
+[23:41:13] train total secs=1247.8 steps=345
+[23:41:13] nm verify after retrain 2:4: layers=72 kept_frac=0.500000 OK
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  3.50it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  3.49it/s]
+[23:41:14] checkpoint /home/hunter/gemmini-sparsity/experiments/accuracy/checkpoints/20261118-232021-mrpc-2_4-s1
+[23:41:26] RESULT precision=fp32 pattern=2:4 seed=1 accuracy=0.848039 f1=0.895623 n=408
+[23:41:45] int8 quantized layers=72 calib_examples=512
+[23:42:20] RESULT precision=int8 pattern=2:4 seed=1 accuracy=0.664216 f1=0.697572 n=408
+[23:42:20] DONE
+/home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261118-232021-mrpc-2_4-s1

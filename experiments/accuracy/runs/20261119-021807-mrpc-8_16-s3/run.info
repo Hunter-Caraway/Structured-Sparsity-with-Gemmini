@@ -1,0 +1,52 @@
+{
+  "model": "bert-base-uncased",
+  "task": "mrpc",
+  "pattern": "8:16",
+  "seed": 3,
+  "parent": "/home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261117-160001-mrpc-dense-s3",
+  "max_steps": null,
+  "threads": 8,
+  "hparams": {
+    "lr": 2e-05,
+    "batch_size": 32,
+    "epochs": 3,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "max_grad_norm": 1.0,
+    "max_len": 128,
+    "calib_examples": 512
+  },
+  "git_head": "da5ddd86d30c2c0017dd7842469c5616927b24e0",
+  "git_dirty_accuracy_dir": [
+    "?? experiments/accuracy/.gitignore",
+    "?? experiments/accuracy/queues/full2/",
+    "?? experiments/accuracy/runs/20261118-232021-mrpc-2_4-s1/",
+    "?? experiments/accuracy/runs/20261118-234223-mrpc-2_4-s2/",
+    "?? experiments/accuracy/runs/20261119-000436-mrpc-2_4-s3/",
+    "?? experiments/accuracy/runs/20261119-002645-mrpc-4_8-s1/",
+    "?? experiments/accuracy/runs/20261119-004854-mrpc-4_8-s2/",
+    "?? experiments/accuracy/runs/20261119-011104-mrpc-4_8-s3/",
+    "?? experiments/accuracy/runs/20261119-013323-mrpc-8_16-s1/",
+    "?? experiments/accuracy/runs/20261119-015545-mrpc-8_16-s2/",
+    "?? experiments/accuracy/runs/20261119-021807-mrpc-8_16-s3/"
+  ],
+  "script_sha256": {
+    "nm_acc.py": "4c54798967e07a02c02c2992ac07c366c5b333b58aa230231346177b230b00f3",
+    "run_config.py": "381cfacf693be840fdc023a8429b2be576ca275a8b7670ba1941a340425c8e53"
+  },
+  "python": "3.14.7",
+  "platform": "Linux-7.1.8-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "torch": "2.15.0+cpu",
+  "transformers": "5.23.0",
+  "datasets": "5.2.0",
+  "argv": [
+    "/home/hunter/gemmini-sparsity/experiments/accuracy/run_config.py",
+    "--pattern",
+    "8:16",
+    "--seed",
+    "3",
+    "--save",
+    "--parent",
+    "/home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261117-160001-mrpc-dense-s3"
+  ]
+}

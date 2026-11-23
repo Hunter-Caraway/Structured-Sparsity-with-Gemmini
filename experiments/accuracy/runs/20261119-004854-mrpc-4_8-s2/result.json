@@ -1,0 +1,29 @@
+{
+  "model": "bert-base-uncased",
+  "task": "mrpc",
+  "pattern": "4:8",
+  "seed": 2,
+  "pct_kept": 0.5,
+  "epochs": 3,
+  "max_steps": null,
+  "train_secs": 1256.3765227794647,
+  "epoch_secs": [
+    421.09419536590576,
+    420.2428021430969,
+    415.0243663787842
+  ],
+  "steps": 345,
+  "checkpoint": "/home/hunter/gemmini-sparsity/experiments/accuracy/checkpoints/20261119-004854-mrpc-4_8-s2",
+  "eval": {
+    "fp32": {
+      "accuracy": 0.8578431372549019,
+      "f1": 0.9,
+      "n": 408
+    },
+    "int8": {
+      "accuracy": 0.7990196078431373,
+      "f1": 0.8571428571428571,
+      "n": 408
+    }
+  }
+}

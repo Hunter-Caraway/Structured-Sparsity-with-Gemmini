@@ -1,0 +1,34 @@
+[02:40:22] run dir /home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261119-024022-mrpc-1_4-s1
+[02:40:22] run.info {"model": "bert-base-uncased", "task": "mrpc", "pattern": "1:4", "seed": 1, "parent": "/home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261118-232021-mrpc-2_4-s1", "max_steps": null, "threads": 8, "hparams": {"lr": 2e-05, "batch_size": 32, "epochs": 3, "weight_decay": 0.01, "warmup_ratio": 0.1, "max_grad_norm": 1.0, "max_len": 128, "calib_examples": 512}, "git_head": "da5ddd86d30c2c0017dd7842469c5616927b24e0", "git_dirty_accuracy_dir": ["?? experiments/accuracy/.gitignore", "?? experiments/accuracy/queues/full2/", "?? experiments/accuracy/runs/20261118-232021-mrpc-2_4-s1/", "?? experiments/accuracy/runs/20261118-234223-mrpc-2_4-s2/", "?? experiments/accuracy/runs/20261119-000436-mrpc-2_4-s3/", "?? experiments/accuracy/runs/20261119-002645-mrpc-4_8-s1/", "?? experiments/accuracy/runs/20261119-004854-mrpc-4_8-s2/", "?? experiments/accuracy/runs/20261119-011104-mrpc-4_8-s3/", "?? experiments/accuracy/runs/20261119-013323-mrpc-8_16-s1/", "?? experiments/accuracy/runs/20261119-015545-mrpc-8_16-s2/", "?? experiments/accuracy/runs/20261119-021807-mrpc-8_16-s3/", "?? experiments/accuracy/runs/20261119-024022-mrpc-1_4-s1/"], "script_sha256": {"nm_acc.py": "4c54798967e07a02c02c2992ac07c366c5b333b58aa230231346177b230b00f3", "run_config.py": "381cfacf693be840fdc023a8429b2be576ca275a8b7670ba1941a340425c8e53"}, "python": "3.14.7", "platform": "Linux-7.1.8-200.fc44.x86_64-x86_64-with-glibc2.43", "torch": "2.15.0+cpu", "transformers": "5.23.0", "datasets": "5.2.0", "argv": ["/home/hunter/gemmini-sparsity/experiments/accuracy/run_config.py", "--pattern", "1:4", "--seed", "1", "--parent", "/home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261118-232021-mrpc-2_4-s1"]}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[02:40:24] data train=3668 val=408
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights:  58%|█████▊    | 117/201 [00:00<00:00, 1127.50it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 1144.83it/s]
+[02:40:26] loaded model from /home/hunter/gemmini-sparsity/experiments/accuracy/checkpoints/20261118-232021-mrpc-2_4-s1
+[02:40:26] nm pruned 1:4: layers=72 kept_frac=0.250000 (before retrain)
+[02:41:40] train epoch=0 step=20/345 loss=0.8776 elapsed=74.0s
+[02:42:54] train epoch=0 step=40/345 loss=0.7572 elapsed=147.9s
+[02:44:06] train epoch=0 step=60/345 loss=0.7168 elapsed=219.7s
+[02:45:19] train epoch=0 step=80/345 loss=0.6997 elapsed=292.8s
+[02:46:30] train epoch=0 step=100/345 loss=0.6770 elapsed=364.2s
+[02:47:24] train epoch=0 done loss=0.6712 secs=417.8
+[02:47:41] train epoch=1 step=120/345 loss=0.6150 elapsed=17.6s
+[02:48:53] train epoch=1 step=140/345 loss=0.5987 elapsed=89.5s
+[02:50:07] train epoch=1 step=160/345 loss=0.6036 elapsed=163.4s
+[02:51:19] train epoch=1 step=180/345 loss=0.6003 elapsed=234.7s
+[02:52:31] train epoch=1 step=200/345 loss=0.5935 elapsed=307.6s
+[02:53:45] train epoch=1 step=220/345 loss=0.6008 elapsed=381.1s
+[02:54:22] train epoch=1 done loss=0.5969 secs=418.1
+[02:54:58] train epoch=2 step=240/345 loss=0.5654 elapsed=36.1s
+[02:56:09] train epoch=2 step=260/345 loss=0.5639 elapsed=107.2s
+[02:57:24] train epoch=2 step=280/345 loss=0.5629 elapsed=181.6s
+[02:58:37] train epoch=2 step=300/345 loss=0.5681 elapsed=255.3s
+[02:59:53] train epoch=2 step=320/345 loss=0.5711 elapsed=331.3s
+[03:01:05] train epoch=2 step=340/345 loss=0.5656 elapsed=403.0s
+[03:01:21] train epoch=2 done loss=0.5632 secs=419.5
+[03:01:21] train total secs=1255.4 steps=345
+[03:01:22] nm verify after retrain 1:4: layers=72 kept_frac=0.250000 OK
+[03:01:34] RESULT precision=fp32 pattern=1:4 seed=1 accuracy=0.696078 f1=0.808050 n=408
+[03:01:52] int8 quantized layers=72 calib_examples=512
+[03:02:28] RESULT precision=int8 pattern=1:4 seed=1 accuracy=0.664216 f1=0.777236 n=408
+[03:02:28] DONE
+/home/hunter/gemmini-sparsity/experiments/accuracy/runs/20261119-024022-mrpc-1_4-s1

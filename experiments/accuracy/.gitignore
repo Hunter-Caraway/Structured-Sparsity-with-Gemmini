@@ -1,0 +1,7 @@
+# model checkpoints and HF caches never go in git
+checkpoints/
+*.safetensors
+*.bin
+*.pt
+__pycache__/
+queues-*.nohup
