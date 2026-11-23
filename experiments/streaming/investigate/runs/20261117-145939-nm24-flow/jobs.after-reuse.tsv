@@ -1,0 +1,123 @@
+chip	cfg	program	seed	timeout	kind	expect
+nm24	GemminiNMRocketConfig	mvin_mvout-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	mvin_mvout_zeros-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	mvin_mvout_stride-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	mvin_mvout_block_stride-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	mvin_mvout_acc-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	mvin_mvout_acc_zero_stride-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	mvin_mvout_acc_stride-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	mvin_mvout_acc_full-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	mvin_mvout_acc_full_stride-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	matmul_os-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	matmul_ws-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	matmul-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	raw_hazard-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	aligned-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	padded-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	mvin_scale-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	conv-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	conv_stride-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	conv_rect-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	conv_rect_pool-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	conv_with_pool-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	conv_with_rot180-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	conv_with_kernel_dilation-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	conv_with_input_dilation-baremetal	1	1000000000	dense	
+nm24	GemminiNMRocketConfig	conv_with_input_dilation_and_rot180-baremetal	1	1000000000	dense	
+nm24	GemminiNMRocketConfig	conv_with_input_dilation_and_neg_padding-baremetal	1	1000000000	dense	
+nm24	GemminiNMRocketConfig	conv_trans_output_1203-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	conv_trans_weight_1203-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	conv_trans_weight_0132-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	conv_trans_input_3120-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	conv_trans_input_3120_with_kernel_dilation-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	conv_first_layer-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	conv_dw-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	conv_perf-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	conv_dw_perf-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	tiled_matmul_os-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	tiled_matmul_ws-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	tiled_matmul_ws_At-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	tiled_matmul_ws_Bt-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	tiled_matmul_ws_full_C-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	tiled_matmul_ws_low_D-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	tiled_matmul_ws_igelu-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	tiled_matmul_ws_layernorm-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	tiled_matmul_ws_softmax-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	tiled_matmul_ws_perf-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	tiled_matmul_cpu-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	tiled_matmul_option-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	transpose-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	matrix_add-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	resadd-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	resadd_stride-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	global_average-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	gemmini_counter-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	template-baremetal	1	150000000	dense	
+nm24	GemminiNMRocketConfig	nm_sparse_sw_24-baremetal	1	150000000	sparse	^nm_sparse_sw passed$
+nm24	GemminiNMRocketConfig	nm_sparse_debug_24-baremetal	1	150000000	sparse	^nm_sparse_debug passed$
+nm24	GemminiNMRocketConfig	nm_sparse_matmul_24-baremetal	1	150000000	sparse	^nm_sparse_matmul passed$
+nm24	GemminiNMRocketConfig	nm_sparse_perf_24-baremetal	1	150000000	sparse	^nm_sparse_perf passed$
+nm24	GemminiNMRocketConfig	nm_sparse_protocol_24-baremetal	1	150000000	sparse	^nm_sparse_protocol passed$
+nm24	GemminiNMRocketConfig	nm_sparse_loop_24-baremetal	1	600000000	sparse	^nm_sparse_loop passed$
+nm24	GemminiNMRocketConfig	nm_sparse_protocol_neg4_24-baremetal	1	150000000	neg	index fifo deadlock
+nm24	GemminiNMRocketConfig	nm_sparse_protocol_neg7_24-baremetal	1	150000000	neg	differs from the mode its weights were preloaded in
+nm24	GemminiNMRocketConfig	nm_sparse_protocol_neg9_24-baremetal	1	150000000	neg	needs weight stationary dataflow
+nm24	GemminiNMRocketConfig	nm_sparse_protocol_neg10_24-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+nm24	GemminiNMRocketConfig	nm_sparse_protocol_neg14_24-baremetal	1	150000000	neg	differs from the mode its weights were preloaded in
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg10_24-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg11_24-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg20_24-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_CONV_WS issued while n:m sparse mode (config_ex rs1[10]) is on
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg30_24-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_WS with rs1[3] set needs LOOP_WS_CONFIG_NM (funct 28) first
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg40_24-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) without LOOP_WS rs1[3]
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg50_24-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg51_24-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg52_24-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg60_24-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg61_24-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg70_24-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg71_24-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg72_24-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg73_24-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg74_24-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg80_24-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop needs A_stride == 1
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg90_24-baremetal	1	150000000	neg	sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank)
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg91_24-baremetal	1	150000000	neg	sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank)
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg92_24-baremetal	1	150000000	neg	sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank)
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg100_24-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop started with index tiles pending in the FIFO: gemmini_nm_reset() first
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg120_24-baremetal	1	150000000	neg	sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg121_24-baremetal	1	150000000	neg	sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg122_24-baremetal	1	150000000	neg	sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg130_24-baremetal	1	150000000	neg	sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg131_24-baremetal	1	150000000	neg	sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg132_24-baremetal	1	150000000	neg	sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm24	GemminiNMRocketConfig	nm_sparse_loop_neg133_24-baremetal	1	150000000	neg	sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm24	GemminiNMRocketConfig	edge_24_full-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	edge_24_fixa-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	edge_24_loop-baremetal	1	150000000	bench	
+stock	GemminiRocketConfig	edge_24_dense-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	small_24_full-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	small_24_fixa-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	small_24_loop-baremetal	1	150000000	bench	
+stock	GemminiRocketConfig	small_24_dense-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	bert_qkv_24_full-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	bert_qkv_24_fixa-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	bert_qkv_24_loop-baremetal	1	150000000	bench	
+stock	GemminiRocketConfig	bert_qkv_24_dense-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	bert_ffn1_24_full-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	bert_ffn1_24_fixa-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	bert_ffn1_24_loop-baremetal	1	150000000	bench	
+stock	GemminiRocketConfig	bert_ffn1_24_dense-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	bert_ffn2_24_full-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	bert_ffn2_24_fixa-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	bert_ffn2_24_loop-baremetal	1	150000000	bench	
+stock	GemminiRocketConfig	bert_ffn2_24_dense-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	rn50_conv_24_full-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	rn50_conv_24_fixa-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	rn50_conv_24_loop-baremetal	1	150000000	bench	
+stock	GemminiRocketConfig	rn50_conv_24_dense-baremetal	1	150000000	bench	
+nm24	GemminiNMRocketConfig	fair_perf_24-baremetal	1	150000000	fair	
+nm24	GemminiNMRocketConfig	fair_perf_dense_only-baremetal	1	150000000	fair	
+nm24	GemminiNMRocketConfig	fair_perf_24-baremetal	2	150000000	fair	
+nm24	GemminiNMRocketConfig	fair_perf_dense_only-baremetal	2	150000000	fair	
+nm24	GemminiNMRocketConfig	fair_perf_24-baremetal	3	150000000	fair	
+nm24	GemminiNMRocketConfig	fair_perf_dense_only-baremetal	3	150000000	fair	

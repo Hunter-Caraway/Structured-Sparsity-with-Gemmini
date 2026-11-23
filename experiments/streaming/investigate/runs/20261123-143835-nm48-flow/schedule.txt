@@ -1,0 +1,130 @@
+predicted schedule: 122 jobs on 3 slot(s), longest first (history: 10 run folder(s), 43 measured cycles/s rates)
+  # chip   program                                          seed     timeout  pred h start h   end h  source
+  1 nm48   nm_sparse_loop_48                                   1 600,000,000    38.8     0.0    38.8  wall 54256 s in 20261115-225958-fixbfail-srv; x2.576 hint: bank-split-impl.md step 9, nm_sparse_loop_24 Spike instructions 59,512,572 (rocc-tests 2ad1fd3) / 23,101,494 (22158bf)  WARN >24h
+  2 nm48   conv_with_rot180                                    1 150,000,000    20.0     0.0    20.0  wall 72015 s in 20261113-160015-fixb-srv
+  3 nm48   tiled_matmul_option                                 1 150,000,000    13.0     0.0    13.0  wall 46864 s in 20261113-160015-fixb-srv
+  4 nm48   conv_trans_input_3120_with_kernel_dilation          1 150,000,000    12.6    13.0    25.7  wall 45529 s in 20261113-160015-fixb-srv
+  5 nm48   bert_ffn1_48_fixa                                   1 150,000,000    11.4    20.0    31.5  wall 41212 s in 20261113-160015-fixb-srv (analog nm48.bert_ffn1_48_full)
+  6 nm48   bert_ffn1_48_full                                   1 150,000,000    11.4    25.7    37.1  wall 41212 s in 20261113-160015-fixb-srv
+  7 stock  bert_ffn1_48_dense                                  1 150,000,000    10.7    31.5    42.2  wall 38618 s in 20261113-160015-fixb-srv (analog stock.bert_ffn1_24_dense)
+  8 nm48   bert_ffn1_48_loop                                   1 150,000,000     7.2    37.1    44.3  wall 25756 s in 20261113-160015-fixb-srv
+  9 nm48   matmul                                              1 150,000,000     5.8    38.8    44.6  wall 20798 s in 20261113-160015-fixb-srv
+ 10 nm48   bert_ffn2_48_fixa                                   1 150,000,000     5.1    42.2    47.3  wall 18334 s in 20261113-160015-fixb-srv (analog nm48.bert_ffn2_48_full)
+ 11 nm48   bert_ffn2_48_full                                   1 150,000,000     5.1    44.3    49.4  wall 18334 s in 20261113-160015-fixb-srv
+ 12 stock  bert_ffn2_48_dense                                  1 150,000,000     4.4    44.6    49.0  wall 15855 s in 20261113-160015-fixb-srv (analog stock.bert_ffn2_24_dense)
+ 13 nm48   bert_ffn2_48_loop                                   1 150,000,000     3.9    47.3    51.1  wall 13887 s in 20261113-160015-fixb-srv
+ 14 nm48   conv_with_pool                                      1 150,000,000     3.8    49.0    52.8  wall 13788 s in 20261113-160015-fixb-srv
+ 15 nm48   conv_trans_input_3120                               1 150,000,000     3.8    49.4    53.2  wall 13741 s in 20261113-160015-fixb-srv
+ 16 nm48   conv                                                1 150,000,000     3.7    51.1    54.8  wall 13172 s in 20261113-160015-fixb-srv
+ 17 nm48   conv_trans_weight_1203                              1 150,000,000     3.5    52.8    56.3  wall 12627 s in 20261113-160015-fixb-srv
+ 18 nm48   conv_trans_weight_0132                              1 150,000,000     3.5    53.2    56.7  wall 12600 s in 20261113-160015-fixb-srv
+ 19 nm48   conv_trans_output_1203                              1 150,000,000     3.5    54.8    58.3  wall 12586 s in 20261113-160015-fixb-srv
+ 20 stock  bert_qkv_48_dense                                   1 150,000,000     2.8    56.3    59.1  wall 10094 s in 20261113-160015-fixb-srv (analog stock.bert_qkv_24_dense)
+ 21 nm48   bert_qkv_48_fixa                                    1 150,000,000     2.8    56.7    59.5  wall 10032 s in 20261113-160015-fixb-srv (analog nm48.bert_qkv_48_full)
+ 22 nm48   bert_qkv_48_full                                    1 150,000,000     2.8    58.3    61.1  wall 10032 s in 20261113-160015-fixb-srv
+ 23 nm48   rn50_conv_48_fixa                                   1 150,000,000     2.6    59.1    61.8  wall 9434 s in 20261113-160015-fixb-srv (analog nm48.rn50_conv_48_full)
+ 24 nm48   rn50_conv_48_full                                   1 150,000,000     2.6    59.5    62.1  wall 9434 s in 20261113-160015-fixb-srv
+ 25 nm48   tiled_matmul_cpu                                    1 150,000,000     2.5    61.1    63.5  wall 8878 s in 20261113-160015-fixb-srv
+ 26 stock  rn50_conv_48_dense                                  1 150,000,000     2.3    61.8    64.0  wall 8111 s in 20261113-160015-fixb-srv (analog stock.rn50_conv_24_dense)
+ 27 nm48   matmul_ws                                           1 150,000,000     2.2    62.1    64.3  wall 7821 s in 20261113-160015-fixb-srv
+ 28 nm48   mvin_mvout_acc_stride                               1 150,000,000     2.1    63.5    65.7  wall 7676 s in 20261113-160015-fixb-srv
+ 29 nm48   fair_perf_48                                        1 150,000,000     2.1    64.0    66.1  wall 7649 s in 20261113-160015-fixb-srv
+ 30 nm48   fair_perf_48                                        2 150,000,000     2.1    64.3    66.4  wall 7649 s in 20261113-160015-fixb-srv
+ 31 nm48   fair_perf_48                                        3 150,000,000     2.1    65.7    67.8  wall 7649 s in 20261113-160015-fixb-srv
+ 32 nm48   nm_sparse_perf_48                                   1 150,000,000     1.9    66.1    68.0  wall 6781 s in 20261113-160015-fixb-srv
+ 33 nm48   fair_perf_dense_only                                1 150,000,000     1.8    66.4    68.2  wall 6583 s in 20261113-160015-fixb-srv (analog stock.fair_perf_dense_only)
+ 34 nm48   fair_perf_dense_only                                2 150,000,000     1.8    67.8    69.6  wall 6583 s in 20261113-160015-fixb-srv (analog stock.fair_perf_dense_only)
+ 35 nm48   fair_perf_dense_only                                3 150,000,000     1.8    68.0    69.9  wall 6583 s in 20261113-160015-fixb-srv (analog stock.fair_perf_dense_only)
+ 36 nm48   matmul_os                                           1 150,000,000     1.8    68.2    70.0  wall 6571 s in 20261113-160015-fixb-srv
+ 37 nm48   bert_qkv_48_loop                                    1 150,000,000     1.8    69.6    71.4  wall 6331 s in 20261113-160015-fixb-srv
+ 38 nm48   tiled_matmul_ws                                     1 150,000,000     1.6    69.9    71.4  wall 5733 s in 20261113-160015-fixb-srv
+ 39 nm48   tiled_matmul_os                                     1 150,000,000     1.6    70.0    71.6  wall 5702 s in 20261113-160015-fixb-srv
+ 40 nm48   nm_sparse_sw_48                                     1 150,000,000     1.5    71.4    72.9  wall 5568 s in 20261113-160015-fixb-srv
+ 41 nm48   rn50_conv_48_loop                                   1 150,000,000     1.5    71.4    73.0  wall 5562 s in 20261113-160015-fixb-srv
+ 42 nm48   conv_dw_perf                                        1 150,000,000     1.4    71.6    73.0  wall 5152 s in 20261113-160015-fixb-srv
+ 43 nm48   conv_rect_pool                                      1 150,000,000     1.3    72.9    74.2  wall 4682 s in 20261113-160015-fixb-srv
+ 44 nm48   conv_perf                                           1 150,000,000     1.1    73.0    74.1  wall 3892 s in 20261113-160015-fixb-srv
+ 45 nm48   conv_first_layer                                    1 150,000,000     1.0    73.0    74.1  wall 3670 s in 20261113-160015-fixb-srv
+ 46 nm48   conv_rect                                           1 150,000,000     0.8    74.1    74.9  wall 3060 s in 20261113-160015-fixb-srv
+ 47 nm48   small_48_fixa                                       1 150,000,000     0.7    74.1    74.8  wall 2660 s in 20261113-160015-fixb-srv (analog nm48.small_48_full)
+ 48 nm48   small_48_full                                       1 150,000,000     0.7    74.2    75.0  wall 2660 s in 20261113-160015-fixb-srv
+ 49 stock  small_48_dense                                      1 150,000,000     0.7    74.8    75.6  wall 2659 s in 20261113-160015-fixb-srv (analog stock.small_24_dense)
+ 50 nm48   conv_stride                                         1 150,000,000     0.7    74.9    75.6  wall 2575 s in 20261113-160015-fixb-srv
+ 51 nm48   conv_dw                                             1 150,000,000     0.7    75.0    75.7  wall 2491 s in 20261113-160015-fixb-srv
+ 52 stock  edge_48_dense                                       1 150,000,000     0.7    75.6    76.2  wall 2443 s in 20261113-160015-fixb-srv (analog stock.edge_24_dense)
+ 53 nm48   tiled_matmul_ws_Bt                                  1 150,000,000     0.6    75.6    76.3  wall 2229 s in 20261113-160015-fixb-srv
+ 54 nm48   tiled_matmul_ws_At                                  1 150,000,000     0.6    75.7    76.3  wall 2128 s in 20261113-160015-fixb-srv
+ 55 nm48   edge_48_fixa                                        1 150,000,000     0.6    76.2    76.8  wall 2123 s in 20261113-160015-fixb-srv (analog nm48.edge_48_full)
+ 56 nm48   edge_48_full                                        1 150,000,000     0.6    76.3    76.8  wall 2123 s in 20261113-160015-fixb-srv
+ 57 nm48   tiled_matmul_ws_low_D                               1 150,000,000     0.5    76.3    76.7  wall 1658 s in 20261113-160015-fixb-srv
+ 58 nm48   nm_sparse_matmul_48                                 1 150,000,000     0.5    76.7    77.2  wall 1624 s in 20261113-160015-fixb-srv
+ 59 nm48   tiled_matmul_ws_full_C                              1 150,000,000     0.4    76.8    77.2  wall 1528 s in 20261113-160015-fixb-srv
+ 60 nm48   nm_sparse_debug_48                                  1 150,000,000     0.4    76.8    77.2  wall 1382 s in 20261113-160015-fixb-srv
+ 61 nm48   nm_sparse_protocol_48                               1 150,000,000     0.4    77.2    77.5  wall 1381 s in 20261113-160015-fixb-srv
+ 62 nm48   small_48_loop                                       1 150,000,000     0.3    77.2    77.6  wall 1237 s in 20261113-160015-fixb-srv
+ 63 nm48   edge_48_loop                                        1 150,000,000     0.2    77.2    77.5  wall 810 s in 20261113-160015-fixb-srv
+ 64 nm48   global_average                                      1 150,000,000     0.2    77.5    77.7  wall 809 s in 20261113-160015-fixb-srv
+ 65 nm48   mvin_mvout_stride                                   1 150,000,000     0.2    77.5    77.7  wall 592 s in 20261113-160015-fixb-srv
+ 66 nm48   matrix_add                                          1 150,000,000     0.2    77.6    77.7  wall 576 s in 20261113-160015-fixb-srv
+ 67 nm48   mvin_mvout_acc_full_stride                          1 150,000,000     0.2    77.7    77.9  wall 568 s in 20261113-160015-fixb-srv
+ 68 nm48   nm_sparse_loop_neg121_48                            1 150,000,000     0.1    77.7    77.8  wall 362 s in 20261113-160015-fixb-srv
+ 69 nm48   nm_sparse_loop_neg92_48                             1 150,000,000     0.1    77.7    77.8  wall 362 s in 20261113-160015-fixb-srv (analog nm48.nm_sparse_loop_neg121_48)
+ 70 nm48   nm_sparse_loop_neg74_48                             1 150,000,000     0.1    77.8    77.9  wall 348 s in 20261113-160015-fixb-srv
+ 71 nm48   nm_sparse_loop_neg130_48                            1 150,000,000     0.1    77.8    77.9  wall 342 s in 20261113-160015-fixb-srv
+ 72 nm48   nm_sparse_loop_neg73_48                             1 150,000,000     0.1    77.9    77.9  wall 341 s in 20261113-160015-fixb-srv
+ 73 nm48   nm_sparse_loop_neg10_48                             1 150,000,000     0.1    77.9    78.0  wall 333 s in 20261113-160015-fixb-srv
+ 74 nm48   nm_sparse_loop_neg120_48                            1 150,000,000     0.1    77.9    78.0  wall 325 s in 20261113-160015-fixb-srv
+ 75 nm48   nm_sparse_loop_neg71_48                             1 150,000,000     0.1    77.9    78.0  wall 322 s in 20261113-160015-fixb-srv
+ 76 nm48   nm_sparse_loop_neg122_48                            1 150,000,000     0.1    78.0    78.1  wall 318 s in 20261113-160015-fixb-srv
+ 77 nm48   nm_sparse_loop_neg51_48                             1 150,000,000     0.1    78.0    78.1  wall 311 s in 20261113-160015-fixb-srv
+ 78 nm48   nm_sparse_loop_neg50_48                             1 150,000,000     0.1    78.0    78.1  wall 310 s in 20261113-160015-fixb-srv
+ 79 nm48   nm_sparse_loop_neg80_48                             1 150,000,000     0.1    78.1    78.2  wall 308 s in 20261113-160015-fixb-srv
+ 80 nm48   nm_sparse_loop_neg100_48                            1 150,000,000     0.1    78.1    78.2  wall 307 s in 20261113-160015-fixb-srv
+ 81 nm48   nm_sparse_loop_neg40_48                             1 150,000,000     0.1    78.1    78.2  wall 301 s in 20261113-160015-fixb-srv
+ 82 nm48   nm_sparse_loop_neg131_48                            1 150,000,000     0.1    78.2    78.3  wall 298 s in 20261113-160015-fixb-srv
+ 83 nm48   nm_sparse_loop_neg72_48                             1 150,000,000     0.1    78.2    78.3  wall 297 s in 20261113-160015-fixb-srv
+ 84 nm48   nm_sparse_loop_neg61_48                             1 150,000,000     0.1    78.2    78.3  wall 294 s in 20261113-160015-fixb-srv
+ 85 nm48   nm_sparse_loop_neg90_48                             1 150,000,000     0.1    78.3    78.3  wall 290 s in 20261113-160015-fixb-srv
+ 86 nm48   nm_sparse_loop_neg60_48                             1 150,000,000     0.1    78.3    78.3  wall 287 s in 20261113-160015-fixb-srv
+ 87 nm48   nm_sparse_loop_neg70_48                             1 150,000,000     0.1    78.3    78.4  wall 284 s in 20261113-160015-fixb-srv
+ 88 nm48   nm_sparse_loop_neg30_48                             1 150,000,000     0.1    78.3    78.4  wall 282 s in 20261113-160015-fixb-srv
+ 89 nm48   nm_sparse_loop_neg52_48                             1 150,000,000     0.1    78.3    78.4  wall 282 s in 20261113-160015-fixb-srv
+ 90 nm48   mvin_mvout_acc                                      1 150,000,000     0.1    78.4    78.4  wall 276 s in 20261113-160015-fixb-srv
+ 91 nm48   nm_sparse_loop_neg91_48                             1 150,000,000     0.1    78.4    78.5  wall 267 s in 20261113-160015-fixb-srv
+ 92 nm48   nm_sparse_loop_neg11_48                             1 150,000,000     0.1    78.4    78.5  wall 264 s in 20261113-160015-fixb-srv
+ 93 nm48   nm_sparse_loop_neg132_48                            1 150,000,000     0.1    78.4    78.5  wall 258 s in 20261113-160015-fixb-srv
+ 94 nm48   nm_sparse_loop_neg133_48                            1 150,000,000     0.1    78.5    78.6  wall 249 s in 20261113-160015-fixb-srv
+ 95 nm48   resadd_stride                                       1 150,000,000     0.1    78.5    78.6  wall 232 s in 20261113-160015-fixb-srv
+ 96 nm48   nm_sparse_loop_neg20_48                             1 150,000,000     0.1    78.5    78.6  wall 226 s in 20261113-160015-fixb-srv
+ 97 nm48   transpose                                           1 150,000,000     0.0    78.6    78.6  wall 174 s in 20261113-160015-fixb-srv
+ 98 nm48   template                                            1 150,000,000     0.0    78.6    78.6  wall 173 s in 20261113-160015-fixb-srv
+ 99 nm48   tiled_matmul_ws_perf                                1 150,000,000     0.0    78.6    78.6  wall 158 s in 20261113-160015-fixb-srv
+100 nm48   mvin_mvout_acc_full                                 1 150,000,000     0.0    78.6    78.6  wall 128 s in 20261113-160015-fixb-srv
+101 nm48   gemmini_counter                                     1 150,000,000     0.0    78.6    78.6  wall 111 s in 20261113-160015-fixb-srv
+102 nm48   mvin_scale                                          1 150,000,000     0.0    78.6    78.6  wall 76 s in 20261113-160015-fixb-srv
+103 nm48   nm_sparse_protocol_neg14_48                         1 150,000,000     0.0    78.6    78.7  wall 68 s in 20261113-160015-fixb-srv
+104 nm48   mvin_mvout_acc_zero_stride                          1 150,000,000     0.0    78.6    78.7  wall 64 s in 20261113-160015-fixb-srv
+105 nm48   nm_sparse_protocol_neg10_48                         1 150,000,000     0.0    78.6    78.7  wall 63 s in 20261113-160015-fixb-srv
+106 nm48   mvin_mvout                                          1 150,000,000     0.0    78.7    78.7  wall 59 s in 20261113-160015-fixb-srv
+107 nm48   nm_sparse_protocol_neg4_48                          1 150,000,000     0.0    78.7    78.7  wall 54 s in 20261113-160015-fixb-srv
+108 nm48   nm_sparse_protocol_neg9_48                          1 150,000,000     0.0    78.7    78.7  wall 46 s in 20261113-160015-fixb-srv
+109 nm48   nm_sparse_protocol_neg7_48                          1 150,000,000     0.0    78.7    78.7  wall 41 s in 20261113-160015-fixb-srv
+110 nm48   resadd                                              1 150,000,000     0.0    78.7    78.7  wall 35 s in 20261113-160015-fixb-srv
+111 nm48   mvin_mvout_block_stride                             1 150,000,000     0.0    78.7    78.7  wall 30 s in 20261113-160015-fixb-srv
+112 nm48   raw_hazard                                          1 150,000,000     0.0    78.7    78.7  wall 16 s in 20261113-160015-fixb-srv
+113 nm48   aligned                                             1 150,000,000     0.0    78.7    78.7  wall 15 s in 20261113-160015-fixb-srv
+114 nm48   padded                                              1 150,000,000     0.0    78.7    78.7  wall 13 s in 20261113-160015-fixb-srv
+115 nm48   mvin_mvout_zeros                                    1 150,000,000     0.0    78.7    78.7  wall 10 s in 20261113-160015-fixb-srv
+116 nm48   tiled_matmul_ws_igelu                               1 150,000,000     0.0    78.7    78.7  wall 10 s in 20261113-160015-fixb-srv
+117 nm48   tiled_matmul_ws_softmax                             1 150,000,000     0.0    78.7    78.7  wall 7 s in 20261113-160015-fixb-srv
+118 nm48   tiled_matmul_ws_layernorm                           1 150,000,000     0.0    78.7    78.7  wall 3 s in 20261113-160015-fixb-srv
+119 nm48   conv_with_input_dilation_and_neg_padding            1 1,000,000,000   226.3    78.7   305.0  timed out at 150,000,000 in 20261113-160015-fixb-srv; budget 1,000,000,000 / 1228 c/s (upper bound)  WARN >24h
+120 nm48   conv_with_input_dilation                            1 1,000,000,000   224.9    78.7   303.6  timed out at 150,000,000 in 20261113-160015-fixb-srv; budget 1,000,000,000 / 1235 c/s (upper bound)  WARN >24h
+121 nm48   conv_with_input_dilation_and_rot180                 1 1,000,000,000   224.3    78.7   303.0  timed out at 150,000,000 in 20261113-160015-fixb-srv; budget 1,000,000,000 / 1238 c/s (upper bound)  WARN >24h
+122 nm48   conv_with_kernel_dilation                           1 150,000,000    26.1   303.0   329.1  wall 94083 s in 20261113-160015-fixb-srv  WARN >24h
+predicted total wall time: 329.1 h (13.71 days) on 3 slot(s)  (over the 24 h target)
+  warning: nm48 nm_sparse_loop_48 seed 1 predicted 38.8 h (> 24 h); it is not killed for time, its cycle budget is 600,000,000
+  warning: nm48 conv_with_input_dilation_and_neg_padding seed 1 predicted 226.3 h (> 24 h); it is not killed for time, its cycle budget is 1,000,000,000
+  warning: nm48 conv_with_input_dilation seed 1 predicted 224.9 h (> 24 h); it is not killed for time, its cycle budget is 1,000,000,000
+  warning: nm48 conv_with_input_dilation_and_rot180 seed 1 predicted 224.3 h (> 24 h); it is not killed for time, its cycle budget is 1,000,000,000
+  warning: nm48 conv_with_kernel_dilation seed 1 predicted 26.1 h (> 24 h); it is not killed for time, its cycle budget is 150,000,000

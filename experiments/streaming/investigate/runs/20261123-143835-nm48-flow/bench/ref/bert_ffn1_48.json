@@ -1,0 +1,37 @@
+{
+ "layer": "bert_ffn1",
+ "M": 128,
+ "K": 768,
+ "N": 3072,
+ "n": 4,
+ "m": 8,
+ "seed": 20261111,
+ "hash": "0x6c46f4f018444f6c",
+ "sample_rows": [
+  0,
+  1,
+  53,
+  61,
+  64,
+  83,
+  126,
+  127
+ ],
+ "sha256": {
+  "A.bin": "d007d5ab68bbad0e30f63854258ab163888ed1ee924031eb323964b570e3f61a",
+  "W.bin": "46f0b9228620aa63aa2d92d43b575c27ec97b2545842ef26ae2453ab024a4fe0",
+  "WC.bin": "bcdba64995cc1c47d521f0852e9b0407832d8f8667ac57a753b37624a4370f41",
+  "IDX.bin": "fd0be7326e8f9e774244749bf9274bf033e193ad3b042feb12f6fae527a02697",
+  "META.bin": "8f669b3b2526f9afffd2e4dea62a8dc56d657679da375100984532124d51a4cf",
+  "SREF.bin": "d339c76162c3a2167503c56037c9c74510a441061892ee0774844c4a083cfaeb"
+ },
+ "kept_fraction": 0.5,
+ "meta_words_per_tile": 16,
+ "bytes": {
+  "A": 98304,
+  "W": 2359296,
+  "WC": 1179648,
+  "META": 589824,
+  "C_int32": 1572864
+ }
+}

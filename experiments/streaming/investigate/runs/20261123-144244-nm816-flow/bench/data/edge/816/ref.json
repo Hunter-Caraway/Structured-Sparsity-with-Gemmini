@@ -1,0 +1,37 @@
+{
+ "layer": "edge",
+ "M": 36,
+ "K": 128,
+ "N": 64,
+ "n": 8,
+ "m": 16,
+ "seed": 20261114,
+ "hash": "0x8f01389fd35b4f55",
+ "sample_rows": [
+  0,
+  1,
+  8,
+  13,
+  18,
+  32,
+  34,
+  35
+ ],
+ "sha256": {
+  "A.bin": "04229817b8d8072368531b6ea3f7ebf7554be59d1e6da4c2c1b191b539bbcd6e",
+  "W.bin": "db7d293fe87ef4acbbc9d337809678eb1958aec917aa5603dcec36e4949c4fd5",
+  "WC.bin": "1bb9aa71a5faf97b7a0aaa7cf2a11b91a69ba6852b1de3e532562433ab1c6c48",
+  "IDX.bin": "056eb5da0a7696230ff363f477382bcc624c0e1fd33bcacc6afdc8bd3b54aef4",
+  "META.bin": "6f3c4b76764a79dd49e2b5952e7f0d51ffb3ce5e203d8b3ea60bc2f2a55bbfb1",
+  "SREF.bin": "8bcb13973c1b79fd07691810fdb4fe62a9c7e2e79d34c7f1514e8477023f60d0"
+ },
+ "kept_fraction": 0.5,
+ "meta_words_per_tile": 16,
+ "bytes": {
+  "A": 4608,
+  "W": 8192,
+  "WC": 4096,
+  "META": 2048,
+  "C_int32": 9216
+ }
+}

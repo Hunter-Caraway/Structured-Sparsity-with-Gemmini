@@ -1,0 +1,4 @@
+pattern=nm48
+cfg=GemminiNM48RocketConfig
+srv_run=/home/ai-user/sinv/runs/20261123-150442-nm48-srv
+launched=2026-11-23T15:05:00

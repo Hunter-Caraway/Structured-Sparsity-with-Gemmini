@@ -1,0 +1,18 @@
+stamp=20261123-151155-nm816-srv
+pattern=nm816 n:m=8:16 config=GemminiNM816RocketConfig
+host=AI-1769.floridapoly.org 6.12.0-211.68.1.el10_2.x86_64 nproc=16
+quota=3 (QUOTA file; the driver never starts a job while 12 simulator-chip* processes run)
+git.laptop.gemmini-sparsity=e3eb337a66465c767d94cc4c42a46b2eeab49281 (uncommitted changes)
+git.laptop.gemmini=7b19c038cac38d615c25fbbc6b004d9f047edba0
+git.laptop.libgemmini=4886238de2b7ec182b46a78f135d5f43e60a42cd
+git.laptop.gemmini-rocc-tests=2ad1fd36a7f850b256afefccd4b9d689357ec97b
+src.laptop.sha256list=300382e3a42192b0158a3ea8e4076e14b9c0aa82f1d6ad0bb5162e3259019b16 (src.laptop.sha256)
+src.server.sha256list=300382e3a42192b0158a3ea8e4076e14b9c0aa82f1d6ad0bb5162e3259019b16 (src.server.sha256, taken at launch)
+src.server_vs_laptop=identical (230 files; include/gemmini_params.h not compared: elaboration output)
+src.GemminiNM816RocketConfig.build_list=b2f6127575f0ae6d10d8ab0e6beb7b821f16ce9e9cc6be29d80511650e19f04f (sim.src.sha256: taken right before make by pattern_srv_build.sh; names sim sha256 747d6cb122ec911e5cad74f1f0eba0b890442899b843baa6883ccdaff215c061)
+sim.nm816=GemminiNM816RocketConfig mtime=2026-11-23T14:51:14 sha256=747d6cb122ec911e5cad74f1f0eba0b890442899b843baa6883ccdaff215c061
+sim.stock=GemminiRocketConfig mtime=2026-11-09T14:04:32 sha256=84c2264ab08524b8e6b6f822b53ebb8613e381219e5ccb8144ad9cc9543b75e4
+timeout_cycles=150000000 per job, raised by prog_timeout (nm_sparse_loop_<NN> >= 600000000, conv_with_input_dilation* >= 1000000000); per-job value in jobs.tsv
+runner=pattern_srv_driver.sh: the simulator is called directly with make run-binary-fast LOADMEM=1 arguments (no make in sims/)
+programs=built on the laptop by run-flow.sh (tests, build_fair, pattern_bench_spike), Spike stage passed; sha256 in bin.sha256, checked on the server before launch
+stock_reused=6 job(s), recorded logs listed in stock-reused.tsv

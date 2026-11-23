@@ -305,7 +305,9 @@ def cmd_schedule(a):
         hints.append((rx, float(fac), why))
     for j in plan:
         j["pred_s"], j["pred_src"] = predict(j, hist, rates, a.sfx, hints)
-    plan.sort(key=lambda j: (-j["pred_s"], j["chip"], j["program"], int(j["seed"])))
+    # --last: Berkeley tests that run for days start after the rest, so they do not hold every slot while the sparse tests wait
+    last = re.compile(a.last) if a.last else None
+    plan.sort(key=lambda j: (bool(last and last.search(base(j["program"]))), -j["pred_s"], j["chip"], j["program"], int(j["seed"])))
     slots = [0.0] * max(1, a.slots)
     for j in plan:  # list scheduling in LPT order: each job takes the slot that frees first
         i = min(range(len(slots)), key=slots.__getitem__)
@@ -454,6 +456,7 @@ def main():
     s.add_argument("--slots", type=int, required=True)
     s.add_argument("--sfx", default="")
     s.add_argument("--hint", action="append", help="<program regex>=<factor>:<reason>")
+    s.add_argument("--last", help="regex of programs scheduled after all others")
     s.add_argument("--out", required=True)
     m = sub.add_parser("summary")
     m.add_argument("--run", required=True)

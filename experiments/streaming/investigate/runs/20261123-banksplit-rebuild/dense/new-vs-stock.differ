@@ -1,0 +1,8 @@
+ExecuteController.sv 440
+Gemmini.sv 11
+LoadController.sv 2
+LoopMatmulLdA.sv 18
+LoopMatmul.sv 6
+MeshWithDelays.sv 4690
+MISSING metadata
+ReservationStation.sv 6

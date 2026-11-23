@@ -1,0 +1,4 @@
+pattern=nm24
+cfg=GemminiNMRocketConfig
+srv_run=/home/ai-user/sinv/runs/20261123-145434-nm24-srv
+launched=2026-11-23T14:54:52

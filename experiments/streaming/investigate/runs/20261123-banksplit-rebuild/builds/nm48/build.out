@@ -1,0 +1,2 @@
+backed up to /home/ai-user/sinv/builds/20261123-banksplit-nm48/backup
+make -j8 CONFIG=GemminiNM48RocketConfig in /home/ai-user/chipyard/sims/verilator (Mon Nov 23 02:42:42 PM EST 2026)

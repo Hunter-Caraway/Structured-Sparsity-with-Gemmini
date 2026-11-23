@@ -1,0 +1,123 @@
+chip	cfg	program	seed	timeout	kind	expect
+nm48	GemminiNM48RocketConfig	mvin_mvout-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	mvin_mvout_zeros-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	mvin_mvout_stride-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	mvin_mvout_block_stride-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	mvin_mvout_acc-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	mvin_mvout_acc_zero_stride-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	mvin_mvout_acc_stride-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	mvin_mvout_acc_full-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	mvin_mvout_acc_full_stride-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	matmul_os-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	matmul_ws-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	matmul-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	raw_hazard-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	aligned-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	padded-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	mvin_scale-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	conv-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	conv_stride-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	conv_rect-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	conv_rect_pool-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	conv_with_pool-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	conv_with_rot180-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	conv_with_kernel_dilation-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	conv_with_input_dilation-baremetal	1	1000000000	dense	
+nm48	GemminiNM48RocketConfig	conv_with_input_dilation_and_rot180-baremetal	1	1000000000	dense	
+nm48	GemminiNM48RocketConfig	conv_with_input_dilation_and_neg_padding-baremetal	1	1000000000	dense	
+nm48	GemminiNM48RocketConfig	conv_trans_output_1203-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	conv_trans_weight_1203-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	conv_trans_weight_0132-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	conv_trans_input_3120-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	conv_trans_input_3120_with_kernel_dilation-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	conv_first_layer-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	conv_dw-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	conv_perf-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	conv_dw_perf-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	tiled_matmul_os-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	tiled_matmul_ws-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	tiled_matmul_ws_At-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	tiled_matmul_ws_Bt-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	tiled_matmul_ws_full_C-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	tiled_matmul_ws_low_D-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	tiled_matmul_ws_igelu-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	tiled_matmul_ws_layernorm-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	tiled_matmul_ws_softmax-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	tiled_matmul_ws_perf-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	tiled_matmul_cpu-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	tiled_matmul_option-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	transpose-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	matrix_add-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	resadd-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	resadd_stride-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	global_average-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	gemmini_counter-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	template-baremetal	1	150000000	dense	
+nm48	GemminiNM48RocketConfig	nm_sparse_sw_48-baremetal	1	150000000	sparse	^nm_sparse_sw passed$
+nm48	GemminiNM48RocketConfig	nm_sparse_debug_48-baremetal	1	150000000	sparse	^nm_sparse_debug passed$
+nm48	GemminiNM48RocketConfig	nm_sparse_matmul_48-baremetal	1	150000000	sparse	^nm_sparse_matmul passed$
+nm48	GemminiNM48RocketConfig	nm_sparse_perf_48-baremetal	1	150000000	sparse	^nm_sparse_perf passed$
+nm48	GemminiNM48RocketConfig	nm_sparse_protocol_48-baremetal	1	150000000	sparse	^nm_sparse_protocol passed$
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_48-baremetal	1	600000000	sparse	^nm_sparse_loop passed$
+nm48	GemminiNM48RocketConfig	nm_sparse_protocol_neg4_48-baremetal	1	150000000	neg	index fifo deadlock
+nm48	GemminiNM48RocketConfig	nm_sparse_protocol_neg7_48-baremetal	1	150000000	neg	differs from the mode its weights were preloaded in
+nm48	GemminiNM48RocketConfig	nm_sparse_protocol_neg9_48-baremetal	1	150000000	neg	needs weight stationary dataflow
+nm48	GemminiNM48RocketConfig	nm_sparse_protocol_neg10_48-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+nm48	GemminiNM48RocketConfig	nm_sparse_protocol_neg14_48-baremetal	1	150000000	neg	differs from the mode its weights were preloaded in
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg10_48-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg11_48-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_WS nm flag (rs1[3]) differs from n:m sparse mode (config_ex rs1[10])
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg20_48-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_CONV_WS issued while n:m sparse mode (config_ex rs1[10]) is on
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg30_48-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_WS with rs1[3] set needs LOOP_WS_CONFIG_NM (funct 28) first
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg40_48-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_WS_CONFIG_NM (funct 28) without LOOP_WS rs1[3]
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg50_48-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg51_48-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg52_48-baremetal	1	150000000	neg	sparse-loop-fix: LOOP_WS_CONFIG_NM needs a non-zero 16-byte aligned rs1 and rs2 == 0
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg60_48-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg61_48-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop needs an even K tile count and pad_K == 0 (K % 2*DIM)
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg70_48-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg71_48-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg72_48-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg73_48-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg74_48-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop does not support transposes, resadd, low_D or spad-only
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg80_48-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop needs A_stride == 1
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg90_48-baremetal	1	150000000	neg	sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank)
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg91_48-baremetal	1	150000000	neg	sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank)
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg92_48-baremetal	1	150000000	neg	sparse-loop-fix: A, B and index regions do not fit in the loop's scratchpad half (or index region exceeds one bank)
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg100_48-baremetal	1	150000000	neg	sparse-loop-fix: sparse loop started with index tiles pending in the FIFO: gemmini_nm_reset() first
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg120_48-baremetal	1	150000000	neg	sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg121_48-baremetal	1	150000000	neg	sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg122_48-baremetal	1	150000000	neg	sparse-loop-fix: LOAD_IDX needs cols == 16 and 1..16 rows
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg130_48-baremetal	1	150000000	neg	sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg131_48-baremetal	1	150000000	neg	sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg132_48-baremetal	1	150000000	neg	sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm48	GemminiNM48RocketConfig	nm_sparse_loop_neg133_48-baremetal	1	150000000	neg	sparse-loop-fix: LOAD_IDX destination must be a scratchpad row address
+nm48	GemminiNM48RocketConfig	edge_48_full-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	edge_48_fixa-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	edge_48_loop-baremetal	1	150000000	bench	
+stock	GemminiRocketConfig	edge_48_dense-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	small_48_full-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	small_48_fixa-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	small_48_loop-baremetal	1	150000000	bench	
+stock	GemminiRocketConfig	small_48_dense-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	bert_qkv_48_full-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	bert_qkv_48_fixa-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	bert_qkv_48_loop-baremetal	1	150000000	bench	
+stock	GemminiRocketConfig	bert_qkv_48_dense-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	bert_ffn1_48_full-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	bert_ffn1_48_fixa-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	bert_ffn1_48_loop-baremetal	1	150000000	bench	
+stock	GemminiRocketConfig	bert_ffn1_48_dense-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	bert_ffn2_48_full-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	bert_ffn2_48_fixa-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	bert_ffn2_48_loop-baremetal	1	150000000	bench	
+stock	GemminiRocketConfig	bert_ffn2_48_dense-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	rn50_conv_48_full-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	rn50_conv_48_fixa-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	rn50_conv_48_loop-baremetal	1	150000000	bench	
+stock	GemminiRocketConfig	rn50_conv_48_dense-baremetal	1	150000000	bench	
+nm48	GemminiNM48RocketConfig	fair_perf_48-baremetal	1	150000000	fair	
+nm48	GemminiNM48RocketConfig	fair_perf_dense_only-baremetal	1	150000000	fair	
+nm48	GemminiNM48RocketConfig	fair_perf_48-baremetal	2	150000000	fair	
+nm48	GemminiNM48RocketConfig	fair_perf_dense_only-baremetal	2	150000000	fair	
+nm48	GemminiNM48RocketConfig	fair_perf_48-baremetal	3	150000000	fair	
+nm48	GemminiNM48RocketConfig	fair_perf_dense_only-baremetal	3	150000000	fair	

@@ -1,0 +1,61 @@
+== LdA new vs fixb
+91,97c91,97
+<   wire        _max_blocks_T = max_col_dim < 16'h5;	
+<   wire [15:0] max_blocks = _max_blocks_T ? max_col_dim : 16'h4;	
+<   wire [28:0] _sp_addr_T_4 = {15'h0, req_addr_start} + {{9'h0, row_iterator} * {9'h0, max_col_dim} + {9'h0, col_iterator}, 4'h0};	
+<   wire [15:0] blocks = col_iterator + max_blocks <= max_col_dim ? max_blocks : max_col_dim - col_iterator;	
+<   assign mvin_cmd_rs2_local_addr_norm_cmd = req_is_resadd ? _sp_addr_T_4[28:26] : _sp_addr_T_4[28:26];	
+<   assign mvin_cmd_rs2_local_addr_garbage_bit = req_is_resadd ? _sp_addr_T_4[14] : _sp_addr_T_4[14];	
+<   assign mvin_cmd_rs2_local_addr_data = req_is_resadd ? _sp_addr_T_4[13:0] : _sp_addr_T_4[13:0];	
+---
+>   wire        _max_blocks_dense_T = max_col_dim < 16'h5;	
+>   wire [15:0] max_blocks_dense = _max_blocks_dense_T ? max_col_dim : 16'h4;	
+>   wire [28:0] _sp_addr_dense_T_4 = {15'h0, req_addr_start} + {{9'h0, row_iterator} * {9'h0, max_col_dim} + {9'h0, col_iterator}, 4'h0};	
+>   wire [15:0] blocks = col_iterator + max_blocks_dense <= max_col_dim ? max_blocks_dense : max_col_dim - col_iterator;	
+>   assign mvin_cmd_rs2_local_addr_norm_cmd = req_is_resadd ? _sp_addr_dense_T_4[28:26] : _sp_addr_dense_T_4[28:26];	
+>   assign mvin_cmd_rs2_local_addr_garbage_bit = req_is_resadd ? _sp_addr_dense_T_4[14] : _sp_addr_dense_T_4[14];	
+>   assign mvin_cmd_rs2_local_addr_data = req_is_resadd ? _sp_addr_dense_T_4[13:0] : _sp_addr_dense_T_4[13:0];	
+101c101
+<   wire [16:0] _next_i_T_3 = {1'h0, i} + {1'h0, req_transpose ? (_max_blocks_T ? req_max_i : 16'h4) : 16'h1};	
+---
+>   wire [16:0] _next_i_T_3 = {1'h0, i} + {1'h0, req_transpose ? (_max_blocks_dense_T ? req_max_i : 16'h4) : 16'h1};	
+103c103
+<   wire [16:0] _next_k_T_4 = {1'h0, k} + {1'h0, req_transpose ? 16'h1 : _max_blocks_T ? req_max_k : 16'h4};	
+---
+>   wire [16:0] _next_k_T_4 = {1'h0, k} + {1'h0, req_transpose ? 16'h1 : _max_blocks_dense_T ? req_max_k : 16'h4};	
+== LdA new vs stock
+91,97c91,97
+<   wire        _max_blocks_T = max_col_dim < 16'h5;	
+<   wire [15:0] max_blocks = _max_blocks_T ? max_col_dim : 16'h4;	
+<   wire [28:0] _sp_addr_T_4 = {15'h0, req_addr_start} + {{9'h0, row_iterator} * {9'h0, max_col_dim} + {9'h0, col_iterator}, 4'h0};	
+<   wire [15:0] blocks = col_iterator + max_blocks <= max_col_dim ? max_blocks : max_col_dim - col_iterator;	
+<   assign mvin_cmd_rs2_local_addr_norm_cmd = req_is_resadd ? _sp_addr_T_4[28:26] : _sp_addr_T_4[28:26];	
+<   assign mvin_cmd_rs2_local_addr_garbage_bit = req_is_resadd ? _sp_addr_T_4[14] : _sp_addr_T_4[14];	
+<   assign mvin_cmd_rs2_local_addr_data = req_is_resadd ? _sp_addr_T_4[13:0] : _sp_addr_T_4[13:0];	
+---
+>   wire        _max_blocks_dense_T = max_col_dim < 16'h5;	
+>   wire [15:0] max_blocks_dense = _max_blocks_dense_T ? max_col_dim : 16'h4;	
+>   wire [28:0] _sp_addr_dense_T_4 = {15'h0, req_addr_start} + {{9'h0, row_iterator} * {9'h0, max_col_dim} + {9'h0, col_iterator}, 4'h0};	
+>   wire [15:0] blocks = col_iterator + max_blocks_dense <= max_col_dim ? max_blocks_dense : max_col_dim - col_iterator;	
+>   assign mvin_cmd_rs2_local_addr_norm_cmd = req_is_resadd ? _sp_addr_dense_T_4[28:26] : _sp_addr_dense_T_4[28:26];	
+>   assign mvin_cmd_rs2_local_addr_garbage_bit = req_is_resadd ? _sp_addr_dense_T_4[14] : _sp_addr_dense_T_4[14];	
+>   assign mvin_cmd_rs2_local_addr_data = req_is_resadd ? _sp_addr_dense_T_4[13:0] : _sp_addr_dense_T_4[13:0];	
+101c101
+<   wire [16:0] _next_i_T_3 = {1'h0, i} + {1'h0, req_transpose ? (_max_blocks_T ? req_max_i : 16'h4) : 16'h1};	
+---
+>   wire [16:0] _next_i_T_3 = {1'h0, i} + {1'h0, req_transpose ? (_max_blocks_dense_T ? req_max_i : 16'h4) : 16'h1};	
+103c103
+<   wire [16:0] _next_k_T_4 = {1'h0, k} + {1'h0, req_transpose ? 16'h1 : _max_blocks_T ? req_max_k : 16'h4};	
+---
+>   wire [16:0] _next_k_T_4 = {1'h0, k} + {1'h0, req_transpose ? 16'h1 : _max_blocks_dense_T ? req_max_k : 16'h4};	
+== LoopMatmul new vs stock
+357,358c357,358
+<   wire          is_loop_config_cmd = _cmd_q_io_deq_bits_cmd_inst_funct > 7'h8 & _cmd_q_io_deq_bits_cmd_inst_funct < 7'hE | _cmd_q_io_deq_bits_cmd_inst_funct > 7'h17 & _cmd_q_io_deq_bits_cmd_inst_funct < 7'h1A;	
+<   wire          is_loop_cmd = is_loop_run_cmd | is_loop_config_cmd;	
+---
+>   wire          is_loop_config_cmd_ws = _cmd_q_io_deq_bits_cmd_inst_funct > 7'h8 & _cmd_q_io_deq_bits_cmd_inst_funct < 7'hE | _cmd_q_io_deq_bits_cmd_inst_funct > 7'h17 & _cmd_q_io_deq_bits_cmd_inst_funct < 7'h1A;	
+>   wire          is_loop_cmd = is_loop_run_cmd | is_loop_config_cmd_ws;	
+1056c1056
+<   assign io_out_valid = loop_configured ? _arb_io_out_valid : _cmd_q_io_deq_valid & ~is_loop_config_cmd & _cmd_q_io_deq_bits_cmd_inst_funct != 7'h8;	
+---
+>   assign io_out_valid = loop_configured ? _arb_io_out_valid : _cmd_q_io_deq_valid & ~is_loop_config_cmd_ws & _cmd_q_io_deq_bits_cmd_inst_funct != 7'h8;	

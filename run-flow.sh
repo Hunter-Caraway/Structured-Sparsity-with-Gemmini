@@ -312,10 +312,11 @@ prog_timeout() {
   local t="${TIMEOUT_CYCLES:-150000000}" need=0
   case "$(basename "$1")" in
     # full 22 cases passed at 600M (investigate/runs/20261115-225958-fixbfail-srv); cases 7-17 alone took 28,576,528 / 29,693,573 cycles (20261115-230636-fixbfail2-srv CYC lines)
-    # bank-split-fix sources: nm_sparse_loop_24 estimated ~162M cycles, under this floor (worklogs/pattern-flow.md step 2)
-    nm_sparse_loop_[0-9]*-baremetal) [[ "$(basename "$1")" =~ ^nm_sparse_loop_[0-9]+-baremetal$ ]] && need=300000000 ;;
+    # bank-split-fix sources: nm_sparse_loop_24 estimated ~162M sim cycles, 600M floor = 3.7x margin (worklogs/pattern-flow.md step 2)
+    nm_sparse_loop_[0-9]*-baremetal) [[ "$(basename "$1")" =~ ^nm_sparse_loop_[0-9]+-baremetal$ ]] && need=600000000 ;;
     # never finished within 150M on any chip (investigate/runs/20261113-160015-fixb-srv, fixb-verify.md Verdict); unresolved
-    conv_with_input_dilation*-baremetal) need=300000000 ;;
+    # sim caps count a 1 GHz clock, the chip runs at 500 MHz (worklogs/rot180-diag.md Step 6): rot180 needs ~390M, neg_padding ~165M sim cycles [E]
+    conv_with_input_dilation*-baremetal) need=1000000000 ;;
   esac
   [ "$t" -ge "$need" ] && echo "$t" || echo "$need"
 }
@@ -1055,7 +1056,7 @@ pattern_rebuild() {
   srv "mkdir -p $d"
   srv "cat > $d/pattern_srv_build.sh" < "$tools/pattern_srv_build.sh"
   srv "cat > $d/src_sha_list.sh" < "$out/src_sha_list.sh"
-  srv "cd $d && nohup setsid bash pattern_srv_build.sh $cfg $j > build.out 2>&1 < /dev/null &"
+  srv "cd $d && (nohup setsid bash pattern_srv_build.sh $cfg $j > build.out 2>&1 < /dev/null &)" < /dev/null
   echo "  started; waiting for $d/STATUS (an SSH drop stops this wait, not the build)"
   while :; do
     sleep 60
@@ -1121,7 +1122,7 @@ pattern_srv() {
   for h in "$streaming"/investigate/runs/*-srv; do [ -f "$h/jobs.tsv" ] && hist+=("$h"); done
   while IFS= read -r h; do [ -z "$h" ] || hints+=(--hint "$h"); done <<<"${SCHED_HINTS-$default_hints}"
   "$py" "$tools/pattern_flow.py" schedule --plan "$out/jobs.after-reuse.tsv" --slots "$slots" --sfx "$sfx" \
-    --history "${hist[@]}" "${hints[@]}" --out "$out/jobs.ordered.tsv" | tee "$out/schedule.txt"
+    --history "${hist[@]}" "${hints[@]}" --last '^conv_with_(input|kernel)_dilation' --out "$out/jobs.ordered.tsv" | tee "$out/schedule.txt"
   rrun="$srv_runs/$stamp-$pat-srv"
   mapfile -t progs < <(tail -n +2 "$out/jobs.ordered.tsv" | cut -f3 | sort -u)
   # run.info: what this run is made of, taken now (the simulator's own source list was taken at its build)
@@ -1141,7 +1142,7 @@ pattern_srv() {
     else echo "src.$cfg.build_list=none"; fi
     echo "sim.$pat=$cfg mtime=$sim_mtime sha256=$sim_sha"
     echo "sim.stock=GemminiRocketConfig mtime=$stock_mtime sha256=$stock_sha"
-    echo "timeout_cycles=${TIMEOUT_CYCLES:-150000000} per job, raised by prog_timeout (nm_sparse_loop_<NN>, conv_with_input_dilation* >= 300000000); per-job value in jobs.tsv"
+    echo "timeout_cycles=${TIMEOUT_CYCLES:-150000000} per job, raised by prog_timeout (nm_sparse_loop_<NN> >= 600000000, conv_with_input_dilation* >= 1000000000); per-job value in jobs.tsv"
     echo "runner=pattern_srv_driver.sh: the simulator is called directly with make run-binary-fast LOADMEM=1 arguments (no make in sims/)"
     echo "programs=built on the laptop by run-flow.sh (tests, build_fair, pattern_bench_spike), Spike stage passed; sha256 in bin.sha256, checked on the server before launch"
     echo "stock_reused=$(($(wc -l < "$out/stock-reused.tsv") - 1)) job(s), recorded logs listed in stock-reused.tsv"
@@ -1173,7 +1174,7 @@ pattern_srv() {
   for h in "$(dirname "$bindir")"/bench/ref/*.json; do srv "cat > $rrun/ref/$(basename "$h")" < "$h"; done
   srv "cat > $rrun/pattern_srv_driver.sh" < "$tools/pattern_srv_driver.sh"
   srv "cd $rrun/bin && sha256sum -c --quiet ../bin.sha256" || die "program checksums differ on the server"
-  srv "cd $rrun && nohup setsid bash pattern_srv_driver.sh > driver.out 2>&1 < /dev/null &"
+  srv "cd $rrun && (nohup setsid bash pattern_srv_driver.sh > driver.out 2>&1 < /dev/null &)" < /dev/null  # a bare trailing & keeps the ssh channel open and the flow hangs
   sleep 10
   echo "  server STATUS: $(srv "cat $rrun/STATUS" || echo none)"
   { echo "pattern=$pat"; echo "cfg=$cfg"; echo "srv_run=$rrun"; echo "launched=$(date '+%Y-%m-%dT%H:%M:%S')"; } > "$out/flow.state"

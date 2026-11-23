@@ -1,0 +1,4 @@
+pattern=nm816
+cfg=GemminiNM816RocketConfig
+srv_run=/home/ai-user/sinv/runs/20261123-151155-nm816-srv
+launched=2026-11-23T15:12:18

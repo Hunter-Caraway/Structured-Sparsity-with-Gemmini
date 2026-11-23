@@ -1,0 +1,7 @@
+chip	cfg	program	seed	timeout	kind	expect	log
+stock	GemminiRocketConfig	fair_perf_dense_only-baremetal	1	150000000	fair		/home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261113-160015-fixb-srv/stock.fair_perf_dense_only.seed1.log
+stock	GemminiRocketConfig	berkeley_dense_perf-baremetal	1	150000000	fair		/home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261113-160015-fixb-srv/stock.berkeley_dense_perf.seed1.log
+stock	GemminiRocketConfig	fair_perf_dense_only-baremetal	2	150000000	fair		/home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261113-160015-fixb-srv/stock.fair_perf_dense_only.seed2.log
+stock	GemminiRocketConfig	berkeley_dense_perf-baremetal	2	150000000	fair		/home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261113-160015-fixb-srv/stock.berkeley_dense_perf.seed2.log
+stock	GemminiRocketConfig	fair_perf_dense_only-baremetal	3	150000000	fair		/home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261113-160015-fixb-srv/stock.fair_perf_dense_only.seed3.log
+stock	GemminiRocketConfig	berkeley_dense_perf-baremetal	3	150000000	fair		/home/hunter/gemmini-sparsity/experiments/streaming/investigate/runs/20261113-160015-fixb-srv/stock.berkeley_dense_perf.seed3.log
