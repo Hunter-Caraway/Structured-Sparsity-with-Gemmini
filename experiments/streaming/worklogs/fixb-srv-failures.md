@@ -69,3 +69,19 @@ Next: coordinator decides on D run and whether to raise the nm_sparse_loop timeo
 ## RESUME HERE (stockdense only; convbudget entries above unchanged)
 - stockdense: DONE, copied and verified (above). Nothing running from this run.
 - Next: coordinator decides if 2 Berkeley failures stay excluded; 3 conv_with_input_dilation* pending from convbudget-stock run.
+
+## Convbudget copy-back 2026-11-23
+- Runs copied via ssh cat per file into `investigate/runs/`: `20261117-110726-convbudget-srv` (nm24, 14 files, STATUS `ALL_DONE Fri Nov 20 12:07:23 AM EST 2026`) and `20261117-111223-convbudget-stock-srv` (stock, 18 files incl. bin/ src/, STATUS `ALL_DONE Thu Nov 19 08:44:45 PM EST 2026`). `sha256sum -c SHA256SUMS`: all OK, rc 0 (13 and 17 entries).
+- `verify_all.py --mode run` on each: I and S PASS (one sim build; nm24 sha 1042fc92.., stock sha 84c2264a..). J FAIL on both (2 jobs exit 0, `conv_with_input_dilation_and_rot180` exit 2, parse_fixa rc 1). Expected: that test is not a known Berkeley failure, so the checker rejects it.
+- Own grep of each `*.log` (FAILED, %Error, assert, timeout): neg_padding and plain dilation logs: 0 hits, end with `Verilog $finish`. rot180 on BOTH chips: `*** FAILED *** (timeout) after 300000001 simulation cycles`, still in "CPU conv..." (no "CPU conv took" line). Cause: 300M-cycle cap (jobs.tsv timeout 300000000) hit during the CPU reference, before Gemmini ran; not a hardware fault. No result for rot180 on either chip.
+- Results (jobs.tsv, logs; "Gemmini conv took" cycles, test self-checks, finish = pass):
+  - neg_padding: nm24 pass 70300 cycles; stock pass 70300 (cross-chip ratio 1.00); CPU 82741500 on both.
+  - dilation: nm24 pass 107704; stock pass 107704 (cross-chip ratio 1.00); CPU 103792927 on both.
+  - rot180: nm24 timeout, stock timeout.
+- Berkeley 54 dense list on stock: stockdense 49 pass + 2 known Berkeley fails (gemmini_counter, global_average) + convbudget-stock 2 pass (neg_padding, dilation) = 51 pass, 2 known Berkeley fails, 1 timeout (rot180, 300M cap too low). Not 54 passing.
+- nm24 sim: no sims running on the server (ps), nothing else pending that uses it from what is visible.
+
+## RESUME HERE (convbudget copy-back, 2026-11-23)
+- convbudget (nm24 and stock): DONE, copied, verified (above). Nothing running.
+- Open: rot180 needs a rerun with a higher TIMEOUT_CYCLES (CPU conv alone exceeds 300M). Needs user approval for sim quota.
+- nm24 simulator is free to rebuild from these runs' point of view.

@@ -1,0 +1,4 @@
+chip	binary	seed	timeout	start	end	wall_s	exit
+stock	conv_with_input_dilation_and_neg_padding-baremetal	1	300000000	1794931963	1795036977	105014	0
+stock	conv_with_input_dilation-baremetal	1	300000000	1794931961	1795069055	137094	0
+stock	conv_with_input_dilation_and_rot180-baremetal	1	300000000	1794931962	1795139085	207123	2

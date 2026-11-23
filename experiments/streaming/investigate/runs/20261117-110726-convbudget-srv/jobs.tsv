@@ -1,0 +1,4 @@
+chip	binary	seed	timeout	start	end	wall_s	exit
+nm24	conv_with_input_dilation_and_neg_padding-baremetal	1	300000000	1794931651	1795069916	138265	0
+nm24	conv_with_input_dilation-baremetal	1	300000000	1794931649	1795095093	163444	0
+nm24	conv_with_input_dilation_and_rot180-baremetal	1	300000000	1794931650	1795151243	219593	2

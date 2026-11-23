@@ -1,0 +1,4 @@
+  done nm24 conv_with_input_dilation_and_neg_padding-baremetal seed 1 exit 0 138265 s (01:31:56)
+  done nm24 conv_with_input_dilation-baremetal seed 1 exit 0 163444 s (08:31:33)
+  done nm24 conv_with_input_dilation_and_rot180-baremetal seed 1 exit 2 219593 s (00:07:23)
+done: /home/ai-user/sinv/runs/20261117-110726-convbudget-srv

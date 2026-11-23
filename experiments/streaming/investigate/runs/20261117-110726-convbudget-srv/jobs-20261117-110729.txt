@@ -1,0 +1,3 @@
+nm24 /home/ai-user/sinv/runs/20261113-160015-fixb-srv/bin/conv_with_input_dilation-baremetal 1 300000000
+nm24 /home/ai-user/sinv/runs/20261113-160015-fixb-srv/bin/conv_with_input_dilation_and_rot180-baremetal 1 300000000
+nm24 /home/ai-user/sinv/runs/20261113-160015-fixb-srv/bin/conv_with_input_dilation_and_neg_padding-baremetal 1 300000000

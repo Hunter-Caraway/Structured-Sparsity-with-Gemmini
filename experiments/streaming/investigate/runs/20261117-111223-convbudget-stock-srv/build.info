@@ -1,0 +1,8 @@
+fresh binaries (src/) built 2026-11-17 on laptop: SCRATCH_DIR=<scratch> ./run-flow.sh tests (restore_params_h + rv_cc, no NM flags)
+gemmini_params.h sha256=3758ae967af3a179497660970201093a7fb624be00173990ce33d3f5c38da924
+gemmini-rocc-tests commit=22158bf  toolchain=riscv64-unknown-elf-gcc (g6afcc4f6d) 16.1.0
+fresh sha256: conv_with_input_dilation=9f0f8b22b87e87467838848280c9419e5bce6196ce43185d0296729437fbecb7
+  conv_with_input_dilation_and_rot180=c9db16e48f2aadb0e1cfd943701b2fe8922270b2c024e7e15aba272848ac65b0
+  conv_with_input_dilation_and_neg_padding=1905f4fe966b3e78b3017cb3335e0a137257703421959bdaa110b88f513ecd8c
+run-1 (20261113-160015-fixb-srv/bin) sha256: 20ee07f3a9b3dc52d81952c56a42c717bf1b92dfb9c14404ebd5e52f89afd340 / 01a9f72a655bada6513fe0d2222d3b98f668d1bd18d3cf800929a499eaba41e7 / 46adb3433ffc5c13e67c41b4e453e862f06f4ffb4e31430eff77f191bf5b644f
+difference: objdump -d and -s identical; only 6 bytes differ, a gcc temp-object name (ccXXXXXX.o) in .strtab; same sizes and sections

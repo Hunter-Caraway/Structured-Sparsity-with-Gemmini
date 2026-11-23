@@ -1,0 +1,4 @@
+  done stock conv_with_input_dilation_and_neg_padding-baremetal seed 1 exit 0 105014 s (16:22:57)
+  done stock conv_with_input_dilation-baremetal seed 1 exit 0 137094 s (01:17:35)
+  done stock conv_with_input_dilation_and_rot180-baremetal seed 1 exit 2 207123 s (20:44:45)
+done: /home/ai-user/sinv/runs/20261117-111223-convbudget-stock-srv
