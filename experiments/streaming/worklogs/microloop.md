@@ -80,3 +80,58 @@ run folders `investigate/runs/<stamp>-microloop-spike`, `<stamp>-microloop-srv`.
 - Server run folder: `~/sinv/runs/20261118-232156-microloop-srv` (run.info, jobs.tsv, 3 logs present). Launched ~23:22.
   Simulator PIDs: 756522 (nm24 micro_loop_24), 756773 (nm48), 757011 (nm24 s1). Driver pid 756153.
 - Waiting on `<run>/STATUS`.
+- 00:05 (Nov 19) progress: case-line counts s1 16/16, nm24 13/32, nm48 5/32; no failures seen. nm48 slower (~8 lines/h); est. a few more hours. Watching via background until-loop on STATUS.
+
+## Step 5. Results (2026-11-23), run `investigate/runs/20261118-232156-microloop-srv/`
+- Copied back with ssh cat; `sha256sum -c SHA256SUMS` all OK. STATUS ALL_DONE Thu Nov 19 02:16:33 2026. jobs.tsv: all exit 0, wall
+  s1 1589 s, nm24 5626 s, nm48 10471 s. No FAILED/assert in any log.
+- Verification (line 53 / 37 of each log): `nm24.micro_loop_24.seed1.log:53` 32 of 32 ALL VERIFIED;
+  `nm48.micro_loop_48.seed1.log:53` 32 of 32 ALL VERIFIED; `nm24.micro_loop_24_s1.seed1.log:37` 16 of 16 ALL VERIFIED.
+- rep=1 lines (cycles within the same build only, rule 4). Columns: total / cyc_per_compute x100 / ex_active. Log line numbers are
+  the same in both 32-check logs: 5x6x48 L0 22, L0i 24, L1 26, L2 28, L3 30, L3i 32, L4 34, dense 36; 3x6x48 same order 38-52.
+  s1 (nm24_s1 log): L0 22 ... dense 36.
+
+| shape | case | nm24 total / cpc / ex | nm48 total / cpc / ex |
+|---|---|---|---|
+| 5x6x48 | L0 | 23197 / 3221 / 22344 | 23184 / 3220 / 22338 |
+| | L0i | 23192 / 3221 / 22344 | 23172 / 3218 / 22338 |
+| | L1 | 15537 / 2157 / 13743 | 15404 / 2139 / 13653 |
+| | L2 | 15418 / 2141 / 13679 | 15509 / 2154 / 13728 |
+| | L3 | 15463 / 2147 / 13736 | 15519 / 2155 / 13716 |
+| | L3i | 15503 / 2153 / 13722 | 15439 / 2144 / 13645 |
+| | L4 | 15382 / 2136 / 13593 | 15318 / 2127 / 13596 |
+| | dense (1440 c) | 28607 / 1986 / 25890 | 28770 / 1997 / 25893 |
+| 3x6x48 | L0 | 13956 / 3230 / 13410 | 13955 / 3230 / 13410 |
+| | L0i | 13964 / 3232 / 13428 | 13955 / 3230 / 13410 |
+| | L1 | 10218 / 2365 / 8978 | 10411 / 2409 / 9053 |
+| | L2 | 10307 / 2385 / 9015 | 10266 / 2376 / 9006 |
+| | L3 | 10597 / 2453 / 9088 | 10536 / 2438 / 9078 |
+| | L3i | 10500 / 2430 / 9054 | 10355 / 2396 / 9038 |
+| | L4 | 10356 / 2397 / 8889 | 10448 / 2418 / 8889 |
+| | dense (864 c) | 20600 / 2384 / 17871 | 20342 / 2354 / 17730 |
+| 1x6x48 (s1, nm24) | L0 / L0i / L1 / L2 | 4756/3302/4509, 4772/3313/4524, 4735/3288/4456, 4695/3260/4460 | - |
+| | L3 / L3i / L4 / dense | 4730/3284/4452, 4714/3273/4458, 4214/2926/3690, 7448/2586/6690 | - |
+
+- Gains (ratio of cyc_per_compute, same chip, [C] computed from the table):
+  | shape | chip | L0/L3 | L0/L3i | L0/L4 |
+  |---|---|---|---|---|
+  | 5x6x48 | nm24 | 1.500 | 1.496 | 1.508 |
+  | 5x6x48 | nm48 | 1.494 | 1.502 | 1.514 |
+  | 3x6x48 | nm24 | 1.317 | 1.329 | 1.348 |
+  | 3x6x48 | nm48 | 1.325 | 1.348 | 1.336 |
+  | 1x6x48 | nm24 | 1.005 | 1.009 | 1.129 |
+- Findings: the bank split (L1-L4) cuts cycles per compute ~33% (5x) and ~24-26% (3x); L3/L3i land within ~1-2% of L4 at 5x and 3x, so
+  the split with indices in place (L3i) captures nearly all of the ideal. At 1x only L4 gains (1.129); L1-L3i gain <=1%.
+- Dense issue vs total: 5x nm24 28535/28607, nm48 28697/28770; 3x nm24 20531/20600, nm48 20276/20342; 1x nm24 7366/7448
+  (ratios 0.989-0.997). issue ~ total, but the dense stream does not look CPU-bound relative to the sparse cases beyond the same
+  ~0.3% overhead every case shows (sparse L0 5x: 22798/23197 = 0.983); [E] the L1 fetch hypothesis is not supported, dense is
+  not instruction-fetch limited here. Per-case spill: L1/L2 at 5x show b_spill=8 (labelled B overflow into bank 2), see logs.
+- Anomalies: nm48 5x L2 (15509) is slower than nm48 L1 (15404) while nm24 shows the opposite (L2 15418 < L1 15537): chip differences
+  of ~1%, single seed, single rep, so not conclusive. 3x L3 is the slowest split layout on nm24 (10597) and L3i recovers ~1%.
+  Launcher's last ssh call timed out at exit 124 (harmless, job started).
+
+## RESUME HERE (2026-11-23)
+- Done: micro_loop launched, finished, copied back, checksums OK, all three logs ALL VERIFIED, table and gains above.
+- Running: nothing.
+- Findings: see Step 5 (L0 -> L3/L3i gain 1.50x at 5x6x48, ~1.32-1.35x at 3x6x48, ~1.0x at 1x6x48; L4 only at 1x).
+- Next: user decides whether the spec's bank split proceeds; no further micro_loop runs planned. README / paper numbers need user approval.

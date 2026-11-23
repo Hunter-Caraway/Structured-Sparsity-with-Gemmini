@@ -1,0 +1,11 @@
+stamp=20261118-232156-microloop-srv
+purpose=bank-split-fix-spec.md section 8 micro-test (micro_loop.c), no simulator rebuild
+sim.nm24=GemminiNMRocketConfig sha256=1042fc926288a463c829cdfe654a5515b6243ca56ae19b425fd7d542bf237891 (same as runs/20261113-160015-fixb-srv)
+sim.nm48=GemminiNM48RocketConfig sha256=f4a3642cf572de929c758c3fd2a1f2320ee286ce45787aca13a7d0ac1018ed34 (same as runs/20261113-160015-fixb-srv)
+programs=from laptop investigate/runs/20261117-142827-microloop-spike/bin (Spike-verified there), copied with ssh cat, sha256 checked:
+c28a472f479cfcd6a3b9f14f357572f61bd0dfc212e1de9190e2261fab369765  micro_loop_24-baremetal
+4600e666d59243bceb9af68a3bc75da1b46b639e12ab4878a05966e9e1e55736  micro_loop_48-baremetal
+93cde5bbcdb7c4d43747184a8d610a4057eeed3081d4a14f535afc7b8ab2ac99  micro_loop_24_s1-baremetal
+sources=6d788592dd1082fb39e25e8e6509206416351b8bc3c511fddf98cb8d3a1d4b71  src/micro_loop.c;815830fd818cd97107466957a708fec92332a311adccf3b0ab29dc87e555701f  src/gen_micro_loop.py;9a3e397015f1158cdb3db109484b2e38f73da3e41932f5d956d56b4f5225d5d2  scripts/build_micro_loop.sh;
+make=run-binary-fast LOADMEM=1 BREAK_SIM_PREREQ=1 via ~/fixb/run_jobs.sh (RANDOM_SEED 1, TIMEOUT_CYCLES 80000000)
+servers_busy_at_launch=5

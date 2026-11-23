@@ -1,0 +1,4 @@
+nm24 /home/ai-user/microloop/progs-20261118-232156-microloop-srv/micro_loop_24-baremetal 1 80000000
+nm48 /home/ai-user/microloop/progs-20261118-232156-microloop-srv/micro_loop_48-baremetal 1 80000000
+nm24 /home/ai-user/microloop/progs-20261118-232156-microloop-srv/micro_loop_24_s1-baremetal 1 80000000
+

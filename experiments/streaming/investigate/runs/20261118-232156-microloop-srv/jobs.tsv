@@ -1,0 +1,4 @@
+chip	binary	seed	timeout	start	end	wall_s	exit
+nm24	micro_loop_24_s1-baremetal	1	80000000	1795062123	1795063712	1589	0
+nm24	micro_loop_24-baremetal	1	80000000	1795062121	1795067747	5626	0
+nm48	micro_loop_48-baremetal	1	80000000	1795062122	1795072593	10471	0

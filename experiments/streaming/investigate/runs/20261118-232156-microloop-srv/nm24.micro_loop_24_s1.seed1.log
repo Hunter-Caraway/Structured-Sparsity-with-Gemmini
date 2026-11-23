@@ -1,0 +1,38 @@
+/home/ai-user/chipyard/common.mk:537: warning: overriding recipe for target 'run-asm-tests-fast'
+/home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/chipyard.harness.TestHarness.GemminiNMRocketConfig.d:780: warning: ignoring old recipe for target 'run-asm-tests-fast'
+/home/ai-user/chipyard/common.mk:540: warning: overriding recipe for target 'run-bmark-tests-fast'
+/home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/chipyard.harness.TestHarness.GemminiNMRocketConfig.d:839: warning: ignoring old recipe for target 'run-bmark-tests-fast'
+if [ "/home/ai-user/sinv/runs/20261118-232156-microloop-srv/bin/micro_loop_24_s1-baremetal" != "none" ] && [ ! -f "/home/ai-user/sinv/runs/20261118-232156-microloop-srv/bin/micro_loop_24_s1-baremetal" ]; then printf "\n\nBinary /home/ai-user/sinv/runs/20261118-232156-microloop-srv/bin/micro_loop_24_s1-baremetal not found\n\n"; exit 1; fi
+(set -o pipefail &&  /home/ai-user/chipyard/sims/verilator/simulator-chipyard.harness-GemminiNMRocketConfig \
+	+permissive \
+	+dramsim +dramsim_ini_dir=/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini +max-cycles=80000000  +verilator+seed+1 +loadmem=/home/ai-user/sinv/runs/20261118-232156-microloop-srv/bin/micro_loop_24_s1-baremetal  \
+	+permissive-off \
+	/home/ai-user/sinv/runs/20261118-232156-microloop-srv/bin/micro_loop_24_s1-baremetal \
+	 \
+	</dev/null | tee /home/ai-user/chipyard/sims/verilator/output/chipyard.harness.TestHarness.GemminiNMRocketConfig/micro_loop_24_s1-baremetal.fixa.nm24.seed1.20261118-232156-microloop-srv.log)
+== Loading device model file '%Warning: System has stack size 8192 kb which may be too small; suggest 'ulimit -c 15364' or larger
+[UART] UART0 is here (stdin/stdout).
+/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/DDR3_micron_64M_8B_x4_sg15.ini' == 
+== Loading system model file '/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/system.ini' == 
+===== MemorySystem 0 =====
+CH. 0 TOTAL_STORAGE : 4096MB | 1 Ranks | 16 Devices per rank
+DRAMSim2 Clock Frequency =666666666Hz, CPU Clock Frequency=500000000Hz
+microloop: DIM=16 BANK_ROWS=4096 NM=2:4 R=4 data_seed=20261117 C.sha256=dea979812cbd1a87 cpu_ref=0 shape_mask=4
+microloop case=L0 shape=1x6x48 rep=0 computes=144 total=4885 issue=4557 cyc_per_compute_x100=3392 ex_active=4524 pre_haz=0 overlap_haz=0 spA_wait=0 spB_wait=357 rs_busy=4766 ex_per_compute_x100=3141 b_spill=0 verified
+microloop case=L0 shape=1x6x48 rep=1 computes=144 total=4756 issue=4445 cyc_per_compute_x100=3302 ex_active=4509 pre_haz=0 overlap_haz=0 spA_wait=0 spB_wait=189 rs_busy=4704 ex_per_compute_x100=3131 b_spill=0 verified
+microloop case=L0i shape=1x6x48 rep=0 computes=144 total=4759 issue=4412 cyc_per_compute_x100=3304 ex_active=4509 pre_haz=0 overlap_haz=0 spA_wait=0 spB_wait=192 rs_busy=4704 ex_per_compute_x100=3131 b_spill=0 verified
+microloop case=L0i shape=1x6x48 rep=1 computes=144 total=4772 issue=4425 cyc_per_compute_x100=3313 ex_active=4524 pre_haz=0 overlap_haz=0 spA_wait=0 spB_wait=189 rs_busy=4720 ex_per_compute_x100=3141 b_spill=0 verified
+microloop case=L1 shape=1x6x48 rep=0 computes=144 total=4735 issue=4419 cyc_per_compute_x100=3288 ex_active=4458 pre_haz=0 overlap_haz=0 spA_wait=119 spB_wait=214 rs_busy=4681 ex_per_compute_x100=3095 b_spill=0 verified
+microloop case=L1 shape=1x6x48 rep=1 computes=144 total=4735 issue=4419 cyc_per_compute_x100=3288 ex_active=4456 pre_haz=0 overlap_haz=0 spA_wait=215 spB_wait=215 rs_busy=4659 ex_per_compute_x100=3094 b_spill=0 verified
+microloop case=L2 shape=1x6x48 rep=0 computes=144 total=4724 issue=4393 cyc_per_compute_x100=3280 ex_active=4456 pre_haz=0 overlap_haz=0 spA_wait=227 spB_wait=203 rs_busy=4672 ex_per_compute_x100=3094 b_spill=0 verified
+microloop case=L2 shape=1x6x48 rep=1 computes=144 total=4695 issue=4362 cyc_per_compute_x100=3260 ex_active=4460 pre_haz=0 overlap_haz=0 spA_wait=200 spB_wait=203 rs_busy=4656 ex_per_compute_x100=3097 b_spill=0 verified
+microloop case=L3 shape=1x6x48 rep=0 computes=144 total=4682 issue=4351 cyc_per_compute_x100=3251 ex_active=4461 pre_haz=0 overlap_haz=0 spA_wait=187 spB_wait=187 rs_busy=4656 ex_per_compute_x100=3097 b_spill=0 verified
+microloop case=L3 shape=1x6x48 rep=1 computes=144 total=4730 issue=4394 cyc_per_compute_x100=3284 ex_active=4452 pre_haz=0 overlap_haz=0 spA_wait=207 spB_wait=207 rs_busy=4680 ex_per_compute_x100=3091 b_spill=0 verified
+microloop case=L3i shape=1x6x48 rep=0 computes=144 total=4682 issue=4351 cyc_per_compute_x100=3251 ex_active=4461 pre_haz=0 overlap_haz=0 spA_wait=163 spB_wait=163 rs_busy=4656 ex_per_compute_x100=3097 b_spill=0 verified
+microloop case=L3i shape=1x6x48 rep=1 computes=144 total=4714 issue=4398 cyc_per_compute_x100=3273 ex_active=4458 pre_haz=0 overlap_haz=0 spA_wait=206 spB_wait=194 rs_busy=4662 ex_per_compute_x100=3095 b_spill=0 verified
+microloop case=L4 shape=1x6x48 rep=0 computes=144 total=4003 issue=3925 cyc_per_compute_x100=2779 ex_active=3525 pre_haz=0 overlap_haz=0 spA_wait=367 spB_wait=343 rs_busy=3974 ex_per_compute_x100=2447 b_spill=0 verified
+microloop case=L4 shape=1x6x48 rep=1 computes=144 total=4214 issue=4136 cyc_per_compute_x100=2926 ex_active=3690 pre_haz=0 overlap_haz=0 spA_wait=386 spB_wait=374 rs_busy=4150 ex_per_compute_x100=2562 b_spill=0 verified
+microloop case=dense shape=1x6x48 rep=0 computes=288 total=7204 issue=7122 cyc_per_compute_x100=2501 ex_active=6495 pre_haz=0 overlap_haz=0 spA_wait=371 spB_wait=76 rs_busy=7140 ex_per_compute_x100=2255 b_spill=0 verified
+microloop case=dense shape=1x6x48 rep=1 computes=288 total=7448 issue=7366 cyc_per_compute_x100=2586 ex_active=6690 pre_haz=0 overlap_haz=0 spA_wait=366 spB_wait=0 rs_busy=7388 ex_per_compute_x100=2322 b_spill=0 verified
+microloop done: 16 of 16 checks verified -> ALL VERIFIED
+- /home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/gen-collateral/TestDriver.v:158: Verilog $finish

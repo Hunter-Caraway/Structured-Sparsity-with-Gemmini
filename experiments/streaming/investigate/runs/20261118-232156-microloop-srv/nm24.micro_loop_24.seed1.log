@@ -1,0 +1,54 @@
+/home/ai-user/chipyard/common.mk:537: warning: overriding recipe for target 'run-asm-tests-fast'
+/home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/chipyard.harness.TestHarness.GemminiNMRocketConfig.d:780: warning: ignoring old recipe for target 'run-asm-tests-fast'
+/home/ai-user/chipyard/common.mk:540: warning: overriding recipe for target 'run-bmark-tests-fast'
+/home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/chipyard.harness.TestHarness.GemminiNMRocketConfig.d:839: warning: ignoring old recipe for target 'run-bmark-tests-fast'
+if [ "/home/ai-user/sinv/runs/20261118-232156-microloop-srv/bin/micro_loop_24-baremetal" != "none" ] && [ ! -f "/home/ai-user/sinv/runs/20261118-232156-microloop-srv/bin/micro_loop_24-baremetal" ]; then printf "\n\nBinary /home/ai-user/sinv/runs/20261118-232156-microloop-srv/bin/micro_loop_24-baremetal not found\n\n"; exit 1; fi
+(set -o pipefail &&  /home/ai-user/chipyard/sims/verilator/simulator-chipyard.harness-GemminiNMRocketConfig \
+	+permissive \
+	+dramsim +dramsim_ini_dir=/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini +max-cycles=80000000  +verilator+seed+1 +loadmem=/home/ai-user/sinv/runs/20261118-232156-microloop-srv/bin/micro_loop_24-baremetal  \
+	+permissive-off \
+	/home/ai-user/sinv/runs/20261118-232156-microloop-srv/bin/micro_loop_24-baremetal \
+	 \
+	</dev/null | tee /home/ai-user/chipyard/sims/verilator/output/chipyard.harness.TestHarness.GemminiNMRocketConfig/micro_loop_24-baremetal.fixa.nm24.seed1.20261118-232156-microloop-srv.log)
+== Loading device model file '/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/DDR3_micron_64M_8B_x4_sg15.ini%Warning: System has stack size 8192 kb which may be too small; suggest 'ulimit -c 15364' or larger
+[UART] UART0 is here (stdin/stdout).
+' == 
+== Loading system model file '/home/ai-user/chipyard/generators/testchipip/src/main/resources/dramsim2_ini/system.ini' == 
+===== MemorySystem 0 =====
+CH. 0 TOTAL_STORAGE : 4096MB | 1 Ranks | 16 Devices per rank
+DRAMSim2 Clock Frequency =666666666Hz, CPU Clock Frequency=500000000Hz
+microloop: DIM=16 BANK_ROWS=4096 NM=2:4 R=4 data_seed=20261117 C.sha256=dea979812cbd1a87 cpu_ref=0 shape_mask=3
+microloop case=L0 shape=5x6x48 rep=0 computes=720 total=23308 issue=22909 cyc_per_compute_x100=3237 ex_active=22344 pre_haz=0 overlap_haz=0 spA_wait=1 spB_wait=437 rs_busy=23162 ex_per_compute_x100=3103 b_spill=0 verified
+microloop case=L0 shape=5x6x48 rep=1 computes=720 total=23197 issue=22798 cyc_per_compute_x100=3221 ex_active=22344 pre_haz=0 overlap_haz=0 spA_wait=1 spB_wait=232 rs_busy=23121 ex_per_compute_x100=3103 b_spill=0 verified
+microloop case=L0i shape=5x6x48 rep=0 computes=720 total=23166 issue=22767 cyc_per_compute_x100=3217 ex_active=22344 pre_haz=0 overlap_haz=0 spA_wait=0 spB_wait=187 rs_busy=23116 ex_per_compute_x100=3103 b_spill=0 verified
+microloop case=L0i shape=5x6x48 rep=1 computes=720 total=23192 issue=22793 cyc_per_compute_x100=3221 ex_active=22344 pre_haz=0 overlap_haz=0 spA_wait=0 spB_wait=213 rs_busy=23116 ex_per_compute_x100=3103 b_spill=0 verified
+microloop case=L1 shape=5x6x48 rep=0 computes=720 total=14501 issue=14428 cyc_per_compute_x100=2014 ex_active=13291 pre_haz=0 overlap_haz=0 spA_wait=336 spB_wait=441 rs_busy=14437 ex_per_compute_x100=1845 b_spill=8 verified
+microloop case=L1 shape=5x6x48 rep=1 computes=720 total=15537 issue=15464 cyc_per_compute_x100=2157 ex_active=13743 pre_haz=0 overlap_haz=0 spA_wait=748 spB_wait=727 rs_busy=15461 ex_per_compute_x100=1908 b_spill=8 verified
+microloop case=L2 shape=5x6x48 rep=0 computes=720 total=14299 issue=14218 cyc_per_compute_x100=1985 ex_active=13224 pre_haz=0 overlap_haz=0 spA_wait=343 spB_wait=319 rs_busy=14223 ex_per_compute_x100=1836 b_spill=8 verified
+microloop case=L2 shape=5x6x48 rep=1 computes=720 total=15418 issue=15337 cyc_per_compute_x100=2141 ex_active=13679 pre_haz=0 overlap_haz=0 spA_wait=720 spB_wait=696 rs_busy=15354 ex_per_compute_x100=1899 b_spill=8 verified
+microloop case=L3 shape=5x6x48 rep=0 computes=720 total=14242 issue=14145 cyc_per_compute_x100=1978 ex_active=13223 pre_haz=0 overlap_haz=0 spA_wait=325 spB_wait=304 rs_busy=14190 ex_per_compute_x100=1836 b_spill=0 verified
+microloop case=L3 shape=5x6x48 rep=1 computes=720 total=15463 issue=15386 cyc_per_compute_x100=2147 ex_active=13736 pre_haz=0 overlap_haz=0 spA_wait=695 spB_wait=671 rs_busy=15387 ex_per_compute_x100=1907 b_spill=0 verified
+microloop case=L3i shape=5x6x48 rep=0 computes=720 total=14523 issue=14446 cyc_per_compute_x100=2017 ex_active=13354 pre_haz=0 overlap_haz=0 spA_wait=378 spB_wait=354 rs_busy=14482 ex_per_compute_x100=1854 b_spill=0 verified
+microloop case=L3i shape=5x6x48 rep=1 computes=720 total=15503 issue=15423 cyc_per_compute_x100=2153 ex_active=13722 pre_haz=0 overlap_haz=0 spA_wait=746 spB_wait=722 rs_busy=15424 ex_per_compute_x100=1905 b_spill=0 verified
+microloop case=L4 shape=5x6x48 rep=0 computes=720 total=14601 issue=14528 cyc_per_compute_x100=2027 ex_active=12975 pre_haz=0 overlap_haz=0 spA_wait=670 spB_wait=670 rs_busy=14546 ex_per_compute_x100=1802 b_spill=0 verified
+microloop case=L4 shape=5x6x48 rep=1 computes=720 total=15382 issue=15305 cyc_per_compute_x100=2136 ex_active=13593 pre_haz=0 overlap_haz=0 spA_wait=749 spB_wait=725 rs_busy=15319 ex_per_compute_x100=1887 b_spill=0 verified
+microloop case=dense shape=5x6x48 rep=0 computes=1440 total=27916 issue=27822 cyc_per_compute_x100=1938 ex_active=25437 pre_haz=0 overlap_haz=0 spA_wait=629 spB_wait=102 rs_busy=27826 ex_per_compute_x100=1766 b_spill=0 verified
+microloop case=dense shape=5x6x48 rep=1 computes=1440 total=28607 issue=28535 cyc_per_compute_x100=1986 ex_active=25890 pre_haz=0 overlap_haz=0 spA_wait=795 spB_wait=0 rs_busy=28503 ex_per_compute_x100=1797 b_spill=0 verified
+microloop case=L0 shape=3x6x48 rep=0 computes=432 total=13948 issue=13552 cyc_per_compute_x100=3228 ex_active=13413 pre_haz=0 overlap_haz=0 spA_wait=105 spB_wait=123 rs_busy=13896 ex_per_compute_x100=3104 b_spill=0 verified
+microloop case=L0 shape=3x6x48 rep=1 computes=432 total=13956 issue=13551 cyc_per_compute_x100=3230 ex_active=13410 pre_haz=0 overlap_haz=0 spA_wait=0 spB_wait=201 rs_busy=13892 ex_per_compute_x100=3104 b_spill=0 verified
+microloop case=L0i shape=3x6x48 rep=0 computes=432 total=13949 issue=13547 cyc_per_compute_x100=3228 ex_active=13413 pre_haz=0 overlap_haz=0 spA_wait=0 spB_wait=211 rs_busy=13896 ex_per_compute_x100=3104 b_spill=0 verified
+microloop case=L0i shape=3x6x48 rep=1 computes=432 total=13964 issue=13565 cyc_per_compute_x100=3232 ex_active=13428 pre_haz=0 overlap_haz=0 spA_wait=0 spB_wait=213 rs_busy=13912 ex_per_compute_x100=3108 b_spill=0 verified
+microloop case=L1 shape=3x6x48 rep=0 computes=432 total=9679 issue=9610 cyc_per_compute_x100=2240 ex_active=8847 pre_haz=0 overlap_haz=0 spA_wait=299 spB_wait=378 rs_busy=9641 ex_per_compute_x100=2047 b_spill=0 verified
+microloop case=L1 shape=3x6x48 rep=1 computes=432 total=10218 issue=10149 cyc_per_compute_x100=2365 ex_active=8978 pre_haz=0 overlap_haz=0 spA_wait=646 spB_wait=634 rs_busy=10142 ex_per_compute_x100=2078 b_spill=0 verified
+microloop case=L2 shape=3x6x48 rep=0 computes=432 total=9591 issue=9519 cyc_per_compute_x100=2220 ex_active=8839 pre_haz=0 overlap_haz=0 spA_wait=334 spB_wait=310 rs_busy=9565 ex_per_compute_x100=2046 b_spill=0 verified
+microloop case=L2 shape=3x6x48 rep=1 computes=432 total=10307 issue=10236 cyc_per_compute_x100=2385 ex_active=9015 pre_haz=0 overlap_haz=0 spA_wait=686 spB_wait=686 rs_busy=10252 ex_per_compute_x100=2086 b_spill=0 verified
+microloop case=L3 shape=3x6x48 rep=0 computes=432 total=9920 issue=9828 cyc_per_compute_x100=2296 ex_active=8924 pre_haz=0 overlap_haz=0 spA_wait=491 spB_wait=467 rs_busy=9882 ex_per_compute_x100=2065 b_spill=0 verified
+microloop case=L3 shape=3x6x48 rep=1 computes=432 total=10597 issue=10528 cyc_per_compute_x100=2453 ex_active=9088 pre_haz=0 overlap_haz=0 spA_wait=819 spB_wait=819 rs_busy=10511 ex_per_compute_x100=2103 b_spill=0 verified
+microloop case=L3i shape=3x6x48 rep=0 computes=432 total=9712 issue=9633 cyc_per_compute_x100=2248 ex_active=8862 pre_haz=0 overlap_haz=0 spA_wait=402 spB_wait=378 rs_busy=9645 ex_per_compute_x100=2051 b_spill=0 verified
+microloop case=L3i shape=3x6x48 rep=1 computes=432 total=10500 issue=10429 cyc_per_compute_x100=2430 ex_active=9054 pre_haz=0 overlap_haz=0 spA_wait=783 spB_wait=783 rs_busy=10424 ex_per_compute_x100=2095 b_spill=0 verified
+microloop case=L4 shape=3x6x48 rep=0 computes=432 total=9746 issue=9670 cyc_per_compute_x100=2256 ex_active=8493 pre_haz=0 overlap_haz=0 spA_wait=694 spB_wait=670 rs_busy=9658 ex_per_compute_x100=1965 b_spill=0 verified
+microloop case=L4 shape=3x6x48 rep=1 computes=432 total=10356 issue=10287 cyc_per_compute_x100=2397 ex_active=8889 pre_haz=0 overlap_haz=0 spA_wait=840 spB_wait=816 rs_busy=10293 ex_per_compute_x100=2057 b_spill=0 verified
+microloop case=dense shape=3x6x48 rep=0 computes=864 total=19822 issue=19748 cyc_per_compute_x100=2294 ex_active=17355 pre_haz=0 overlap_haz=0 spA_wait=1168 spB_wait=72 rs_busy=19762 ex_per_compute_x100=2008 b_spill=0 verified
+microloop case=dense shape=3x6x48 rep=1 computes=864 total=20600 issue=20531 cyc_per_compute_x100=2384 ex_active=17871 pre_haz=0 overlap_haz=0 spA_wait=1296 spB_wait=0 rs_busy=20523 ex_per_compute_x100=2068 b_spill=0 verified
+microloop done: 32 of 32 checks verified -> ALL VERIFIED
+- /home/ai-user/chipyard/sims/verilator/generated-src/chipyard.harness.TestHarness.GemminiNMRocketConfig/gen-collateral/TestDriver.v:158: Verilog $finish
